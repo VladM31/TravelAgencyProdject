@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+
+    <title>Please sign in</title>
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/popper/popper.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <link href="/css_sign_in.css" rel="stylesheet"/>
+</head>
+<body class="main">
+<div  th:src="@{landscape.jpg}">
+
+
+
+
+
+    <form class="regtanleMain"  th:object="${user}" th:action="@{/login}" method="post">
+
+        <div class="showSuccessfully" th:if="${tes.error}">
+            Invalid username and password.
+        </div>
+        <div class="showSuccessfully" th:if="${tes.logout}">
+
+            You have been logged out.
+        </div>
+        <div class="mainIconDiv">
+            <img class="mainIcon" th:src="@{login_user_image.png}" alt="You" src="">
+        </div>
+
+        <div>
+            <img class="usernameDivIcon"  th:src="@{sign_in_icon.png}" alt="User name">
+            <input class="usernameDiv" type="text" name="username" placeholder="Enter user name">
+        </div>
+
+        <div>
+            <img class="passwordDivIcon" th:src="@{lock_icon.png}" alt="Password">
+            <input class="passwordDiv" type="password" placeholder="Enter password" name="password">
+        </div>
+
+        <!-- #region th:href="@{/male} -->
+        <a class="signinLink" href="http://127.0.0.1:5500/test.html">Sign up</a>
+        <a class="forgotPassword" href="http://127.0.0.1:5500/test.html">Forgot password?</a>
+
+
+        <input class="signinButton" type="submit" value="Sign in">
+    </form>
+
+
+</div>
+
+</body>
+</html>
