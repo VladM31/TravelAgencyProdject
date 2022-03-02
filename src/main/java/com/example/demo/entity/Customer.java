@@ -3,10 +3,10 @@ package com.example.demo.entity;
 import java.time.LocalDateTime;
 
 public class Customer extends User{
-    Long customerId;
-    boolean male;
-    String firstName;
-    String lastName;
+    private Long customerId;
+    private boolean male;
+    private String firstName;
+    private String lastName;
 
     public Long getCustomerId() {
         return customerId;
