@@ -43,10 +43,10 @@ public class Customer extends User{
     public Customer() {
     }
 
-    public Customer(Long id, int number, String email, String username,
-                    String password, boolean active, LocalDateTime dataRegistretion,
-                    Role role, Long customerId, boolean male, String firstName, String lastName) {
-        super(id, number, email, username, password, active, dataRegistretion, role);
+    public Customer(Long id, int number, String email, String username, String password,
+                    boolean active, LocalDateTime dataRegistretion, Role role, String country,
+                    Long customerId, boolean male, String firstName, String lastName) {
+        super(id, number, email, username, password, active, dataRegistretion, role, country);
         this.customerId = customerId;
         this.male = male;
         this.firstName = firstName;

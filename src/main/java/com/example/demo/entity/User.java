@@ -11,6 +11,15 @@ public  class User {
     private boolean active;
     private LocalDateTime dataRegistretion;
     private Role role;
+    private String country;
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
 
     public Long getId() {
         return id;
@@ -76,7 +85,7 @@ public  class User {
         this.role = role;
     }
 
-    public User(Long id, int number, String email, String username, String password, boolean active, LocalDateTime dataRegistretion, Role role) {
+    public User(Long id, int number, String email, String username, String password, boolean active, LocalDateTime dataRegistretion, Role role, String country) {
         this.id = id;
         this.number = number;
         this.email = email;
@@ -85,6 +94,7 @@ public  class User {
         this.active = active;
         this.dataRegistretion = dataRegistretion;
         this.role = role;
+        this.country = country;
     }
 
     public User() {

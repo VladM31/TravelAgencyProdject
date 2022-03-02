@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
-public class TravelAgency {
+import java.time.LocalDateTime;
+
+public class TravelAgency extends User{
     private Long travelId;
     private int rating;
     private int kved;
@@ -74,7 +76,11 @@ public class TravelAgency {
         this.describeAgency = describeAgency;
     }
 
-    public TravelAgency(Long travelId, int rating, int kved, Long egrpoy, Long rnekpn, String address, String allNameDirector, String describeAgency) {
+    public TravelAgency(Long id, int number, String email, String username, String password,
+                        boolean active, LocalDateTime dataRegistretion, Role role,
+                        String country, Long travelId, int rating, int kved, Long egrpoy,
+                        Long rnekpn, String address, String allNameDirector, String describeAgency) {
+        super(id, number, email, username, password, active, dataRegistretion, role, country);
         this.travelId = travelId;
         this.rating = rating;
         this.kved = kved;
@@ -84,6 +90,7 @@ public class TravelAgency {
         this.allNameDirector = allNameDirector;
         this.describeAgency = describeAgency;
     }
+
     public TravelAgency(){
 
     }
