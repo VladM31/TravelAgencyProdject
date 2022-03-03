@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 public class Customer extends User{
     private Long customerId;
-    private boolean male;
+    private Boolean male;
     private String firstName;
     private String lastName;
 
@@ -16,11 +16,11 @@ public class Customer extends User{
         this.customerId = customerId;
     }
 
-    public boolean isMale() {
+    public Boolean isMale() {
         return male;
     }
 
-    public void setMale(boolean male) {
+    public void setMale(Boolean male) {
         this.male = male;
     }
 
@@ -45,7 +45,7 @@ public class Customer extends User{
 
     public Customer(Long id, int number, String email, String username, String password,
                     boolean active, LocalDateTime dataRegistretion, Role role, String country,
-                    Long customerId, boolean male, String firstName, String lastName) {
+                    Long customerId, Boolean male, String firstName, String lastName) {
         super(id, number, email, username, password, active, dataRegistretion, role, country);
         this.customerId = customerId;
         this.male = male;
