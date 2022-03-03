@@ -52,4 +52,22 @@ public class Customer extends User{
         this.firstName = firstName;
         this.lastName = lastName;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || !(o instanceof Customer)) return false;
+        if (!super.equals(o)) return false;
+
+        Customer customer = (Customer) o;
+
+        return customerId.equals(customer.customerId);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + customerId.hashCode();
+        return result;
+    }
 }

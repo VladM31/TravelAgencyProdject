@@ -95,4 +95,21 @@ public class TravelAgency extends User{
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || !(o instanceof TravelAgency)) return false;
+        if (!super.equals(o)) return false;
+
+        TravelAgency that = (TravelAgency) o;
+
+        return travelId != null ? travelId.equals(that.travelId) : true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (travelId != null ? travelId.hashCode() : 0);
+        return result;
+    }
 }
