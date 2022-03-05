@@ -1,11 +1,12 @@
 package com.example.demo.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class TravelAgency extends User{
     private Long travelId;
-    private int rating;
-    private int kved;
+    private float rating;
+    private long kved;
     private Long egrpoy;
     private Long rnekpn;
     private String address;
@@ -20,19 +21,19 @@ public class TravelAgency extends User{
         this.travelId = travelId;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
-    public int getKved() {
+    public long getKved() {
         return kved;
     }
 
-    public void setKved(int kved) {
+    public void setKved(long kved) {
         this.kved = kved;
     }
 
@@ -78,7 +79,7 @@ public class TravelAgency extends User{
 
     public TravelAgency(Long id, int number, String email, String username, String password,
                         boolean active, LocalDateTime dataRegistretion, Role role,
-                        String country, Long travelId, int rating, int kved, Long egrpoy,
+                        String country, Long travelId, float rating, long kved, Long egrpoy,
                         Long rnekpn, String address, String allNameDirector, String describeAgency) {
         super(id, number, email, username, password, active, dataRegistretion, role, country);
         this.travelId = travelId;
@@ -103,7 +104,7 @@ public class TravelAgency extends User{
 
         TravelAgency that = (TravelAgency) o;
 
-        return travelId != null ? travelId.equals(that.travelId) : true;
+        return Objects.equals(this.travelId,that.travelId);
     }
 
     @Override
