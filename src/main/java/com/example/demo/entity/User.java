@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 
 public  class User {
     private Long id;
-    private int number;
+    private long number;
     private String email;
     private String username;
     private String password;
     private boolean active;
-    private LocalDateTime dataRegistretion;
+    private LocalDateTime dateRegistration;
     private Role role;
     private String country;
 
@@ -29,11 +29,11 @@ public  class User {
         this.id = id;
     }
 
-    public int getNumber() {
+    public long getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(long number) {
         this.number = number;
     }
 
@@ -69,12 +69,12 @@ public  class User {
         this.active = active;
     }
 
-    public LocalDateTime getDataRegistretion() {
-        return dataRegistretion;
+    public LocalDateTime getDateRegistration() {
+        return dateRegistration;
     }
 
-    public void setDataRegistretion(LocalDateTime dataRegistretion) {
-        this.dataRegistretion = dataRegistretion;
+    public void setDateRegistration(LocalDateTime dateRegistration) {
+        this.dateRegistration = dateRegistration;
     }
 
     public Role getRole() {
@@ -85,14 +85,16 @@ public  class User {
         this.role = role;
     }
 
-    public User(Long id, int number, String email, String username, String password, boolean active, LocalDateTime dataRegistretion, Role role, String country) {
+    public User(Long id, long number, String email, String username,
+                String password, boolean active, LocalDateTime dateRegistration,
+                Role role, String country) {
         this.id = id;
         this.number = number;
         this.email = email;
         this.username = username;
         this.password = password;
         this.active = active;
-        this.dataRegistretion = dataRegistretion;
+        this.dateRegistration = dateRegistration;
         this.role = role;
         this.country = country;
     }

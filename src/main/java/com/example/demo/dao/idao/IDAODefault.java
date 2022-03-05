@@ -4,12 +4,11 @@ import java.util.List;
 
 public interface IDAODefault<T> {
 
-    void deleteAllById(Iterable<Long> ids);
-    void deleteAllByEntity(Iterable<T> entities);
-    void deleteByEntity(T entity);
-    void deleteById(Long id);
-    void deleteAll();
-
+    int deleteAllById(Iterable<Long> ids);
+    int deleteAllByEntity(Iterable<T> entities);
+    int deleteByEntity(T entity);
+    int deleteById(Long id);
+    int deleteAll();
 
     List<T> findAll();
     List<T> findAllById(Iterable<Long> ids);
@@ -17,6 +16,9 @@ public interface IDAODefault<T> {
 
     boolean addAll(Iterable<T> entities);
     boolean add(T entity);
+
+    int updateAllById(Iterable<T> entities);
+    int updateOneById(T entity);
 
     boolean saveAll(Iterable<T> entities);
     boolean save(T entity);
