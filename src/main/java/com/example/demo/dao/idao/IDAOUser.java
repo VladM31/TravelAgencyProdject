@@ -6,24 +6,24 @@ import com.example.demo.entity.User;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface IDAOUser extends  IDAODefault<User> {
+public interface IDAOUser<T extends User> extends  IDAODefault<T> {
 
-   User  findByNumber(long number);
-   User findByEmail(String email);
-   User findByUsername(String username);
-   User findByUsernameAndPassword(String username,String password);
-   List<User> findByPassword(String password);
+   public T  findByNumber(long number);
+   public T findByEmail(String email);
+   public T findByUsername(String username);
+   public T findByUsernameAndPassword(String username,String password);
+   public List<T> findByPassword(String password);
 
-   List<User> findByDateRegistration(LocalDateTime dataRegistration);
-   List<User> findByDateRegistrationAfter(LocalDateTime dataRegistration);
-   List<User> findByDateRegistrationBefore(LocalDateTime dataRegistration);
-   List<User> findByDateRegistrationBetween(LocalDateTime start,LocalDateTime end);
+   public List<T> findByDateRegistration(LocalDateTime dataRegistration);
+   public List<T> findByDateRegistrationAfter(LocalDateTime dataRegistration);
+   public List<T> findByDateRegistrationBefore(LocalDateTime dataRegistration);
+   public List<T> findByDateRegistrationBetween(LocalDateTime start,LocalDateTime end);
 
-   List<User> findByActive(boolean active);
-   List<User> findByRole(Role role);
-   List<User> findByCountry(String country);
+   public List<T> findByActive(boolean active);
+   public List<T> findByRole(Role role);
+   public List<T> findByCountry(String country);
 
-   List<User> findByEmailLike(String piece);
-   List<User> findByEmailStarting(String start);
-   List<User> findByEmailEnding(String end);
+   public List<T> findByEmailLike(String piece);
+   public List<T> findByEmailStartingWith(String start);
+   public List<T> findByEmailEndingWith(String end);
 }
