@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @Controller
-public class TestControler {
+public class SecurityControler {
 
     @RequestMapping(value = { "/", "/mainWindow" }, method = { RequestMethod.GET, RequestMethod.POST })
     public String showMainWindow(Model model) {
