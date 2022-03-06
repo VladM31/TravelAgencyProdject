@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.Test;
 import com.example.demo.entity.User;
+import com.example.demo.forms.ChooseSignUpForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,5 +36,24 @@ public class SecurityControler {
         return "mainWindowPage";
     }
 
+    @RequestMapping(value= {"/sign_up"},method = { RequestMethod.GET })
+    public String signUpGet(Model model)
+    {
+        model.addAttribute("setSignUp",new ChooseSignUpForm(null,false,true));
 
+        return "choose_sign_upPage";
+    }
+
+    @RequestMapping(value= {"/sign_up"},method = { RequestMethod.POST })
+    public String signUpPOST(Model model,ChooseSignUpForm form)
+    {
+        if (form.isEmpty()) {
+            model.addAttribute("setSignUp", new ChooseSignUpForm(null, true, false));
+            return "choose_sign_upPage";
+        }
+        if (form.isCustomer()) {
+            return "redirect:/login";
+        }
+        return "redirect:/mainWindowPage";
+    }
 }

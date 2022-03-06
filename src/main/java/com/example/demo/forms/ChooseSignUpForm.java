@@ -1,49 +1,77 @@
 package com.example.demo.forms;
 
 public class ChooseSignUpForm {
-    private static String decsribeCustomer;
-    private static String decsribeTravelAgency;
+    private static String decsribeCustomer = "Таки купить";
+    private static String decsribeTravelAgency = "Таки продать";
 
-    private boolean chooseCustomer;
-    private boolean chooseTravelAgency;
-
-    public static String getDecsribeCustomer() {
-        return decsribeCustomer;
-    }
+    private Boolean choose;
+    private boolean error;
+    private boolean hello;
 
     public static void setDecsribeCustomer(String decsribeCustomer) {
         ChooseSignUpForm.decsribeCustomer = decsribeCustomer;
-    }
-
-    public static String getDecsribeTravelAgency() {
-        return decsribeTravelAgency;
     }
 
     public static void setDecsribeTravelAgency(String decsribeTravelAgency) {
         ChooseSignUpForm.decsribeTravelAgency = decsribeTravelAgency;
     }
 
-    public boolean isChooseCustomer() {
-        return chooseCustomer;
+    public void setChoose(Boolean choose) {
+        this.choose = choose;
     }
 
-    public void setChooseCustomer(boolean chooseCustomer) {
-        this.chooseCustomer = chooseCustomer;
+    public void setError(boolean error) {
+        this.error = error;
     }
 
-    public boolean isChooseTravelAgency() {
-        return chooseTravelAgency;
+    public ChooseSignUpForm(Boolean choose, boolean error, boolean hello) {
+        this.choose = choose;
+        this.error = error;
+        this.hello = hello;
     }
 
-    public void setChooseTravelAgency(boolean chooseTravelAgency) {
-        this.chooseTravelAgency = chooseTravelAgency;
+    public void setHello(boolean hello) {
+        this.hello = hello;
     }
 
-    public ChooseSignUpForm(boolean chooseCustomer, boolean chooseTravelAgency) {
-        this.chooseCustomer = chooseCustomer;
-        this.chooseTravelAgency = chooseTravelAgency;
+    public static String getDecsribeCustomer() {
+        return decsribeCustomer;
+    }
+
+    public static String getDecsribeTravelAgency() {
+        return decsribeTravelAgency;
+    }
+
+    public Boolean getChoose() {
+        return choose;
+    }
+
+    public boolean isError() {
+        return error;
+    }
+
+    public boolean isHello() {
+        return hello;
     }
 
     public ChooseSignUpForm() {
+    }
+
+    public boolean isEmpty()
+    {
+        return this.choose == null;
+    }
+
+    public boolean isCustomer()
+    {
+        return this.choose;
+    }
+
+
+
+    public void turnOnError()
+    {
+        this.error = true;
+        this.hello = false;
     }
 }

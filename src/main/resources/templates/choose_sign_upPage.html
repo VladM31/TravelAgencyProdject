@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+
+    <title>Please sign in</title>
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/popper/popper.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <link href="choose_sign_up_css.css" rel="stylesheet"/>
+</head>
+<body class="mainBackground">
+    <div >
+        <div class="palceForAllDescribe" >
+            <p class="decsribeUser">Опис</p>
+        </div>
+    
+        <form class="placeForAllButtom" th:object="${setSignUp}" th:action="@{/sign_up}" method="post">
+            <p class="signUpText" th:if="${setSignUp.hello}">Зареєструвати</p>
+            <p class="signUpText" th:if="${setSignUp.error}">Не вібрана реєстрація</p>
+            <div class="buttonForCustomer">
+                <p>Користувача</p>
+                
+            </div>
+            <div class="buttomForTravelAgency">
+                <p>Турагенцію</p>
+                
+            </div>
+            
+                <input type="radio" class="radioCustomer"  name="contact" value="1" th:field="*{choose}">
+                <input type="radio" class="radioTreval"  name="contact" value="0" th:field="*{choose}">
+            
+            <input type="submit" class="buttonSend" value="Відправити">
+
+            
+        </form>
+    
+        <div class="describeForCustomer">
+            <p th:text="${setSignUp.decsribeCustomer}">Welcome to our grocery store!</p>
+        </div>
+    
+        <div class="describeForTravelAgency">
+            <p th:text="${setSignUp.decsribeTravelAgency}">Welcome to our grocery store!</p>
+        </div>
+    </div>
+
+   
+
+</body>
+</html>
