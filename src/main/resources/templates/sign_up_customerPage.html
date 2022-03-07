@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+
+    <title>Please sign in</title>
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/popper/popper.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+    <link href="sign_up_customer_css.css" rel="stylesheet"/>
+</head>
+<body class="mainLable" >
+<div class="lableSignUp">
+    <p class="signUpText" th:if="${customer.hello}">Реєстрація</p>
+    <p class="signUpText" th:if="${customer.error}">Введена не коректна інформація</p>
+
+    <form th:action="@{/sign_up_error}" th:object="${customer}" method="POST">
+
+        <input type="text" class="lableLogin" placeholder="Enter login" th:field="*{username}">
+        <p class="labelTextLogin">Login</p>
+
+        <input type="text" class="lablePassword" placeholder="Enter password" th:field="*{password}">
+        <p class="labelTextPassword">Password</p>
+
+        <input type="text" class="lableName" placeholder="Enter name" th:field="*{name}">
+        <p class="labelTextName">Name</p>
+
+        <input type="text" class="lableSurname" placeholder="Enter surname" th:field="*{surname}">
+        <p class="labelTextSurname">Surname</p>
+
+        <input type="text" class="lableNumber" placeholder="Enter number" th:field="*{number}">
+        <p class="labelTextNubmer">Number</p>
+
+        <input type="text" class="lableEmail" placeholder="Enter email" th:field="*{email}">
+        <p class="labelTextEmail">Email</p>
+
+        <input type="text" class="lableCountry" placeholder="Enter country" th:field="*{country}">
+        <p class="labelTextCountry">Country</p>
+
+        <div class="divChooseSex">
+            <p class="manText">Чоловік</p>
+            <input type="radio" class="manRadio" name="male" value="man" th:field="*{gender}">
+            <p class="womanText">Жінка</p>
+            <input type="radio" class="womanRadio" name="male" value="woman" th:field="*{gender}">
+            <p class="otherText">Ішне</p>
+            <input type="radio" class="otherRadio" name="male" value="other" th:field="*{gender}">
+        </div>
+
+        <input type="submit" class="mainButton">
+    </form>
+</div>
+
+</body>
+</html>
+
