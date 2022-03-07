@@ -8,37 +8,37 @@ import java.util.List;
 public interface IDAOTravelAgency<TA extends TravelAgency> extends IDAOUser<TA>{
 
 
-    List<TA> findByTravelAgencyIdIn(@NonNull Iterable<Long> ids);
-    List<TA> findByTravelAgencyObjectIdIn(@NonNull Iterable<TA> ids);
-    TA findByTravelAgencyId(@NonNull Long id);
+     public  List<TA> findByTravelAgencyIdIn(@NonNull Iterable<Long> ids);
+     public  List<TA> findByTravelAgencyObjectIdIn(@NonNull Iterable<TA> ids);
+     public  TA findByTravelAgencyId(@NonNull Long id);
 
-    List<TA> findByRating(float rating);
-    List<TA> findByRatingLessThan(float rating);
-    List<TA> findByRatingLessThanEqual(float rating);
-    List<TA> findByRatingGreaterThan(float rating);
-    List<TA> findByRatingGreaterThanEqual(float rating);
+     public List<TA> findByRating(float rating);
+     public List<TA> findByRatingLessThan(float rating);
+     public List<TA> findByRatingLessThanEqual(float rating);
+     public List<TA> findByRatingGreaterThan(float rating);
+     public List<TA> findByRatingGreaterThanEqual(float rating);
 
-    List<TA> findByRatingGreaterThanAndLessThan(float rating);
-    List<TA> findByRatingGreaterThanEqualAndLessThan(float rating);
-    List<TA> findByRatingGreaterThanAndLessThanEqual(float rating);
-    List<TA> findByRatingGreaterThanEqualAndLessThanEqual(float rating);
+     public List<TA> findByRatingGreaterThanAndLessThan(float rating);
+     public List<TA> findByRatingGreaterThanEqualAndLessThan(float rating);
+     public List<TA> findByRatingGreaterThanAndLessThanEqual(float rating);
+     public List<TA> findByRatingGreaterThanEqualAndLessThanEqual(float rating);
 
-    TA findByKVED(long kved);
-    List<TA> findByKVEDIn(@NonNull Iterable<Long> kveds);
+     public TA findByKVED(long kved);
+     public List<TA> findByKVEDIn(@NonNull Iterable<Long> kveds);
 
-    TA findByEGRPOY(Long egrpoy);
-    List<TA> findByEGRPOYIn(@NonNull Iterable<Long> egrpoys);
-    List<TA> findByEGRPOYIsNull();
-    List<TA> findByEGRPOYIsNotNull();
+     public TA findByEGRPOY(Long egrpoy);
+     public List<TA> findByEGRPOYIn(@NonNull Iterable<Long> egrpoys);
+     public List<TA> findByEGRPOYIsNull();
+     public List<TA> findByEGRPOYIsNotNull();
 
-    TA findByRNEKPN(Long rnekpn);
-    List<TA> findByRNEKPNIn(@NonNull Iterable<Long> rnekpns);
-    List<TA> findByRNEKPNIsNull();
-    List<TA> findByRNEKPNIsNotNull();
+     public TA findByRNEKPN(Long rnekpn);
+     public List<TA> findByRNEKPNIn(@NonNull Iterable<Long> rnekpns);
+     public List<TA> findByRNEKPNIsNull();
+     public List<TA> findByRNEKPNIsNotNull();
 
-    TA findByAddress(String address);
-    List<TA> findByAddressLike(String script);
+     public TA findByAddress(String address);
+     public List<TA> findByAddressLike(String script);
 
-    List<TA> findByAllNameDirector(String allNameDirector);
-    List<TA> findByAllNameDirectorLike(String script);
+     public List<TA> findByAllNameDirector(String allNameDirector);
+     public List<TA> findByAllNameDirectorLike(String script);
 }

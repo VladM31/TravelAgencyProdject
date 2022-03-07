@@ -1,0 +1,440 @@
+
+.lableSignUp{
+    position: absolute;
+    width: 800px;
+    height: 600px;
+
+    background: rgba(255, 255, 255, 0.80);
+    border: 3px solid #0FBA53;
+    box-sizing: border-box;
+    border-radius: 55px;
+
+    margin-top: 4%;
+    margin-left: 22.5%;
+}
+
+.mainLable{
+    position: absolute;
+    width: 1600px;
+    height: 800px;
+
+    background: url(images/sign_up_customer_island.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+.lableLogin{
+    position: absolute;
+    width: 270px;
+    height: 65px;
+
+    background: rgba(255, 255, 255, 0.75);
+    border: 3px solid rgba(15, 186, 83, 0.85);
+    box-sizing: border-box;
+    border-radius: 30px;
+
+    font-family: Volkhov;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 36px;
+    padding: 30px;
+
+    margin-top: 120px;
+    margin-left: 64px;
+}
+
+.lableName{
+    position: absolute;
+    width: 270px;
+    height: 65px;
+
+    background: rgba(255, 255, 255, 0.75);
+    border: 3px solid rgba(15, 186, 83, 0.85);
+    box-sizing: border-box;
+    border-radius: 30px;
+
+    font-family: Volkhov;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 36px;
+    padding: 30px;
+
+    margin-top: 215px;
+    margin-left: 64px;
+}
+
+.lableSurname{
+    position: absolute;
+    width: 270px;
+    height: 65px;
+
+    background: rgba(255, 255, 255, 0.75);
+    border: 3px solid rgba(15, 186, 83, 0.85);
+    box-sizing: border-box;
+    border-radius: 30px;
+
+    font-family: Volkhov;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 36px;
+    padding: 30px;
+
+    margin-top: 215px;
+    margin-left: 444px;
+}
+
+
+
+.lableEmail{
+    position: absolute;
+    width: 270px;
+    height: 65px;
+
+    background: rgba(255, 255, 255, 0.75);
+    border: 3px solid rgba(15, 186, 83, 0.85);
+    box-sizing: border-box;
+    border-radius: 30px;
+
+    font-family: Volkhov;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 36px;
+    padding: 30px;
+
+    margin-top: 310px;
+    margin-left: 444px;
+}
+
+.lablePassword{
+    position: absolute;
+    width: 270px;
+    height: 65px;
+
+    background: rgba(255, 255, 255, 0.75);
+    border: 3px solid rgba(15, 186, 83, 0.85);
+    box-sizing: border-box;
+    border-radius: 30px;
+
+    font-family: Volkhov;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 36px;
+
+    padding: 30px;
+    margin-top: 120px;
+    margin-left: 444px;
+}
+
+.lableNumber{
+    position: absolute;
+    width: 270px;
+    height: 65px;
+
+    background: rgba(255, 255, 255, 0.75);
+    border: 3px solid rgba(15, 186, 83, 0.85);
+    box-sizing: border-box;
+    border-radius: 30px;
+
+    font-family: Volkhov;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 36px;
+    padding: 30px;
+
+    margin-top: 310px;
+    margin-left: 64px;
+}
+
+.lableCountry{
+    position: absolute;
+    width: 270px;
+    height: 65px;
+
+    background: rgba(255, 255, 255, 0.75);
+    border: 3px solid rgba(15, 186, 83, 0.85);
+    box-sizing: border-box;
+    border-radius: 30px;
+
+    font-family: Volkhov;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 36px;
+    padding: 30px;
+
+    margin-top: 405px;
+    margin-left: 64px;
+}
+
+input[type=text]:focus {
+    border: 3px solid rgb(28, 161, 214);
+    outline: none;
+}
+
+.labelTextLogin{
+    position: absolute;
+    width: 164px;
+    height: 36px;
+
+    font-family: Volkhov;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 36px;
+
+    color: rgba(15, 186, 83, 0.85);
+
+    margin-top: 90px;
+    margin-left: 90px;
+}
+
+.labelTextPassword{
+    position: absolute;
+    width: 164px;
+    height: 36px;
+
+    font-family: Volkhov;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 36px;
+
+    color: rgba(15, 186, 83, 0.85);
+
+    margin-top: 90px;
+    margin-left: 470px;
+}
+
+.labelTextName{
+    position: absolute;
+    width: 164px;
+    height: 36px;
+
+    font-family: Volkhov;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 36px;
+
+    color: rgba(15, 186, 83, 0.85);
+
+    margin-top: 185px;
+    margin-left: 90px;
+}
+
+.labelTextSurname{
+    position: absolute;
+    width: 164px;
+    height: 36px;
+
+    font-family: Volkhov;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 36px;
+
+    color: rgba(15, 186, 83, 0.85);
+
+    margin-top: 185px;
+    margin-left: 470px;
+}
+
+.labelTextEmail{
+    position: absolute;
+    width: 164px;
+    height: 36px;
+
+    font-family: Volkhov;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 36px;
+
+    color: rgba(15, 186, 83, 0.85);
+
+    margin-top: 280px;
+    margin-left: 470px;
+}
+
+.labelTextNubmer{
+    position: absolute;
+    width: 164px;
+    height: 36px;
+
+    font-family: Volkhov;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 36px;
+
+    color: rgba(15, 186, 83, 0.85);
+
+    margin-top: 280px;
+    margin-left: 90px;
+}
+
+.labelTextCountry{
+    position: absolute;
+    width: 164px;
+    height: 36px;
+
+    font-family: Volkhov;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 28px;
+    line-height: 36px;
+
+    color: rgba(15, 186, 83, 0.85);
+
+    margin-top: 375px;
+    margin-left: 90px;
+}
+
+.divChooseSex{
+    position: absolute;
+    width: 360px;
+    height: 50px;
+
+    background: #ffffff;
+    border: 3px solid rgba(15, 186, 83, 0.85);
+    box-sizing: border-box;
+    margin-top: 410px;
+    margin-left: 355px;
+
+    border: 3px solid rgba(15, 186, 83, 0.85);
+    box-sizing: border-box;
+    border-radius: 10px;
+}
+
+.manText{
+    position: absolute;
+    width: 103px;
+    height: 23px;
+
+    font-family: Volkhov;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 31px;
+
+    color: rgba(15, 186, 83, 0.85);
+    margin-top: 4px;
+    margin-left: 20px;
+}
+
+.manRadio{
+    position: absolute;
+    width: 19px;
+    height: 19px;
+
+    background: #C4C4C4;
+    border: 2px solid #494949;
+    box-sizing: border-box;
+    margin-top: 9px;
+    margin-left: 110px;
+}
+
+.womanText{
+    position: absolute;
+    width: 103px;
+    height: 23px;
+
+    font-family: Volkhov;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 31px;
+
+    color: rgba(15, 186, 83, 0.85);
+    margin-top: 4px;
+    margin-left: 140px;
+}
+
+.womanRadio{
+    position: absolute;
+    width: 19px;
+    height: 19px;
+
+    background: #C4C4C4;
+    border: 2px solid #494949;
+    box-sizing: border-box;
+    margin-top: 10px;
+    margin-left: 210px;
+}
+
+.otherText{
+    position: absolute;
+    width: 103px;
+    height: 23px;
+
+    font-family: Volkhovwomam;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 31px;
+
+    color: rgba(15, 186, 83, 0.85);
+    margin-top: 4px;
+    margin-left: 240px;
+}
+
+.otherRadio{
+    position: absolute;
+    width: 19px;
+    height: 19px;
+
+    background: #C4C4C4;
+    border: 2px solid #494949;
+    box-sizing: border-box;
+    margin-top: 10px;
+    margin-left: 300px;
+}
+
+.mainButton{
+    position: absolute;
+    width: 250px;
+    height: 60px;
+
+    background: rgba(15, 186, 83, 0.6);
+    border: 3px solid rgba(15, 186, 83, 0.8);
+    box-sizing: border-box;
+    border-radius: 12px;
+
+    font-family: Volkhov;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 28px;
+    line-height: 36px;
+    color: #FFFFFF;
+
+    margin-top: 62%;
+    margin-left: 270px;
+}
+
+.mainButton:hover{
+    background: rgba(15, 186, 83);
+    border: 3px solid rgba(15, 186, 83 );
+}
+
+.signUpText{
+    position: absolute;
+    width: 286px;
+    height: 55px;
+
+    font-family: Volkhov;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 48px;
+    line-height: 62px;
+
+    color: rgba(15, 186, 83, 0.85);
+    margin-top: 15px;
+    margin-left: 260px;
+}

@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.Test;
 import com.example.demo.entity.User;
 import com.example.demo.forms.ChooseSignUpForm;
+import com.example.demo.forms.CustomerForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,8 +53,16 @@ public class SecurityControler {
             return "choose_sign_upPage";
         }
         if (form.isCustomer()) {
-            return "redirect:/login";
+            model.addAttribute("customer",new CustomerForm());
+            return "sign_up_customerPage";
         }
-        return "redirect:/mainWindowPage";
+        return "redirect:/mainWindow";
+    }
+
+    @RequestMapping(value= {"/sign_up_error"},method = { RequestMethod.POST })
+    public String signUpCustomerPOST(Model model, CustomerForm form)
+    {
+        System.out.println(form);
+        return "redirect:/login";
     }
 }
