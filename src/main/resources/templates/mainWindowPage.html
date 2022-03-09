@@ -14,26 +14,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
 
-
+    <link href="css/mainPrototypeStyle.css" rel="stylesheet"/>
 </head>
 
-<body>
+<body class="main">
     <!-- Include _menu.html -->
-	<div class="container">
+	<div class="container-lg">
 
         <div>
             <a href="#" class="btn btn-primary">Main Window</a>
              | &nbsp;
             <a  th:href="@{/login}" class="btn btn-outline-info">Sing in</a>
             | &nbsp;
+            <div class="spinner-grow text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            |
         </div>
 
-			<img class="img-fluid img-thumbnail" src="https://ispaniainvest.com/wp-content/uploads/2014/02/%D1%82%D1%83%D1%80%D1%84%D0%B8%D1%80%D0%BC%D1%8B.jpg"
-				alt="альтернативный текст">
-
-
-
-
 	</div>
+
+
 </body>
 </html>

@@ -142,7 +142,9 @@ public class TravelAgencyForm {
     }
 
     public TravelAgencyForm() {
+
         this.hello = true;
+        this.EGRPOYorRNYKPN = 0L;
     }
 
     @Override
@@ -191,5 +193,17 @@ public class TravelAgencyForm {
 
         return travel;
     }
+
+    public boolean isChooseEmpty() {
+        return this.whatChoose == null;
+    }
+
+    public TravelAgencyForm getErrorForm()
+    {
+        this.hello = false;
+        this.error = true;
+        return this;
+    }
+
 
 }

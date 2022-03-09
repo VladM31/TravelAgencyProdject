@@ -4,6 +4,7 @@ import com.example.demo.Test;
 import com.example.demo.entity.User;
 import com.example.demo.forms.ChooseSignUpForm;
 import com.example.demo.forms.CustomerForm;
+import com.example.demo.forms.TravelAgencyForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,16 +53,31 @@ public class SecurityControler {
             model.addAttribute("setSignUp", new ChooseSignUpForm(null, true, false));
             return "choose_sign_upPage";
         }
+
         if (form.isCustomer()) {
             model.addAttribute("customer",new CustomerForm());
             return "sign_up_customerPage";
+        }else{
+            model.addAttribute("travel",new TravelAgencyForm());
+            return "sign_up_travel_agencyPage";
         }
-        return "redirect:/mainWindow";
     }
 
     @RequestMapping(value= {"/sign_up_error"},method = { RequestMethod.POST })
     public String signUpCustomerPOST(Model model, CustomerForm form)
     {
+        System.out.println(form);
+        return "redirect:/login";
+    }
+
+    @RequestMapping(value= {"/sign_up_error_travel"},method = { RequestMethod.POST })
+    public String signUpTravelAgencyPOST(Model model, TravelAgencyForm form)
+    {
+        if (form.isChooseEmpty())
+        {
+            model.addAttribute("travel",form.getErrorForm());
+            return "sign_up_travel_agencyPage";
+        }
         System.out.println(form);
         return "redirect:/login";
     }
