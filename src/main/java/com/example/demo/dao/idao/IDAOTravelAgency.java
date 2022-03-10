@@ -18,10 +18,10 @@ public interface IDAOTravelAgency<TA extends TravelAgency> extends IDAOUser<TA>{
      public List<TA> findByRatingGreaterThan(float rating);
      public List<TA> findByRatingGreaterThanEqual(float rating);
 
-     public List<TA> findByRatingGreaterThanAndLessThan(float rating);
-     public List<TA> findByRatingGreaterThanEqualAndLessThan(float rating);
-     public List<TA> findByRatingGreaterThanAndLessThanEqual(float rating);
-     public List<TA> findByRatingGreaterThanEqualAndLessThanEqual(float rating);
+     public List<TA> findByRatingGreaterThanAndLessThan(float ratingF,float ratingE);
+     public List<TA> findByRatingGreaterThanEqualAndLessThan(float ratingF,float ratingE);
+     public List<TA> findByRatingGreaterThanAndLessThanEqual(float ratingF,float ratingE);
+     public List<TA> findByRatingGreaterThanEqualAndLessThanEqual(float ratingF,float ratingE);
 
      public TA findByKVED(long kved);
      public List<TA> findByKVEDIn(@NonNull Iterable<Long> kveds);
