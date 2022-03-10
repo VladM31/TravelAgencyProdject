@@ -169,4 +169,15 @@ public class CustomerForm {
             return null;
         }
     }
+
+    public boolean hasGender() {
+        return this.gender != null;
+    }
+
+    public void turnOnError()
+    {
+        this.error = true;
+        this.hello = false;
+    }
+
 }

@@ -11,7 +11,6 @@ public interface IDAOUser<T extends User> extends  IDAODefault<T> {
    public T  findByNumber(long number);
    public T findByEmail(String email);
    public T findByUsername(String username);
-   public T findByUsernameAndPassword(String username,String password);
    public List<T> findByPassword(String password);
 
    public List<T> findByDateRegistration(LocalDateTime dataRegistration);

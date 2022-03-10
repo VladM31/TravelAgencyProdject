@@ -2,6 +2,7 @@ package com.example.demo.dao.idao;
 
 import com.example.demo.entity.User;
 
-public interface IDAOFactoryUser {
+public interface IDAOSecurity {
     public User getUserByUsernameDependingOnRole(String username);
+    public boolean canAddThisUser(User user);
 }

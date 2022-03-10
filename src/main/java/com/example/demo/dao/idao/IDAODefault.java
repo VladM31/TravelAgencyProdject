@@ -14,12 +14,11 @@ public interface IDAODefault<T> {
    public List<T> findAllById(Iterable<Long> ids);
    public       T findOneById(Long id);
 
-   public boolean addAll(Iterable<T> entities);
-   public boolean add(T entity);
-
    public int updateAllById(Iterable<T> entities);
    public int updateOneById(T entity);
 
    public boolean saveAll(Iterable<T> entities);
    public boolean save(T entity);
+
+   public long size();
 }
