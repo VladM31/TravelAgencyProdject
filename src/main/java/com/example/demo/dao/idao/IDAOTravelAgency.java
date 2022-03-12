@@ -41,4 +41,11 @@ public interface IDAOTravelAgency<TA extends TravelAgency> extends IDAOUser<TA>{
 
      public List<TA> findByAllNameDirector(String allNameDirector);
      public List<TA> findByAllNameDirectorLike(String script);
+
+     public List<TA> findByCanUse(boolean canU);
+     public TA findByNameTravelAgency(String nameTravel);
+     public List<TA> findByNameTravelAgencyLike(String nameTravel);
+     public List<TA> findByNameTravelAgencyContaining(String nameTravel);
+     public List<TA> findByNameTravelAgencyStartingWith(String nameTravel);
+     public List<TA> findByNameTravelAgencyEndingWith(String nameTravel);
 }

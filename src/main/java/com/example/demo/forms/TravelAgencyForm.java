@@ -175,6 +175,7 @@ public class TravelAgencyForm {
          travel.setDateRegistration(LocalDateTime.now());
          travel.setRole(Role.TRAVEL_AGENCY);
          travel.setRating(0.0f);
+         travel.setCan_use(false);
         // -------- set ----------------
         travel.setNumber(Long.parseLong(this.numberPhone));
         travel.setEmail(this.email);
@@ -184,7 +185,7 @@ public class TravelAgencyForm {
         travel.setKved(this.KVED);
         travel.setAddress(this.addressTravelAgency);
         travel.setAllNameDirector(this.nameHeadAgency);
-
+        travel.setNameTravelAgency(this.nameTravelAgency);
         if (this.whatChoose.equals("setEGRPOY")) {
             travel.setEgrpoy(this.EGRPOYorRNYKPN);
         } else {

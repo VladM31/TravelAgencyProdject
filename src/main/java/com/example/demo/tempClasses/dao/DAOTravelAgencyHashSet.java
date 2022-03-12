@@ -421,4 +421,48 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     public List<TravelAgency> findByAllNameDirectorLike(String script) {
         return null;
     }
+
+    @Override
+    public List<TravelAgency> findByCanUse(boolean canU) {
+        return table.stream().filter( i -> i.isCan_use() == canU).collect(Collectors.toList());
+    }
+
+    @Override
+    public TravelAgency findByNameTravelAgency(String nameTravel) {
+        for (TravelAgency ta : this.table) {
+            if (ta.getNameTravelAgency().equals(nameTravel)) {
+                return ta;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<TravelAgency> findByNameTravelAgencyLike(String nameTravel) {
+        return null;
+    }
+
+    @Override
+    public List<TravelAgency> findByNameTravelAgencyContaining(String nameTravel) {
+        return table.stream().filter(i -> i.getNameTravelAgency().contains(nameTravel)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TravelAgency> findByNameTravelAgencyStartingWith(String nameTravel) {
+        return table.stream().filter(i -> i.getNameTravelAgency().startsWith(nameTravel)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TravelAgency> findByNameTravelAgencyEndingWith(String nameTravel) {
+        return  table.stream().filter(i -> i.getNameTravelAgency().endsWith(nameTravel)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TravelAgency> findByUsernameOrPasswordOrNumberOrEmail(TravelAgency user) {
+        return table.stream().filter( i -> i.getUsername().equals(user.getUsername()) ||
+                i.getPassword().equals(user.getPassword()) ||
+                i.getNumber() == user.getNumber() ||
+                i.getEmail().equals(user.getEmail())
+        ).collect(Collectors.toList());
+    }
 }

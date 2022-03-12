@@ -2,7 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.Test;
 import com.example.demo.dao.idao.IDAOCustomer;
+import com.example.demo.dao.idao.IDAOSecurity;
+import com.example.demo.dao.idao.IDAOTravelAgency;
 import com.example.demo.entity.Customer;
+import com.example.demo.entity.TravelAgency;
 import com.example.demo.entity.User;
 import com.example.demo.forms.ChooseSignUpForm;
 import com.example.demo.forms.CustomerForm;
@@ -17,15 +20,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class SecurityControler {
 
-    private IDAOCustomer<Customer> datadao;
+    private IDAOCustomer<Customer> daoCustomer;
+
+    private IDAOTravelAgency<TravelAgency> daoTravelAgency;
+
+    private IDAOSecurity daoSecurity;
 
     public SecurityControler() {
         try(ClassPathXmlApplicationContext context =
                     new ClassPathXmlApplicationContext("DAOContext.xml")) {
-            datadao = context.getBean("DAOCustomer",IDAOCustomer.class);
+
+            daoCustomer = context.getBean("DAOCustomer",IDAOCustomer.class);
+            daoTravelAgency = context.getBean("DAOTravelAgency",IDAOTravelAgency.class);
+            daoSecurity = context.getBean("DAOSecurity",IDAOSecurity.class);
         } finally {
         }
-        System.out.println(datadao);
+        System.out.println(daoCustomer);
+        System.out.println(daoTravelAgency);
+        System.out.println(daoSecurity);
     }
 
     @RequestMapping(value = { "/", "/mainWindow" }, method = { RequestMethod.GET, RequestMethod.POST })
@@ -45,7 +57,7 @@ public class SecurityControler {
     public String signInPOST(Model model, User user) {
 
 
-        User temp = this.datadao.findByUsername(user.getUsername());
+        User temp = this.daoCustomer.findByUsername(user.getUsername());
         if(temp == null || (!temp.getPassword().equals(user.getPassword()))){
             model.addAttribute("tes", new Test(true,false));
             model.addAttribute("user",user);
@@ -96,7 +108,7 @@ public class SecurityControler {
             return "sign_up_customerPage";
         }
 
-        this.datadao.save(form.getCustomer());
+        this.daoCustomer.save(form.getCustomer());
 
         return "redirect:/login";
     }

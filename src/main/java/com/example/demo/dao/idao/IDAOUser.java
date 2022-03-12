@@ -25,4 +25,6 @@ public interface IDAOUser<T extends User> extends  IDAODefault<T> {
    public List<T> findByEmailLike(String piece);
    public List<T> findByEmailStartingWith(String start);
    public List<T> findByEmailEndingWith(String end);
+
+   public List<T> findByUsernameOrPasswordOrNumberOrEmail(T user);
 }

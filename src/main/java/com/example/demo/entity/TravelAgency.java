@@ -12,6 +12,24 @@ public class TravelAgency extends User{
     private String address;
     private String allNameDirector;
     private String describeAgency;
+    private String nameTravelAgency;
+    private boolean can_use;
+
+    public String getNameTravelAgency() {
+        return nameTravelAgency;
+    }
+
+    public void setNameTravelAgency(String nameTravelAgency) {
+        this.nameTravelAgency = nameTravelAgency;
+    }
+
+    public boolean isCan_use() {
+        return can_use;
+    }
+
+    public void setCan_use(boolean can_use) {
+        this.can_use = can_use;
+    }
 
     public Long getTravelId() {
         return travelId;
@@ -77,11 +95,11 @@ public class TravelAgency extends User{
         this.describeAgency = describeAgency;
     }
 
-    public TravelAgency(Long id, int number, String email, String username, String password,
-                        boolean active, LocalDateTime dataRegistretion, Role role,
-                        String country, Long travelId, float rating, long kved, Long egrpoy,
-                        Long rnekpn, String address, String allNameDirector, String describeAgency) {
-        super(id, number, email, username, password, active, dataRegistretion, role, country);
+    public TravelAgency(Long id, long number, String email, String username, String password, boolean active,
+                        LocalDateTime dateRegistration, Role role, String country, Long travelId, float rating,
+                        long kved, Long egrpoy, Long rnekpn, String address, String allNameDirector, String describeAgency,
+                        String nameTravelAgency, boolean can_use) {
+        super(id, number, email, username, password, active, dateRegistration, role, country);
         this.travelId = travelId;
         this.rating = rating;
         this.kved = kved;
@@ -90,10 +108,11 @@ public class TravelAgency extends User{
         this.address = address;
         this.allNameDirector = allNameDirector;
         this.describeAgency = describeAgency;
+        this.nameTravelAgency = nameTravelAgency;
+        this.can_use = can_use;
     }
 
     public TravelAgency(){
-
     }
 
     @Override
