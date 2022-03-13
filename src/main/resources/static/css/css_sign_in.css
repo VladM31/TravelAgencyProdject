@@ -21,7 +21,7 @@
     position: absolute;
     width: 1600px;
     height: 900px;
-    background: url(images/landscape.jpg);
+    background: url(../images/landscape.jpg);
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: 100% 100%;

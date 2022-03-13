@@ -155,7 +155,7 @@ public class CustomerForm {
         cust.setCountry(this.country);
         cust.setMale(CustomerForm.getGender(this.gender));
         cust.setFirstName(this.name);
-        cust.setUsername(this.surname);
+        cust.setLastName(this.surname);
 
         return cust;
     }

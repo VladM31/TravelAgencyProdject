@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
 public interface IDAOCustomer<C extends Customer> extends IDAOUser<C>{
      public List<C> findByMale(Boolean male);
      public List<C> findByCustomerIdIn(Iterable<C> ids);

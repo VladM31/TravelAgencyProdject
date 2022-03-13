@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
+   <head>
+     <title>log out</title>
+            <meta charset="UTF-8"/>
+   
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+       
+      <!-- See configuration in WebMvConfig.java -->
+      <link th:href="@{/bootstrap/css/bootstrap.min.css}"
+                rel="stylesheet" media="screen"/>
+                 
+        
+      <script th:src="@{/jquery/jquery.min.js}"></script>  
+      <script th:src="@{/popper/popper.min.js}"></script>  
+      <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>   
+          
+   </head>
+
+
+
+<body>
+
+	<div>
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" class="btn btn-success" value="Are you sure" />
+		</form>
+	</div>
+</body>
+</html>

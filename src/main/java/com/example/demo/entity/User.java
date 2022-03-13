@@ -1,8 +1,13 @@
 package com.example.demo.entity;
 
-import java.time.LocalDateTime;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-public  class User {
+import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.Set;
+
+public  class User implements UserDetails {
     private Long id;
     private long number;
     private String email;
@@ -49,8 +54,33 @@ public  class User {
         return username;
     }
 
+    @Override
+    public boolean isAccountNonExpired() {
+        return active;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return active;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return active;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return active;
+    }
+
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Set.of(this.role);
     }
 
     public String getPassword() {
@@ -83,6 +113,15 @@ public  class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 
     public User(Long id, long number, String email, String username,
