@@ -26,12 +26,49 @@
              | &nbsp;
             <a  th:href="@{/login}" class="btn btn-outline-info">Sing in</a>
             | &nbsp;
+            <a  th:href="@{/logout}" class="btn btn-outline-danger">Sing out</a>
+            | &nbsp;
+            <button id='b1' class="btn btn-outline-dark">Change photo</button>
+            | &nbsp;
             <div class="spinner-grow text-primary" role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
             |
         </div>
 
+        <script>
+            var i = 0;
+            var images =[];
+            var urlPhoto = "../images/backGroundHello/";
+
+            images[0] = urlPhoto + "mainBackground_house_1.jpg";
+            images[1] = urlPhoto + "mainBackground_house_2.jpg";
+            images[2] = urlPhoto + "mainBackground_house_3.jpg";
+            images[3] = urlPhoto + "mainBackground_house_4.jpg";
+            images[4] = urlPhoto + "mainBackground_house_5.jpg";
+            images[5] = urlPhoto + "mainBackground_red.jpg";
+            images[6] = urlPhoto + "mainBackground_view_1.jpg";
+            images[7] = urlPhoto + "mainBackground_view_2.jpg";
+            images[8] = urlPhoto + "mainBackground_view_3.jpg";
+            images[9] = urlPhoto + "mainBackground_view_4.jpg";
+            images[10] = urlPhoto + "mainBackground_winter_1.jpg";
+            images[11] = urlPhoto + "mainBackground_winter_2.jpg";
+            images[12] = urlPhoto + "mainBackground_winter_3.jpg";
+
+
+            function sliderShow(){
+                document.getElementsByClassName('main')[0].style = " background: url(" + images[i] +");background-repeat: no-repeat;\n" +
+                    "    background-attachment: fixed;\n" +
+                    "    background-size: 100% 100%;";
+                if(i < images.length-1) {
+                    i++;
+                } else{
+                    i=0;
+                }
+                //setTimeout("sliderShow()",time);
+            }
+            b1.onclick=sliderShow;
+        </script>
 	</div>
 
 

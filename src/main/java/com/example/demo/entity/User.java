@@ -115,15 +115,6 @@ public  class User implements UserDetails {
         this.role = role;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
-
     public User(Long id, long number, String email, String username,
                 String password, boolean active, LocalDateTime dateRegistration,
                 Role role, String country) {
@@ -155,5 +146,16 @@ public  class User implements UserDetails {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id = " + id +
+                ", username = '" + username + '\'' +
+                ", password = '" + password + '\'' +
+                ", dateRegistration = " + dateRegistration +
+                ", role = " + role +
+                '}';
     }
 }

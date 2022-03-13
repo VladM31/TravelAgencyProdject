@@ -8,14 +8,14 @@
     <script th:src="@{/jquery/jquery.min.js}"></script>
     <script th:src="@{/popper/popper.min.js}"></script>
     <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
-    <link href="sign_up_customer_css.css" rel="stylesheet"/>
+    <link href="css/sign_up_customer_css.css" rel="stylesheet"/>
 </head>
 <body class="mainLable" >
 <div class="lableSignUp">
     <p class="signUpText" th:if="${customer.hello}">Реєстрація</p>
-    <p class="signUpText" th:if="${customer.error}">Введена не коректна інформація</p>
+    <p class="incorrectSignUpText" th:if="${customer.error}">Введена не коректна інформація</p>
 
-    <form th:action="@{/sign_up_error}" th:object="${customer}" method="POST">
+    <form th:action="@{/sign_up_error_customer}" th:object="${customer}" method="POST">
 
         <input type="text" class="lableLogin" placeholder="Enter login" th:field="*{username}">
         <p class="labelTextLogin">Login</p>

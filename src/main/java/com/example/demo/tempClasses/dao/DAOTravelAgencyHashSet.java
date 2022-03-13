@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Component("DAOTravelAgency")
 public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
 
-    private Set<TravelAgency> table = new HashSet<>();
+    private static Set<TravelAgency> table = new HashSet<>();
 
     @Override
     public int deleteAllById(Iterable<Long> ids) {

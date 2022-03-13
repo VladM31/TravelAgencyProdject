@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Component("DAOCustomer")
 public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
 
-    private Set<Customer> table = new HashSet<>();
+    private static Set<Customer> table = new HashSet<>();
 
     public DAOCustomerHashSet() {
         table.add(new Customer(1l,38066047,"laf@gmail.com","laf","laf",

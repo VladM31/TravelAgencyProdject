@@ -18,7 +18,7 @@
     width: 1600px;
     height: 800px;
 
-    background: url(images/sign_up_customer_island.jpg);
+    background: url(../images/sign_up_customer_island.jpg);
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: 100% 100%;
@@ -437,4 +437,20 @@ input[type=text]:focus {
     color: rgba(15, 186, 83, 0.85);
     margin-top: 15px;
     margin-left: 260px;
+}
+
+.incorrectSignUpText{
+    position: absolute;
+    width: 700px;
+    height: 55px;
+
+    font-family: Volkhov;
+    font-style: italic;
+    font-weight: bold;
+    font-size: 48px;
+    line-height: 62px;
+
+    color: rgba(15, 186, 83, 0.85);
+    margin-top: 15px;
+    margin-left: 43px;
 }

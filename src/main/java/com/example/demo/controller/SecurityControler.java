@@ -50,7 +50,7 @@ public class SecurityControler {
         return "redirect:/mainWindow";
     }
 
-    @RequestMapping(value = { "/", "/mainWindow" }, method = { RequestMethod.GET, RequestMethod.POST })
+    @RequestMapping(value = { "/", "/mainWindow","/hello" }, method = { RequestMethod.GET, RequestMethod.POST })
     public String showMainWindow(Model model) {
 
         return "mainWindowPage";
@@ -68,25 +68,6 @@ public class SecurityControler {
     {
         return "logout";
     }
-
-
-//    @RequestMapping(value = { "/login"}, method = { RequestMethod.POST })
-//    public String signInPOST(Model model, User user) {
-//
-//        User temp = this.daoCustomer.findByUsername(user.getUsername());
-//        if(temp == null || (!temp.getPassword().equals(user.getPassword()))){
-//            model.addAttribute("tes", new Test(true,false));
-//            model.addAttribute("user",user);
-//            return "login";
-//        }
-//
-//        System.out.println("//-=-=-=- Sign in post -=-=-=-");
-//        System.out.println(user.getUsername());
-//        System.out.println(user.getPassword());
-//        System.out.println("\\\\-=-=-=- Sign in post -=-=-=-");
-//
-//        return "redirect:/mainWindow";
-//    }
 
     @RequestMapping(value= {"/sign_up"},method = { RequestMethod.GET })
     public String signUpGet(Model model)
@@ -113,7 +94,7 @@ public class SecurityControler {
         }
     }
 
-    @RequestMapping(value= {"/sign_up_error"},method = { RequestMethod.POST })
+    @RequestMapping(value= {"/sign_up_error_customer"},method = { RequestMethod.POST })
     public String signUpCustomerPOST(Model model, CustomerForm form) {
         if (!form.hasGender()) {
             form.turnOnError();
@@ -121,7 +102,16 @@ public class SecurityControler {
             return "sign_up_customerPage";
         }
 
-        this.daoCustomer.save(form.getCustomer());
+        Customer temp = form.getCustomer();
+
+        if(!this.daoSecurity.canAddThisUser(temp))
+        {
+            form.turnOnError();
+            model.addAttribute("customer", form);
+            return "sign_up_customerPage";
+        }
+
+        this.daoCustomer.save(temp);
         return "redirect:/login";
     }
 
@@ -131,7 +121,15 @@ public class SecurityControler {
             model.addAttribute("travel",form.getErrorForm());
             return "sign_up_travel_agencyPage";
         }
-        System.out.println(form);
+
+        TravelAgency temp = form.getTravelAgency();
+
+        if(!this.daoSecurity.canAddThisUser(temp)) {
+            model.addAttribute("customer", form.getErrorForm());
+            return "sign_up_customerPage";
+        }
+
+        this.daoTravelAgency.save(temp);
         return "redirect:/login";
     }
 }

@@ -11,7 +11,7 @@ public class CustomerForm {
         return idGenerator++;
     }
 
-    private static long idGenerator =0;
+    private static long idGenerator =10;
     private String username;
     private String password;
     private String name;
