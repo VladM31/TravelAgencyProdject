@@ -338,7 +338,7 @@ input[type=text]:focus {
     border: 2px solid #494949;
     box-sizing: border-box;
     margin-top: 9px;
-    margin-left: 110px;
+    margin-left: 90px;
 }
 
 .womanText{
@@ -354,7 +354,7 @@ input[type=text]:focus {
 
     color: rgba(15, 186, 83, 0.85);
     margin-top: 4px;
-    margin-left: 140px;
+    margin-left: 120px;
 }
 
 .womanRadio{

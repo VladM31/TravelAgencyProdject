@@ -12,6 +12,7 @@ import com.example.demo.forms.CustomerForm;
 import com.example.demo.forms.TravelAgencyForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,34 +39,28 @@ public class SecurityControler {
             daoSecurity = context.getBean("DAOSecurity",IDAOSecurity.class);
         } finally {
         }
-        System.out.println(daoCustomer);
-        System.out.println(daoTravelAgency);
-        System.out.println(daoSecurity);
-    }
-
-    @RequestMapping(value = { "/all"}, method = { RequestMethod.GET })
-    public String getAllCustomer()
-    {
-        this.daoCustomer.findAll().forEach(System.out::println);
-        return "redirect:/mainWindow";
     }
 
     @RequestMapping(value = { "/", "/mainWindow","/hello" }, method = { RequestMethod.GET, RequestMethod.POST })
-    public String showMainWindow(Model model) {
+    public String showMainWindow(@AuthenticationPrincipal User user, Model model) {
+        if (user != null) {
 
+            model.addAttribute("home", true);
+            this.setMenuModel(user,model);
+        }
+        System.out.println(user);
         return "mainWindowPage";
     }
 
     @RequestMapping(value = { "/login"}, method = { RequestMethod.GET })
     public String signInGet(Model model) {
-//        model.addAttribute("tes", new Test(false,true));
-//        model.addAttribute("user",new User());
+
         return "login";
     }
 
     @RequestMapping(value = { "/logout"}, method = { RequestMethod.GET })
-    public String signOutGet(Model model)
-    {
+    public String signOutGet(@AuthenticationPrincipal User user,Model model) {
+        this.setMenuModel(user,model);
         return "logout";
     }
 
@@ -132,4 +127,14 @@ public class SecurityControler {
         this.daoTravelAgency.save(temp);
         return "redirect:/login";
     }
+
+    private void setMenuModel(User user,Model model) {
+        model.addAttribute("sign_in", true);
+        if (user instanceof Customer) {
+            model.addAttribute("name", ((Customer) user).getFirstName());
+        } else if (user instanceof TravelAgency) {
+            model.addAttribute("name", ((TravelAgency) user).getNameTravelAgency());
+        }
+    }
+
 }

@@ -1,0 +1,38 @@
+
+.buttonAreYouSure{
+    position: absolute;
+    width: 397px;
+    height: 150px;
+    
+    background: rgba(163, 219, 250, 0.5);
+    border: 8px solid #00e1ff;
+    box-sizing: border-box;
+    border-radius: 50px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 60px;
+    line-height: 70px;
+
+    margin-top: 13%;
+    margin-left: 28%;
+    color: #00e1ff;
+}
+
+
+.buttonAreYouSure:hover{
+    color: #ffffff;
+    background: #00e1ff;
+}
+
+.bodyBackground{
+    position: absolute;
+    width: 1600px;
+    height: 900px;
+
+    background: url(../images/backgroundSignOut.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}

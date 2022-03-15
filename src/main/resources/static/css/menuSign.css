@@ -1,0 +1,132 @@
+.topMenu{
+        position: absolute;
+    width: 1237.89px;
+    height: 80px;
+
+    border-top: 0px;
+    border-radius: 0px 0px 30px 30px;
+    margin-left: 5%;
+}
+
+.buttonHome{
+    position: absolute;
+    width: 180px;
+    height: 55px;
+
+    background: rgba(107,0,56,0.85);
+    border-radius: 20px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+    border: 2px solid rgba(107,0,56,0.85);
+    margin-top: 1%;
+    margin-left: 1%;
+
+    color: #FFFFFF;
+}
+
+
+.buttonHome:hover{
+    background: rgba(255,39,150,0.85);
+    color: rgba(107,0,56);
+}
+
+.buttonService{
+    position: absolute;
+    width: 180px;
+    height: 55px;
+
+    background: rgba(107,0,56,0.85);
+    border-radius: 20px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+    border: 2px solid rgba(107,0,56,0.85);
+    margin-top: 1%;
+    margin-left: 18%;
+
+    color: #FFFFFF;
+}
+
+.buttonService:hover{
+    background: rgba(255,39,150,0.85);
+    color: rgba(107,0,56);
+}
+
+.buttonSign{
+    position: absolute;
+    width: 180px;
+    height: 55px;
+
+    background: rgba(107,0,56,0.85);
+    border-radius: 20px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+    border: 2px solid rgba(107,0,56,0.85);
+    margin-top: 1%;
+    margin-left: 84.5%;
+
+    color: #FFFFFF;
+}
+
+.buttonSign:hover{
+    background: rgba(255,39,150,0.85);
+    color: rgba(107,0,56);
+}
+
+.buttonChange{
+    position: absolute;
+    width: 230px;
+    height: 55px;
+
+    background: linear-gradient(rgba(107,0,56,0.85), rgb(2, 18, 110));
+    border-radius: 20px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+    border: 2px solid rgba(107,0,56,0.85);
+    margin-top: 1%;
+    margin-left: 35%;
+
+    color: #FFFFFF;
+}
+
+.buttonChange:hover{
+    background: linear-gradient(rgba(255,39,150,0.85), rgb(44, 39, 185));
+    color: rgb(255, 168, 214);
+}
+
+.buttonWelcome{
+    position: absolute;
+    width: 230px;
+    height: 35px;
+
+    background: rgba(107,0,56,0.55);
+    border-radius: 6px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+    margin-top: 2%;
+    margin-left: 60%;
+
+    color: #FFFFFF;
+
+    padding-top: 3px;
+    padding-left: 15px;
+}

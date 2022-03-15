@@ -18,8 +18,7 @@
         <div class="showSuccessfully" th:if="${param.error}">
             Invalid username and password.
         </div>
-        <div class="showSuccessfully" th:if="${param.logout}">
-
+        <div class="showSuccessfully"  th:unless="${param.error}">
             You have been logged out.
         </div>
         <div class="mainIconDiv">
@@ -38,7 +37,7 @@
 
         <!-- #region th:href="@{/male} -->
         <a class="signinLink" th:href="@{/sign_up}"  formmethod="get">Sign up</a>
-        <a class="forgotPassword" href="http://127.0.0.1:5500/test.html">Forgot password?</a>
+        <a class="forgotPassword" href="/">Forgot password?</a>
 
 
         <input class="signinButton" type="submit" value="Sign in">

@@ -24,8 +24,6 @@ public class DAOSecurityHashSet implements IDAOSecurity {
         if (getUser == null) {
             getUser = dataTravel.findByUsername(username);
         }
-        dataCustomer.findAll().forEach(System.out::println);
-        dataTravel.findAll().forEach(System.out::println);
         return getUser;
     }
 

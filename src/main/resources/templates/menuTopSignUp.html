@@ -1,0 +1,14 @@
+<div class="topMenu">
+
+       <a th:href="@{/}"><input type="submit" class="buttonHome" value="Home" ></a>
+
+       <a href="#"> <input type="submit" class="buttonService" value="Find service"></a>
+
+       <button id='b1' class="buttonChange" th:if="${home}">Change background</button>
+
+       <a th:href="@{/logout}"><input type="submit" class="buttonSign" value="Sign out" th:if="${sign_in}"></a>
+
+       <a th:href="@{/login}"><input type="submit" class="buttonSign" value="Sign in" th:unless="${sign_in}"></a>
+
+       <p class="buttonWelcome" th:text="${name}" th:if="${sign_in}">Welcome user</p>
+   </div>
