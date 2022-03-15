@@ -20,11 +20,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userService;
 
-    public SecurityConfig()
-    {
-        userService = new UserService();
-    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(NoOpPasswordEncoder.getInstance());

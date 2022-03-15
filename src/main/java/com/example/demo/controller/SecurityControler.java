@@ -10,6 +10,8 @@ import com.example.demo.entity.User;
 import com.example.demo.forms.ChooseSignUpForm;
 import com.example.demo.forms.CustomerForm;
 import com.example.demo.forms.TravelAgencyForm;
+import com.example.demo.tempClasses.verify.VerifyTempCustomerForm;
+import com.example.demo.tempClasses.verify.VerifyTempTravelAgencyForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,23 +25,14 @@ import java.util.List;
 
 @Controller
 public class SecurityControler {
-
+    @Autowired
     private IDAOCustomer<Customer> daoCustomer;
-
+    @Autowired
     private IDAOTravelAgency<TravelAgency> daoTravelAgency;
-
-    private IDAOSecurity daoSecurity;
-
-    public SecurityControler() {
-        try(ClassPathXmlApplicationContext context =
-                    new ClassPathXmlApplicationContext("DAOContext.xml")) {
-
-            daoCustomer = context.getBean("DAOCustomer",IDAOCustomer.class);
-            daoTravelAgency = context.getBean("DAOTravelAgency",IDAOTravelAgency.class);
-            daoSecurity = context.getBean("DAOSecurity",IDAOSecurity.class);
-        } finally {
-        }
-    }
+    @Autowired
+    private VerifyTempCustomerForm chechCustForm;
+    @Autowired
+    private VerifyTempTravelAgencyForm checkTravAgenForm;
 
     @RequestMapping(value = { "/", "/mainWindow","/hello" }, method = { RequestMethod.GET, RequestMethod.POST })
     public String showMainWindow(@AuthenticationPrincipal User user, Model model) {
@@ -49,6 +42,7 @@ public class SecurityControler {
             this.setMenuModel(user,model);
         }
         System.out.println(user);
+        System.out.println(daoCustomer);
         return "mainWindowPage";
     }
 
@@ -99,7 +93,7 @@ public class SecurityControler {
 
         Customer temp = form.getCustomer();
 
-        if(!this.daoSecurity.canAddThisUser(temp))
+        if(!chechCustForm.checkOut(form).equals("Successful"))
         {
             form.turnOnError();
             model.addAttribute("customer", form);
@@ -117,14 +111,12 @@ public class SecurityControler {
             return "sign_up_travel_agencyPage";
         }
 
-        TravelAgency temp = form.getTravelAgency();
-
-        if(!this.daoSecurity.canAddThisUser(temp)) {
+        if(!checkTravAgenForm.checkOut(form).equals("Successful")) {
             model.addAttribute("customer", form.getErrorForm());
             return "sign_up_customerPage";
         }
 
-        this.daoTravelAgency.save(temp);
+        this.daoTravelAgency.save(form.getTravelAgency());
         return "redirect:/login";
     }
 

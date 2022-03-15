@@ -31,7 +31,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
 
     @Override
     public String toString() {
-        return "DAOSet : " + this.table.hashCode();
+        return "DAOSet : " + this.table.hashCode() + "\n" + super.toString();
     }
 
     @Override

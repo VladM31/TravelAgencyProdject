@@ -22,6 +22,15 @@ public class CustomerForm {
     private String country;
     private boolean hello;
     private boolean error;
+    private long emailCheckCod = -1;
+
+    public long getEmailCheckCod() {
+        return emailCheckCod;
+    }
+
+    public void setEmailCheckCod(long emailCheckCod) {
+        this.emailCheckCod = emailCheckCod;
+    }
 
     public String getCountry() {
         return country;

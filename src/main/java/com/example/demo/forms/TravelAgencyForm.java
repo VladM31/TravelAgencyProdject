@@ -19,6 +19,15 @@ public class TravelAgencyForm {
     private String whatChoose;
     private String nameHeadAgency;
     private String country;
+    private long emailCheckCod = -1;
+
+    public long getEmailCheckCod() {
+        return emailCheckCod;
+    }
+
+    public void setEmailCheckCod(long emailCheckCod) {
+        this.emailCheckCod = emailCheckCod;
+    }
 
     public String getCountry() {
         return country;
@@ -126,7 +135,7 @@ public class TravelAgencyForm {
 
     public TravelAgencyForm(boolean hello, boolean error, String nameTravelAgency, String addressTravelAgency,
                             String numberPhone, long KVED, String login, String password, String email,
-                            Long EGRPOYorRNYKPN, String whatChoose, String nameHeadAgency) {
+                            Long EGRPOYorRNYKPN, String whatChoose, String nameHeadAgency, long emailCheckCod) {
         this.hello = hello;
         this.error = error;
         this.nameTravelAgency = nameTravelAgency;
@@ -139,6 +148,7 @@ public class TravelAgencyForm {
         this.EGRPOYorRNYKPN = EGRPOYorRNYKPN;
         this.whatChoose = whatChoose;
         this.nameHeadAgency = nameHeadAgency;
+        this.emailCheckCod = emailCheckCod;
     }
 
     public TravelAgencyForm() {
