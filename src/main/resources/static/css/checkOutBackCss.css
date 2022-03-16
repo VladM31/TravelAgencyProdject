@@ -1,0 +1,141 @@
+.bodyBackground{
+    position: absolute;
+    width: 1600px;
+    height: 900px;
+    
+    background: url(../images/checkOutBack.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+
+.mainLabel{
+    position: absolute;
+    width: 500px;
+    height: 350px;
+
+    background: rgba(255, 255, 255, 0.75);
+    border: 3px solid rgba(15, 186, 83, 0.85);
+    box-sizing: border-box;
+    border-radius: 50px;
+
+    margin-top: 8%;
+    margin-left: 26%;
+}
+
+.buttonPush{
+    position: absolute;
+    width: 100px;
+    height: 50px;
+
+    background: rgba(15, 186, 83, 0.85);
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 36px;
+    line-height: 45px;
+
+    color: #FFFFFF;
+
+    margin-top: 50%;
+    margin-left: 73%;
+    border: 3px solid #0FBA53;
+    border-radius: 0px  30px  30px 0px;
+}
+
+.buttonPush:hover{
+    background: rgb(15, 186, 83);
+}
+
+.labelCode{
+    position: absolute;
+    width: 330px;
+    height: 50px;
+
+    background: rgba(255, 255, 255, 0.75);
+    border: 3px solid #0FBA53;
+    box-sizing: border-box;
+    border-radius: 30px  0px  0px 30px;
+
+    margin-top: 50%;
+    margin-left: 7%;
+    padding-left: 100px;
+    font-size: 28px;
+}
+
+.helloText{
+    position: absolute;
+    width: 500px;
+    height: 64px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 47px;
+
+    margin-top: 4%;
+    margin-left: 7%;
+
+    color: #0FBA53;
+}
+
+.inputText{
+    position: absolute;
+    width: 487px;
+    height: 63px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 33px;
+
+    margin-top: 18%;
+    margin-left: 7%;
+
+    color: #0FBA53;
+}
+
+.yourEmailText{
+    position: absolute;
+    width: 255px;
+    height: 33px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 33px;
+    /* identical to box height */
+    margin-top: 29%;
+    margin-left: 7%;
+
+    color: #0FBA53;
+}
+
+.codeMistakeText{
+    position: absolute;
+    width: 200px;
+    height: 33px;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 33px;
+    /* identical to box height */
+
+
+    color: #ff2626;
+
+    margin-top: 44%;
+    margin-left:20%;
+
+}
+
+input[type=text]:focus {
+    border: 3px solid rgb(86, 207, 255);
+    outline: none;
+}

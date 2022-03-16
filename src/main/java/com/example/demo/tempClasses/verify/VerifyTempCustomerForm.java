@@ -1,9 +1,7 @@
 package com.example.demo.tempClasses.verify;
 
 import com.example.demo.dao.idao.IDAOCustomer;
-import com.example.demo.dao.idao.IDAOTravelAgency;
 import com.example.demo.entity.Customer;
-import com.example.demo.entity.TravelAgency;
 import com.example.demo.forms.CustomerForm;
 import com.example.demo.verify.inter.IVerifyCustomerForm;
 import com.example.demo.verify.inter.IVerifySyntaxErrors;
@@ -21,13 +19,16 @@ public class VerifyTempCustomerForm implements IVerifyCustomerForm {
     @Override
     public String checkOut(CustomerForm cf) {
 
-        if (syntaxErrors.checkOutUsername(cf.getUsername())){
+        if(!cf.hasGender()){
+            return "Error:The gender dont choose";
+        }
+        if (syntaxErrors.hasProblemInUsername(cf.getUsername())){
             return "Error:The username is incorrect";
         }
-        if (syntaxErrors.checkOutPassword(cf.getPassword())) {
+        if (syntaxErrors.hasProblemInPassword(cf.getPassword())) {
             return "Error:The password is incorrect";
         }
-        if (syntaxErrors.checkOutEmail(cf.getEmail())){
+        if (syntaxErrors.hasProblemInEmail(cf.getEmail())){
             return "Error:The email is incorrect";
         }
         if (dataCustomer.findByUsername(cf.getUsername()) != null) {

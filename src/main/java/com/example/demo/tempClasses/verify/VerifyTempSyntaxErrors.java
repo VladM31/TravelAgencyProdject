@@ -6,17 +6,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class VerifyTempSyntaxErrors implements IVerifySyntaxErrors {
     @Override
-    public boolean checkOutPassword(String password) {
+    public boolean hasProblemInPassword(String password) {
         return this.checkString(password);
     }
 
     @Override
-    public boolean checkOutUsername(String username) {
+    public boolean hasProblemInUsername(String username) {
         return this.checkString(username);
     }
 
     @Override
-    public boolean checkOutEmail(String email) {
+    public boolean hasProblemInEmail(String email) {
         return this.checkString(email);
     }
 
@@ -24,6 +24,6 @@ public class VerifyTempSyntaxErrors implements IVerifySyntaxErrors {
         if (str == null) {
             return true;
         }
-        return !str.isEmpty();
+        return str.isEmpty();
     }
 }

@@ -22,15 +22,6 @@ public class CustomerForm {
     private String country;
     private boolean hello;
     private boolean error;
-    private long emailCheckCod = -1;
-
-    public long getEmailCheckCod() {
-        return emailCheckCod;
-    }
-
-    public void setEmailCheckCod(long emailCheckCod) {
-        this.emailCheckCod = emailCheckCod;
-    }
 
     public String getCountry() {
         return country;
@@ -112,9 +103,9 @@ public class CustomerForm {
         this.error = error;
     }
 
-    public CustomerForm(String username, String password, String name, String surname,
-                        long number, String email, String gender, String country,
-                        boolean hello, boolean error) {
+    public CustomerForm(String username, String password, String name,
+                        String surname, long number, String email, String gender,
+                        String country, boolean hello, boolean error) {
         this.username = username;
         this.password = password;
         this.name = name;
@@ -133,18 +124,17 @@ public class CustomerForm {
 
     @Override
     public String toString() {
-        return "CustomerForm{" +
-                "\nusername='" + username + '\'' +
-                ",\n password='" + password + '\'' +
-                ",\n name='" + name + '\'' +
-                ",\n surname='" + surname + '\'' +
-                ",\n number=" + number +
-                ",\n email='" + email + '\'' +
-                ",\n gender='" + gender + '\'' +
-                ",\n country='" + country + '\'' +
-                ",\n hello=" + hello +
-                ",\n error=" + error +
-                '}';
+        return "CustomerForm " +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", number=" + number +
+                ", email='" + email + '\'' +
+                ", gender='" + gender + '\'' +
+                ", country='" + country + '\'' +
+                ", hello=" + hello +
+                ", error=" + error ;
     }
 
     public Customer getCustomer()
@@ -183,10 +173,11 @@ public class CustomerForm {
         return this.gender != null;
     }
 
-    public void turnOnError()
+    public CustomerForm getErrorForm()
     {
-        this.error = true;
         this.hello = false;
+        this.error = true;
+        return this;
     }
 
 }

@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/","/sign_up","/sign_up_error_travel","/sign_up_error_customer","/menu")
+                .antMatchers("/","/sign_up","/sign_up_error_travel","/sign_up_error_customer","/menu","/confirm.mail.customer","/confirm.mail.travel.agency")
                 .permitAll()
                 .anyRequest()
                 .authenticated()

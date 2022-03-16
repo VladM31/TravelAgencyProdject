@@ -1,8 +1,6 @@
 package com.example.demo.tempClasses.verify;
 
-import com.example.demo.dao.idao.IDAOCustomer;
 import com.example.demo.dao.idao.IDAOTravelAgency;
-import com.example.demo.entity.Customer;
 import com.example.demo.entity.TravelAgency;
 import com.example.demo.forms.TravelAgencyForm;
 import com.example.demo.verify.inter.IVerifySyntaxErrors;
@@ -23,13 +21,13 @@ public class VerifyTempTravelAgencyForm implements IVerifyTravelForm {
         if(taf.isChooseEmpty())
             return "Error:Didn't choose EGRPOY or RNEKPN";
 
-        if (syntaxErrors.checkOutUsername(taf.getLogin()))
+        if (syntaxErrors.hasProblemInUsername(taf.getLogin()))
             return "Error:The username is incorrect";
 
-        if (syntaxErrors.checkOutPassword(taf.getPassword()))
+        if (syntaxErrors.hasProblemInPassword(taf.getPassword()))
             return "Error:The password is incorrect";
 
-        if (syntaxErrors.checkOutEmail(taf.getEmail()))
+        if (syntaxErrors.hasProblemInEmail(taf.getEmail()))
             return "Error:The email is incorrect";
 
         if (this.dataTravel.findByKVED(taf.getKVED()) != null)

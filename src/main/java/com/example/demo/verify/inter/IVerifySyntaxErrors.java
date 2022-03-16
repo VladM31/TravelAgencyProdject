@@ -2,10 +2,10 @@ package com.example.demo.verify.inter;
 
 public interface IVerifySyntaxErrors {
 
-    public boolean checkOutPassword(String password);
+    public boolean hasProblemInPassword(String password);
 
-    public boolean checkOutUsername(String username);
+    public boolean hasProblemInUsername(String username);
 
-    public boolean checkOutEmail(String email);
+    public boolean hasProblemInEmail(String email);
 
 }
