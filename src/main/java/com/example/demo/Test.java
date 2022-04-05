@@ -25,7 +25,7 @@ public class Test
         this.logout = logout;
     }
 
-    public void test2()
+    public void test3()
     {
 
     }
