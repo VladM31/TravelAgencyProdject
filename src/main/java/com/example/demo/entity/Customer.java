@@ -3,7 +3,7 @@ package com.example.demo.entity;
 import java.time.LocalDateTime;
 
 public class Customer extends User{
-    private Long customerId;
+    private Long customerId;//
     private Boolean male;
     private String firstName;
     private String lastName;
