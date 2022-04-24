@@ -1,6 +1,6 @@
 package com.example.demo.dao.idao;
 
-import com.example.demo.entity.TravelAgency;
+import com.example.demo.entity.important.TravelAgency;
 import org.springframework.lang.NonNull;
 
 import java.util.List;

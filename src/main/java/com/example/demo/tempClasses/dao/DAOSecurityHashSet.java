@@ -3,10 +3,9 @@ package com.example.demo.tempClasses.dao;
 import com.example.demo.dao.idao.IDAOCustomer;
 import com.example.demo.dao.idao.IDAOSecurity;
 import com.example.demo.dao.idao.IDAOTravelAgency;
-import com.example.demo.entity.Customer;
-import com.example.demo.entity.Role;
-import com.example.demo.entity.TravelAgency;
-import com.example.demo.entity.User;
+import com.example.demo.entity.important.Customer;
+import com.example.demo.entity.important.TravelAgency;
+import com.example.demo.entity.important.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -4,11 +4,8 @@ import com.example.demo.dao.idao.IDAOCustomer;
 import com.example.demo.dao.idao.IDAOTravelAgency;
 import com.example.demo.dao.idao.form.IDAOCustomerForm;
 import com.example.demo.dao.idao.form.IDAOTravelAgencyForm;
-import com.example.demo.entity.Customer;
-import com.example.demo.entity.TravelAgency;
-import com.example.demo.forms.CustomerForm;
-import com.example.demo.forms.TravelAgencyForm;
-import com.example.demo.gmail.MyConstants;
+import com.example.demo.entity.important.Customer;
+import com.example.demo.entity.important.TravelAgency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -16,10 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Random;
 
 @Controller
 public class EmailController {

@@ -1,7 +1,7 @@
 package com.example.demo.dao.idao;
 
-import com.example.demo.entity.Role;
-import com.example.demo.entity.User;
+import com.example.demo.entity.important.Role;
+import com.example.demo.entity.important.User;
 
 import java.time.LocalDateTime;
 import java.util.List;

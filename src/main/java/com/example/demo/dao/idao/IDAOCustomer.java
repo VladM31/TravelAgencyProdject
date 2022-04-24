@@ -1,7 +1,6 @@
 package com.example.demo.dao.idao;
 
-import com.example.demo.entity.Customer;
-import org.springframework.stereotype.Component;
+import com.example.demo.entity.important.Customer;
 
 import java.util.List;
 

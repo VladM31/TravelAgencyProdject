@@ -1,7 +1,7 @@
 package com.example.demo.forms;
 
-import com.example.demo.entity.Customer;
-import com.example.demo.entity.Role;
+import com.example.demo.entity.important.Customer;
+import com.example.demo.entity.important.Role;
 
 import java.time.LocalDateTime;
 

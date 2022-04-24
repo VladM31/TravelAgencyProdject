@@ -1,6 +1,4 @@
-package com.example.demo.entity;
-
-import org.springframework.beans.factory.annotation.Autowired;
+package com.example.demo.entity.important;
 
 import java.time.LocalDateTime;
 import java.util.Set;
