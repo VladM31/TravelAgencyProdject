@@ -5,6 +5,7 @@ import com.example.demo.dao.idao.IDAOTravelAgency;
 import com.example.demo.dao.idao.form.IDAOCustomerForm;
 import com.example.demo.dao.idao.form.IDAOTravelAgencyForm;
 import com.example.demo.entity.important.Customer;
+import com.example.demo.entity.important.Role;
 import com.example.demo.entity.important.TravelAgency;
 import com.example.demo.entity.important.User;
 import com.example.demo.forms.ChooseSignUpForm;
@@ -127,11 +128,8 @@ public class SecurityControler {
 
     private void setMenuModel(User user,Model model) {
         model.addAttribute("sign_in", true);
-        if (user instanceof Customer) {
-            model.addAttribute("name", ((Customer) user).getFirstName());
-        } else if (user instanceof TravelAgency) {
-            model.addAttribute("name", ((TravelAgency) user).getNameTravelAgency());
-        }
+        model.addAttribute("name",user.getRole().equals(Role.CUSTOMER) ? user.getName().replace('/',' ') : user.getName());
+
     }
 
 

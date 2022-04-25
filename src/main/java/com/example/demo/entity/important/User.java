@@ -17,6 +17,15 @@ public  class User implements UserDetails {
     private LocalDateTime dateRegistration;
     private Role role;
     private String country;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getCountry() {
         return country;
@@ -115,9 +124,8 @@ public  class User implements UserDetails {
         this.role = role;
     }
 
-    public User(Long id, long number, String email, String username,
-                String password, boolean active, LocalDateTime dateRegistration,
-                Role role, String country) {
+    public User(Long id, long number, String email, String username, String password, boolean active,
+                LocalDateTime dateRegistration, Role role, String country, String name) {
         this.id = id;
         this.number = number;
         this.email = email;
@@ -127,6 +135,7 @@ public  class User implements UserDetails {
         this.dateRegistration = dateRegistration;
         this.role = role;
         this.country = country;
+        this.name = name;
     }
 
     public User() {
