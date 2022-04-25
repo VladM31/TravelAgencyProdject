@@ -8,8 +8,6 @@ public class Message {
     private String name;
     private String describeMess;
     private LocalDateTime dateSend;
-    private Long fromWhomId;
-    private Set<Long> toWhomIds;
 
     public Long getId() {
         return id;
@@ -43,29 +41,12 @@ public class Message {
         this.dateSend = dateSend;
     }
 
-    public Long getFromWhomId() {
-        return fromWhomId;
-    }
-
-    public void setFromWhomId(Long fromWhomId) {
-        this.fromWhomId = fromWhomId;
-    }
-
-    public Set<Long> getToWhomIds() {
-        return toWhomIds;
-    }
-
-    public void setToWhomIds(Set<Long> toWhomIds) {
-        this.toWhomIds = toWhomIds;
-    }
-
-    public Message(Long id, String name, String describeMess, LocalDateTime dateSend, Long fromWhomId, Set<Long> toWhomIds) {
+    public Message(Long id, String name, String describeMess, LocalDateTime dateSend) {
         this.id = id;
         this.name = name;
         this.describeMess = describeMess;
         this.dateSend = dateSend;
-        this.fromWhomId = fromWhomId;
-        this.toWhomIds = toWhomIds;
+
     }
 
     public Message() {
@@ -79,17 +60,15 @@ public class Message {
         Message message = (Message) o;
 
         if (!id.equals(message.id)) return false;
-        if (!dateSend.equals(message.dateSend)) return false;
-        if (!fromWhomId.equals(message.fromWhomId)) return false;
-        return toWhomIds.equals(message.toWhomIds);
+
+
+        return dateSend.equals(message.dateSend);
     }
 
     @Override
     public int hashCode() {
         int result = id.hashCode();
         result = 31 * result + dateSend.hashCode();
-        result = 31 * result + fromWhomId.hashCode();
-        result = 31 * result + toWhomIds.hashCode();
         return result;
     }
 }
