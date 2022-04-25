@@ -60,8 +60,6 @@ public class Message {
         Message message = (Message) o;
 
         if (!id.equals(message.id)) return false;
-
-
         return dateSend.equals(message.dateSend);
     }
 
