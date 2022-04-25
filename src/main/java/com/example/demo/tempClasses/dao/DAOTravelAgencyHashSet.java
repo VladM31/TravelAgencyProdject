@@ -429,7 +429,7 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     @Override
     public TravelAgency findByNameTravelAgency(String nameTravel) {
         for (TravelAgency ta : this.table) {
-            if (ta.getNameTravelAgency().equals(nameTravel)) {
+            if (ta.getName().equals(nameTravel)) {
                 return ta;
             }
         }
@@ -443,17 +443,17 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
 
     @Override
     public List<TravelAgency> findByNameTravelAgencyContaining(String nameTravel) {
-        return table.stream().filter(i -> i.getNameTravelAgency().contains(nameTravel)).collect(Collectors.toList());
+        return table.stream().filter(i -> i.getName().contains(nameTravel)).collect(Collectors.toList());
     }
 
     @Override
     public List<TravelAgency> findByNameTravelAgencyStartingWith(String nameTravel) {
-        return table.stream().filter(i -> i.getNameTravelAgency().startsWith(nameTravel)).collect(Collectors.toList());
+        return table.stream().filter(i -> i.getName().startsWith(nameTravel)).collect(Collectors.toList());
     }
 
     @Override
     public List<TravelAgency> findByNameTravelAgencyEndingWith(String nameTravel) {
-        return  table.stream().filter(i -> i.getNameTravelAgency().endsWith(nameTravel)).collect(Collectors.toList());
+        return  table.stream().filter(i -> i.getName().endsWith(nameTravel)).collect(Collectors.toList());
     }
 
     @Override

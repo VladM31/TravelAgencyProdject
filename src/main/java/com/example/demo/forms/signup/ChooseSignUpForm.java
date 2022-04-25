@@ -1,4 +1,4 @@
-package com.example.demo.forms;
+package com.example.demo.forms.signup;
 
 public class ChooseSignUpForm {
     private static String decsribeCustomer = "Таки купить";

@@ -1,7 +1,6 @@
 package com.example.demo.verify.inter;
 
-import com.example.demo.forms.CustomerForm;
-import com.example.demo.forms.TravelAgencyForm;
+import com.example.demo.forms.signup.CustomerForm;
 
 public interface IVerifyCustomerForm {
 

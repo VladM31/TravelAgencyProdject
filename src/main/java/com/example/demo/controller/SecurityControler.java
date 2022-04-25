@@ -4,13 +4,14 @@ import com.example.demo.dao.idao.IDAOCustomer;
 import com.example.demo.dao.idao.IDAOTravelAgency;
 import com.example.demo.dao.idao.form.IDAOCustomerForm;
 import com.example.demo.dao.idao.form.IDAOTravelAgencyForm;
+import com.example.demo.dao.idao.temporary.IDAOCustomerTemporary;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.Role;
 import com.example.demo.entity.important.TravelAgency;
 import com.example.demo.entity.important.User;
-import com.example.demo.forms.ChooseSignUpForm;
-import com.example.demo.forms.CustomerForm;
-import com.example.demo.forms.TravelAgencyForm;
+import com.example.demo.forms.signup.ChooseSignUpForm;
+import com.example.demo.forms.signup.CustomerForm;
+import com.example.demo.forms.signup.TravelAgencyForm;
 import com.example.demo.tempClasses.verify.VerifyTempTravelAgencyForm;
 import com.example.demo.verify.inter.IVerifyCustomerForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,11 @@ public class SecurityControler {
     private VerifyTempTravelAgencyForm checkTravAgenForm;
 
     @Autowired
-    private IDAOCustomerForm daoCustForm;
-    @Autowired
     private IDAOTravelAgencyForm daoTravAgenForm;
+
+    @Autowired
+    private IDAOCustomerTemporary daoCustTemp;
+
 
     // ************* Головна сторінка *****************
     @RequestMapping(value = { "/", "/mainWindow","/hello" }, method = { RequestMethod.GET, RequestMethod.POST })
@@ -92,7 +95,7 @@ public class SecurityControler {
             return "sign_up_customerPage";
         }
 
-        this.daoCustForm.saveForm(form);
+        this.daoCustTemp.save(form.toCustomerTemporary());
 
         modelEmail.addAttribute("email", form.getEmail());
 
@@ -129,7 +132,6 @@ public class SecurityControler {
     private void setMenuModel(User user,Model model) {
         model.addAttribute("sign_in", true);
         model.addAttribute("name",user.getRole().equals(Role.CUSTOMER) ? user.getName().replace('/',' ') : user.getName());
-
     }
 
 

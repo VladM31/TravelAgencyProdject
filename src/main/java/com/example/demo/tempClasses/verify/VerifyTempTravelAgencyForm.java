@@ -2,7 +2,7 @@ package com.example.demo.tempClasses.verify;
 
 import com.example.demo.dao.idao.IDAOTravelAgency;
 import com.example.demo.entity.important.TravelAgency;
-import com.example.demo.forms.TravelAgencyForm;
+import com.example.demo.forms.signup.TravelAgencyForm;
 import com.example.demo.verify.inter.IVerifySyntaxErrors;
 import com.example.demo.verify.inter.IVerifyTravelForm;
 import org.springframework.beans.factory.annotation.Autowired;

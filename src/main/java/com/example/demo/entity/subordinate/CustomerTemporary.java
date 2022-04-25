@@ -2,14 +2,15 @@ package com.example.demo.entity.subordinate;
 
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.Role;
-import com.example.demo.forms.CustomerForm;
+import com.example.demo.forms.signup.CustomerForm;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class CustomerTemporary {
-    private Long id_temp;
-    private Long id_customer;
+    private Long idTemp;
+    private Long idCustomer;
+    private Long idTempCust;
     private Long number;
     private String email;
     private String username;
@@ -17,25 +18,41 @@ public class CustomerTemporary {
     private String surname;
     private String firstname;
     private String country;
-    private Boolean is_male;
+    private Boolean isMale;
     private Boolean doesWait;
     private Boolean isUsed;
     private LocalDateTime dateRegistration;
 
-    public Long getId_temp() {
-        return id_temp;
+    public Long getIdTempCust() {
+        return idTempCust;
     }
 
-    public void setId_temp(Long id_temp) {
-        this.id_temp = id_temp;
+    public void setIdTempCust(Long idTempCust) {
+        this.idTempCust = idTempCust;
     }
 
-    public Long getId_customer() {
-        return id_customer;
+    public String getCountry() {
+        return country;
     }
 
-    public void setId_customer(Long id_customer) {
-        this.id_customer = id_customer;
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public Long getIdTemp() {
+        return idTemp;
+    }
+
+    public void setIdTemp(Long idTemp) {
+        this.idTemp = idTemp;
+    }
+
+    public Long getIdCustomer() {
+        return idCustomer;
+    }
+
+    public void setIdCustomer(Long idCustomer) {
+        this.idCustomer = idCustomer;
     }
 
     public Long getNumber() {
@@ -86,12 +103,12 @@ public class CustomerTemporary {
         this.firstname = firstname;
     }
 
-    public Boolean getIs_male() {
-        return is_male;
+    public Boolean getIsMale() {
+        return isMale;
     }
 
-    public void setIs_male(Boolean is_male) {
-        this.is_male = is_male;
+    public void setIsMale(Boolean isMale) {
+        this.isMale = isMale;
     }
 
     public Boolean getDoesWait() {
@@ -118,11 +135,12 @@ public class CustomerTemporary {
         this.dateRegistration = dateRegistration;
     }
 
-    public CustomerTemporary(Long id_temp, Long id_customer, Long number, String email, String username, String password,
+    public CustomerTemporary(Long id_temp, Long id_customer, Long id_temp_cust, Long number, String email, String username, String password,
                              String surname, String firstname, String country, Boolean is_male, Boolean doesWait,
                              Boolean isUsed, LocalDateTime dateRegistration) {
-        this.id_temp = id_temp;
-        this.id_customer = id_customer;
+        this.idTemp = id_temp;
+        this.idCustomer = id_customer;
+        this.idTempCust = id_temp_cust;
         this.number = number;
         this.email = email;
         this.username = username;
@@ -130,7 +148,7 @@ public class CustomerTemporary {
         this.surname = surname;
         this.firstname = firstname;
         this.country = country;
-        this.is_male = is_male;
+        this.isMale = is_male;
         this.doesWait = doesWait;
         this.isUsed = isUsed;
         this.dateRegistration = dateRegistration;
@@ -146,12 +164,12 @@ public class CustomerTemporary {
 
         CustomerTemporary that = (CustomerTemporary) o;
 
-        return Objects.equals(id_temp, that.id_temp);
+        return Objects.equals(idTemp, that.idTemp);
     }
 
     @Override
     public int hashCode() {
-        return id_temp != null ? id_temp.hashCode() : 0;
+        return idTemp != null ? idTemp.hashCode() : 0;
     }
 
     public Customer toCustomer(){
@@ -168,9 +186,8 @@ public class CustomerTemporary {
         newCustomer.setUsername(this.username);
         newCustomer.setPassword(this.password);
         newCustomer.setCountry(this.country);
-        newCustomer.setMale(this.is_male);
-        newCustomer.setFirstName(this.firstname);
-        newCustomer.setLastName(this.surname);
+        newCustomer.setMale(this.isMale);
+        newCustomer.setName(this.firstname + "/" + this.surname);
         return newCustomer;
     }
 }

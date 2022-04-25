@@ -1,8 +1,7 @@
 package com.example.demo.tempClasses.dao.form;
 
 import com.example.demo.dao.idao.form.IDAOTravelAgencyForm;
-import com.example.demo.forms.CustomerForm;
-import com.example.demo.forms.TravelAgencyForm;
+import com.example.demo.forms.signup.TravelAgencyForm;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

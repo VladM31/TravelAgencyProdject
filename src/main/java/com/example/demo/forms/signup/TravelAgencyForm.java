@@ -1,4 +1,4 @@
-package com.example.demo.forms;
+package com.example.demo.forms.signup;
 
 import com.example.demo.entity.important.Role;
 import com.example.demo.entity.important.TravelAgency;
@@ -195,7 +195,7 @@ public class TravelAgencyForm {
         travel.setKved(this.KVED);
         travel.setAddress(this.addressTravelAgency);
         travel.setAllNameDirector(this.nameHeadAgency);
-        travel.setNameTravelAgency(this.nameTravelAgency);
+        //travel.setNameTravelAgency(this.nameTravelAgency);
         if (this.whatChoose.equals("setEGRPOY")) {
             travel.setEgrpoy(this.EGRPOYorRNYKPN);
         } else {

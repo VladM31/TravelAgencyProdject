@@ -4,8 +4,10 @@ import com.example.demo.dao.idao.IDAOCustomer;
 import com.example.demo.dao.idao.IDAOTravelAgency;
 import com.example.demo.dao.idao.form.IDAOCustomerForm;
 import com.example.demo.dao.idao.form.IDAOTravelAgencyForm;
+import com.example.demo.dao.idao.temporary.IDAOCustomerTemporary;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.TravelAgency;
+import com.example.demo.entity.subordinate.CustomerTemporary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -24,9 +26,11 @@ public class EmailController {
     @Autowired
     private IDAOTravelAgency<TravelAgency> daoTravelAgency;
     @Autowired
-    private IDAOCustomerForm daoCustForm;
-    @Autowired
     private IDAOTravelAgencyForm daoTravAgenForm;
+
+    @Autowired
+    private IDAOCustomerTemporary  daoCustTemp;
+
 
     private static final boolean enteredCodeIsWrong = true;
     private static final boolean dontHaveTheProblem = false;
@@ -37,9 +41,11 @@ public class EmailController {
     @RequestMapping(value= {"/confirm.mail.customer"},method = { RequestMethod.GET })
     public String sendCodeToEmailForCustomerGet(Model model, String email) {
        //  System.out.println(daoCustForm.getCode(email));
-       this.sendCode(email,daoCustForm.getName(email),daoCustForm.getCode(email));//todo
 
-        this.setAttributeCheck(model,daoCustForm.getName(email),email,customerCheckUrl,dontHaveTheProblem);
+        CustomerTemporary custTemp = daoCustTemp.getCustomerTemporaryByEmail(email);
+       this.sendCode(email,custTemp.getFirstname() + " " + custTemp.getSurname(),daoCustTemp.getCodeByIdTempUser(custTemp));//todo
+
+        this.setAttributeCheck(model,custTemp.getFirstname() + " " + custTemp.getSurname(),email,customerCheckUrl,dontHaveTheProblem);
 
         return "checkOutEmailCodePage";
     }
@@ -47,13 +53,14 @@ public class EmailController {
    // @ResponseBody
     @RequestMapping(value= {"/confirm.mail.customer"},method = { RequestMethod.POST })
     public String sendCodeToEmailForCustomerPost(Model model,String email,Long cod) {
+        CustomerTemporary custTemp = daoCustTemp.getCustomerTemporaryByCode(((cod == null)? errorValueCode : cod));
 
-        if(daoCustForm.getCode(email) == ((cod == null)? errorValueCode : cod)) {
-            this.daoCustomer.save(daoCustForm.getForm(email,cod).getCustomer());
+        if(custTemp.getEmail().equals(email)) {
+            this.daoCustomer.save(custTemp.toCustomer());
             return "redirect:/login";
         }
 
-        this.setAttributeCheck(model,daoCustForm.getName(email),email,customerCheckUrl,enteredCodeIsWrong);
+        this.setAttributeCheck(model,custTemp.getFirstname() + " " + custTemp.getSurname(),email,customerCheckUrl,enteredCodeIsWrong);
 
         return "checkOutEmailCodePage";
     }
@@ -76,7 +83,7 @@ public class EmailController {
             return "redirect:/login";
         }
 
-        this.setAttributeCheck(model,daoCustForm.getName(email),email,travelAgencyCheckUrl,enteredCodeIsWrong);
+        this.setAttributeCheck(model,daoTravAgenForm.getName(email),email,travelAgencyCheckUrl,enteredCodeIsWrong);
 
         return "checkOutEmailCodePage";
     }
