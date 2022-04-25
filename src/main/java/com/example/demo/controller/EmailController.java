@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class EmailController {
@@ -39,8 +40,8 @@ public class EmailController {
     private static final String travelAgencyCheckUrl = "/confirm.mail.travel.agency";
 
     @RequestMapping(value= {"/confirm.mail.customer"},method = { RequestMethod.GET })
-    public String sendCodeToEmailForCustomerGet(Model model, String email) {
-       //  System.out.println(daoCustForm.getCode(email));
+    public String sendCodeToEmailForCustomerGet(Model model,@RequestParam("email") String email) {
+         System.out.println(email);
 
         CustomerTemporary custTemp = daoCustTemp.getCustomerTemporaryByEmail(email);
        this.sendCode(email,custTemp.getFirstname() + " " + custTemp.getSurname(),daoCustTemp.getCodeByIdTempUser(custTemp));//todo

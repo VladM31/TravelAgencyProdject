@@ -19,7 +19,6 @@ public class CustomerTemporary {
     private String firstname;
     private String country;
     private Boolean isMale;
-    private Boolean doesWait;
     private Boolean isUsed;
     private LocalDateTime dateRegistration;
 
@@ -111,14 +110,6 @@ public class CustomerTemporary {
         this.isMale = isMale;
     }
 
-    public Boolean getDoesWait() {
-        return doesWait;
-    }
-
-    public void setDoesWait(Boolean doesWait) {
-        this.doesWait = doesWait;
-    }
-
     public Boolean getUsed() {
         return isUsed;
     }
@@ -136,7 +127,7 @@ public class CustomerTemporary {
     }
 
     public CustomerTemporary(Long id_temp, Long id_customer, Long id_temp_cust, Long number, String email, String username, String password,
-                             String surname, String firstname, String country, Boolean is_male, Boolean doesWait,
+                             String surname, String firstname, String country, Boolean is_male,
                              Boolean isUsed, LocalDateTime dateRegistration) {
         this.idTemp = id_temp;
         this.idCustomer = id_customer;
@@ -149,7 +140,6 @@ public class CustomerTemporary {
         this.firstname = firstname;
         this.country = country;
         this.isMale = is_male;
-        this.doesWait = doesWait;
         this.isUsed = isUsed;
         this.dateRegistration = dateRegistration;
     }
@@ -189,5 +179,24 @@ public class CustomerTemporary {
         newCustomer.setMale(this.isMale);
         newCustomer.setName(this.firstname + "/" + this.surname);
         return newCustomer;
+    }
+
+    @Override
+    public String toString() {
+        return "CustomerTemporary{" +
+                "idTemp=" + idTemp +
+                ", idCustomer=" + idCustomer +
+                ", idTempCust=" + idTempCust +
+                ", number=" + number +
+                ", \nemail='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", surname='" + surname + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", \ncountry='" + country + '\'' +
+                ", isMale=" + isMale +
+                ", isUsed=" + isUsed +
+                ", dateRegistration=" + dateRegistration +
+                '}';
     }
 }

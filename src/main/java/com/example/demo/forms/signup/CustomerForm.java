@@ -142,6 +142,7 @@ public class CustomerForm {
         CustomerTemporary custTemp = new CustomerTemporary();
 
         custTemp.setIdTempCust(CustomerForm.getIdGenerator());
+        custTemp.setIdTemp(CustomerForm.getIdGenerator());
         custTemp.setNumber(this.number);
         custTemp.setEmail(this.email);
         custTemp.setUsername(this.username);

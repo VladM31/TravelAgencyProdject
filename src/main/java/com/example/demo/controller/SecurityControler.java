@@ -94,7 +94,7 @@ public class SecurityControler {
             model.addAttribute("customer", form.getErrorForm());
             return "sign_up_customerPage";
         }
-
+        System.out.println(form.toCustomerTemporary());
         this.daoCustTemp.save(form.toCustomerTemporary());
 
         modelEmail.addAttribute("email", form.getEmail());
