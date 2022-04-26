@@ -5,6 +5,7 @@ import com.example.demo.dao.idao.IDAOTravelAgency;
 import com.example.demo.dao.idao.form.IDAOCustomerForm;
 import com.example.demo.dao.idao.form.IDAOTravelAgencyForm;
 import com.example.demo.dao.idao.temporary.IDAOCustomerTemporary;
+import com.example.demo.dao.idao.temporary.IDAOTravelAgencyTemporaryCode;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.Role;
 import com.example.demo.entity.important.TravelAgency;
@@ -26,21 +27,23 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class SecurityControler {
+    //--------------------------------------------------
     @Autowired
     private IDAOCustomer<Customer> daoCustomer;
     @Autowired
     private IDAOTravelAgency<TravelAgency> daoTravelAgency;
+    //--------------------------------------------------
+    @Autowired
+    private IDAOCustomerTemporary daoCustTemp;
+    @Autowired
+    private IDAOTravelAgencyTemporaryCode idaoTravelAgencyTemporaryCode;
+    //--------------------------------------------------
     @Autowired
     private IVerifyCustomerForm chechCustForm;
     @Autowired
     private VerifyTempTravelAgencyForm checkTravAgenForm;
 
-    @Autowired
-    private IDAOTravelAgencyForm daoTravAgenForm;
-
-    @Autowired
-    private IDAOCustomerTemporary daoCustTemp;
-
+    //--------------------------------------------------
 
     // ************* Головна сторінка *****************
     @RequestMapping(value = { "/", "/mainWindow","/hello" }, method = { RequestMethod.GET, RequestMethod.POST })
@@ -94,7 +97,7 @@ public class SecurityControler {
             model.addAttribute("customer", form.getErrorForm());
             return "sign_up_customerPage";
         }
-        System.out.println(form.toCustomerTemporary());
+       // System.out.println(form.toCustomerTemporary());
         this.daoCustTemp.save(form.toCustomerTemporary());
 
         modelEmail.addAttribute("email", form.getEmail());
@@ -105,12 +108,15 @@ public class SecurityControler {
     // ************* Реєстрація агенції *****************
     @RequestMapping(value= {"/sign_up_error_travel"},method = { RequestMethod.POST })
     public String signUpTravelAgencyPOST(RedirectAttributes modelEmail,Model model, TravelAgencyForm form) {
-        if(!checkTravAgenForm.checkOut(form).equals("Successful")) {
-            model.addAttribute("customer", form.getErrorForm());
-            return "sign_up_customerPage";
+
+        String checkOut = checkTravAgenForm.checkOut(form);
+        if(!checkOut.equals("Successful")) {
+            System.out.println(checkOut);
+            model.addAttribute("travel", form.getErrorForm());
+            return "sign_up_travel_agencyPage";
         }
 
-        this.daoTravAgenForm.saveForm(form);
+        this.idaoTravelAgencyTemporaryCode.save(form.toTravelAgencyTemporary());
         modelEmail.addAttribute("email", form.getEmail());
         return "redirect:/confirm.mail.travel.agency";
     }

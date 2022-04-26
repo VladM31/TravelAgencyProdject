@@ -5,9 +5,11 @@ import com.example.demo.dao.idao.IDAOTravelAgency;
 import com.example.demo.dao.idao.form.IDAOCustomerForm;
 import com.example.demo.dao.idao.form.IDAOTravelAgencyForm;
 import com.example.demo.dao.idao.temporary.IDAOCustomerTemporary;
+import com.example.demo.dao.idao.temporary.IDAOTravelAgencyTemporaryCode;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.TravelAgency;
 import com.example.demo.entity.subordinate.CustomerTemporary;
+import com.example.demo.entity.subordinate.TravelAgencyTemporary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -26,18 +28,20 @@ public class EmailController {
     private IDAOCustomer<Customer> daoCustomer;
     @Autowired
     private IDAOTravelAgency<TravelAgency> daoTravelAgency;
-    @Autowired
-    private IDAOTravelAgencyForm daoTravAgenForm;
+
 
     @Autowired
     private IDAOCustomerTemporary  daoCustTemp;
-
+    @Autowired
+    private IDAOTravelAgencyTemporaryCode idaoTravelAgencyTemporaryCode;
 
     private static final boolean enteredCodeIsWrong = true;
     private static final boolean dontHaveTheProblem = false;
     private static final long errorValueCode = -1;
     private static final String customerCheckUrl = "/confirm.mail.customer";
     private static final String travelAgencyCheckUrl = "/confirm.mail.travel.agency";
+    private static final String check_out_Email_Code_HTML_File = "checkOutEmailCodePage";
+    private static final String go_to_the_login = "redirect:/login";
 
     @RequestMapping(value= {"/confirm.mail.customer"},method = { RequestMethod.GET })
     public String sendCodeToEmailForCustomerGet(Model model,@RequestParam("email") String email) {
@@ -48,45 +52,49 @@ public class EmailController {
 
         this.setAttributeCheck(model,custTemp.getFirstname() + " " + custTemp.getSurname(),email,customerCheckUrl,dontHaveTheProblem);
 
-        return "checkOutEmailCodePage";
+        return check_out_Email_Code_HTML_File;
     }
 
-   // @ResponseBody
     @RequestMapping(value= {"/confirm.mail.customer"},method = { RequestMethod.POST })
     public String sendCodeToEmailForCustomerPost(Model model,String email,Long cod) {
         CustomerTemporary custTemp = daoCustTemp.getCustomerTemporaryByCode(((cod == null)? errorValueCode : cod));
 
         if(custTemp.getEmail().equals(email)) {
             this.daoCustomer.save(custTemp.toCustomer());
-            return "redirect:/login";
+            return go_to_the_login;
         }
 
         this.setAttributeCheck(model,custTemp.getFirstname() + " " + custTemp.getSurname(),email,customerCheckUrl,enteredCodeIsWrong);
 
-        return "checkOutEmailCodePage";
+        return check_out_Email_Code_HTML_File;
     }
 
     @RequestMapping(value= {"/confirm.mail.travel.agency"},method = { RequestMethod.GET })
     public String sendCodeToEmailForTravelAgencyGet(Model model, String email) {
-        this.sendCode(email,daoTravAgenForm.getName(email),daoTravAgenForm.getCode(email));
 
-        this.setAttributeCheck(model,daoTravAgenForm.getName(email),email,travelAgencyCheckUrl,dontHaveTheProblem);
+        TravelAgencyTemporary tat = idaoTravelAgencyTemporaryCode.getTravelAgencyTemporaryByEmail(email);
 
-        return "checkOutEmailCodePage";
+        this.sendCode(email,tat.getName(),idaoTravelAgencyTemporaryCode.getCodeByIdTempUser(tat));
+
+        this.setAttributeCheck(model,tat.getName(),email,travelAgencyCheckUrl,dontHaveTheProblem);
+
+        return check_out_Email_Code_HTML_File;
     }
 
     // @ResponseBody
     @RequestMapping(value= {"/confirm.mail.travel.agency"},method = { RequestMethod.POST })
     public String sendCodeToEmailForTravelAgencyPost(Model model,String email,Long cod) {
 
-        if(daoTravAgenForm.getCode(email) == ((cod == null)? errorValueCode : cod)) {
-            this.daoTravelAgency.save(daoTravAgenForm.getForm(email,cod).getTravelAgency());
-            return "redirect:/login";
+        TravelAgencyTemporary tat = idaoTravelAgencyTemporaryCode.getTravelAgencyTemporaryByCode(cod);
+
+        if(tat.getEmail().equals(email)) {
+            this.daoTravelAgency.save(tat.toTravelAgency());
+            return go_to_the_login;
         }
 
-        this.setAttributeCheck(model,daoTravAgenForm.getName(email),email,travelAgencyCheckUrl,enteredCodeIsWrong);
+        this.setAttributeCheck(model,tat.getName(),email,travelAgencyCheckUrl,enteredCodeIsWrong);
 
-        return "checkOutEmailCodePage";
+        return check_out_Email_Code_HTML_File;
     }
 
     private void sendCode(String email,String name,long cod){
