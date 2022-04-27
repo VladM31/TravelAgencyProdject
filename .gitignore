@@ -18,6 +18,7 @@ target/
 *.iws
 *.iml
 *.ipr
+!**/src/main/java/com/example/demo/tempClasses/mainvlad/TestMySQL.java
 
 ### NetBeans ###
 /nbproject/private/
@@ -33,4 +34,3 @@ build/
 .vscode/
 
 
-!**/src/main/**/tempClasses/
