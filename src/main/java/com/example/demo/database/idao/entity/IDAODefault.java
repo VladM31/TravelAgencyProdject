@@ -1,4 +1,4 @@
-package com.example.demo.dao.idao;
+package com.example.demo.database.idao.entity;
 
 import java.util.List;
 

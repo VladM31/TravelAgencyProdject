@@ -1,4 +1,4 @@
-package com.example.demo.dao.idao;
+package com.example.demo.database.idao.entity;
 
 import com.example.demo.entity.important.TravelAgency;
 import org.springframework.lang.NonNull;

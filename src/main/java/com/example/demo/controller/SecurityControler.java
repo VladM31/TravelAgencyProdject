@@ -1,11 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.dao.idao.IDAOCustomer;
-import com.example.demo.dao.idao.IDAOTravelAgency;
-import com.example.demo.dao.idao.form.IDAOCustomerForm;
-import com.example.demo.dao.idao.form.IDAOTravelAgencyForm;
-import com.example.demo.dao.idao.temporary.IDAOCustomerTemporary;
-import com.example.demo.dao.idao.temporary.IDAOTravelAgencyTemporaryCode;
+import com.example.demo.database.idao.entity.IDAOCustomer;
+import com.example.demo.database.idao.entity.IDAOTravelAgency;
+import com.example.demo.database.idao.temporary.IDAOCustomerTemporary;
+import com.example.demo.database.idao.temporary.IDAOTravelAgencyTemporaryCode;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.Role;
 import com.example.demo.entity.important.TravelAgency;
@@ -14,7 +12,7 @@ import com.example.demo.forms.signup.ChooseSignUpForm;
 import com.example.demo.forms.signup.CustomerForm;
 import com.example.demo.forms.signup.TravelAgencyForm;
 import com.example.demo.tempClasses.verify.VerifyTempTravelAgencyForm;
-import com.example.demo.verify.inter.IVerifyCustomerForm;
+import com.example.demo.tempClasses.verify.verify.inter.IVerifyCustomerForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

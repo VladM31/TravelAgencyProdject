@@ -1,11 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.dao.idao.IDAOCustomer;
-import com.example.demo.dao.idao.IDAOTravelAgency;
-import com.example.demo.dao.idao.form.IDAOCustomerForm;
-import com.example.demo.dao.idao.form.IDAOTravelAgencyForm;
-import com.example.demo.dao.idao.temporary.IDAOCustomerTemporary;
-import com.example.demo.dao.idao.temporary.IDAOTravelAgencyTemporaryCode;
+import com.example.demo.database.idao.entity.IDAOCustomer;
+import com.example.demo.database.idao.entity.IDAOTravelAgency;
+import com.example.demo.database.idao.temporary.IDAOCustomerTemporary;
+import com.example.demo.database.idao.temporary.IDAOTravelAgencyTemporaryCode;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.TravelAgency;
 import com.example.demo.entity.subordinate.CustomerTemporary;

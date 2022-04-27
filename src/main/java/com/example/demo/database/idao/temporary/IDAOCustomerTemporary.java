@@ -1,4 +1,4 @@
-package com.example.demo.dao.idao.temporary;
+package com.example.demo.database.idao.temporary;
 
 import com.example.demo.entity.subordinate.CustomerTemporary;
 

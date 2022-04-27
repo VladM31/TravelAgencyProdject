@@ -1,10 +1,10 @@
 package com.example.demo.tempClasses.verify;
 
-import com.example.demo.dao.idao.IDAOTravelAgency;
+import com.example.demo.database.idao.entity.IDAOTravelAgency;
 import com.example.demo.entity.important.TravelAgency;
 import com.example.demo.forms.signup.TravelAgencyForm;
-import com.example.demo.verify.inter.IVerifySyntaxErrors;
-import com.example.demo.verify.inter.IVerifyTravelForm;
+import com.example.demo.tempClasses.verify.verify.inter.IVerifySyntaxErrors;
+import com.example.demo.tempClasses.verify.verify.inter.IVerifyTravelForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

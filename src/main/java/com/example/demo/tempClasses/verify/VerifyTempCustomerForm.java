@@ -1,20 +1,26 @@
 package com.example.demo.tempClasses.verify;
 
-import com.example.demo.dao.idao.IDAOCustomer;
+import com.example.demo.database.idao.entity.IDAOCustomer;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.forms.signup.CustomerForm;
-import com.example.demo.verify.inter.IVerifyCustomerForm;
-import com.example.demo.verify.inter.IVerifySyntaxErrors;
+import com.example.demo.tempClasses.verify.verify.inter.IVerifyCustomerForm;
+import com.example.demo.tempClasses.verify.verify.inter.IVerifySyntaxErrors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class VerifyTempCustomerForm implements IVerifyCustomerForm {
 
-    @Autowired
     private IDAOCustomer<Customer> dataCustomer;
-    @Autowired
     private IVerifySyntaxErrors syntaxErrors;
+
+    public void setDataCustomer(@Autowired IDAOCustomer<Customer> dataCustomer) {
+        this.dataCustomer = dataCustomer;
+    }
+
+    public void setSyntaxErrors(@Autowired IVerifySyntaxErrors syntaxErrors) {
+        this.syntaxErrors = syntaxErrors;
+    }
 
     @Override
     public String checkOut(CustomerForm cf) {

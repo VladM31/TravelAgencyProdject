@@ -1,6 +1,6 @@
 package com.example.demo.tempClasses.dao.temporary;
 
-import com.example.demo.dao.idao.temporary.IDAOCustomerTemporary;
+import com.example.demo.database.idao.temporary.IDAOCustomerTemporary;
 import com.example.demo.entity.subordinate.CustomerTemporary;
 import org.springframework.stereotype.Component;
 

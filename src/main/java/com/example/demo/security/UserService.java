@@ -1,9 +1,6 @@
 package com.example.demo.security;
 
-import com.example.demo.dao.idao.IDAOCustomer;
-import com.example.demo.dao.idao.IDAOSecurity;
-import com.example.demo.dao.idao.IDAOTravelAgency;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.demo.database.idao.IDAOSecurity;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

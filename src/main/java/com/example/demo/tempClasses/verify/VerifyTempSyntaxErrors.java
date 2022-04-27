@@ -1,6 +1,6 @@
 package com.example.demo.tempClasses.verify;
 
-import com.example.demo.verify.inter.IVerifySyntaxErrors;
+import com.example.demo.tempClasses.verify.verify.inter.IVerifySyntaxErrors;
 import org.springframework.stereotype.Component;
 
 @Component
