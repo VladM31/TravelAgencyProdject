@@ -65,4 +65,20 @@ public class Customer extends User{
         result = 31 * result + customerId.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "customerId=" + customerId +
+                ", male=" + male +
+                ", firstname = " + this.getFirstName() +
+                ", lastname = " + this.getLastName() +
+                ", number = " + super.getNumber() +
+                ", email = " + super.getEmail() +
+                ", username = " + super.getUsername() +
+                ", password = " + super.getPassword() +
+                ", active = " + super.isActive() +
+                ", country = " + super.getCountry() +
+                ", date registration = " + super.getDateRegistration() + "};";
+    }
 }

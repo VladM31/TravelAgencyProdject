@@ -8,10 +8,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 @Component
 @Scope("singleton")
@@ -20,14 +17,15 @@ public class MySqlConnectorGetter implements IConnectorGetter {
     private Connection conn;
 
     @Override
-    public Statement getSqlStatement() {
-        try {
-            return conn.createStatement();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Statement getSqlStatement() throws SQLException{
+        return conn.createStatement();
     }
+
+    @Override
+    public PreparedStatement getSqlPreparedStatement(String script) throws SQLException {
+        return conn.prepareStatement(script);
+    }
+
 
     @PostConstruct
     public void init(){
