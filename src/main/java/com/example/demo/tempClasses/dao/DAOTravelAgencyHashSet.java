@@ -457,7 +457,7 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     }
 
     @Override
-    public List<TravelAgency> findByUsernameOrPasswordOrNumberOrEmail(TravelAgency user) {
+    public List<TravelAgency> findByUsernameOrNumberOrEmail(TravelAgency user) {
         return table.stream().filter( i -> i.getUsername().equals(user.getUsername()) ||
                 i.getPassword().equals(user.getPassword()) ||
                 i.getNumber() == user.getNumber() ||

@@ -339,7 +339,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
     }
 
     @Override
-    public List<Customer> findByUsernameOrPasswordOrNumberOrEmail(Customer user) {
+    public List<Customer> findByUsernameOrNumberOrEmail(Customer user) {
         return table.stream().filter( i -> i.getUsername().equals(user.getUsername()) ||
                 i.getPassword().equals(user.getPassword()) ||
                 i.getNumber() == user.getNumber() ||

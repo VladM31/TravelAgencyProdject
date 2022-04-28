@@ -1,7 +1,9 @@
 package com.example.demo.database.dao.entity;
 
+import com.example.demo.database.dao.tools.Handler;
 import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.database.idao.entity.IDAOCustomer;
+import com.example.demo.database.idao.tools.AddParameters;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.Role;
 import com.example.demo.entity.important.User;
@@ -127,10 +129,11 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
             "(SELECT name FROM country_table WHERE country_table.id = user_table.country_table_id) AS country\n" +
             " from customer_table left join user_table on customer_table.id_user = user_table.id;";
 
+    private static final String SORT_TO_DATE_REGISTRATION = " ORDER BY date_registration ASC;";
+
     @Override
     public List<Customer> findAll() {
-
-        return useScript(conn,SELECT_ALL);
+        return useSelectScript(conn,SELECT_ALL.replace(";",SORT_TO_DATE_REGISTRATION),DEFAULT_PARAMETER);
     }
 
     @Override
@@ -153,53 +156,54 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         return 0;
     }
 
+
     @Override
     public boolean saveAll(Iterable<Customer> entities) {
+        try {
+            try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(INSERT_USER)) {
+                for(Customer entity : entities) {
+                    userToMySqlScript(preStat,entity,DEFAULT_PARAMETER);
+                    preStat.addBatch();
+                }
 
-        try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(insertUser)) {
-            for(Customer entity : entities) {
-                userToMySqlScript(preStat,entity);
+                if(Handler.arrayHasOnlyOne(preStat.executeBatch()) == ERROR_BOOLEAN_ANSWER){
+                    return ERROR_BOOLEAN_ANSWER;
+                }
+            }finally {
             }
-            preStat.execute();
+
+            try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(INSERT_CUSTOMER)) {
+                for(Customer entity : entities) {
+                    customerToMySqlScript(preStat,entity,DEFAULT_PARAMETER);
+                    preStat.addBatch();
+                }
+                return Handler.arrayHasOnlyOne(preStat.executeBatch());
+            }finally {
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return false;
-        }
-
-        try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(insertCustomer)) {
-            for(Customer entity : entities) {
-                customerToMySqlScript(preStat,entity);
-            }
-            return preStat.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
+            return ERROR_BOOLEAN_ANSWER;
         }
     }
 
     @Override
     public boolean save(Customer entity) {
-
-        try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(insertUser)) {
-            userToMySqlScript(preStat,entity);
-            preStat.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(insertCustomer)) {
-            customerToMySqlScript(preStat,entity);
-            return preStat.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        return this.saveAll(List.of(entity));
     }
+
+    private static final String SELECT_COUNT = "SELECT COUNT(*) AS size_customer FROM customer_table left join user_table on customer_table.id_user = user_table.id;";
 
     @Override
     public long size() {
-        return 0;
+        try(java.sql.Statement statement = this.conn.getSqlStatement();
+            ResultSet resultSet = statement.executeQuery(SELECT_COUNT)){
+            resultSet.next();
+            return resultSet.getLong("size_customer");
+        }catch(SQLException e){
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
@@ -273,58 +277,61 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
     }
 
     @Override
-    public List<Customer> findByUsernameOrPasswordOrNumberOrEmail(Customer user) {
+    public List<Customer> findByUsernameOrNumberOrEmail(Customer user) {
         return null;
     }
 
 
-    private static final String insertUser = "INSERT INTO user_table (number,email,username,password,name,active,date_registration,id_role,country_table_id) " +
+    private static final String INSERT_USER = "INSERT INTO user_table (number,email,username,password,name,active,date_registration,id_role,country_table_id) " +
             "VALUES (?,?,?,?,?,?,?,(SELECT id from role_table WHERE name = ?) ,(SELECT id from country_table WHERE name = ?));";
 
-    private static final int numberUserPosition = 1;
-    private static final int emailUserPosition = 2;
-    private static final int usernameUserPosition = 3;
-    private static final int passwordUserPosition = 4;
-    private static final int nameUserPosition = 5;
-    private static final int activeUserPosition = 6;
-    private static final int date_registrationUserPosition = 7;
-    private static final int roleUserPosition = 8;
-    private static final int countryUserPosition = 9;
+    private static final int NUMBER_USER_POSITION_FOR_INSERT = 1;
+    private static final int EMAIL_USER_POSITION_FOR_INSERT = 2;
+    private static final int USERNAME_USER_POSITION_FOR_INSERT = 3;
+    private static final int PASSWORD_USER_POSITION_FOR_INSERT = 4;
+    private static final int NAME_USER_POSITION_FOR_INSERT = 5;
+    private static final int ACTIVE_USER_POSITION_FOR_INSERT = 6;
+    private static final int DATE_REGISTRATION_USER_POSITION_FOR_INSERT = 7;
+    private static final int ROLE_USER_POSITION_FOR_INSERT = 8;
+    private static final int COUNTRY_USER_POSITION_FOR_INSERT = 9;
+    
+    private static final AddParameters DEFAULT_PARAMETER = (p) -> {};
+    private static final boolean ERROR_BOOLEAN_ANSWER = false;
 
-    private static void userToMySqlScript(PreparedStatement preStat, User user){
+    private static void userToMySqlScript(PreparedStatement preStat, User user, AddParameters extraSet){
         try {
-            preStat.setLong(numberUserPosition,user.getNumber());
-            preStat.setString(emailUserPosition,user.getEmail());
-            preStat.setString(usernameUserPosition,user.getUsername());
-            preStat.setString(passwordUserPosition,user.getPassword());
-            preStat.setString(nameUserPosition,user.getName());
-            preStat.setBoolean(activeUserPosition,user.isActive());
-            preStat.setTimestamp(date_registrationUserPosition, Timestamp.valueOf(user.getDateRegistration()));
-            preStat.setString(roleUserPosition,user.getRole().toString());
-            preStat.setString(countryUserPosition,user.getCountry());
+            preStat.setLong(NUMBER_USER_POSITION_FOR_INSERT,user.getNumber());
+            preStat.setString(EMAIL_USER_POSITION_FOR_INSERT,user.getEmail());
+            preStat.setString(USERNAME_USER_POSITION_FOR_INSERT,user.getUsername());
+            preStat.setString(PASSWORD_USER_POSITION_FOR_INSERT,user.getPassword());
+            preStat.setString(NAME_USER_POSITION_FOR_INSERT,user.getName());
+            preStat.setBoolean(ACTIVE_USER_POSITION_FOR_INSERT,user.isActive());
+            preStat.setTimestamp(DATE_REGISTRATION_USER_POSITION_FOR_INSERT, Timestamp.valueOf(user.getDateRegistration()));
+            preStat.setString(ROLE_USER_POSITION_FOR_INSERT,user.getRole().toString());
+            preStat.setString(COUNTRY_USER_POSITION_FOR_INSERT,user.getCountry());
+
+            extraSet.extraOptions(preStat);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private static final String insertCustomer = "insert into customer_table(is_male,id_user) value (?,(select id from user_table WHERE email = ?));";
-
-    private static final int maleCustomerPosition = 1;
-    private static final int emailCustomerPosition = 2;
-
-    public static void customerToMySqlScript(PreparedStatement preStat, Customer user){
+    private static final String INSERT_CUSTOMER = " INSERT INTO customer_table (is_male,id_user) VALUES (?,(select id from user_table WHERE email = ?));";
+    private static final int MALE_CUSTOMER_POSITION_FOR_INSERT = 1;
+    private static final int EMAIL_CUSTOMER_POSITION_FOR_INSERT = 2;
+    
+    private static void customerToMySqlScript(PreparedStatement preStat, Customer user, AddParameters extraSet){
         try {
-            preStat.setBoolean(maleCustomerPosition,user.isMale());
-            preStat.setString(emailCustomerPosition,user.getEmail());
+            preStat.setBoolean(MALE_CUSTOMER_POSITION_FOR_INSERT,user.isMale());
+            preStat.setString(EMAIL_CUSTOMER_POSITION_FOR_INSERT,user.getEmail());
+            extraSet.extraOptions(preStat);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 
     public static Customer resultSetToCustomer(ResultSet resultSet){
         Customer customer = new Customer();
-
         try {
             customer.setId(resultSet.getLong("user_pk"));
             customer.setCustomerId(resultSet.getLong("customer_pk"));
@@ -345,18 +352,22 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return customer;
     }
 
 
-    private static List<Customer> useScript(IConnectorGetter connectorGetter,final String script){
+    private static List<Customer> useSelectScript(IConnectorGetter connectorGetter, final String script, AddParameters extraSet){
         List<Customer> list = null;
-        try(java.sql.Statement stat = connectorGetter.getSqlStatement();
-            ResultSet resultSet = stat.executeQuery(script)) {
-            list = new ArrayList<>(resultSet.getRow());
-            while (resultSet.next()){
-                list.add(resultSetToCustomer(resultSet));
+        try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
+            
+            extraSet.extraOptions(stat);
+
+            try(ResultSet resultSet = stat.executeQuery(script)){
+                list = new ArrayList<>(resultSet.getRow());
+                while (resultSet.next()){
+                    list.add(resultSetToCustomer(resultSet));
+                }
+            }finally {
             }
 
         }catch (SQLException e){
