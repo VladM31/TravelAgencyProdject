@@ -133,12 +133,13 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
 
     @Override
     public List<Customer> findAll() {
-        return useSelectScript(conn,SELECT_ALL.replace(";",SORT_TO_DATE_REGISTRATION),DEFAULT_PARAMETER);
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,SORT_TO_DATE_REGISTRATION),DEFAULT_PARAMETER);
     }
 
+    private static final String WHERE_ID_USER = " user_table.id = ? " + SORT_TO_DATE_REGISTRATION;
     @Override
     public List<Customer> findAllById(Iterable<Long> ids) {
-        return null;
+        return null;//useSelectScript(conn,SELECT_ALL.replace(";",WHERE_ID_USER),);
     }
 
     @Override
@@ -206,29 +207,69 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         }
     }
 
+    private static final String WHERE_NUMBER_IS = " WHERE user_table.number = ? ";
+
     @Override
     public Customer findByNumber(long number) {
-        return null;
+        return useSelectScriptAndGetOneCustomer(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_NUMBER_IS,SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setLong(1,number);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String WHERE_EMAIL_IS = " WHERE user_table.email = ? ";
 
     @Override
     public Customer findByEmail(String email) {
-        return null;
+        return useSelectScriptAndGetOneCustomer(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_EMAIL_IS,SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setString(1,email);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String WHERE_USERNAME_IS = " WHERE user_table.username = ? ";
 
     @Override
     public Customer findByUsername(String username) {
-        return null;
+        return useSelectScriptAndGetOneCustomer(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_USERNAME_IS,SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setString(1,username);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String WHERE_PASSWORD_IS = " WHERE user_table.password = ? ";
 
     @Override
     public List<Customer> findByPassword(String password) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_PASSWORD_IS,SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setString(1,password);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String WHERE_DATE_REGISTRATION_IS = " WHERE user_table.date_registration = ? ";
 
     @Override
     public List<Customer> findByDateRegistration(LocalDateTime dataRegistration) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_DATE_REGISTRATION_IS,SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setTimestamp(1, Timestamp.valueOf(dataRegistration));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -281,7 +322,6 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         return null;
     }
 
-
     private static final String INSERT_USER = "INSERT INTO user_table (number,email,username,password,name,active,date_registration,id_role,country_table_id) " +
             "VALUES (?,?,?,?,?,?,?,(SELECT id from role_table WHERE name = ?) ,(SELECT id from country_table WHERE name = ?));";
 
@@ -295,7 +335,9 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
     private static final int ROLE_USER_POSITION_FOR_INSERT = 8;
     private static final int COUNTRY_USER_POSITION_FOR_INSERT = 9;
     
-    private static final AddParameters DEFAULT_PARAMETER = (p) -> {};
+    private static final AddParameters DEFAULT_PARAMETER = (PreparedStatement p) -> {};
+
+
     private static final boolean ERROR_BOOLEAN_ANSWER = false;
 
     private static void userToMySqlScript(PreparedStatement preStat, User user, AddParameters extraSet){
@@ -355,25 +397,41 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         return customer;
     }
 
+    private static final int EMPTY_CAPACITY = 0;
 
     private static List<Customer> useSelectScript(IConnectorGetter connectorGetter, final String script, AddParameters extraSet){
-        List<Customer> list = null;
+
         try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
             
             extraSet.extraOptions(stat);
 
-            try(ResultSet resultSet = stat.executeQuery(script)){
-                list = new ArrayList<>(resultSet.getRow());
+            try(ResultSet resultSet = stat.executeQuery()){
+                List<Customer> list = new ArrayList<>();
                 while (resultSet.next()){
                     list.add(resultSetToCustomer(resultSet));
                 }
+                return list;
             }finally {
             }
 
         }catch (SQLException e){
             e.printStackTrace();
+            return new ArrayList<>(EMPTY_CAPACITY);
         }
+    }
 
-        return list;
+    private static Customer useSelectScriptAndGetOneCustomer(IConnectorGetter connectorGetter, final String script, AddParameters extraSet){
+        try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
+            extraSet.extraOptions(stat);
+            try(ResultSet resultSet = stat.executeQuery()){
+                if(resultSet.next()){
+                    return resultSetToCustomer(resultSet);
+                }
+            }finally {
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
