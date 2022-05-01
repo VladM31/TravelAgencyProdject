@@ -214,11 +214,8 @@ public class TravelAgencyTemporary {
         travel.setAddress(this.address);
         travel.setAllNameDirector(this.fullNameDirector);
         travel.setName(this.name);
-        if (this.isEGRPOY) {
-            travel.setEgrpoy(this.valueEGRPOYorRNYKPN);
-        } else {
-            travel.setRnekpn(this.valueEGRPOYorRNYKPN);
-        }
+        travel.setEgrpoy(this.isEGRPOY);
+        travel.setEgrpoy_or_rnekpn(this.valueEGRPOYorRNYKPN);
 
         return travel;
     }

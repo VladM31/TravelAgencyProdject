@@ -27,7 +27,6 @@ public class EmailController {
     @Autowired
     private IDAOTravelAgency<TravelAgency> daoTravelAgency;
 
-
     @Autowired
     private IDAOCustomerTemporary  daoCustTemp;
     @Autowired
@@ -43,11 +42,10 @@ public class EmailController {
 
     @RequestMapping(value= {"/confirm.mail.customer"},method = { RequestMethod.GET })
     public String sendCodeToEmailForCustomerGet(Model model,@RequestParam("email") String email) {
-         System.out.println(email);
+        // System.out.println(email);
 
         CustomerTemporary custTemp = daoCustTemp.getCustomerTemporaryByEmail(email);
        this.sendCode(email,custTemp.getFirstname() + " " + custTemp.getSurname(),daoCustTemp.getCodeByIdTempUser(custTemp));//todo
-
         this.setAttributeCheck(model,custTemp.getFirstname() + " " + custTemp.getSurname(),email,customerCheckUrl,dontHaveTheProblem);
 
         return check_out_Email_Code_HTML_File;

@@ -160,11 +160,16 @@ public  class User implements UserDetails {
     @Override
     public String toString() {
         return "User{" +
-                "id = " + id +
-                ", username = '" + username + '\'' +
-                ", password = '" + password + '\'' +
-                ", dateRegistration = " + dateRegistration +
-                ", role = " + role +
+                "id=" + id +
+                ", number=" + number +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", active=" + active +
+                ", dateRegistration=" + dateRegistration.toString().replace('T',' ') +
+                ", role=" + role +
+                ", country='" + country + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements UserDetailsService {
-
     private IDAOSecurity repository;
 
     public UserService() {
@@ -19,7 +18,6 @@ public class UserService implements UserDetailsService {
         } finally {
         }
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

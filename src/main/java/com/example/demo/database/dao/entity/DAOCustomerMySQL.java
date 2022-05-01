@@ -24,59 +24,160 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         this.conn = conn;
     }
 
+    private static final String WHERE_MALE_IS = " WHERE customer_table.is_male = ? ";
+
     @Override
     public List<Customer> findByMale(Boolean male) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_MALE_IS,SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setBoolean(1,male);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String REPLACE_SYMBOL = "@#@_REPLACE_ME_@#@";
+
+    private static final String WHERE_CUSTOMER_ID_IN = " WHERE customer_table.id in (" + REPLACE_SYMBOL + ") ";
 
     @Override
     public List<Customer> findByCustomerIdIn(Iterable<Customer> ids) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,
+                WHERE_CUSTOMER_ID_IN.replace(REPLACE_SYMBOL,Handler.symbolsInDependsFromSize(ids)),
+                SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                Handler.substituteIds(p,ids, (customer)-> customer.getCustomerId());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String WHERE_CUSTOMER_ID_ID = " WHERE customer_table.id = ? ";
 
     @Override
     public Customer findByCustomerId(Long id) {
-        return null;
+        return useSelectScriptAndGetOneCustomer(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_CUSTOMER_ID_ID,SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setLong(1,id);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String WHERE_FIRSTNAME_IS = " WHERE user_table.name LIKE ? ";
 
     @Override
     public List<Customer> findByFirstName(String firstName) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_FIRSTNAME_IS,
+                SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setString(1,firstName.concat("/%"));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String WHERE_LASTNAME_IS = " WHERE user_table.name LIKE ? ";
 
     @Override
     public List<Customer> findByLastName(String lastName) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_LASTNAME_IS,
+                SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setString(1,"%/".concat(lastName));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String WHERE_FIRSTNAME_LIKE = " WHERE user_table.name LIKE ? ";
 
     @Override
     public List<Customer> findByFirstNameLike(String script) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_FIRSTNAME_LIKE,
+                SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setString(1,script.concat("/%"));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String WHERE_LASTNAME_LIKE = " WHERE user_table.name LIKE ? ";
 
     @Override
     public List<Customer> findByLastNameLike(String script) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_LASTNAME_LIKE,
+                SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setString(1,"%/".concat(script));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String WHERE_FIRSTNAME_NOT_LIKE = " WHERE user_table.name NOT LIKE ? ";
 
     @Override
     public List<Customer> findByFirstNameNotLike(String script) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_FIRSTNAME_NOT_LIKE,
+                SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setString(1,script.concat("/%"));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+
+    private static final String WHERE_LASTNAME_NOT_LIKE = " WHERE user_table.name NOT LIKE ? ";
 
     @Override
     public List<Customer> findByLastNameNotLike(String script) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_LASTNAME_NOT_LIKE,
+                SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setString(1,"%/".concat(script));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String WHERE_FIRSTNAME_STARTING_WITH = " WHERE user_table.name LIKE ? ";
 
     @Override
     public List<Customer> findByFirstNameStartingWith(String starting) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_FIRSTNAME_STARTING_WITH,
+                SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setString(1,starting.concat("%/%"));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String WHERE_LASTNAME_STARTING_WITH = " WHERE user_table.name LIKE ? ";
 
     @Override
     public List<Customer> findByLastNameStartingWith(String starting) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_LASTNAME_STARTING_WITH,
+                SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setString(1,"%/".concat(starting).concat("%"));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -272,14 +373,30 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
+    private static final String WHERE_DATE_REGISTRATION_AFTER_THIS = " WHERE user_table.date_registration > ? ";
+
     @Override
     public List<Customer> findByDateRegistrationAfter(LocalDateTime dataRegistration) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_DATE_REGISTRATION_AFTER_THIS,SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setTimestamp(1, Timestamp.valueOf(dataRegistration));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
+
+    private static final String WHERE_DATE_REGISTRATION_BEFORE_THIS = " WHERE user_table.date_registration < ? ";
 
     @Override
     public List<Customer> findByDateRegistrationBefore(LocalDateTime dataRegistration) {
-        return null;
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_DATE_REGISTRATION_BEFORE_THIS,SORT_TO_DATE_REGISTRATION),(p) -> {
+            try {
+                p.setTimestamp(1, Timestamp.valueOf(dataRegistration));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
