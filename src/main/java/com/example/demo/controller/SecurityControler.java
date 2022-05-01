@@ -1,17 +1,18 @@
 package com.example.demo.controller;
 
-import com.example.demo.dao.idao.IDAOCustomer;
-import com.example.demo.dao.idao.IDAOTravelAgency;
-import com.example.demo.dao.idao.form.IDAOCustomerForm;
-import com.example.demo.dao.idao.form.IDAOTravelAgencyForm;
+import com.example.demo.database.idao.entity.IDAOCustomer;
+import com.example.demo.database.idao.entity.IDAOTravelAgency;
+import com.example.demo.database.idao.temporary.IDAOCustomerTemporary;
+import com.example.demo.database.idao.temporary.IDAOTravelAgencyTemporaryCode;
 import com.example.demo.entity.important.Customer;
+import com.example.demo.entity.important.Role;
 import com.example.demo.entity.important.TravelAgency;
 import com.example.demo.entity.important.User;
-import com.example.demo.forms.ChooseSignUpForm;
-import com.example.demo.forms.CustomerForm;
-import com.example.demo.forms.TravelAgencyForm;
+import com.example.demo.forms.signup.ChooseSignUpForm;
+import com.example.demo.forms.signup.CustomerForm;
+import com.example.demo.forms.signup.TravelAgencyForm;
 import com.example.demo.tempClasses.verify.VerifyTempTravelAgencyForm;
-import com.example.demo.verify.inter.IVerifyCustomerForm;
+import com.example.demo.tempClasses.verify.verify.inter.IVerifyCustomerForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -24,19 +25,23 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class SecurityControler {
+    //--------------------------------------------------
     @Autowired
     private IDAOCustomer<Customer> daoCustomer;
     @Autowired
     private IDAOTravelAgency<TravelAgency> daoTravelAgency;
+    //--------------------------------------------------
+    @Autowired
+    private IDAOCustomerTemporary daoCustTemp;
+    @Autowired
+    private IDAOTravelAgencyTemporaryCode idaoTravelAgencyTemporaryCode;
+    //--------------------------------------------------
     @Autowired
     private IVerifyCustomerForm chechCustForm;
     @Autowired
     private VerifyTempTravelAgencyForm checkTravAgenForm;
 
-    @Autowired
-    private IDAOCustomerForm daoCustForm;
-    @Autowired
-    private IDAOTravelAgencyForm daoTravAgenForm;
+    //--------------------------------------------------
 
     // ************* Головна сторінка *****************
     @RequestMapping(value = { "/", "/mainWindow","/hello" }, method = { RequestMethod.GET, RequestMethod.POST })
@@ -90,8 +95,8 @@ public class SecurityControler {
             model.addAttribute("customer", form.getErrorForm());
             return "sign_up_customerPage";
         }
-
-        this.daoCustForm.saveForm(form);
+       // System.out.println(form.toCustomerTemporary());
+        this.daoCustTemp.save(form.toCustomerTemporary());
 
         modelEmail.addAttribute("email", form.getEmail());
 
@@ -101,12 +106,15 @@ public class SecurityControler {
     // ************* Реєстрація агенції *****************
     @RequestMapping(value= {"/sign_up_error_travel"},method = { RequestMethod.POST })
     public String signUpTravelAgencyPOST(RedirectAttributes modelEmail,Model model, TravelAgencyForm form) {
-        if(!checkTravAgenForm.checkOut(form).equals("Successful")) {
-            model.addAttribute("customer", form.getErrorForm());
-            return "sign_up_customerPage";
+
+        String checkOut = checkTravAgenForm.checkOut(form);
+        if(!checkOut.equals("Successful")) {
+            System.out.println(checkOut);
+            model.addAttribute("travel", form.getErrorForm());
+            return "sign_up_travel_agencyPage";
         }
 
-        this.daoTravAgenForm.saveForm(form);
+        this.idaoTravelAgencyTemporaryCode.save(form.toTravelAgencyTemporary());
         modelEmail.addAttribute("email", form.getEmail());
         return "redirect:/confirm.mail.travel.agency";
     }
@@ -127,11 +135,7 @@ public class SecurityControler {
 
     private void setMenuModel(User user,Model model) {
         model.addAttribute("sign_in", true);
-        if (user instanceof Customer) {
-            model.addAttribute("name", ((Customer) user).getFirstName());
-        } else if (user instanceof TravelAgency) {
-            model.addAttribute("name", ((TravelAgency) user).getNameTravelAgency());
-        }
+        model.addAttribute("name",user.getRole().equals(Role.CUSTOMER) ? user.getName().replace('/',' ') : user.getName());
     }
 
 

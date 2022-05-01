@@ -1,7 +1,9 @@
-package com.example.demo.forms;
+package com.example.demo.forms.signup;
 
 import com.example.demo.entity.important.Role;
 import com.example.demo.entity.important.TravelAgency;
+import com.example.demo.entity.subordinate.TravelAgencyTemporary;
+import org.springframework.lang.NonNull;
 
 import java.time.LocalDateTime;
 
@@ -121,6 +123,10 @@ public class TravelAgencyForm {
         return whatChoose;
     }
 
+    public String getUsername() { return this.login;}
+
+    public String getName() { return this.nameTravelAgency;}
+
     public void setWhatChoose(String whatChoose) {
         this.whatChoose = whatChoose;
     }
@@ -177,32 +183,34 @@ public class TravelAgencyForm {
 
     public TravelAgency getTravelAgency()
     {
-        TravelAgency travel = new TravelAgency();
-        // -------- default -------------
-         travel.setId(CustomerForm.getIdGenerator());
-         travel.setTravelId(travel.getId());
-         travel.setActive(true);
-         travel.setDateRegistration(LocalDateTime.now());
-         travel.setRole(Role.TRAVEL_AGENCY);
-         travel.setRating(0.0f);
-         travel.setCan_use(false);
-        // -------- set ----------------
-        travel.setNumber(Long.parseLong(this.numberPhone));
-        travel.setEmail(this.email);
-        travel.setUsername(this.login);
-        travel.setPassword(this.password);
-        travel.setCountry(this.country);
-        travel.setKved(this.KVED);
-        travel.setAddress(this.addressTravelAgency);
-        travel.setAllNameDirector(this.nameHeadAgency);
-        travel.setNameTravelAgency(this.nameTravelAgency);
-        if (this.whatChoose.equals("setEGRPOY")) {
-            travel.setEgrpoy(this.EGRPOYorRNYKPN);
-        } else {
-            travel.setRnekpn(this.EGRPOYorRNYKPN);
-        }
+        return null;
+    }
 
-        return travel;
+    @NonNull
+    public TravelAgencyTemporary toTravelAgencyTemporary(){
+        TravelAgencyTemporary travelAgencyTemporary = new TravelAgencyTemporary();
+
+        travelAgencyTemporary.setIdTemp(CustomerForm.getIdGenerator());
+        //travelAgencyTemporary.setIdTravelAgency(CustomerForm.getIdGenerator());
+        travelAgencyTemporary.setIdTempTA(CustomerForm.getIdGenerator());
+
+        travelAgencyTemporary.setEmail(this.email);
+        travelAgencyTemporary.setUsername(this.login);
+        travelAgencyTemporary.setPassword(this.password);
+        travelAgencyTemporary.setCountry(this.country);
+        travelAgencyTemporary.setAddress(this.addressTravelAgency);
+        travelAgencyTemporary.setFullNameDirector(this.nameHeadAgency);
+        travelAgencyTemporary.setName(this.nameTravelAgency);
+
+        travelAgencyTemporary.setDateRegistration(LocalDateTime.now());
+        travelAgencyTemporary.setUsed(Boolean.FALSE);
+        travelAgencyTemporary.setEGRPOY(this.whatChoose.equals("setEGRPOY"));
+
+        travelAgencyTemporary.setValueEGRPOYorRNYKPN(this.EGRPOYorRNYKPN);
+        travelAgencyTemporary.setKved(this.KVED);
+        travelAgencyTemporary.setNumber(Long.parseLong(this.numberPhone));
+
+        return  travelAgencyTemporary;
     }
 
     public boolean isChooseEmpty() {

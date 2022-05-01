@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 public class Customer extends User{
     private Long customerId;////
     private Boolean male;
-    private String firstName;
-    private String lastName;
 
     public Long getCustomerId() {
         return customerId;
@@ -25,32 +23,29 @@ public class Customer extends User{
     }
 
     public String getFirstName() {
-        return firstName;
+        return super.getName().substring(0,super.getName().indexOf("/"));
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        super.setName(firstName + super.getName().substring(super.getName().indexOf("/")));
     }
 
     public String getLastName() {
-        return lastName;
+        return super.getName().substring(super.getName().indexOf("/")+1);
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        super.setName(super.getName().substring(0,super.getName().indexOf("/")+1) + lastName);
     }
 
     public Customer() {
     }
 
-    public Customer(Long id, int number, String email, String username, String password,
-                    boolean active, LocalDateTime dataRegistretion, Role role, String country,
-                    Long customerId, Boolean male, String firstName, String lastName) {
-        super(id, number, email, username, password, active, dataRegistretion, role, country);
+    public Customer(Long id, long number, String email, String username, String password, boolean active,
+                    LocalDateTime dateRegistration, Role role, String country, String name, Long customerId, Boolean male) {
+        super(id, number, email, username, password, active, dateRegistration, role, country, name);
         this.customerId = customerId;
         this.male = male;
-        this.firstName = firstName;
-        this.lastName = lastName;
     }
 
     @Override
@@ -69,5 +64,21 @@ public class Customer extends User{
         int result = super.hashCode();
         result = 31 * result + customerId.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "customerId=" + customerId +
+                ", male=" + male +
+                ", firstname = " + this.getFirstName() +
+                ", lastname = " + this.getLastName() +
+                ", number = " + super.getNumber() +
+                ", email = " + super.getEmail() +
+                ", username = " + super.getUsername() +
+                ", password = " + super.getPassword() +
+                ", active = " + super.isActive() +
+                ", country = " + super.getCountry() +
+                ", date registration = " + super.getDateRegistration() + "};";
     }
 }

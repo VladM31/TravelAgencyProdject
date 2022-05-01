@@ -7,21 +7,12 @@ public class TravelAgency extends User{
     private Long travelId;
     private float rating;
     private long kved;
-    private Long egrpoy;
-    private Long rnekpn;
+    private Long egrpoy_or_rnekpn;
+    private boolean isEgrpoy;
     private String address;
     private String allNameDirector;
     private String describeAgency;
-    private String nameTravelAgency;
     private boolean can_use;
-
-    public String getNameTravelAgency() {
-        return nameTravelAgency;
-    }
-
-    public void setNameTravelAgency(String nameTravelAgency) {
-        this.nameTravelAgency = nameTravelAgency;
-    }
 
     public boolean isCan_use() {
         return can_use;
@@ -55,22 +46,6 @@ public class TravelAgency extends User{
         this.kved = kved;
     }
 
-    public Long getEgrpoy() {
-        return egrpoy;
-    }
-
-    public void setEgrpoy(Long egrpoy) {
-        this.egrpoy = egrpoy;
-    }
-
-    public Long getRnekpn() {
-        return rnekpn;
-    }
-
-    public void setRnekpn(Long rnekpn) {
-        this.rnekpn = rnekpn;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -95,20 +70,34 @@ public class TravelAgency extends User{
         this.describeAgency = describeAgency;
     }
 
-    public TravelAgency(Long id, long number, String email, String username, String password, boolean active,
-                        LocalDateTime dateRegistration, Role role, String country, Long travelId, float rating,
-                        long kved, Long egrpoy, Long rnekpn, String address, String allNameDirector, String describeAgency,
-                        String nameTravelAgency, boolean can_use) {
-        super(id, number, email, username, password, active, dateRegistration, role, country);
+    public Long getEgrpoy_or_rnekpn() {
+        return egrpoy_or_rnekpn;
+    }
+
+    public void setEgrpoy_or_rnekpn(Long egrpoy_or_rnekpn) {
+        this.egrpoy_or_rnekpn = egrpoy_or_rnekpn;
+    }
+
+    public boolean isEgrpoy() {
+        return isEgrpoy;
+    }
+
+    public void setEgrpoy(boolean egrpoy) {
+        isEgrpoy = egrpoy;
+    }
+
+    public TravelAgency(Long id, long number, String email, String username, String password, boolean active, LocalDateTime dateRegistration,
+                        Role role, String country, String name, Long travelId, float rating, long kved, Long egrpoy_or_rnekpn,
+                        boolean isEgrpoy, String address, String allNameDirector, String describeAgency, boolean can_use) {
+        super(id, number, email, username, password, active, dateRegistration, role, country, name);
         this.travelId = travelId;
         this.rating = rating;
         this.kved = kved;
-        this.egrpoy = egrpoy;
-        this.rnekpn = rnekpn;
+        this.egrpoy_or_rnekpn = egrpoy_or_rnekpn;
+        this.isEgrpoy = isEgrpoy;
         this.address = address;
         this.allNameDirector = allNameDirector;
         this.describeAgency = describeAgency;
-        this.nameTravelAgency = nameTravelAgency;
         this.can_use = can_use;
     }
 
@@ -131,5 +120,21 @@ public class TravelAgency extends User{
         int result = super.hashCode();
         result = 31 * result + (travelId != null ? travelId.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "TravelAgency{" +
+                "travelId=" + travelId +
+                ", rating=" + rating +
+                ", kved=" + kved +
+                ", egrpoy_or_rnekpn=" + egrpoy_or_rnekpn +
+                ", isEgrpoy=" + isEgrpoy +
+                ", address='" + address + '\'' +
+                ", allNameDirector='" + allNameDirector + '\'' +
+                ", describeAgency='" + describeAgency + '\'' +
+                ", can_use=" + can_use +
+                ", name=" + super.getName() +
+                "} " + super.toString();
     }
 }

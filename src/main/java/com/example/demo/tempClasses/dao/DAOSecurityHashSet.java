@@ -1,8 +1,8 @@
 package com.example.demo.tempClasses.dao;
 
-import com.example.demo.dao.idao.IDAOCustomer;
-import com.example.demo.dao.idao.IDAOSecurity;
-import com.example.demo.dao.idao.IDAOTravelAgency;
+import com.example.demo.database.idao.entity.IDAOCustomer;
+import com.example.demo.database.idao.IDAOSecurity;
+import com.example.demo.database.idao.entity.IDAOTravelAgency;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.TravelAgency;
 import com.example.demo.entity.important.User;

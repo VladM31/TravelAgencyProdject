@@ -1,4 +1,4 @@
-package com.example.demo.dao.idao;
+package com.example.demo.database.idao.entity;
 
 import com.example.demo.entity.important.Role;
 import com.example.demo.entity.important.User;
@@ -26,5 +26,5 @@ public interface IDAOUser<T extends User> extends  IDAODefault<T> {
    public List<T> findByEmailStartingWith(String start);
    public List<T> findByEmailEndingWith(String end);
 
-   public List<T> findByUsernameOrPasswordOrNumberOrEmail(T user);
+   public List<T> findByUsernameOrNumberOrEmail(T user);
 }

@@ -1,4 +1,4 @@
-package com.example.demo.verify.inter;
+package com.example.demo.tempClasses.verify.verify.inter;
 
 public interface IVerifySyntaxErrors {
 

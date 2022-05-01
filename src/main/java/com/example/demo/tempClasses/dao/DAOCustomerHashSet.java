@@ -1,6 +1,6 @@
 package com.example.demo.tempClasses.dao;
 
-import com.example.demo.dao.idao.IDAOCustomer;
+import com.example.demo.database.idao.entity.IDAOCustomer;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.Role;
 import org.springframework.stereotype.Component;
@@ -16,13 +16,13 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
 
     public DAOCustomerHashSet() {
         table.add(new Customer(1l,38066047,"laf@gmail.com","laf","laf",
-                true,LocalDateTime.now(),Role.CUSTOMER,"Ukrania",1l,true,"Vlad","Mormul"));
+                true,LocalDateTime.now(),Role.CUSTOMER,"Ukrania","Vlad/Mormul",1l,true));
         table.add(new Customer(2l,38066048,"alin@gmail.com","alin","alin",
-                true,LocalDateTime.now().plusSeconds(30),Role.CUSTOMER,"Ukrania",2l,false,"Alina","Ficenco"));
+                true,LocalDateTime.now().plusSeconds(30),Role.CUSTOMER,"Ukrania","Alina/Ficenco",2l,false));
         table.add(new Customer(3l,38066049,"tym@gmail.com","tym","tym",
-                true,LocalDateTime.now().plusMinutes(1),Role.CUSTOMER,"Ukrania",3l,true,"Tymur","Khamzin"));
+                true,LocalDateTime.now().plusMinutes(1),Role.CUSTOMER,"Ukrania","Tymur/Khamzin",3l,true));
         table.add(new Customer(4l,1,"Delete","1","1",
-                true,LocalDateTime.now(),Role.CUSTOMER,"Delete",4l,true,"Delete","Delete"));
+                true,LocalDateTime.now(),Role.CUSTOMER,"Delete","Delete/Delete",4l,true));
     }
 
     public DAOCustomerHashSet(Set<Customer> table) {
@@ -339,7 +339,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
     }
 
     @Override
-    public List<Customer> findByUsernameOrPasswordOrNumberOrEmail(Customer user) {
+    public List<Customer> findByUsernameOrNumberOrEmail(Customer user) {
         return table.stream().filter( i -> i.getUsername().equals(user.getUsername()) ||
                 i.getPassword().equals(user.getPassword()) ||
                 i.getNumber() == user.getNumber() ||

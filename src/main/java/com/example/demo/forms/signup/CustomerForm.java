@@ -1,7 +1,8 @@
-package com.example.demo.forms;
+package com.example.demo.forms.signup;
 
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.Role;
+import com.example.demo.entity.subordinate.CustomerTemporary;
 
 import java.time.LocalDateTime;
 
@@ -137,27 +138,24 @@ public class CustomerForm {
                 ", error=" + error ;
     }
 
-    public Customer getCustomer()
-    {
-        Customer cust = new Customer();
-        //**************** default
-        cust.setCustomerId(CustomerForm.getIdGenerator());
-        cust.setId(cust.getCustomerId());
-        cust.setActive(true);
-        cust.setDateRegistration(LocalDateTime.now());
-        cust.setRole(Role.CUSTOMER);
-        //**************** insert
-        cust.setNumber(this.number);
-        cust.setEmail(this.email);
-        cust.setUsername(this.username);
-        cust.setPassword(this.password);
-        cust.setCountry(this.country);
-        cust.setMale(CustomerForm.getGender(this.gender));
-        cust.setFirstName(this.name);
-        cust.setLastName(this.surname);
+    public CustomerTemporary toCustomerTemporary(){
+        CustomerTemporary custTemp = new CustomerTemporary();
 
-        return cust;
+        custTemp.setIdTempCust(CustomerForm.getIdGenerator());
+        custTemp.setIdTemp(CustomerForm.getIdGenerator());
+        custTemp.setNumber(this.number);
+        custTemp.setEmail(this.email);
+        custTemp.setUsername(this.username);
+        custTemp.setPassword(this.password);
+        custTemp.setCountry(this.country);
+        custTemp.setIsMale(CustomerForm.getGender(this.gender));
+        custTemp.setFirstname(this.name);
+        custTemp.setSurname(this.surname);
+        custTemp.setDateRegistration(LocalDateTime.now());
+
+        return  custTemp;
     }
+
 
     private static Boolean getGender(String gender) {
         if (gender.equals("man")) {

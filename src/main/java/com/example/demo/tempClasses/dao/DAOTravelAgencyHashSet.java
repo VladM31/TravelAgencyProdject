@@ -1,6 +1,6 @@
 package com.example.demo.tempClasses.dao;
 
-import com.example.demo.dao.idao.IDAOTravelAgency;
+import com.example.demo.database.idao.entity.IDAOTravelAgency;
 import com.example.demo.entity.important.Role;
 import com.example.demo.entity.important.TravelAgency;
 import org.springframework.stereotype.Component;
@@ -335,7 +335,7 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     @Override
     public TravelAgency findByEGRPOY(Long egrpoy) {
         for (TravelAgency ta : table) {
-            if (ta.getEgrpoy().equals(egrpoy)) {
+            if (ta.isEgrpoy() && ta.getEgrpoy_or_rnekpn().equals(egrpoy) ) {
                 return ta;
             }
         }
@@ -346,7 +346,7 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     public List<TravelAgency> findByEGRPOYIn(Iterable<Long> egrpoys) {
         return  table.stream().filter( i -> {
             for (long egrpoy : egrpoys) {
-                if (i.getEgrpoy() == egrpoy) {
+                if (i.isEgrpoy() && i.getEgrpoy_or_rnekpn() == egrpoy) {
                     return true;
                 }
             }
@@ -355,19 +355,16 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     }
 
     @Override
-    public List<TravelAgency> findByEGRPOYIsNull() {
-        return table.stream().filter(i -> i.getEgrpoy() == null).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByEGRPOYIsNotNull() {
-        return table.stream().filter(i -> i.getEgrpoy() != null).collect(Collectors.toList());
+    public List<TravelAgency> findByEGRPOY(boolean isEGRPOY) {
+        return table.stream()
+                .filter( i -> i.isEgrpoy() == isEGRPOY)
+                .collect(Collectors.toList());
     }
 
     @Override
     public TravelAgency findByRNEKPN(Long rnekpn) {
         for (TravelAgency ta : table) {
-            if (ta.getRnekpn().equals(rnekpn)) {
+            if (!ta.isEgrpoy() && ta.getEgrpoy_or_rnekpn().equals(rnekpn)) {
                 return ta;
             }
         }
@@ -378,22 +375,12 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     public List<TravelAgency> findByRNEKPNIn(Iterable<Long> rnekpns) {
         return  table.stream().filter( i -> {
             for (long rnekpn : rnekpns) {
-                if (i.getRnekpn() == rnekpn) {
+                if (!i.isEgrpoy() && i.getEgrpoy_or_rnekpn() == rnekpn) {
                     return true;
                 }
             }
             return false;
         }).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByRNEKPNIsNull() {
-        return table.stream().filter(i -> i.getRnekpn() == null).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByRNEKPNIsNotNull() {
-        return table.stream().filter(i -> i.getRnekpn() != null).collect(Collectors.toList());
     }
 
     @Override
@@ -429,7 +416,7 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     @Override
     public TravelAgency findByNameTravelAgency(String nameTravel) {
         for (TravelAgency ta : this.table) {
-            if (ta.getNameTravelAgency().equals(nameTravel)) {
+            if (ta.getName().equals(nameTravel)) {
                 return ta;
             }
         }
@@ -443,21 +430,21 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
 
     @Override
     public List<TravelAgency> findByNameTravelAgencyContaining(String nameTravel) {
-        return table.stream().filter(i -> i.getNameTravelAgency().contains(nameTravel)).collect(Collectors.toList());
+        return table.stream().filter(i -> i.getName().contains(nameTravel)).collect(Collectors.toList());
     }
 
     @Override
     public List<TravelAgency> findByNameTravelAgencyStartingWith(String nameTravel) {
-        return table.stream().filter(i -> i.getNameTravelAgency().startsWith(nameTravel)).collect(Collectors.toList());
+        return table.stream().filter(i -> i.getName().startsWith(nameTravel)).collect(Collectors.toList());
     }
 
     @Override
     public List<TravelAgency> findByNameTravelAgencyEndingWith(String nameTravel) {
-        return  table.stream().filter(i -> i.getNameTravelAgency().endsWith(nameTravel)).collect(Collectors.toList());
+        return  table.stream().filter(i -> i.getName().endsWith(nameTravel)).collect(Collectors.toList());
     }
 
     @Override
-    public List<TravelAgency> findByUsernameOrPasswordOrNumberOrEmail(TravelAgency user) {
+    public List<TravelAgency> findByUsernameOrNumberOrEmail(TravelAgency user) {
         return table.stream().filter( i -> i.getUsername().equals(user.getUsername()) ||
                 i.getPassword().equals(user.getPassword()) ||
                 i.getNumber() == user.getNumber() ||
