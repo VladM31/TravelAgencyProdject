@@ -4,6 +4,8 @@ import com.example.demo.entity.important.Message;
 
 import java.util.Set;
 
+
+// todo Delete me
 public class MessageConection {
     private Message message;
     private Long fromWhomId;
