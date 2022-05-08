@@ -323,20 +323,10 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
     }
 
     @Override
-    public List<Customer> findByEmailStartingWith(String start) {
-        return this.table
-                .stream()
-                .filter(i-> i.getEmail().startsWith(start))
-                .collect(Collectors.toList());
+    public List<Customer> findByEmailContaining(String start) {
+        return null;
     }
 
-    @Override
-    public List<Customer> findByEmailEndingWith(String end) {
-        return this.table
-                .stream()
-                .filter(i-> i.getEmail().endsWith(end))
-                .collect(Collectors.toList());
-    }
 
     @Override
     public List<Customer> findByUsernameOrNumberOrEmail(Customer user) {
@@ -345,5 +335,15 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
                 i.getNumber() == user.getNumber() ||
                 i.getEmail().equals(user.getEmail())
         ).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Customer> findByName(String name) {
+        return null;
+    }
+
+    @Override
+    public List<Customer> findByNameContaining(String name) {
+        return null;
     }
 }

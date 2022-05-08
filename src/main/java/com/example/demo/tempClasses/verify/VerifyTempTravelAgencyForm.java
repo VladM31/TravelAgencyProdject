@@ -36,9 +36,6 @@ public class VerifyTempTravelAgencyForm implements IVerifyTravelForm {
         if (this.dataTravel.findByAddress(taf.getAddressTravelAgency())!= null)
             return "Error:The Address is basy";;
 
-        if(this.dataTravel.findByNameTravelAgency(taf.getNameTravelAgency()) != null)
-            return "Error:The name travel agency is basy";
-
         if (taf.getEGRPOYorRNYKPN() == null) {
             return "Error:EGRPOY or RNYKPN didnt input";
         }

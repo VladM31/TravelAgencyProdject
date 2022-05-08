@@ -24,7 +24,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         this.conn = conn;
     }
 
-    private static final String WHERE_MALE_IS = " WHERE customer_table.is_male = ? ";
+    private static final String WHERE_MALE_IS = " AND customer.is_male = ? ";
 
     @Override
     public List<Customer> findByMale(Boolean male) {
@@ -39,7 +39,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
 
     private static final String REPLACE_SYMBOL = "@#@_REPLACE_ME_@#@";
 
-    private static final String WHERE_CUSTOMER_ID_IN = " WHERE customer_table.id in (" + REPLACE_SYMBOL + ") ";
+    private static final String WHERE_CUSTOMER_ID_IN = " AND customer.id in (" + REPLACE_SYMBOL + ") ";
 
     @Override
     public List<Customer> findByCustomerIdIn(Iterable<Customer> ids) {
@@ -54,7 +54,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_CUSTOMER_ID_ID = " WHERE customer_table.id = ? ";
+    private static final String WHERE_CUSTOMER_ID_ID = " AND customer.id = ? ";
 
     @Override
     public Customer findByCustomerId(Long id) {
@@ -67,7 +67,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_FIRSTNAME_IS = " WHERE user_table.name LIKE ? ";
+    private static final String WHERE_FIRSTNAME_IS = " AND user.name LIKE ? ";
 
     @Override
     public List<Customer> findByFirstName(String firstName) {
@@ -81,7 +81,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_LASTNAME_IS = " WHERE user_table.name LIKE ? ";
+    private static final String WHERE_LASTNAME_IS = " AND user.name LIKE ? ";
 
     @Override
     public List<Customer> findByLastName(String lastName) {
@@ -95,7 +95,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_FIRSTNAME_LIKE = " WHERE user_table.name LIKE ? ";
+    private static final String WHERE_FIRSTNAME_LIKE = " AND user.name LIKE ? ";
 
     @Override
     public List<Customer> findByFirstNameLike(String script) {
@@ -109,7 +109,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_LASTNAME_LIKE = " WHERE user_table.name LIKE ? ";
+    private static final String WHERE_LASTNAME_LIKE = " AND user.name LIKE ? ";
 
     @Override
     public List<Customer> findByLastNameLike(String script) {
@@ -123,7 +123,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_FIRSTNAME_NOT_LIKE = " WHERE user_table.name NOT LIKE ? ";
+    private static final String WHERE_FIRSTNAME_NOT_LIKE = " AND user.name NOT LIKE ? ";
 
     @Override
     public List<Customer> findByFirstNameNotLike(String script) {
@@ -138,7 +138,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
     }
 
 
-    private static final String WHERE_LASTNAME_NOT_LIKE = " WHERE user_table.name NOT LIKE ? ";
+    private static final String WHERE_LASTNAME_NOT_LIKE = " AND user.name NOT LIKE ? ";
 
     @Override
     public List<Customer> findByLastNameNotLike(String script) {
@@ -152,7 +152,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_FIRSTNAME_STARTING_WITH = " WHERE user_table.name LIKE ? ";
+    private static final String WHERE_FIRSTNAME_STARTING_WITH = " AND user.name LIKE ? ";
 
     @Override
     public List<Customer> findByFirstNameStartingWith(String starting) {
@@ -166,7 +166,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_LASTNAME_STARTING_WITH = " WHERE user_table.name LIKE ? ";
+    private static final String WHERE_LASTNAME_STARTING_WITH = " AND user.name LIKE ? ";
 
     @Override
     public List<Customer> findByLastNameStartingWith(String starting) {
@@ -225,10 +225,10 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         return 0;
     }
 
-    private static final String SELECT_ALL = "select user_table.id AS user_pk, customer_table.id AS customer_pk,  is_male,\n" +
+    private static final String SELECT_ALL = "select user.id AS user_pk, customer.id AS customer_pk,  is_male,\n" +
             "number,email,username,password, name,active,date_registration,\n" +
-            "(SELECT name FROM country_table WHERE country_table.id = user_table.country_table_id) AS country\n" +
-            " from customer_table left join user_table on customer_table.id_user = user_table.id;";
+            "(SELECT name FROM country WHERE country.id = user.country_id) AS country\n" +
+            " from customer left join user on customer.user_id = user.id WHERE user.type_state_user_id = 20 ;";
 
     private static final String SORT_TO_DATE_REGISTRATION = " ORDER BY date_registration ASC;";
 
@@ -237,10 +237,10 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,SORT_TO_DATE_REGISTRATION),DEFAULT_PARAMETER);
     }
 
-    private static final String WHERE_ID_USER = " user_table.id = ? " + SORT_TO_DATE_REGISTRATION;
+    private static final String WHERE_user_id = " AND user.id = ? " + SORT_TO_DATE_REGISTRATION;
     @Override
     public List<Customer> findAllById(Iterable<Long> ids) {
-        return null;//useSelectScript(conn,SELECT_ALL.replace(";",WHERE_ID_USER),);
+        return null;//useSelectScript(conn,SELECT_ALL.replace(";",WHERE_user_id),);
     }
 
     @Override
@@ -294,7 +294,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         return this.saveAll(List.of(entity));
     }
 
-    private static final String SELECT_COUNT = "SELECT COUNT(*) AS size_customer FROM customer_table left join user_table on customer_table.id_user = user_table.id;";
+    private static final String SELECT_COUNT = "SELECT COUNT(*) AS size_customer FROM customer left join user on customer.user_id = user.id;";
 
     @Override
     public long size() {
@@ -308,7 +308,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         }
     }
 
-    private static final String WHERE_NUMBER_IS = " WHERE user_table.number = ? ";
+    private static final String WHERE_NUMBER_IS = " AND user.number = ? ";
 
     @Override
     public Customer findByNumber(long number) {
@@ -321,7 +321,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_EMAIL_IS = " WHERE user_table.email = ? ";
+    private static final String WHERE_EMAIL_IS = " AND user.email = ? ";
 
     @Override
     public Customer findByEmail(String email) {
@@ -334,7 +334,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_USERNAME_IS = " WHERE user_table.username = ? ";
+    private static final String WHERE_USERNAME_IS = " AND user.username = ? ";
 
     @Override
     public Customer findByUsername(String username) {
@@ -347,7 +347,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_PASSWORD_IS = " WHERE user_table.password = ? ";
+    private static final String WHERE_PASSWORD_IS = " AND user.password = ? ";
 
     @Override
     public List<Customer> findByPassword(String password) {
@@ -360,7 +360,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_DATE_REGISTRATION_IS = " WHERE user_table.date_registration = ? ";
+    private static final String WHERE_DATE_REGISTRATION_IS = " AND user.date_registration = ? ";
 
     @Override
     public List<Customer> findByDateRegistration(LocalDateTime dataRegistration) {
@@ -373,7 +373,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_DATE_REGISTRATION_AFTER_THIS = " WHERE user_table.date_registration > ? ";
+    private static final String WHERE_DATE_REGISTRATION_AFTER_THIS = " AND user.date_registration > ? ";
 
     @Override
     public List<Customer> findByDateRegistrationAfter(LocalDateTime dataRegistration) {
@@ -386,7 +386,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         });
     }
 
-    private static final String WHERE_DATE_REGISTRATION_BEFORE_THIS = " WHERE user_table.date_registration < ? ";
+    private static final String WHERE_DATE_REGISTRATION_BEFORE_THIS = " AND user.date_registration < ? ";
 
     @Override
     public List<Customer> findByDateRegistrationBefore(LocalDateTime dataRegistration) {
@@ -425,12 +425,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
     }
 
     @Override
-    public List<Customer> findByEmailStartingWith(String start) {
-        return null;
-    }
-
-    @Override
-    public List<Customer> findByEmailEndingWith(String end) {
+    public List<Customer> findByEmailContaining(String start) {
         return null;
     }
 
@@ -439,8 +434,18 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         return null;
     }
 
-    private static final String INSERT_USER = "INSERT INTO user_table (number,email,username,password,name,active,date_registration,id_role,country_table_id) " +
-            "VALUES (?,?,?,?,?,?,?,(SELECT id from role_table WHERE name = ?) ,(SELECT id from country_table WHERE name = ?));";
+    @Override
+    public List<Customer> findByName(String name) {
+        return null;
+    }
+
+    @Override
+    public List<Customer> findByNameContaining(String name) {
+        return null;
+    }
+
+    private static final String INSERT_USER = "INSERT INTO user (number,email,username,password,name,active,date_registration,role_id,country_id,type_state_user_id) " +
+            "VALUES (?,?,?,?,?,?,?,(SELECT id from role WHERE name = ?) ,(SELECT id from country WHERE name = ?),(SELECT id from type_state_user WHERE name = 'ЗАРЕЄСТРОВАНИЙ'));";
 
     private static final int NUMBER_USER_POSITION_FOR_INSERT = 1;
     private static final int EMAIL_USER_POSITION_FOR_INSERT = 2;
@@ -475,7 +480,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         }
     }
 
-    private static final String INSERT_CUSTOMER = " INSERT INTO customer_table (is_male,id_user) VALUES (?,(select id from user_table WHERE email = ?));";
+    private static final String INSERT_CUSTOMER = " INSERT INTO customer (is_male,user_id) VALUES (?,(select id from user WHERE email = ?));";
     private static final int MALE_CUSTOMER_POSITION_FOR_INSERT = 1;
     private static final int EMAIL_CUSTOMER_POSITION_FOR_INSERT = 2;
     
