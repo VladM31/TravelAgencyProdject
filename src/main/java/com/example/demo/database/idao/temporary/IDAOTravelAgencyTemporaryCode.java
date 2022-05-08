@@ -8,4 +8,5 @@ public interface IDAOTravelAgencyTemporaryCode {
     public TravelAgencyTemporary getTravelAgencyTemporaryByCode(long code);
     public long getCodeByIdTempUser(TravelAgencyTemporary id);
     public boolean save(TravelAgencyTemporary ct);
+    public boolean setCodeConfirmedCode(TravelAgencyTemporary ct);
 }

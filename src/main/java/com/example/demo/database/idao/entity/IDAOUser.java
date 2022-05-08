@@ -23,8 +23,10 @@ public interface IDAOUser<T extends User> extends  IDAODefault<T> {
    public List<T> findByCountry(String country);
 
    public List<T> findByEmailLike(String piece);
-   public List<T> findByEmailStartingWith(String start);
-   public List<T> findByEmailEndingWith(String end);
+   public List<T> findByEmailContaining(String start);
 
    public List<T> findByUsernameOrNumberOrEmail(T user);
+
+   public List<T> findByName(String name);
+   public List<T> findByNameContaining(String name);
 }

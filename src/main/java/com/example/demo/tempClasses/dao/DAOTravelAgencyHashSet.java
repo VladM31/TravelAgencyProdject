@@ -216,19 +216,8 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     }
 
     @Override
-    public List<TravelAgency> findByEmailStartingWith(String start) {
-        return this.table
-                .stream()
-                .filter(i-> i.getEmail().startsWith(start))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByEmailEndingWith(String end) {
-        return this.table
-                .stream()
-                .filter(i-> i.getEmail().endsWith(end))
-                .collect(Collectors.toList());
+    public List<TravelAgency> findByEmailContaining(String start) {
+        return null;
     }
 
     @Override
@@ -271,18 +260,8 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     }
 
     @Override
-    public List<TravelAgency> findByRatingLessThan(float rating) {
-        return this.table.stream().filter( i ->i.getRating()< rating).collect(Collectors.toList());
-    }
-
-    @Override
     public List<TravelAgency> findByRatingLessThanEqual(float rating) {
         return this.table.stream().filter( i ->i.getRating()<= rating).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByRatingGreaterThan(float rating) {
-        return this.table.stream().filter( i ->i.getRating() > rating).collect(Collectors.toList());
     }
 
     @Override
@@ -291,32 +270,12 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     }
 
     @Override
-    public List<TravelAgency> findByRatingGreaterThanAndLessThan(float ratingF, float ratingE) {
-        return this.table.stream().filter( i ->i.getRating() > ratingF && i.getRating() < ratingE).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByRatingGreaterThanEqualAndLessThan(float ratingF, float ratingE) {
-        return this.table.stream().filter( i ->i.getRating() >= ratingF && i.getRating() < ratingE).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByRatingGreaterThanAndLessThanEqual(float ratingF, float ratingE) {
-        return this.table.stream().filter( i ->i.getRating() > ratingF && i.getRating() <= ratingE).collect(Collectors.toList());
-    }
-
-    @Override
     public List<TravelAgency> findByRatingGreaterThanEqualAndLessThanEqual(float ratingF, float ratingE) {
         return this.table.stream().filter( i ->i.getRating() >= ratingF && i.getRating() <= ratingE).collect(Collectors.toList());
     }
 
     @Override
-    public TravelAgency findByKVED(long kved) {
-        for (TravelAgency ta : table) {
-            if (ta.getKved() == kved) {
-                return ta;
-            }
-        }
+    public List<TravelAgency> findByKVED(long kved) {
         return null;
     }
 
@@ -408,40 +367,6 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
         return null;
     }
 
-    @Override
-    public List<TravelAgency> findByCanUse(boolean canU) {
-        return table.stream().filter( i -> i.isCan_use() == canU).collect(Collectors.toList());
-    }
-
-    @Override
-    public TravelAgency findByNameTravelAgency(String nameTravel) {
-        for (TravelAgency ta : this.table) {
-            if (ta.getName().equals(nameTravel)) {
-                return ta;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public List<TravelAgency> findByNameTravelAgencyLike(String nameTravel) {
-        return null;
-    }
-
-    @Override
-    public List<TravelAgency> findByNameTravelAgencyContaining(String nameTravel) {
-        return table.stream().filter(i -> i.getName().contains(nameTravel)).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByNameTravelAgencyStartingWith(String nameTravel) {
-        return table.stream().filter(i -> i.getName().startsWith(nameTravel)).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByNameTravelAgencyEndingWith(String nameTravel) {
-        return  table.stream().filter(i -> i.getName().endsWith(nameTravel)).collect(Collectors.toList());
-    }
 
     @Override
     public List<TravelAgency> findByUsernameOrNumberOrEmail(TravelAgency user) {
@@ -450,5 +375,15 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
                 i.getNumber() == user.getNumber() ||
                 i.getEmail().equals(user.getEmail())
         ).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TravelAgency> findByName(String name) {
+        return null;
+    }
+
+    @Override
+    public List<TravelAgency> findByNameContaining(String name) {
+        return null;
     }
 }

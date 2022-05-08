@@ -59,4 +59,9 @@ public class DAOTravelAgencyTemporaryCode implements IDAOTravelAgencyTemporaryCo
         databases.put(tat,ran.nextLong(minimumRangeNumber,maximumRangeNumber));
         return true;
     }
+
+    @Override
+    public boolean setCodeConfirmedCode(TravelAgencyTemporary ct) {
+        return false;
+    }
 }

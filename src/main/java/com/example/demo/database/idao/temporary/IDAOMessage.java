@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface IDAOMessage {
 
-    List<MessageShortData> findMSDAll();
+    List<MessageShortData> findMessageShortDataAll();
     List<MessageShortData> findMSDBySendlerNameContaining(String sendlerName);
     List<MessageShortData> findMSDByNameMessageContaining(String messageName);
     List<MessageShortData> findMSDByRole(Role role);
