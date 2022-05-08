@@ -20,6 +20,6 @@ public interface IDAOMessage {
 
     String findDescribeByMSD(MessageShortData messageShortData);
 
-    boolean save(Message message,@NonNull String[] emails);
-    boolean save(Message message,@Nullable Role usersByRole);
+    boolean save(Message message,long fromWhom,@NonNull String[] emails);
+    boolean save(Message message,long fromWhom,@Nullable Role usersByRole);
 }
