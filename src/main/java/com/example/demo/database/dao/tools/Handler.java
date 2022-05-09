@@ -1,11 +1,25 @@
 package com.example.demo.database.dao.tools;
 
+import com.example.demo.database.idao.IConnectorGetter;
+import com.example.demo.entity.important.Customer;
+import com.example.demo.entity.subordinate.MessageShortData;
 import org.springframework.lang.NonNull;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Handler {
+
+    public static final int EMPTY_CAPACITY = 0;
+    public static final String REPLACE_SYMBOL = "?#!@#@_REPLACE_ME_@#@!#?";
+    public static final Consumer<PreparedStatement> DEFAULT_PARAMETER = (PreparedStatement p) -> {};
+
+
     public static boolean arrayHasOnlyOne(int[] arr){
         for(int i: arr){
             if(i != 1){
@@ -41,5 +55,41 @@ public class Handler {
             return startScript;
         }
         return startScript.replace(";",String.join(" ",ExtraScripts));
+    }
+
+
+
+    public static <T> List<T> useSelectScript(IConnectorGetter connectorGetter, final String script,
+                                              Consumer<java.sql.PreparedStatement> extraSet, Function<ResultSet,T> getObject){
+        try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
+            extraSet.accept(stat);
+            try(ResultSet resultSet = stat.executeQuery()){
+                List<T> list = new ArrayList<>();
+                while (resultSet.next()){
+                    list.add(getObject.apply(resultSet));
+                }
+                return list;
+            }finally {
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            return new ArrayList<>(Handler.EMPTY_CAPACITY);
+        }
+    }
+
+    public static <T> T useSelectScriptAndGetOneObject(IConnectorGetter connectorGetter, final String script, Consumer<java.sql.PreparedStatement> extraSet, Function<ResultSet, T> getObject){
+        try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
+            extraSet.accept(stat);
+            try(ResultSet resultSet = stat.executeQuery()){
+                if(resultSet.next()){
+                    return getObject.apply(resultSet);
+                }
+            }finally {
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

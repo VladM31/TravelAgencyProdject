@@ -110,4 +110,17 @@ public class MessageShortData {
         result = 31 * result + (itWasRead ? 1 : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "MessageShortData{" +
+                "idMessage=" + idMessage +
+                ", sendlerRole=" + sendlerRole +
+                ", sendlerName='" + sendlerName + '\'' +
+                ", messageName='" + messageName + '\'' +
+                ", sendlerEmail='" + sendlerEmail + '\'' +
+                ", sendDate=" + sendDate +
+                ", itWasRead=" + itWasRead +
+                '}';
+    }
 }
