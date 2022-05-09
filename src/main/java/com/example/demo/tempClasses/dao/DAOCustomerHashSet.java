@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Component("DAOCustomer")
+
 public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
 
     private static Set<Customer> table = new HashSet<>();
