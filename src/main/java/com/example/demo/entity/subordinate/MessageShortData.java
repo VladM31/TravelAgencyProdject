@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class MessageShortData {
+    private Long idUserMessage;
     private Long idMessage;
     private Role sendlerRole;
     private String sendlerName;
@@ -20,6 +21,14 @@ public class MessageShortData {
 
     public void setIdMessage(Long idMessage) {
         this.idMessage = idMessage;
+    }
+
+    public Long getIdUserMessage() {
+        return idUserMessage;
+    }
+
+    public void setIdUserMessage(Long idUserMessage) {
+        this.idUserMessage = idUserMessage;
     }
 
     public Role getSendlerRole() {
@@ -70,7 +79,8 @@ public class MessageShortData {
         this.itWasRead = itWasRead;
     }
 
-    public MessageShortData(Long idMessage, Role sendlerRole, String sendlerName, String messageName, String sendlerEmail, LocalDateTime sendDate, boolean itWasRead) {
+    public MessageShortData(Long idUserMessage, Long idMessage, Role sendlerRole, String sendlerName, String messageName, String sendlerEmail, LocalDateTime sendDate, boolean itWasRead) {
+        this.idUserMessage = idUserMessage;
         this.idMessage = idMessage;
         this.sendlerRole = sendlerRole;
         this.sendlerName = sendlerName;
@@ -90,24 +100,14 @@ public class MessageShortData {
 
         MessageShortData that = (MessageShortData) o;
 
-        if (itWasRead != that.itWasRead) return false;
-        if (!idMessage.equals(that.idMessage)) return false;
-        if (sendlerRole != that.sendlerRole) return false;
-        if (!sendlerName.equals(that.sendlerName)) return false;
-        if (!messageName.equals(that.messageName)) return false;
-        if (!sendlerEmail.equals(that.sendlerEmail)) return false;
-        return sendDate.equals(that.sendDate);
+        if (!idUserMessage.equals(that.idUserMessage)) return false;
+        return idMessage.equals(that.idMessage);
     }
 
     @Override
     public int hashCode() {
-        int result = idMessage.hashCode();
-        result = 31 * result + sendlerRole.hashCode();
-        result = 31 * result + sendlerName.hashCode();
-        result = 31 * result + messageName.hashCode();
-        result = 31 * result + sendlerEmail.hashCode();
-        result = 31 * result + sendDate.hashCode();
-        result = 31 * result + (itWasRead ? 1 : 0);
+        int result = idUserMessage.hashCode();
+        result = 31 * result + idMessage.hashCode();
         return result;
     }
 
@@ -115,6 +115,7 @@ public class MessageShortData {
     public String toString() {
         return "MessageShortData{" +
                 "idMessage=" + idMessage +
+                ", idUserMessage=" + idUserMessage +
                 ", sendlerRole=" + sendlerRole +
                 ", sendlerName='" + sendlerName + '\'' +
                 ", messageName='" + messageName + '\'' +

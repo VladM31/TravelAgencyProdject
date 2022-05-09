@@ -7,6 +7,7 @@ import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.Message;
 import com.example.demo.entity.important.Role;
 import com.example.demo.entity.subordinate.MessageShortData;
+import com.sun.jdi.PrimitiveValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -50,9 +52,10 @@ public class DAOMessageMySQL implements IDAOMessage {
         return ++id;
     }
 
+    private static final String SORT_BY_DATE_SEND_DESC = " ORDER BY message.date_registration DESC";
 
     private static final String SELECT_ALL_MSD_BY_TO_WHOM = "SELECT \n" +
-            "message.id AS idMessage, " +
+            "message.id AS idMessage, user_message.id AS idUserMessage, " +
             "role.name AS sendlerRole, " +
             "user.name AS sendlerName,  " +
             "message.name AS messageName, " +
@@ -63,14 +66,13 @@ public class DAOMessageMySQL implements IDAOMessage {
             "JOIN user_message ON user_message.message_id = message.id " +
             "JOIN user ON user.Id=user_message.from_whom_id " +
             "JOIN role ON user.role_id= role.id " +
-            "WHERE user_message.to_whom_id = ?;";
+            "WHERE user_message.to_whom_id = ? ;";
     private static final int POSITION_TO_WHOM_FOR_SELECT = 1;
 
     @Override
     public List<MessageShortData> findMessageShortDataAllByToWhom(long toWhom) {
-        return Handler.useSelectScript(this.conn,SELECT_ALL_MSD_BY_TO_WHOM,
-                (preparedStatement ->
-                {
+        return Handler.useSelectScript(this.conn,Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,SORT_BY_DATE_SEND_DESC),
+                (preparedStatement -> {
                     try {
                         preparedStatement.setLong(POSITION_TO_WHOM_FOR_SELECT,toWhom);
                     } catch (SQLException e) {
@@ -79,43 +81,158 @@ public class DAOMessageMySQL implements IDAOMessage {
                 }),MessageHandler::getMessageShortDataFromResultSet);
     }
 
+    private static final String WHERE_SENDLER_NAME_CONTAINING = " AND user.name LIKE ? ";
+
+    private static final int POSITION_SENDLER_NAME_FOR_SELECT = 2;
     @Override
     public List<MessageShortData> findMSDByToWhomAndSendlerNameContaining(long toWhom, String sendlerName) {
-        return null;
+        return Handler.useSelectScript(this.conn,
+                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SENDLER_NAME_CONTAINING,SORT_BY_DATE_SEND_DESC),
+                (preparedStatement -> {
+                    try {
+                        preparedStatement.setLong(POSITION_TO_WHOM_FOR_SELECT,toWhom);
+                        preparedStatement.setString(POSITION_SENDLER_NAME_FOR_SELECT,"%".concat(sendlerName).concat("%"));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }),MessageHandler::getMessageShortDataFromResultSet);
     }
+
+    private static final String WHERE_NAME_MESSAGE_CONTAINING = " AND message.name LIKE ? ";
+
+    private static final int POSITION_NAME_MESSAGE_FOR_SELECT = 2;
 
     @Override
     public List<MessageShortData> findMSDByToWhomAndNameMessageContaining(long toWhom, String messageName) {
-        return null;
+        return Handler.useSelectScript(this.conn,
+                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_NAME_MESSAGE_CONTAINING,SORT_BY_DATE_SEND_DESC),
+                (preparedStatement -> {
+                    try {
+                        preparedStatement.setLong(POSITION_TO_WHOM_FOR_SELECT,toWhom);
+                        preparedStatement.setString(POSITION_NAME_MESSAGE_FOR_SELECT,"%".concat(messageName).concat("%"));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }),MessageHandler::getMessageShortDataFromResultSet);
     }
+
+    private static final String WHERE_ROLE_IS = " AND role.name = ? ";
+
+    private static final int POSITION_ROLE_FOR_SELECT = 2;
 
     @Override
     public List<MessageShortData> findMSDByToWhomAndRole(long toWhom, Role role) {
-        return null;
+        return Handler.useSelectScript(this.conn,
+                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_ROLE_IS,SORT_BY_DATE_SEND_DESC),
+                (preparedStatement -> {
+                    try {
+                        preparedStatement.setLong(POSITION_TO_WHOM_FOR_SELECT,toWhom);
+                        preparedStatement.setString(POSITION_ROLE_FOR_SELECT,role.name());
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }),MessageHandler::getMessageShortDataFromResultSet);
     }
+
+    private static final String WHERE_SEND_DATE_BETWEEN = " AND message.date_registration BETWEEN ? AND ? ";
+
+    private static final int POSITION_SEND_DATE_START = 2;
+    private static final int POSITION_SEND_DATE_END = 3;
 
     @Override
     public List<MessageShortData> findMSDByToWhomAndSendDateBetween(long toWhom, LocalDateTime sendDateStart, LocalDateTime sendDateEnd) {
-        return null;
+        return Handler.useSelectScript(this.conn,
+                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SEND_DATE_BETWEEN,SORT_BY_DATE_SEND_DESC),
+                (preparedStatement -> {
+                    try {
+                        preparedStatement.setLong(POSITION_TO_WHOM_FOR_SELECT,toWhom);
+                        preparedStatement.setTimestamp(POSITION_SEND_DATE_START,Timestamp.valueOf(sendDateStart));
+                        preparedStatement.setTimestamp(POSITION_SEND_DATE_END,Timestamp.valueOf(sendDateEnd));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }),MessageHandler::getMessageShortDataFromResultSet);
     }
 
-    @Override
-    public List<MessageShortData> findMSDByToWhomAndSendDateAfter(long toWhom, LocalDateTime sendDateStart) {
-        return null;
-    }
+    private static final String WHERE_SEND_DATE_AFTER = " AND message.date_registration >= ? ";
+
+    private static final int POSITION_SEND_DATE_AFTER = 2;
 
     @Override
-    public List<MessageShortData> findMSDByToWhomAndSendDateBefore(long toWhom, LocalDateTime sendDateEnd) {
-        return null;
+    public List<MessageShortData> findMSDByToWhomAndSendDateAfterAndEquals(long toWhom, LocalDateTime sendDateStart) {
+        return Handler.useSelectScript(this.conn,
+                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SEND_DATE_AFTER,SORT_BY_DATE_SEND_DESC),
+                (preparedStatement -> {
+                    try {
+                        preparedStatement.setLong(POSITION_TO_WHOM_FOR_SELECT,toWhom);
+                        preparedStatement.setTimestamp(POSITION_SEND_DATE_AFTER,Timestamp.valueOf(sendDateStart));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }),MessageHandler::getMessageShortDataFromResultSet);
     }
+
+    private static final String WHERE_SEND_DATE_BEFORE = " AND message.date_registration <= ? ";
+
+    private static final int POSITION_SEND_DATE_BEFORE = 2;
+
+    @Override
+    public List<MessageShortData> findMSDByToWhomAndSendDateBeforeAndEquals(long toWhom, LocalDateTime sendDateEnd) {
+        return Handler.useSelectScript(this.conn,
+                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SEND_DATE_BEFORE,SORT_BY_DATE_SEND_DESC),
+                (preparedStatement ->
+                {
+                    try {
+                        preparedStatement.setLong(POSITION_TO_WHOM_FOR_SELECT,toWhom);
+                        preparedStatement.setTimestamp(POSITION_SEND_DATE_BEFORE,Timestamp.valueOf(sendDateEnd));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }),MessageHandler::getMessageShortDataFromResultSet);
+    }
+
+    private static final String WHERE_IT_WAS_READ_IS = " AND user_message.was_read = ? ";
+
+    private static final int POSITION_IT_WAS_READ = 2;
 
     @Override
     public List<MessageShortData> findMSDByToWhomAndItWasRead(long toWhom, boolean itWasRead) {
-        return null;
+        return Handler.useSelectScript(this.conn,
+                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_IT_WAS_READ_IS,SORT_BY_DATE_SEND_DESC),
+                (preparedStatement ->
+                {
+                    try {
+                        preparedStatement.setLong(POSITION_TO_WHOM_FOR_SELECT,toWhom);
+                        preparedStatement.setBoolean(POSITION_IT_WAS_READ,itWasRead);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }),MessageHandler::getMessageShortDataFromResultSet);
     }
+
+    private static final String SELECE_DISCRABE_MESSAGE_WHERE_ID_IS = "SELECT describe_message FROM message WHERE id = ?;";
+    private static final boolean NotRead = false;
+    private static final int POSITION_MESSAGE_ID = 1;
 
     @Override
     public String findDescribeByMSD(MessageShortData messageShortData) {
+        if(messageShortData.isItWasRead() == NotRead){
+            MessageHandler.markAsRead(this.conn,messageShortData.getIdUserMessage());
+        }
+        try(java.sql.PreparedStatement preparedStatement = this.conn.getSqlPreparedStatement(SELECE_DISCRABE_MESSAGE_WHERE_ID_IS)) {
+            preparedStatement.setLong(POSITION_MESSAGE_ID,messageShortData.getIdMessage());
+
+            try(java.sql.ResultSet resultSet = preparedStatement.executeQuery()){
+                if(resultSet.next()){
+                        return resultSet.getString("describe_message");
+                }
+            }
+            finally{
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -161,8 +278,6 @@ class MessageHandler{
             return preparedStatement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-
         }
         return false;
     }
@@ -188,7 +303,6 @@ class MessageHandler{
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
         }
 
         list.remove(null);
@@ -213,7 +327,6 @@ class MessageHandler{
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
         }
 
         return list;
@@ -241,8 +354,6 @@ class MessageHandler{
 
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-
         }
         return false;
     }
@@ -258,6 +369,7 @@ class MessageHandler{
             messageShortData.setSendlerEmail(resultSet.getString("sendlerEmail"));
             messageShortData.setSendDate(resultSet.getTimestamp("sendDate").toLocalDateTime());
             messageShortData.setItWasRead(resultSet.getBoolean("itWasRead"));
+            messageShortData.setIdUserMessage(resultSet.getLong("idUserMessage"));
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -265,5 +377,16 @@ class MessageHandler{
         return messageShortData;
     }
 
+    private static final String SCRIPT_MAEK_AS_READ = "UPDATE user_message SET was_read = true WHERE id = ?;";
+    private static final int POSITION_ID_FOR_MAEK_AS_READ = 1;
 
+    static boolean markAsRead(IConnectorGetter conn,long idUserMessage){
+        try(java.sql.PreparedStatement preparedStatement = conn.getSqlPreparedStatement(SCRIPT_MAEK_AS_READ)) {
+            preparedStatement.setLong(POSITION_ID_FOR_MAEK_AS_READ,idUserMessage);
+            return preparedStatement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

@@ -16,8 +16,8 @@ public interface IDAOMessage {
     List<MessageShortData> findMSDByToWhomAndNameMessageContaining(long toWhom, String messageName);
     List<MessageShortData> findMSDByToWhomAndRole(long toWhom, Role role);
     List<MessageShortData> findMSDByToWhomAndSendDateBetween(long toWhom, LocalDateTime sendDateStart, LocalDateTime sendDateEnd);
-    List<MessageShortData> findMSDByToWhomAndSendDateAfter(long toWhom, LocalDateTime sendDateStart);
-    List<MessageShortData> findMSDByToWhomAndSendDateBefore(long toWhom, LocalDateTime sendDateEnd);
+    List<MessageShortData> findMSDByToWhomAndSendDateAfterAndEquals(long toWhom, LocalDateTime sendDateStart);
+    List<MessageShortData> findMSDByToWhomAndSendDateBeforeAndEquals(long toWhom, LocalDateTime sendDateEnd);
     List<MessageShortData> findMSDByToWhomAndItWasRead(long toWhom, boolean itWasRead);
 
     String findDescribeByMSD(MessageShortData messageShortData);
