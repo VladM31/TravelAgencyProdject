@@ -11,15 +11,17 @@ import java.util.List;
 
 public interface IDAOMessage {
 
-    List<MessageShortData> findMessageShortDataAll();
-    List<MessageShortData> findMSDBySendlerNameContaining(String sendlerName);
-    List<MessageShortData> findMSDByNameMessageContaining(String messageName);
-    List<MessageShortData> findMSDByRole(Role role);
-    List<MessageShortData> findMSDBySendDateBetween(LocalDateTime sendDateStart, LocalDateTime sendDateEnd);
-    List<MessageShortData> findMSDByItWasRead(boolean itWasRead);
+    List<MessageShortData> findMessageShortDataAllByToWhom(long toWhom);
+    List<MessageShortData> findMSDByToWhomAndSendlerNameContaining(long toWhom, String sendlerName);
+    List<MessageShortData> findMSDByToWhomAndNameMessageContaining(long toWhom, String messageName);
+    List<MessageShortData> findMSDByToWhomAndRole(long toWhom, Role role);
+    List<MessageShortData> findMSDByToWhomAndSendDateBetween(long toWhom, LocalDateTime sendDateStart, LocalDateTime sendDateEnd);
+    List<MessageShortData> findMSDByToWhomAndSendDateAfterAndEquals(long toWhom, LocalDateTime sendDateStart);
+    List<MessageShortData> findMSDByToWhomAndSendDateBeforeAndEquals(long toWhom, LocalDateTime sendDateEnd);
+    List<MessageShortData> findMSDByToWhomAndItWasRead(long toWhom, boolean itWasRead);
 
     String findDescribeByMSD(MessageShortData messageShortData);
 
-    boolean save(Message message,@NonNull String[] emails);
-    boolean save(Message message,@Nullable Role usersByRole);
+    boolean save(Message message,long fromWhom,@NonNull String[] emails);
+    boolean save(Message message,long fromWhom,@Nullable Role usersByRole);
 }
