@@ -7,6 +7,7 @@ import static com.example.demo.database.dao.tools.Handler.*;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.Role;
 import com.example.demo.entity.important.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
@@ -18,9 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-@Component("DAOCustomer")
+@Component("IDAOCustomer")
 public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
 
+    @Autowired
     private IConnectorGetter conn;
 
     public void setConn(IConnectorGetter conn) {

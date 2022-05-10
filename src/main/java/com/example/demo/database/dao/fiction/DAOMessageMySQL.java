@@ -21,15 +21,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-@Component
+@Component("idaoMessage")
 public class DAOMessageMySQL implements IDAOMessage {
-
+    @Autowired
     private IConnectorGetter conn;
-    public void setConn(@Autowired IConnectorGetter conn) {
+    public void setConn(IConnectorGetter conn) {
         this.conn = conn;
     }
 
-    public IConnectorGetter getConn() {
+    private IConnectorGetter getConn() {
         return conn;
     }
 

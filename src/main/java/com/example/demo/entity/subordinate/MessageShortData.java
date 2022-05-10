@@ -3,6 +3,7 @@ package com.example.demo.entity.subordinate;
 import com.example.demo.entity.important.Role;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class MessageShortData {
@@ -14,6 +15,8 @@ public class MessageShortData {
     private String sendlerEmail;
     private LocalDateTime sendDate;
     private boolean itWasRead;
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
 
     public Long getIdMessage() {
         return idMessage;
@@ -67,8 +70,15 @@ public class MessageShortData {
         return sendDate;
     }
 
+    public String getFromatSendDate(){
+        return sendDate.format(FORMATTER);
+    }
+
     public void setSendDate(LocalDateTime sendDate) {
         this.sendDate = sendDate;
+    }
+    public void setSendDate(String sendDate) {
+        this.sendDate = LocalDateTime.parse(sendDate,FORMATTER);
     }
 
     public boolean isItWasRead() {

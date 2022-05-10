@@ -3,14 +3,13 @@ package com.example.demo.tempClasses.dao;
 import com.example.demo.database.idao.entity.IDAOCustomer;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.Role;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
+public class DAOCustomerHashSet{// implements IDAOCustomer<Customer>  {
 
     private static Set<Customer> table = new HashSet<>();
 
@@ -29,17 +28,17 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
         this.table = table;
     }
 
-    @Override
+    //@Override
     public String toString() {
         return "DAOSet : " + this.table.hashCode() + "\n" + super.toString();
     }
 
-    @Override
+    //@Override
     public List<Customer> findByMale(Boolean male) {
         return table.stream().filter( i -> i.equals(male)).collect(Collectors.toList());
     }
 
-    @Override
+    //@Override
     public List<Customer> findByCustomerIdIn(Iterable<Customer> ids) {
         return  table.stream().filter( i -> {
             for (Customer id : ids) {
@@ -51,7 +50,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
         }).collect(Collectors.toList());
     }
 
-    @Override
+    //@Override
     public Customer findByCustomerId(Long id) {
         for (Customer cust : table) {
             if (cust.getCustomerId().equals(id)) {
@@ -61,67 +60,67 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
         return null;
     }
 
-    @Override
+   // @Override
     public List<Customer> findByFirstName(String firstName) {
         return table.stream().filter(i -> i.getFirstName().equals(firstName)).collect(Collectors.toList());
     }
 
-    @Override
+   // @Override
     public List<Customer> findByLastName(String lastName) {
         return table.stream().filter(i -> i.getLastName().equals(lastName)).collect(Collectors.toList());
     }
 
-    @Override
+    //@Override
     public List<Customer> findByFirstNameLike(String script) {
         return null;
     }
 
-    @Override
+    //@Override
     public List<Customer> findByLastNameLike(String script) {
         return null;
     }
 
-    @Override
+    //@Override
     public List<Customer> findByFirstNameNotLike(String script) {
         return null;
     }
 
-    @Override
+    //@Override
     public List<Customer> findByLastNameNotLike(String script) {
         return null;
     }
 
-    @Override
+   // @Override
     public List<Customer> findByFirstNameStartingWith(String starting) {
         return table.stream().filter(i -> i.getFirstName().startsWith(starting)).collect(Collectors.toList());
     }
 
-    @Override
+    //@Override
     public List<Customer> findByLastNameStartingWith(String starting) {
         return table.stream().filter(i -> i.getLastName().startsWith(starting)).collect(Collectors.toList());
     }
 
-    @Override
+  //  @Override
     public List<Customer> findByFirstNameEndingWith(String ending) {
         return table.stream().filter(i -> i.getFirstName().endsWith(ending)).collect(Collectors.toList());
     }
 
-    @Override
+   // @Override
     public List<Customer> findByLastNameEndingWith(String ending) {
         return table.stream().filter(i -> i.getLastName().endsWith(ending)).collect(Collectors.toList());
     }
 
-    @Override
+   // @Override
     public List<Customer> findByFirstNameContaining(String part) {
         return table.stream().filter(i -> i.getFirstName().contains(part)).collect(Collectors.toList());
     }
 
-    @Override
+    //@Override
     public List<Customer> findByLastNameContaining(String part) {
         return table.stream().filter(i -> i.getLastName().contains(part)).collect(Collectors.toList());
     }
 
-    @Override
+   // @Override
     public int deleteAllById(Iterable<Long> ids) {
         int toDelete = 0;
         Customer temp = null;
@@ -138,7 +137,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
         return toDelete;
     }
 
-    @Override
+    //@Override
     public int deleteAllByEntity(Iterable<Customer> entities) {
         int wasSize = this.table.size();
         for (Customer cust : entities) {
@@ -147,12 +146,12 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
         return wasSize - this.table.size();
     }
 
-    @Override
+   // @Override
     public int deleteByEntity(Customer entity) {
         return Boolean.compare(this.table.remove(entity),false);
     }
 
-    @Override
+   // @Override
     public int deleteById(Long id) {
         for (Iterator<Customer> it = table.iterator(); it.hasNext(); ) {
             if (it.next().getId().equals(id)) {
@@ -163,19 +162,19 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
         return 0;
     }
 
-    @Override
+   // @Override
     public int deleteAll() {
         int wasSize = this.table.size();
         this.table.clear();
         return wasSize;
     }
 
-    @Override
+    //@Override
     public List<Customer> findAll() {
         return new ArrayList<>(this.table);
     }
 
-    @Override
+   // @Override
     public List<Customer> findAllById(Iterable<Long> ids) {
         return this.table.stream().filter( i ->{
             for(long id:ids)
@@ -189,7 +188,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
         }).collect(Collectors.toList());
     }
 
-    @Override
+   // @Override
     public Customer findOneById(Long id) {
         for (Customer cust : table) {
             if (cust.getId().equals(id)) {
@@ -199,34 +198,34 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
         return null;
     }
 
-    @Override
+   // @Override
     public boolean saveAll(Iterable<Customer> entities) {
         int wasSize = this.table.size();
         entities.forEach(table::add);
         return Integer.compare(wasSize, table.size()) != 0;
     }
 
-    @Override
+    //@Override
     public boolean save(Customer entity) {
         return this.table.add(entity);
     }
 
-    @Override
+   // @Override
     public int updateAllById(Iterable<Customer> entities) {
         return 0;
     }
 
-    @Override
+    //@Override
     public int updateOneById(Customer entity) {
         return 0;
     }
 
-    @Override
+    //@Override
     public long size() {
         return this.table.size();
     }
 
-    @Override
+   // @Override
     public Customer findByNumber(long number) {
         for (Customer cust : this.table) {
             if (cust.getNumber() == number) {
@@ -236,7 +235,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
         return null;
     }
 
-    @Override
+    //@Override
     public Customer findByEmail(String email) {
         for (Customer cust : this.table) {
             if (cust.getEmail().equals(email)) {
@@ -246,7 +245,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
         return null;
     }
 
-    @Override
+    //@Override
     public Customer findByUsername(String username) {
         for (Customer cust : this.table) {
             if (cust.getUsername().equals(username)) {
@@ -256,12 +255,12 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
         return null;
     }
 
-    @Override
+    //@Override
     public List<Customer> findByPassword(String password) {
         return this.table.stream().filter(i -> i.getPassword().equals(password)).collect(Collectors.toList());
     }
 
-    @Override
+    //@Override
     public List<Customer> findByDateRegistration(LocalDateTime dataRegistration) {
         return this.table
                 .stream()
@@ -269,7 +268,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
                 .collect(Collectors.toList());
     }
 
-    @Override
+   // @Override
     public List<Customer> findByDateRegistrationAfter(LocalDateTime dataRegistration) {
         return this.table
                 .stream()
@@ -277,7 +276,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
                 .collect(Collectors.toList());
     }
 
-    @Override
+  //  @Override
     public List<Customer> findByDateRegistrationBefore(LocalDateTime dataRegistration) {
         return this.table
                 .stream()
@@ -285,7 +284,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
                 .collect(Collectors.toList());
     }
 
-    @Override
+   // @Override
     public List<Customer> findByDateRegistrationBetween(LocalDateTime start, LocalDateTime end) {
         return this.table
                 .stream()
@@ -293,7 +292,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
                 .collect(Collectors.toList());
     }
 
-    @Override
+  //  @Override
     public List<Customer> findByActive(boolean active) {
         return this.table
                 .stream()
@@ -301,7 +300,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
                 .collect(Collectors.toList());
     }
 
-    @Override
+    //@Override
     public List<Customer> findByRole(Role role) {
         return this.table
                 .stream()
@@ -309,7 +308,7 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
                 .collect(Collectors.toList());
     }
 
-    @Override
+   // @Override
     public List<Customer> findByCountry(String country) {
         return this.table
                 .stream()
@@ -317,18 +316,18 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
                 .collect(Collectors.toList());
     }
 
-    @Override
+ //   @Override
     public List<Customer> findByEmailLike(String piece) {
         return null;
     }
 
-    @Override
+   // @Override
     public List<Customer> findByEmailContaining(String start) {
         return null;
     }
 
 
-    @Override
+    //@Override
     public List<Customer> findByUsernameOrNumberOrEmail(Customer user) {
         return table.stream().filter( i -> i.getUsername().equals(user.getUsername()) ||
                 i.getPassword().equals(user.getPassword()) ||
@@ -337,12 +336,12 @@ public class DAOCustomerHashSet implements IDAOCustomer<Customer>  {
         ).collect(Collectors.toList());
     }
 
-    @Override
+    //@Override
     public List<Customer> findByName(String name) {
         return null;
     }
 
-    @Override
+    //@Override
     public List<Customer> findByNameContaining(String name) {
         return null;
     }

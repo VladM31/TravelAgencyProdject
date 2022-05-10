@@ -4,13 +4,13 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Please sign in</title>
+    <title>Profile message</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <script th:src="@{/jquery/jquery.min.js}"></script>
     <script th:src="@{/popper/popper.min.js}"></script>
     <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
-    <link href="message_css_file.css" rel="stylesheet" />
+    <link href="css/show_all_messages_css_file.css" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Neucha" />
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
@@ -21,22 +21,22 @@
     <div class="main-body-top">
         <div>
             
-            <h1 class="main-travel-agency-naming">
+            <h1 class="main-travel-agency-naming" th:text="${nameUser}">
                 Назва турагенції
               </h1>
+            <h2 th:if="${IamAdmin}" th:text=""${nameRole}>
+
+            </h2>
         </div>
-          <div style="display: flex; padding-left: 40%;">
-            <span class="starts-style">&starf;</span>
-            <span class="starts-style">&starf;</span>
-            <span class="starts-style">&starf;</span>
-            <span class="starts-style">&star;</span>
-            <span class="starts-style">&star;</span>
+          <div style="display: flex; padding-left: 40%;" th:if="${haveReting}">
+            <span class="starts-style" th:each="option : ${countries}" th:text="${option}">&starf;</span>
+
         </div>
     </div>
 
     <div class="main-body-buttom">
 
-        <form id="filter-right" class="filter-mail-block-for-all-info">
+        <form th:action="@{/profile-message}" th:object="${filter}" method="POST" class="filter-mail-block-for-all-info">
             <div>
                 <h2 style="font-family: 'Neucha';font-style: normal;font-size: 45px;">
                     <b>
@@ -47,30 +47,32 @@
     
             <div id="Role">
                 <h6>Ролями</h6>
-                <select id="phone" name="role" class="box-filter">
-                    <option value="customer">Customer</option>
-                    <option value="travelAgecy">Travel agency</option>
-                    <option value="admin">Administrator</option>
-                    <option value="moder">Moderator</option>
+                <select  th:field="*{byRole}" class="box-filter">
+                    <option value="ALL">All roles</option>
+                    <option value="CUSTOMER">Customer</option>
+                    <option value="TRAVEL_AGENCY">Travel agency</option>
+                    <option value="ADMINISTRATOR">Administrator</option>
+                    <option value="MODERATOR">Moderator</option>
+                    <option value="COURIER">Courier</option>
                 </select>
             </div>
     
             <div id="NameMessage">
                 <h6>Назва повідомлення</h6>
-                <input type="text" class="box-filter">
+                <input type="text" class="box-filter" th:field="*{byNameMessage}">
             </div>
     
             <div id="NameSendler">
                 <h6>Назва відправника</h6>
-                <input type="text" class="box-filter">
+                <input type="text" class="box-filter" th:field="*{byNameSendler}">
             </div>
     
             <div id="Chose_date">
                 <h5 style="color: white;">Датою</h5>
                 <div style=" display:flex; justify-content: space-around;">
-                    <input type="date" name="start" class="box-filter-date">
+                    <input type="datetime-local" class="box-filter-date" th:field="*{byStartSendDate}">
                     <p class="line-between-date">-</p>
-                    <input type="date" name="ends" class="box-filter-date">
+                    <input type="datetime-local" class="box-filter-date" th:field="*{byEndSendDate}">
                 </div>
             </div>
     
@@ -78,10 +80,10 @@
                 <h5 style="color: white;">За станом</h5>
                 <div style="display: flex;justify-content: space-around;">
                     <div class="box-filter-check">
-                        <input type="checkbox" checked name="htm1" /> Прочитані
+                        <input type="checkbox" th:field="*{byRead}" /> Прочитані
                     </div>
                     <div class="box-filter-check">
-                        <input type="checkbox" checked name="html5" /> Не прочитані
+                        <input type="checkbox" th:field="*{byNotRead}"/> Не прочитані
                     </div>
                 </div>
     
@@ -101,12 +103,12 @@
                 <div class="labelOr">
                     <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked
-                            value="EGRPOY" th:field="*{whatChoose}">
+                            value="EGRPOY">
                         <label class="btn btn-outline-primary"
                             for="btnradio1">&nbsp;&nbsp;&nbsp;&nbsp;\/&nbsp;&nbsp;&nbsp;&nbsp;</label>
     
                         <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off"
-                            value="RNYKPN" th:field="*{whatChoose}">
+                            value="RNYKPN">
                         <label class="btn btn-outline-primary"
                             for="btnradio2">&nbsp;&nbsp;&nbsp;&nbsp;/\&nbsp;&nbsp;&nbsp;&nbsp;</label>
                     </div>
@@ -119,41 +121,51 @@
     
         </form>
 
-        <div class="message-block-for-all-tabs">
-            <div class="message_block">
-                <div class="message_block-all-info">
-                    <div class="message_block-all-info-name">
-                        <p class="messages-name"> Name</p>
+        <div class="message-block-for-all-tabs" >
+            <div th:each="Info : ${messages}">
+
+                <form class="message_block" th:action="@{/show-message}"   th:object="${Info}" method="POST" >
+                    <div class="message_block-all-info">
+                        <div class="message_block-all-info-name">
+                            <p class="messages-name" th:text="${Info.messageName}"> Name</p>
+                            <input type="hidden" name="messageName" th:value="${Info.messageName}">
+                            <input type="hidden" name="sendlerEmail" th:value="${Info.sendlerEmail}">
+                            <input type="hidden" name="idUserMessage" th:value="${Info.idUserMessage}">
+                            <input type="hidden" name="idMessage" th:value="${Info.idMessage}">
+                            <input type="hidden" name="itWasRead" th:value="${Info.itWasRead}">
+                        </div>
+                        <div class="message_block-all-info-other">
+                            <div class="message-info-text">
+                                <small class="message-info-text-name-top"> Відправник</small>
+                                <p class="message-info-text-name-bottom"  th:text="${Info.sendlerName}"> Імя</p>
+                                <input type="hidden" name="sendlerName" th:value="${Info.sendlerName}">
+                            </div>
+                            <div class="message-info-text">
+                                <small class="message-info-text-name-top"> Роль</small>
+                                <p class="message-info-text-name-bottom"   th:text="${Info.sendlerRole}">  Імя</p>
+                            </div>
+                            <div class="message-info-text">
+                                <small class="message-info-text-name-top"> Дата відправлення</small>
+                                <p class="message-info-text-name-bottom" th:text="${Info.getFromatSendDate()}"> Імя</p>
+                                <input type="hidden" name="sendDateTxt" th:value="${Info.sendDate}">
+                            </div>
+
+                        </div>
                     </div>
-                    <div class="message_block-all-info-other">
-                        <div class="message-info-text">
-                            <small class="message-info-text-name-top"> Відправник</small>
-                            <p class="message-info-text-name-bottom"> Імя</p>
-                        </div>
-                        <div class="message-info-text">
-                            <small class="message-info-text-name-top"> Роль</small>
-                            <p class="message-info-text-name-bottom"> Імя</p>
-                        </div>
-                        <div class="message-info-text">
-                            <small class="message-info-text-name-top"> Дата відправлення</small>
-                            <p class="message-info-text-name-bottom"> Імя</p>
-                        </div>
-    
+                    <div class="message_block-button">
+                        <input type="submit" class="message-button color-read" value="ПЕРЕГЛЯНУТИ" th:if="${Info.itWasRead}">
+                        <input type="submit" class="message-button color-new" value="ПЕРЕГЛЯНУТИ" th:unless="${Info.itWasRead}">
                     </div>
-                </div>
-                <form class="message_block-button">
-                    <input type="submit" class="message-button color-new" value="ПЕРЕГЛЯНУТИ">
                 </form>
             </div>
-            
         </div>
     
-        <form action="" class="watch-travel-agency">
+        <form th:action="@{${urlChoose}}" class="watch-travel-agency">
             <div>
-                <h2 class="watch-travel-agency-choose-see"><b>Перегляд</b></h2>
+                <h2 class="watch-user-choose-see"><b>Перегляд</b></h2>
                 
                 <div style="display: flex;align-items: flex-start;margin-left: 4%">
-                    <input type="submit" class="watch-travel-agency-choose-servise-submit wtacss-right" value="Послуг" >
+                    <input type="submit" class="watch-travel-agency-choose-servise-submit wtacss-right" th:value="${nameChoose}" >
                     <input type="button" class="watch-travel-agency-choose-servise-submit wtacss-left wtacss-not-work" value="Повідомлень">
                 </div>
     
@@ -165,11 +177,12 @@
             </div>
     
             <div>
-                <input id="WriteMessage" type="submit"  class="watch-travel-agency-other-submit" rows="2" value="Написати повідомлення" >
+
+                <input id="WriteMessage" type="submit" formaction="/send-message"  formmethod="get" class="watch-travel-agency-other-submit" rows="2" value="Написати повідомлення" >
             </div>
     
-            <div>
-                <input id="MakeTheService" type="submit"  class="watch-travel-agency-other-submit" rows="2" value="Створити послугу" >
+            <div th:if="${haveButton}">
+                <input id="MakeTheService" type="submit"  class="watch-travel-agency-other-submit" rows="2" th:value="${nameButton}" >
             </div>
     
         </form>

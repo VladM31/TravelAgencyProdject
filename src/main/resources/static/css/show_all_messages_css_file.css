@@ -1,7 +1,7 @@
 
 
 .main-body{
-    background: url(message_show_background.png);
+    background: url(../images/place_for_messages/show_all_messages_background.png);
     position: absolute;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -248,7 +248,7 @@ select:focus {
     text-align: center;
 }
 
-.watch-travel-agency-choose-see{
+.watch-user-choose-see{
     font-family: 'Neucha';
     font-style: normal;
     font-weight: 400;
@@ -295,7 +295,6 @@ select:focus {
     border: 3px solid #01FD66;
 
     font-family: 'Neucha';
-    font-style: bold;
     font-weight: 400;
     font-size: 30px;
     line-height: 28px;

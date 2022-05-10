@@ -8,27 +8,34 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.io.Closeable;
+import java.io.IOException;
 import java.sql.*;
 
 @Component
 @Scope("singleton")
-public class MySqlConnectorGetter implements IConnectorGetter {
+public class MySqlConnectorGetter implements IConnectorGetter{
 
     private Connection conn;
 
     @Override
     public Statement getSqlStatement() throws SQLException{
-        return conn.createStatement();
+        synchronized (conn) {
+             return conn.createStatement();
+        }
     }
 
     @Override
     public PreparedStatement getSqlPreparedStatement(String script) throws SQLException {
-        return conn.prepareStatement(script);
+        synchronized (conn) {
+            return conn.prepareStatement(script);
+        }
     }
 
 
     @PostConstruct
     public void init(){
+        ///System.out.println("MySqlConnectorGetter void init()");
         try {
             this.conn = DriverManager.getConnection(MyConstants.URL, MyConstants.MYSQL_USER, MyConstants.MYSQL_PASSWORD);
         } catch (SQLException e) {
@@ -38,12 +45,12 @@ public class MySqlConnectorGetter implements IConnectorGetter {
     }
 
     @PreDestroy
-    public void destroy(){
+    public void destroy() throws IOException {
+        //System.out.println("MySqlConnectorGetter void destroy()");
         try {
             this.conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 }
