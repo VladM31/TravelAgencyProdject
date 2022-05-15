@@ -1,5 +1,6 @@
 package com.example.demo.entity.important;
 
+import com.example.demo.entity.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

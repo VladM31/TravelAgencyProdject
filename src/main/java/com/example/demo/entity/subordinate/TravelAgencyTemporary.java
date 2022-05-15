@@ -1,6 +1,6 @@
 package com.example.demo.entity.subordinate;
 
-import com.example.demo.entity.important.Role;
+import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.important.TravelAgency;
 import com.example.demo.forms.signup.CustomerForm;
 

@@ -3,21 +3,17 @@ package com.example.demo.database.dao.fiction;
 import com.example.demo.database.dao.tools.Handler;
 import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.database.idao.temporary.IDAOMessage;
-import com.example.demo.entity.important.Customer;
-import com.example.demo.entity.important.Message;
-import com.example.demo.entity.important.Role;
+import com.example.demo.entity.subordinate.Message;
+import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.subordinate.MessageShortData;
-import com.sun.jdi.PrimitiveValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 

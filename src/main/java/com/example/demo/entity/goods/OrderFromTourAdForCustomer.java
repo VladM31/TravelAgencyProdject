@@ -1,9 +1,11 @@
 package com.example.demo.entity.goods;
 
+import com.example.demo.entity.enums.ConditionCommodity;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class OrderFromServiceForCustomer extends OrderFromServiceCore {
+public class OrderFromTourAdForCustomer extends OrderFromTourAdCore {
     private String nameTravelAgency;
     private String restingPlace;
 
@@ -23,13 +25,13 @@ public class OrderFromServiceForCustomer extends OrderFromServiceCore {
         this.restingPlace = restingPlace;
     }
 
-    public OrderFromServiceForCustomer(Long id, String country, String city, int cost, int numberOfPeople, LocalDate dateStart,
-                                       LocalDate dateEnd, LocalDateTime dateRegistration, String nameTravelAgency, String restingPlace) {
-        super(id, country, city, cost, numberOfPeople, dateStart, dateEnd, dateRegistration);
+    public OrderFromTourAdForCustomer(Long id, String country, String city, int cost, int numberOfPeople, LocalDate dateStart,
+                                      LocalDate dateEnd, LocalDateTime dateRegistration, ConditionCommodity conditionCommodity, String nameTravelAgency, String restingPlace) {
+        super(id, country, city, cost, numberOfPeople, dateStart, dateEnd, dateRegistration,conditionCommodity);
         this.nameTravelAgency = nameTravelAgency;
         this.restingPlace = restingPlace;
     }
 
-    public OrderFromServiceForCustomer() {
+    public OrderFromTourAdForCustomer() {
     }
 }

@@ -1,5 +1,7 @@
 package com.example.demo.entity.important;
 
+import com.example.demo.entity.enums.Role;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 

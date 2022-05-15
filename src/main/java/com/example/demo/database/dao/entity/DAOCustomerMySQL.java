@@ -5,7 +5,7 @@ import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.database.idao.entity.IDAOCustomer;
 import static com.example.demo.database.dao.tools.Handler.*;
 import com.example.demo.entity.important.Customer;
-import com.example.demo.entity.important.Role;
+import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.important.User;
 
 import java.sql.PreparedStatement;
@@ -13,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 

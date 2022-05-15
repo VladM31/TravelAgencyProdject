@@ -1,7 +1,6 @@
-package com.example.demo.entity.important;
+package com.example.demo.entity.subordinate;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 public class Message {
     private Long id;

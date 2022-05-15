@@ -1,7 +1,5 @@
 package com.example.demo.forms.signup;
 
-import com.example.demo.entity.important.Customer;
-import com.example.demo.entity.important.Role;
 import com.example.demo.entity.subordinate.CustomerTemporary;
 
 import java.time.LocalDateTime;

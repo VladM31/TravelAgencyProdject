@@ -1,9 +1,8 @@
 package com.example.demo.entity.subordinate;
 
-import com.example.demo.entity.important.Role;
+import com.example.demo.entity.enums.Role;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class MessageShortData {
     private Long idUserMessage;

@@ -1,7 +1,7 @@
 package com.example.demo.database.idao.temporary;
 
-import com.example.demo.entity.important.Message;
-import com.example.demo.entity.important.Role;
+import com.example.demo.entity.subordinate.Message;
+import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.subordinate.MessageShortData;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;

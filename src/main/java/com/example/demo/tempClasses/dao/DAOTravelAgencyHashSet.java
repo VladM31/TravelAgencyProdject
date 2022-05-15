@@ -1,7 +1,7 @@
 package com.example.demo.tempClasses.dao;
 
 import com.example.demo.database.idao.entity.IDAOTravelAgency;
-import com.example.demo.entity.important.Role;
+import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.important.TravelAgency;
 import org.springframework.stereotype.Component;
 

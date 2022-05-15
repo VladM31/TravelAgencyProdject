@@ -1,6 +1,6 @@
 package com.example.demo.database.idao.entity;
 
-import com.example.demo.entity.important.Role;
+import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.important.User;
 
 import java.time.LocalDateTime;

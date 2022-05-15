@@ -1,4 +1,4 @@
-package com.example.demo.entity.important;
+package com.example.demo.entity.enums;
 
 import org.springframework.security.core.GrantedAuthority;
 

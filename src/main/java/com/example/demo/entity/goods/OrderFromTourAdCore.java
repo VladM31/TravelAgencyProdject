@@ -1,10 +1,12 @@
 package com.example.demo.entity.goods;
 
+import com.example.demo.entity.enums.ConditionCommodity;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class OrderFromServiceCore {
+public class OrderFromTourAdCore {
     private Long id;
     private String country;
     private String city;
@@ -13,6 +15,15 @@ public class OrderFromServiceCore {
     private LocalDate dateStart;
     private LocalDate dateEnd;
     private LocalDateTime dateRegistration;
+    private ConditionCommodity conditionCommodity;
+
+    public ConditionCommodity getConditionCommodity() {
+        return conditionCommodity;
+    }
+
+    public void setConditionCommodity(ConditionCommodity conditionCommodity) {
+        this.conditionCommodity = conditionCommodity;
+    }
 
     public Long getId() {
         return id;
@@ -78,7 +89,8 @@ public class OrderFromServiceCore {
         this.dateRegistration = dateRegistration;
     }
 
-    public OrderFromServiceCore(Long id, String country, String city, int cost, int numberOfPeople, LocalDate dateStart, LocalDate dateEnd, LocalDateTime dateRegistration) {
+    public OrderFromTourAdCore(Long id, String country, String city, int cost, int numberOfPeople, LocalDate dateStart,
+                               LocalDate dateEnd, LocalDateTime dateRegistration, ConditionCommodity conditionCommodity) {
         this.id = id;
         this.country = country;
         this.city = city;
@@ -87,16 +99,17 @@ public class OrderFromServiceCore {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.dateRegistration = dateRegistration;
+        this.conditionCommodity = conditionCommodity;
     }
 
-    public OrderFromServiceCore() {
+    public OrderFromTourAdCore() {
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrderFromServiceCore that = (OrderFromServiceCore) o;
+        OrderFromTourAdCore that = (OrderFromTourAdCore) o;
         return Objects.equals(id, that.id) && Objects.equals(dateRegistration, that.dateRegistration);
     }
 

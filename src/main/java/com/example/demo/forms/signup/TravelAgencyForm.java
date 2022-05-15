@@ -1,6 +1,5 @@
 package com.example.demo.forms.signup;
 
-import com.example.demo.entity.important.Role;
 import com.example.demo.entity.important.TravelAgency;
 import com.example.demo.entity.subordinate.TravelAgencyTemporary;
 import org.springframework.lang.NonNull;

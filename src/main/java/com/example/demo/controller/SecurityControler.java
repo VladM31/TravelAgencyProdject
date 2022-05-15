@@ -5,7 +5,7 @@ import com.example.demo.database.idao.entity.IDAOTravelAgency;
 import com.example.demo.database.idao.temporary.IDAOCustomerTemporary;
 import com.example.demo.database.idao.temporary.IDAOTravelAgencyTemporaryCode;
 import com.example.demo.entity.important.Customer;
-import com.example.demo.entity.important.Role;
+import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.important.TravelAgency;
 import com.example.demo.entity.important.User;
 import com.example.demo.forms.signup.ChooseSignUpForm;
