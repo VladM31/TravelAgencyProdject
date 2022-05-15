@@ -1,7 +1,7 @@
 package com.example.demo.forms.filter;
 
 import com.example.demo.database.idao.temporary.IDAOMessage;
-import com.example.demo.entity.important.Role;
+import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.subordinate.MessageShortData;
 
 import java.time.LocalDate;

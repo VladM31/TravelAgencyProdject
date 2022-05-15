@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.database.idao.temporary.IDAOMessage;
-import com.example.demo.entity.important.Message;
-import com.example.demo.entity.important.Role;
+import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.important.TravelAgency;
 import com.example.demo.entity.important.User;
+import com.example.demo.entity.subordinate.Message;
 import com.example.demo.entity.subordinate.MessageShortData;
 import com.example.demo.forms.filter.MessageShowFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +45,7 @@ public class InsideMessageController {
 
         model.addAttribute(ATTRIBUTE_FILTER,filter);
         model.addAttribute(ATTRIBUTE_MESSAGES,filter.filtering(user.getId(),this.idaoMessage));
+        HendlerIMCForAll.setInformationAboutUserForShowAll(model,user);
         return SHOW_ALL_MESSAGES_PAGE;
     }
 
@@ -102,8 +103,6 @@ public class InsideMessageController {
         }
         idaoMessage.save(writeMessage,user.getId(),strings);
 
-
-        //return SEND_MESSAGE_PAGE;
         return "redirect:/profile-message";
     }
 
