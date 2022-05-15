@@ -2,7 +2,7 @@ package com.example.demo.tempClasses.dao;
 
 import com.example.demo.database.idao.entity.IDAOCustomer;
 import com.example.demo.entity.important.Customer;
-import com.example.demo.entity.enums.Role;
+import com.example.demo.entity.important.Role;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

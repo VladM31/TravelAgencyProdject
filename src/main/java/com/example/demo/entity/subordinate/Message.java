@@ -49,6 +49,8 @@ public class Message {
     }
 
     public Message() {
+        this.id = 0l;
+        this.dateSend = LocalDateTime.now();
     }
 
     @Override
@@ -67,5 +69,15 @@ public class Message {
         int result = id.hashCode();
         result = 31 * result + dateSend.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", describeMess='" + describeMess + '\'' +
+                ", dateSend=" + dateSend +
+                '}';
     }
 }
