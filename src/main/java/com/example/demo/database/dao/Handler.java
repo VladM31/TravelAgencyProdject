@@ -3,9 +3,9 @@ package com.example.demo.database.dao;
 import com.example.demo.database.idao.IConnectorGetter;
 import org.springframework.lang.NonNull;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -17,6 +17,9 @@ public class Handler {
     public static final String REPLACE_SYMBOL = "?#!@#@_REPLACE_ME_@#@!#?";
     public static final Consumer<PreparedStatement> DEFAULT_PARAMETER = (PreparedStatement p) -> {};
 
+    public static String containingString(String str){
+        return "%".concat(str).concat("%");
+    }
 
     public static boolean arrayHasOnlyOne(int[] arr){
         for(int i: arr){
@@ -73,6 +76,57 @@ public class Handler {
         }catch (SQLException e){
             e.printStackTrace();
             return new ArrayList<>(Handler.EMPTY_CAPACITY);
+        }
+    }
+
+    public static final int START_POSITION = 0;
+    public static <T> List<T> useSelectScript(IConnectorGetter connectorGetter, final String script,
+                                              Function<ResultSet,T> getObject, @NonNull Object ...array){
+        try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
+            int position = START_POSITION;
+            for(Object obj : array){
+                substituteVariable(stat,++position,obj);
+            }
+
+            try(ResultSet resultSet = stat.executeQuery()){
+                List<T> list = new ArrayList<>();
+                while (resultSet.next()){
+                    list.add(getObject.apply(resultSet));
+                }
+                return list;
+            }finally {
+            }
+
+        }catch (SQLException e){
+            e.printStackTrace();
+            return new ArrayList<>(Handler.EMPTY_CAPACITY);
+        }
+    }
+
+    private static void substituteVariable(PreparedStatement preparedStatement,int position,Object object) throws SQLException{
+        if(object == null){
+            preparedStatement.setNull(position, Types.OTHER);
+            return;
+        }
+
+        if (object instanceof Long) {
+            preparedStatement.setLong(position, (Long) object);
+        } else if (object instanceof String) {
+            preparedStatement.setString(position, object.toString());
+        } else if (object instanceof Integer){
+            preparedStatement.setInt(position, (Integer) object);
+        } else if (object instanceof LocalDateTime){
+            preparedStatement.setTimestamp(position, Timestamp.valueOf(((LocalDateTime) object)));
+        } else if( object instanceof LocalDate){
+            preparedStatement.setDate(position, Date.valueOf((LocalDate) object));
+        } else if (object instanceof Boolean) {
+            preparedStatement.setBoolean(position, (Boolean) object);
+        } else if (object instanceof Float){
+            preparedStatement.setFloat(position, (Float) object);
+        } else if (object instanceof Enum<?>){
+            preparedStatement.setString(position, object.toString());
+        }else{
+            throw new SQLException("substituteVariable: object is " + object.getClass().getName());
         }
     }
 
