@@ -1,8 +1,6 @@
-package com.example.demo.database.dao.tools;
+package com.example.demo.database.dao;
 
 import com.example.demo.database.idao.IConnectorGetter;
-import com.example.demo.entity.important.Customer;
-import com.example.demo.entity.subordinate.MessageShortData;
 import org.springframework.lang.NonNull;
 
 import java.sql.PreparedStatement;

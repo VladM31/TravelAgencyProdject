@@ -2,7 +2,7 @@ package com.example.demo.database.idao.entity;
 
 import java.util.List;
 
-public interface IDAODefault<T> {
+public interface IDAOCore<T> {
 
    public int deleteAllById(Iterable<Long> ids);
    public int deleteAllByEntity(Iterable<T> entities);

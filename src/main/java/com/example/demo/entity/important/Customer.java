@@ -32,6 +32,10 @@ public class Customer extends User{
         super.setName(firstName + super.getName().substring(super.getName().indexOf("/")));
     }
 
+    public String getFormatName(){
+        return super.getName().replace('/',' ');
+    }
+
     public String getLastName() {
         return super.getName().substring(super.getName().indexOf("/")+1);
     }

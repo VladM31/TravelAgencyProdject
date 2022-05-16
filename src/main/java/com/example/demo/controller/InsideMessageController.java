@@ -83,23 +83,24 @@ public class InsideMessageController {
     @RequestMapping(value = "/send-message",method = {RequestMethod.POST})
     public String sendMessagePost(@AuthenticationPrincipal User user,Model model,Message writeMessage,String writeEmail, boolean doSendMessage){
 
+
         if(writeEmail == null || writeEmail.trim().isEmpty()){
             //todo
             return "redirect:/profile-message";
         }
+
+        writeMessage.setId(IDAOMessage.NEED_TO_GENERATE_ID);
+
         if (writeEmail.contains(CHOSE_ALL_ROLE)){
-            for (Role role : HendlerSendMessage.getAllRoles()) {
-                idaoMessage.save(writeMessage,user.getId(),role);
-            }
+            idaoMessage.save(writeMessage,user.getId(),HendlerSendMessage.getAllRoles());
+
             return "redirect:/profile-message";
         }
 
         String [] strings =writeEmail.split(",");
         //todo
         if (HendlerSendMessage.hasRole(writeEmail)){
-            for (Role role : HendlerSendMessage.getRoleFromString(strings)) {
-                idaoMessage.save(writeMessage,user.getId(),role);
-            }
+            idaoMessage.save(writeMessage,user.getId(),HendlerSendMessage.getRoleFromString(strings));
         }
         idaoMessage.save(writeMessage,user.getId(),strings);
 
@@ -251,8 +252,8 @@ class HendlerSendMessage{
         return doSendMessage;
     }
 
-    static Role[] getAllRoles(){
-        return new Role[]{Role.MODERATOR,Role.TRAVEL_AGENCY,Role.CUSTOMER,Role.COURIER};
+    static Set<Role> getAllRoles(){
+        return Set.of(Role.MODERATOR,Role.TRAVEL_AGENCY,Role.CUSTOMER,Role.COURIER);
     }
 
     static boolean hasRole(String writeEmail){

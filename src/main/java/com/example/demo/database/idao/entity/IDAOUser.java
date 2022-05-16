@@ -6,7 +6,7 @@ import com.example.demo.entity.important.User;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface IDAOUser<T extends User> extends  IDAODefault<T> {
+public interface IDAOUser<T extends User> extends IDAOCore<T> {
 
    public T  findByNumber(long number);
    public T findByEmail(String email);

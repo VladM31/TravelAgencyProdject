@@ -8,9 +8,10 @@ import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 public interface IDAOMessage {
-
+    public static final Long NEED_TO_GENERATE_ID = null;
     List<MessageShortData> findMessageShortDataAllByToWhom(long toWhom);
     List<MessageShortData> findMSDByToWhomAndSendlerNameContaining(long toWhom, String sendlerName);
     List<MessageShortData> findMSDByToWhomAndNameMessageContaining(long toWhom, String messageName);
@@ -23,5 +24,5 @@ public interface IDAOMessage {
     String findDescribeByMSD(MessageShortData messageShortData);
 
     boolean save(Message message,long fromWhom,@NonNull String[] emails);
-    boolean save(Message message,long fromWhom,@Nullable Role usersByRole);
+    boolean save(Message message, long fromWhom,@NonNull Set<Role> roles);
 }

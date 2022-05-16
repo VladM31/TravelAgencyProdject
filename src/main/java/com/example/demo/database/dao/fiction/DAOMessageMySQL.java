@@ -1,6 +1,6 @@
 package com.example.demo.database.dao.fiction;
 
-import com.example.demo.database.dao.tools.Handler;
+import com.example.demo.database.dao.Handler;
 import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.database.idao.temporary.IDAOMessage;
 import com.example.demo.entity.subordinate.Message;
@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component("idaoMessage")
 public class DAOMessageMySQL implements IDAOMessage {
@@ -234,7 +235,9 @@ public class DAOMessageMySQL implements IDAOMessage {
 
     @Override
     public boolean save(Message message,long fromWhom, String[] emails) {
-        message.setId(DAOMessageMySQL.getId());
+        if (message.getId() == IDAOMessage.NEED_TO_GENERATE_ID){
+            message.setId(DAOMessageMySQL.getId());
+        }
 
         MessageHandler.saveMessage(message,this.conn);
 
@@ -244,12 +247,14 @@ public class DAOMessageMySQL implements IDAOMessage {
     }
 
     @Override
-    public boolean save(Message message,long fromWhom, Role usersByRole) {
-        message.setId(DAOMessageMySQL.getId());
+    public boolean save(Message message,long fromWhom,@NonNull Set<Role> roles) {
+        if (message.getId() == IDAOMessage.NEED_TO_GENERATE_ID){
+            message.setId(DAOMessageMySQL.getId());
+        }
 
         MessageHandler.saveMessage(message,this.conn);
 
-        Iterable<Long> idsToWhom = MessageHandler.findIdUserByRole(usersByRole,this.conn);
+        Iterable<Long> idsToWhom = MessageHandler.findIdUserByRole(roles,this.conn);
 
         return MessageHandler.saveCommunication(idsToWhom,fromWhom,message.getId(),this.conn);
     }
@@ -281,7 +286,7 @@ class MessageHandler{
     private static final String SELECT_USERS_ID_BY_EMEIL = "SELECT id FROM user WHERE email IN(" + Handler.REPLACE_SYMBOL + ");";
     static Iterable<Long> findIdUserByEmail(String[] emails,IConnectorGetter conn){
         final String HOMEMADE_SELECT_USERS_ID_BY_EMEIL = SELECT_USERS_ID_BY_EMEIL.replace(Handler.REPLACE_SYMBOL,
-        com.example.demo.database.dao.tools.Handler.symbolsInDependsFromSize(List.of(emails)));
+        Handler.symbolsInDependsFromSize(List.of(emails)));
 
         int index = 0;
         HashSet<Long> list = new HashSet<>();
@@ -306,14 +311,20 @@ class MessageHandler{
     }
 
 
-    private static final String SELECT_USERS_ID_BY_ROLE = "SELECT id FROM user WHERE role_id = (SELECT id FROM role WHERE name=?);";
-    private static final int POSITION_NAME_ROLE = 1;
-    static Iterable<Long> findIdUserByRole(@NonNull Role role, IConnectorGetter conn){
+    private static final String SELECT_ROLES_ID_BY_NAME = "SELECT id FROM user WHERE role_id IN (SELECT id FROM role WHERE name IN(" + Handler.REPLACE_SYMBOL + "));";
+    static Iterable<Long> findIdUserByRole(Iterable<Role> roles, IConnectorGetter conn){
         HashSet<Long> list = new HashSet<>();
 
-        try(java.sql.PreparedStatement preparedStatement =conn.getSqlPreparedStatement(SELECT_USERS_ID_BY_ROLE)){
-            preparedStatement.setString(POSITION_NAME_ROLE,role.name());
+        int index = 0;
 
+        final String SELECT_USERS_ID_BY_ROLES = SELECT_ROLES_ID_BY_NAME.replace(Handler.REPLACE_SYMBOL,
+                Handler.symbolsInDependsFromSize(roles));
+
+        try(java.sql.PreparedStatement preparedStatement =conn.getSqlPreparedStatement(SELECT_USERS_ID_BY_ROLES)){
+
+            for(Role role : roles){
+                preparedStatement.setString(++index,role.name());
+            }
             try(java.sql.ResultSet resultSet = preparedStatement.executeQuery()){
                 while(resultSet.next()){
                     list.add(resultSet.getLong("id"));
@@ -346,7 +357,7 @@ class MessageHandler{
                 preparedStatement.setLong(POSITION_TO_WHOM_ID,toWhom);
                 preparedStatement.addBatch();
             }
-            return  com.example.demo.database.dao.tools.Handler.arrayHasOnlyOne(preparedStatement.executeBatch());
+            return  Handler.arrayHasOnlyOne(preparedStatement.executeBatch());
 
         } catch (SQLException e) {
             e.printStackTrace();
