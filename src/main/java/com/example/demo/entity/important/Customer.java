@@ -80,14 +80,6 @@ public class Customer extends User{
         return "Customer{" +
                 "customerId=" + customerId +
                 ", male=" + male +
-                ", firstname = " + this.getFirstName() +
-                ", lastname = " + this.getLastName() +
-                ", number = " + super.getNumber() +
-                ", email = " + super.getEmail() +
-                ", username = " + super.getUsername() +
-                ", password = " + super.getPassword() +
-                ", active = " + super.isActive() +
-                ", country = " + super.getCountry() +
-                ", date registration = " + super.getDateRegistration() + "};";
+                "} " + super.toString();
     }
 }

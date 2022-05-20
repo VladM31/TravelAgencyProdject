@@ -1,6 +1,5 @@
 package com.example.demo.entity.important;
 
-import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.enums.TypeState;
 
@@ -10,20 +9,20 @@ import java.util.Objects;
 public class TravelAgency extends User{
     private Long travelId;
     private float rating;
-    private long kved;
-    private Long egrpoy_or_rnekpn;
+    private String kved;
+    private Long egrpoyOrRnekpn;
     private boolean isEgrpoy;
     private String address;
-    private String allNameDirector;
+    private String fullNameDirector;
     private String describeAgency;
-    private boolean can_use;
+    private String urlPhoto;
 
-    public boolean isCan_use() {
-        return can_use;
+    public String getUrlPhoto() {
+        return urlPhoto;
     }
 
-    public void setCan_use(boolean can_use) {
-        this.can_use = can_use;
+    public void setUrlPhoto(String urlPhoto) {
+        this.urlPhoto = urlPhoto;
     }
 
     public Long getTravelId() {
@@ -42,11 +41,11 @@ public class TravelAgency extends User{
         this.rating = rating;
     }
 
-    public long getKved() {
+    public String getKved() {
         return kved;
     }
 
-    public void setKved(long kved) {
+    public void setKved(String kved) {
         this.kved = kved;
     }
 
@@ -58,12 +57,12 @@ public class TravelAgency extends User{
         this.address = address;
     }
 
-    public String getAllNameDirector() {
-        return allNameDirector;
+    public String getFullNameDirector() {
+        return fullNameDirector;
     }
 
-    public void setAllNameDirector(String allNameDirector) {
-        this.allNameDirector = allNameDirector;
+    public void setFullNameDirector(String fullNameDirector) {
+        this.fullNameDirector = fullNameDirector;
     }
 
     public String getDescribeAgency() {
@@ -74,12 +73,12 @@ public class TravelAgency extends User{
         this.describeAgency = describeAgency;
     }
 
-    public Long getEgrpoy_or_rnekpn() {
-        return egrpoy_or_rnekpn;
+    public Long getEgrpoyOrRnekpn() {
+        return egrpoyOrRnekpn;
     }
 
-    public void setEgrpoy_or_rnekpn(Long egrpoy_or_rnekpn) {
-        this.egrpoy_or_rnekpn = egrpoy_or_rnekpn;
+    public void setEgrpoyOrRnekpn(Long egrpoyOrRnekpn) {
+        this.egrpoyOrRnekpn = egrpoyOrRnekpn;
     }
 
     public boolean isEgrpoy() {
@@ -90,9 +89,20 @@ public class TravelAgency extends User{
         isEgrpoy = egrpoy;
     }
 
-    public TravelAgency(Long id, String number, String email, String username, String password, boolean active, LocalDateTime dateRegistration,
-                        Role role, String country, String name, TypeState typeState) {
+    public TravelAgency(Long id, String number, String email, String username, String password, boolean active,
+                        LocalDateTime dateRegistration, Role role, String country, String name, TypeState typeState,
+                        Long travelId, float rating, String kved, Long egrpoyOrRnekpn, boolean isEgrpoy, String address,
+                        String fullNameDirector, String describeAgency, String urlPhoto) {
         super(id, number, email, username, password, active, dateRegistration, role, country, name, typeState);
+        this.travelId = travelId;
+        this.rating = rating;
+        this.kved = kved;
+        this.egrpoyOrRnekpn = egrpoyOrRnekpn;
+        this.isEgrpoy = isEgrpoy;
+        this.address = address;
+        this.fullNameDirector = fullNameDirector;
+        this.describeAgency = describeAgency;
+        this.urlPhoto = urlPhoto;
     }
 
     public TravelAgency(){
@@ -121,14 +131,13 @@ public class TravelAgency extends User{
         return "TravelAgency{" +
                 "travelId=" + travelId +
                 ", rating=" + rating +
-                ", kved=" + kved +
-                ", egrpoy_or_rnekpn=" + egrpoy_or_rnekpn +
+                ", kved='" + kved + '\'' +
+                ", egrpoyOrRnekpn=" + egrpoyOrRnekpn +
                 ", isEgrpoy=" + isEgrpoy +
                 ", address='" + address + '\'' +
-                ", allNameDirector='" + allNameDirector + '\'' +
+                ", fullNameDirector='" + fullNameDirector + '\'' +
                 ", describeAgency='" + describeAgency + '\'' +
-                ", can_use=" + can_use +
-                ", name=" + super.getName() +
+                ", urlPhoto='" + urlPhoto + '\'' +
                 "} " + super.toString();
     }
 }

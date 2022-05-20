@@ -23,9 +23,9 @@ import java.util.function.Consumer;
 @Component("IDAOCustomer")
 public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
 
-    @Autowired
     private IConnectorGetter conn;
 
+    @Autowired
     public void setConn(IConnectorGetter conn) {
         this.conn = conn;
     }
@@ -34,13 +34,8 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
 
     @Override
     public List<Customer> findByMale(Boolean male) {
-        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_MALE_IS,SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setBoolean(1,male);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
+        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_MALE_IS,SORT_TO_DATE_REGISTRATION),
+                HandlerCustomer::resultSetToCustomer,male);
     }
 
     private static final String REPLACE_SYMBOL = "@#@_REPLACE_ME_@#@";
@@ -57,7 +52,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }, DAOCustomerMySQL::resultSetToCustomer);
+        }, HandlerCustomer::resultSetToCustomer);
     }
 
     private static final String WHERE_CUSTOMER_ID_ID = " AND customer.id = ? ";
@@ -70,7 +65,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }, DAOCustomerMySQL::resultSetToCustomer);
+        }, HandlerCustomer::resultSetToCustomer);
     }
 
 
@@ -109,16 +104,18 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         return 0;
     }
 
-    private static final String SELECT_ALL = "select user.id AS user_pk, customer.id AS customer_pk,  is_male,\n" +
-            "number,email,username,password, name,active,date_registration,\n" +
-            "(SELECT name FROM country WHERE country.id = user.country_id) AS country\n" +
-            " from customer left join user on customer.user_id = user.id WHERE user.type_state_user_id = 20 ;";
+    private static final String SELECT_ALL = "select user.id AS user_pk, customer.id AS customer_pk,  male," +
+            "number,email,username,password,user.name AS name,active,date_registration," +
+            "country.name AS country from customer " +
+            " left join user on customer.user_id = user.id" +
+            " left join country on user.country_id = country.id " +
+            " WHERE user.type_state_id = 20 ;";
 
     private static final String SORT_TO_DATE_REGISTRATION = " ORDER BY date_registration ASC;";
 
     @Override
     public List<Customer> findAll() {
-        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,SORT_TO_DATE_REGISTRATION),DEFAULT_PARAMETER, DAOCustomerMySQL::resultSetToCustomer);
+        return Handler.useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,SORT_TO_DATE_REGISTRATION), HandlerCustomer::resultSetToCustomer);
     }
 
     private static final String WHERE_user_id = " AND user.id = ? " + SORT_TO_DATE_REGISTRATION;
@@ -142,25 +139,29 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         return 0;
     }
 
+    protected static final String INSERT_USER = "INSERT INTO user (number,email,username,password,name,active,date_registration,role_id,country_id,type_state_id) " +
+            "VALUES (?,?,?,?,?,?,?,(SELECT id from role WHERE name = ?) ,(SELECT id from country WHERE name = ?),(SELECT id from type_state WHERE name = 'REGISTERED'));";
+
+    private static final String INSERT_CUSTOMER = " INSERT INTO customer (male,user_id) VALUES (?,(select id from user WHERE email = ? AND user.type_state_id = 20));";
 
     @Override
     public boolean saveAll(Iterable<Customer> entities) {
         try {
             try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(INSERT_USER)) {
                 for(Customer entity : entities) {
-                    userToMySqlScript(preStat,entity,DEFAULT_PARAMETER);
+                    HandlerCustomer.userToMySqlScript(preStat,entity,DEFAULT_PARAMETER);
                     preStat.addBatch();
                 }
 
-                if(Handler.arrayHasOnlyOne(preStat.executeBatch()) == ERROR_BOOLEAN_ANSWER){
-                    return ERROR_BOOLEAN_ANSWER;
+                if(Handler.arrayHasOnlyOne(preStat.executeBatch()) == HandlerCustomer.ERROR_BOOLEAN_ANSWER){
+                    return HandlerCustomer.ERROR_BOOLEAN_ANSWER;
                 }
             }finally {
             }
 
             try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(INSERT_CUSTOMER)) {
                 for(Customer entity : entities) {
-                    customerToMySqlScript(preStat,entity,DEFAULT_PARAMETER);
+                    HandlerCustomer.customerToMySqlScript(preStat,entity,DEFAULT_PARAMETER);
                     preStat.addBatch();
                 }
                 return Handler.arrayHasOnlyOne(preStat.executeBatch());
@@ -169,7 +170,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return ERROR_BOOLEAN_ANSWER;
+            return HandlerCustomer.ERROR_BOOLEAN_ANSWER;
         }
     }
 
@@ -196,39 +197,24 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
 
     @Override
     public Customer findByNumber(String number) {
-        return useSelectScriptAndGetOneObject(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_NUMBER_IS,SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setString(1,number);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
+        return Handler.useSelectScriptAndGetOneObject(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_NUMBER_IS,SORT_TO_DATE_REGISTRATION),
+                HandlerCustomer::resultSetToCustomer,number);
     }
 
     private static final String WHERE_EMAIL_IS = " AND user.email = ? ";
 
     @Override
     public Customer findByEmail(String email) {
-        return useSelectScriptAndGetOneObject(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_EMAIL_IS,SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setString(1,email);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
+        return useSelectScriptAndGetOneObject(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_EMAIL_IS,SORT_TO_DATE_REGISTRATION),
+                HandlerCustomer::resultSetToCustomer,email);
     }
 
     private static final String WHERE_USERNAME_IS = " AND user.username = ? ";
 
     @Override
     public Customer findByUsername(String username) {
-        return useSelectScriptAndGetOneObject(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_USERNAME_IS,SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setString(1,username);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
+        return useSelectScriptAndGetOneObject(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_USERNAME_IS,SORT_TO_DATE_REGISTRATION),
+                HandlerCustomer::resultSetToCustomer,username);
     }
 
     @Override
@@ -245,13 +231,8 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
 
     @Override
     public List<Customer> findByPassword(String password) {
-        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_PASSWORD_IS,SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setString(1,password);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
+        return Handler.useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_PASSWORD_IS,SORT_TO_DATE_REGISTRATION),
+                HandlerCustomer::resultSetToCustomer,password);
     }
 
 
@@ -292,8 +273,10 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         return null;
     }
 
-    private static final String INSERT_USER = "INSERT INTO user (number,email,username,password,name,active,date_registration,role_id,country_id,type_state_user_id) " +
-            "VALUES (?,?,?,?,?,?,?,(SELECT id from role WHERE name = ?) ,(SELECT id from country WHERE name = ?),(SELECT id from type_state_user WHERE name = 'ЗАРЕЄСТРОВАНИЙ'));";
+}
+
+
+class HandlerCustomer {
 
     private static final int NUMBER_USER_POSITION_FOR_INSERT = 1;
     private static final int EMAIL_USER_POSITION_FOR_INSERT = 2;
@@ -305,9 +288,9 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
     private static final int ROLE_USER_POSITION_FOR_INSERT = 8;
     private static final int COUNTRY_USER_POSITION_FOR_INSERT = 9;
 
-    private static final boolean ERROR_BOOLEAN_ANSWER = false;
+    static final boolean ERROR_BOOLEAN_ANSWER = false;
 
-    private static void userToMySqlScript(PreparedStatement preStat, User user,  Consumer<PreparedStatement> extraSet){
+    static void userToMySqlScript(PreparedStatement preStat, User user,  Consumer<PreparedStatement> extraSet){
         try {
             preStat.setString(NUMBER_USER_POSITION_FOR_INSERT,user.getNumber());
             preStat.setString(EMAIL_USER_POSITION_FOR_INSERT,user.getEmail());
@@ -325,11 +308,11 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         }
     }
 
-    private static final String INSERT_CUSTOMER = " INSERT INTO customer (is_male,user_id) VALUES (?,(select id from user WHERE email = ?));";
+
     private static final int MALE_CUSTOMER_POSITION_FOR_INSERT = 1;
     private static final int EMAIL_CUSTOMER_POSITION_FOR_INSERT = 2;
-    
-    private static void customerToMySqlScript(PreparedStatement preStat, Customer user, Consumer<PreparedStatement> extraSet){
+
+    static void customerToMySqlScript(PreparedStatement preStat, Customer user, Consumer<PreparedStatement> extraSet){
         try {
             preStat.setBoolean(MALE_CUSTOMER_POSITION_FOR_INSERT,user.isMale());
             preStat.setString(EMAIL_CUSTOMER_POSITION_FOR_INSERT,user.getEmail());
@@ -352,7 +335,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
             customer.setName(resultSet.getString("name"));
             customer.setCountry(resultSet.getString("country"));
 
-            customer.setMale(resultSet.getBoolean("is_male"));
+            customer.setMale(resultSet.getBoolean("male"));
             customer.setActive(resultSet.getBoolean("active"));
 
             customer.setDateRegistration(resultSet.getTimestamp("date_registration").toLocalDateTime());
@@ -363,6 +346,4 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         }
         return customer;
     }
-
-
 }

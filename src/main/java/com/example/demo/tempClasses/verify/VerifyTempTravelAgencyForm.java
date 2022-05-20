@@ -30,9 +30,6 @@ public class VerifyTempTravelAgencyForm implements IVerifyTravelForm {
         if (syntaxErrors.hasProblemInEmail(taf.getEmail()))
             return "Error:The email is incorrect";
 
-        if (this.dataTravel.findByKVED(taf.getKVED()) != null)
-            return "Error:The KVED is basy";
-
         if (taf.getEGRPOYorRNYKPN() == null) {
             return "Error:EGRPOY or RNYKPN didnt input";
         }

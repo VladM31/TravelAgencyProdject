@@ -13,7 +13,7 @@ import java.util.Set;
 
 public interface IDAOTourAd<T extends TourAd>  extends IDAOCoreSave<T>, IDAOCoreUpdate<T>, IDAOCoreEditing<T> {
 
-    public static final long ALL_AGENCY = Integer.MIN_VALUE;
+    public static final Long ALL_AGENCY = Long.MIN_VALUE;
     public static final Set<TypeState> All_TYPE_STATE = Set.of(TypeState.ALL);
     public static final Set<ConditionCommodity> ALL_CONDITION = Set.of(ConditionCommodity.ALL);
 

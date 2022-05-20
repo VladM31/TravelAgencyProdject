@@ -203,19 +203,19 @@ public class TravelAgencyTemporary {
         travel.setDateRegistration(LocalDateTime.now());
         travel.setRole(Role.TRAVEL_AGENCY);
         travel.setRating(0.0f);
-        travel.setCan_use(false);
+        travel.setUrlPhoto("");
         // -------- set ----------------
         travel.setNumber(""+this.number);
         travel.setEmail(this.email);
         travel.setUsername(this.username);
         travel.setPassword(this.password);
         travel.setCountry(this.country);
-        travel.setKved(this.kved);
+        travel.setKved(""+this.kved);
         travel.setAddress(this.address);
-        travel.setAllNameDirector(this.fullNameDirector);
+        travel.setFullNameDirector(this.fullNameDirector);
         travel.setName(this.name);
         travel.setEgrpoy(this.isEGRPOY);
-        travel.setEgrpoy_or_rnekpn(this.valueEGRPOYorRNYKPN);
+        travel.setEgrpoyOrRnekpn(this.valueEGRPOYorRNYKPN);
 
         return travel;
     }

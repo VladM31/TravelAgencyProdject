@@ -248,26 +248,15 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     }
 
     @Override
-    public List<TravelAgency> findByKVED(long kved) {
+    public List<TravelAgency> findByKVEDContaining(String kved) {
         return null;
     }
 
-    @Override
-    public List<TravelAgency> findByKVEDIn(Iterable<Long> kveds) {
-        return  table.stream().filter( i -> {
-            for (long kved : kveds) {
-                if (i.getKved() == kved) {
-                    return true;
-                }
-            }
-            return false;
-        }).collect(Collectors.toList());
-    }
 
     @Override
     public TravelAgency findByEGRPOY(Long egrpoy) {
         for (TravelAgency ta : table) {
-            if (ta.isEgrpoy() && ta.getEgrpoy_or_rnekpn().equals(egrpoy) ) {
+            if (ta.isEgrpoy() && ta.getEgrpoyOrRnekpn().equals(egrpoy) ) {
                 return ta;
             }
         }
@@ -284,7 +273,7 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     @Override
     public TravelAgency findByRNEKPN(Long rnekpn) {
         for (TravelAgency ta : table) {
-            if (!ta.isEgrpoy() && ta.getEgrpoy_or_rnekpn().equals(rnekpn)) {
+            if (!ta.isEgrpoy() && ta.getEgrpoyOrRnekpn().equals(rnekpn)) {
                 return ta;
             }
         }

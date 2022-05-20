@@ -2,6 +2,7 @@ package com.example.demo.database.dao;
 
 import com.example.demo.database.idao.IConnectorGetter;
 import org.springframework.lang.NonNull;
+import org.springframework.lang.Nullable;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -129,10 +130,29 @@ public class Handler {
             throw new SQLException("substituteVariable: object is " + object.getClass().getName());
         }
     }
-
+    @Nullable
     public static <T> T useSelectScriptAndGetOneObject(IConnectorGetter connectorGetter, final String script, Consumer<java.sql.PreparedStatement> extraSet, Function<ResultSet, T> getObject){
         try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
             extraSet.accept(stat);
+            try(ResultSet resultSet = stat.executeQuery()){
+                if(resultSet.next()){
+                    return getObject.apply(resultSet);
+                }
+            }finally {
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Nullable
+    public static <T> T useSelectScriptAndGetOneObject(IConnectorGetter connectorGetter, final String script, Function<ResultSet, T> getObject, @NonNull Object ...array){
+        try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
+            int position = START_POSITION;
+            for(Object obj : array){
+                substituteVariable(stat,++position,obj);
+            }
             try(ResultSet resultSet = stat.executeQuery()){
                 if(resultSet.next()){
                     return getObject.apply(resultSet);
