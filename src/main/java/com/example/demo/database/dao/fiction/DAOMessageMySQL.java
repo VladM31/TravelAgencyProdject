@@ -62,7 +62,7 @@ public class DAOMessageMySQL implements IDAOMessage {
             "FROM message  " +
             "JOIN user_message ON user_message.message_id = message.id " +
             "JOIN user ON user.Id=user_message.from_whom_id " +
-            "JOIN role ON user.role_id= role.id " +
+            "JOIN role ON user.role_id = role.id " +
             "WHERE user_message.to_whom_id = ? ;";
     private static final int POSITION_TO_WHOM_FOR_SELECT = 1;
 

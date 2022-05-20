@@ -1,6 +1,7 @@
 package com.example.demo.tempClasses.dao;
 
 import com.example.demo.database.idao.entity.IDAOTravelAgency;
+import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.important.TravelAgency;
 import org.springframework.stereotype.Component;
@@ -120,7 +121,7 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     }
 
     @Override
-    public TravelAgency findByNumber(long number) {
+    public TravelAgency findByNumber(String number) {
         for (TravelAgency cust : this.table) {
             if (cust.getNumber() == number) {
                 return cust;
@@ -150,33 +151,20 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     }
 
     @Override
+    public List<TravelAgency> findByNumberContaining(String number) {
+        return null;
+    }
+
+    @Override
+    public List<TravelAgency> findByUsernameContaining(String username) {
+        return null;
+    }
+
+    @Override
     public List<TravelAgency> findByPassword(String password) {
         return this.table.stream().filter(i -> i.getPassword().equals(password)).collect(Collectors.toList());
     }
 
-    @Override
-    public List<TravelAgency> findByDateRegistration(LocalDateTime dataRegistration) {
-        return this.table
-                .stream()
-                .filter(i-> i.getDateRegistration().equals(dataRegistration))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByDateRegistrationAfter(LocalDateTime dataRegistration) {
-        return this.table
-                .stream()
-                .filter(i-> i.getDateRegistration().isAfter(dataRegistration))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByDateRegistrationBefore(LocalDateTime dataRegistration) {
-        return this.table
-                .stream()
-                .filter(i-> i.getDateRegistration().isBefore(dataRegistration))
-                .collect(Collectors.toList());
-    }
 
     @Override
     public List<TravelAgency> findByDateRegistrationBetween(LocalDateTime start, LocalDateTime end) {
@@ -203,16 +191,16 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     }
 
     @Override
+    public List<TravelAgency> findByConditionCommodity(ConditionCommodity conditionCommodity) {
+        return null;
+    }
+
+    @Override
     public List<TravelAgency> findByCountry(String country) {
         return this.table
                 .stream()
                 .filter(i-> i.getCountry().equals(country))
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByEmailLike(String piece) {
-        return null;
     }
 
     @Override
@@ -255,22 +243,7 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     }
 
     @Override
-    public List<TravelAgency> findByRating(float rating) {
-        return this.table.stream().filter( i -> Float.compare(i.getRating(),rating)==0).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByRatingLessThanEqual(float rating) {
-        return this.table.stream().filter( i ->i.getRating()<= rating).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByRatingGreaterThanEqual(float rating) {
-        return this.table.stream().filter( i ->i.getRating() >= rating).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByRatingGreaterThanEqualAndLessThanEqual(float ratingF, float ratingE) {
+    public List<TravelAgency> findByRatingBetween(float ratingF, float ratingE) {
         return this.table.stream().filter( i ->i.getRating() >= ratingF && i.getRating() <= ratingE).collect(Collectors.toList());
     }
 
@@ -302,18 +275,6 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     }
 
     @Override
-    public List<TravelAgency> findByEGRPOYIn(Iterable<Long> egrpoys) {
-        return  table.stream().filter( i -> {
-            for (long egrpoy : egrpoys) {
-                if (i.isEgrpoy() && i.getEgrpoy_or_rnekpn() == egrpoy) {
-                    return true;
-                }
-            }
-            return false;
-        }).collect(Collectors.toList());
-    }
-
-    @Override
     public List<TravelAgency> findByEGRPOY(boolean isEGRPOY) {
         return table.stream()
                 .filter( i -> i.isEgrpoy() == isEGRPOY)
@@ -331,59 +292,22 @@ public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
     }
 
     @Override
-    public List<TravelAgency> findByRNEKPNIn(Iterable<Long> rnekpns) {
-        return  table.stream().filter( i -> {
-            for (long rnekpn : rnekpns) {
-                if (!i.isEgrpoy() && i.getEgrpoy_or_rnekpn() == rnekpn) {
-                    return true;
-                }
-            }
-            return false;
-        }).collect(Collectors.toList());
-    }
-
-    @Override
-    public TravelAgency findByAddress(String address) {
-        for (TravelAgency ta : table) {
-            if (ta.getAddress().equals(address)) {
-                return ta;
-            }
-        }
+    public List<TravelAgency> findByAddressContaining(String address) {
         return null;
     }
 
     @Override
-    public List<TravelAgency> findByAddressLike(String script) {
-        return null;
-    }
-
-    @Override
-    public List<TravelAgency> findByAllNameDirector(String allNameDirector) {
-        return table.stream().filter(i -> i.getAllNameDirector().equals(allNameDirector)).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByAllNameDirectorLike(String script) {
-        return null;
-    }
-
-
-    @Override
-    public List<TravelAgency> findByUsernameOrNumberOrEmail(TravelAgency user) {
-        return table.stream().filter( i -> i.getUsername().equals(user.getUsername()) ||
-                i.getPassword().equals(user.getPassword()) ||
-                i.getNumber() == user.getNumber() ||
-                i.getEmail().equals(user.getEmail())
-        ).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TravelAgency> findByName(String name) {
+    public List<TravelAgency> findByAllNameDirectoContaining(String allNameDirector) {
         return null;
     }
 
     @Override
     public List<TravelAgency> findByNameContaining(String name) {
         return null;
+    }
+
+    @Override
+    public boolean editing(TravelAgency entity) {
+        return false;
     }
 }

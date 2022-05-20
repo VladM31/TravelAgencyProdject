@@ -1,6 +1,8 @@
 package com.example.demo.entity.important;
 
+import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
+import com.example.demo.entity.enums.TypeState;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,7 +12,7 @@ import java.util.Set;
 
 public  class User implements UserDetails {
     private Long id;
-    private long number;
+    private String number;
     private String email;
     private String username;
     private String password;
@@ -19,6 +21,15 @@ public  class User implements UserDetails {
     private Role role;
     private String country;
     private String name;
+    private TypeState typeState;
+
+    public TypeState getTypeState() {
+        return typeState;
+    }
+
+    public void setTypeState(TypeState typeState) {
+        this.typeState = typeState;
+    }
 
     public String getName() {
         return name;
@@ -44,11 +55,11 @@ public  class User implements UserDetails {
         this.id = id;
     }
 
-    public long getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(long number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
@@ -125,8 +136,8 @@ public  class User implements UserDetails {
         this.role = role;
     }
 
-    public User(Long id, long number, String email, String username, String password, boolean active,
-                LocalDateTime dateRegistration, Role role, String country, String name) {
+    public User(Long id, String number, String email, String username, String password, boolean active,
+                LocalDateTime dateRegistration, Role role, String country, String name, TypeState typeState) {
         this.id = id;
         this.number = number;
         this.email = email;
@@ -137,6 +148,8 @@ public  class User implements UserDetails {
         this.role = role;
         this.country = country;
         this.name = name;
+        this.typeState = typeState;
+
     }
 
     public User() {

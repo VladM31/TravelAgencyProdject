@@ -171,7 +171,7 @@ public class CustomerTemporary {
         newCustomer.setDateRegistration(LocalDateTime.now());
         newCustomer.setRole(Role.CUSTOMER);
         //**************** insert
-        newCustomer.setNumber(this.number);
+        newCustomer.setNumber(""+this.number);
         newCustomer.setEmail(this.email);
         newCustomer.setUsername(this.username);
         newCustomer.setPassword(this.password);

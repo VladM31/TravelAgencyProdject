@@ -4,6 +4,8 @@ import com.example.demo.database.dao.Handler;
 import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.database.idao.entity.IDAOCustomer;
 import static com.example.demo.database.dao.Handler.*;
+
+import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.important.User;
@@ -71,128 +73,6 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         }, DAOCustomerMySQL::resultSetToCustomer);
     }
 
-    private static final String WHERE_FIRSTNAME_IS = " AND user.name LIKE ? ";
-
-    @Override
-    public List<Customer> findByFirstName(String firstName) {
-        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_FIRSTNAME_IS,
-                SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setString(1,firstName.concat("/%"));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
-    }
-
-    private static final String WHERE_LASTNAME_IS = " AND user.name LIKE ? ";
-
-    @Override
-    public List<Customer> findByLastName(String lastName) {
-        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_LASTNAME_IS,
-                SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setString(1,"%/".concat(lastName));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
-    }
-
-    private static final String WHERE_FIRSTNAME_LIKE = " AND user.name LIKE ? ";
-
-    @Override
-    public List<Customer> findByFirstNameLike(String script) {
-        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_FIRSTNAME_LIKE,
-                SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setString(1,script.concat("/%"));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
-    }
-
-    private static final String WHERE_LASTNAME_LIKE = " AND user.name LIKE ? ";
-
-    @Override
-    public List<Customer> findByLastNameLike(String script) {
-        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_LASTNAME_LIKE,
-                SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setString(1,"%/".concat(script));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
-    }
-
-    private static final String WHERE_FIRSTNAME_NOT_LIKE = " AND user.name NOT LIKE ? ";
-
-    @Override
-    public List<Customer> findByFirstNameNotLike(String script) {
-        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_FIRSTNAME_NOT_LIKE,
-                SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setString(1,script.concat("/%"));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
-    }
-
-
-    private static final String WHERE_LASTNAME_NOT_LIKE = " AND user.name NOT LIKE ? ";
-
-    @Override
-    public List<Customer> findByLastNameNotLike(String script) {
-        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_LASTNAME_NOT_LIKE,
-                SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setString(1,"%/".concat(script));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
-    }
-
-    private static final String WHERE_FIRSTNAME_STARTING_WITH = " AND user.name LIKE ? ";
-
-    @Override
-    public List<Customer> findByFirstNameStartingWith(String starting) {
-        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_FIRSTNAME_STARTING_WITH,
-                SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setString(1,starting.concat("%/%"));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
-    }
-
-    private static final String WHERE_LASTNAME_STARTING_WITH = " AND user.name LIKE ? ";
-
-    @Override
-    public List<Customer> findByLastNameStartingWith(String starting) {
-        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_LASTNAME_STARTING_WITH,
-                SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setString(1,"%/".concat(starting).concat("%"));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
-    }
-
-    @Override
-    public List<Customer> findByFirstNameEndingWith(String ending) {
-        return null;
-    }
-
-    @Override
-    public List<Customer> findByLastNameEndingWith(String ending) {
-        return null;
-    }
 
     @Override
     public List<Customer> findByFirstNameContaining(String part) {
@@ -315,10 +195,10 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
     private static final String WHERE_NUMBER_IS = " AND user.number = ? ";
 
     @Override
-    public Customer findByNumber(long number) {
+    public Customer findByNumber(String number) {
         return useSelectScriptAndGetOneObject(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_NUMBER_IS,SORT_TO_DATE_REGISTRATION),(p) -> {
             try {
-                p.setLong(1,number);
+                p.setString(1,number);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -351,6 +231,16 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         }, DAOCustomerMySQL::resultSetToCustomer);
     }
 
+    @Override
+    public List<Customer> findByNumberContaining(String number) {
+        return null;
+    }
+
+    @Override
+    public List<Customer> findByUsernameContaining(String username) {
+        return null;
+    }
+
     private static final String WHERE_PASSWORD_IS = " AND user.password = ? ";
 
     @Override
@@ -364,49 +254,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         }, DAOCustomerMySQL::resultSetToCustomer);
     }
 
-    private static final String WHERE_DATE_REGISTRATION_IS = " AND user.date_registration = ? ";
 
-    @Override
-    public List<Customer> findByDateRegistration(LocalDateTime dataRegistration) {
-        return useSelectScript(conn,
-                Handler.concatScriptToEnd(SELECT_ALL,WHERE_DATE_REGISTRATION_IS,SORT_TO_DATE_REGISTRATION),
-                (p) -> {
-            try {
-                p.setTimestamp(1, Timestamp.valueOf(dataRegistration));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
-    }
-
-    private static final String WHERE_DATE_REGISTRATION_AFTER_THIS = " AND user.date_registration > ? ";
-
-    @Override
-    public List<Customer> findByDateRegistrationAfter(LocalDateTime dataRegistration) {
-        return Handler.useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_DATE_REGISTRATION_AFTER_THIS,SORT_TO_DATE_REGISTRATION),
-                (p) -> {
-            try {
-                p.setTimestamp(1, Timestamp.valueOf(dataRegistration));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, DAOCustomerMySQL::resultSetToCustomer);
-    }
-
-    private static final String WHERE_DATE_REGISTRATION_BEFORE_THIS = " AND user.date_registration < ? ";
-
-    @Override
-    public List<Customer> findByDateRegistrationBefore(LocalDateTime dataRegistration) {
-        return Handler.useSelectScript(conn,
-                Handler.concatScriptToEnd(SELECT_ALL,WHERE_DATE_REGISTRATION_BEFORE_THIS,SORT_TO_DATE_REGISTRATION),
-                (p) -> {
-            try {
-                p.setTimestamp(1, Timestamp.valueOf(dataRegistration));
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        },DAOCustomerMySQL::resultSetToCustomer);
-    }
 
     @Override
     public List<Customer> findByDateRegistrationBetween(LocalDateTime start, LocalDateTime end) {
@@ -424,27 +272,18 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
     }
 
     @Override
+    public List<Customer> findByConditionCommodity(ConditionCommodity conditionCommodity) {
+        return null;
+    }
+
+    @Override
     public List<Customer> findByCountry(String country) {
         return null;
     }
 
-    @Override
-    public List<Customer> findByEmailLike(String piece) {
-        return null;
-    }
 
     @Override
     public List<Customer> findByEmailContaining(String start) {
-        return null;
-    }
-
-    @Override
-    public List<Customer> findByUsernameOrNumberOrEmail(Customer user) {
-        return null;
-    }
-
-    @Override
-    public List<Customer> findByName(String name) {
         return null;
     }
 
@@ -470,7 +309,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
 
     private static void userToMySqlScript(PreparedStatement preStat, User user,  Consumer<PreparedStatement> extraSet){
         try {
-            preStat.setLong(NUMBER_USER_POSITION_FOR_INSERT,user.getNumber());
+            preStat.setString(NUMBER_USER_POSITION_FOR_INSERT,user.getNumber());
             preStat.setString(EMAIL_USER_POSITION_FOR_INSERT,user.getEmail());
             preStat.setString(USERNAME_USER_POSITION_FOR_INSERT,user.getUsername());
             preStat.setString(PASSWORD_USER_POSITION_FOR_INSERT,user.getPassword());
@@ -505,7 +344,7 @@ public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
         try {
             customer.setId(resultSet.getLong("user_pk"));
             customer.setCustomerId(resultSet.getLong("customer_pk"));
-            customer.setNumber(resultSet.getLong("number"));
+            customer.setNumber(resultSet.getString("number"));
 
             customer.setEmail(resultSet.getString("email"));
             customer.setUsername(resultSet.getString("username"));

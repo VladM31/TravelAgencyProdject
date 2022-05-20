@@ -12,8 +12,10 @@ public class TourAd {
     private int costOneCustomer;
     private int costService;
     private int discountSizePeople;
+    private int orderQuantity;
 
     private float discountPercentage;
+    private float ratingAgency;
 
     private boolean hidden;
 
@@ -24,6 +26,7 @@ public class TourAd {
     private String place;
     private String city;
     private String country;
+    private String nameAgency;
 
     private TypeState typeState;
     private ConditionCommodity conditionCommodity;

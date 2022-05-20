@@ -33,9 +33,6 @@ public class VerifyTempTravelAgencyForm implements IVerifyTravelForm {
         if (this.dataTravel.findByKVED(taf.getKVED()) != null)
             return "Error:The KVED is basy";
 
-        if (this.dataTravel.findByAddress(taf.getAddressTravelAgency())!= null)
-            return "Error:The Address is basy";;
-
         if (taf.getEGRPOYorRNYKPN() == null) {
             return "Error:EGRPOY or RNYKPN didnt input";
         }

@@ -1,6 +1,8 @@
 package com.example.demo.entity.important;
 
+import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
+import com.example.demo.entity.enums.TypeState;
 
 import java.time.LocalDateTime;
 
@@ -54,9 +56,10 @@ public class Courier extends User {
     public Courier() {
     }
 
-    public Courier(Long id, long number, String email, String username, String password, boolean active, LocalDateTime dateRegistration,
-                   Role role, String country, String name, Long idCourier, String city, String address, LocalDateTime dateBirth, boolean doesHeWant) {
-        super(id, number, email, username, password, active, dateRegistration, role, country, name);
+    public Courier(Long id, String number, String email, String username, String password, boolean active, LocalDateTime dateRegistration, Role role,
+                   String country, String name, TypeState typeState,
+                   Long idCourier, String city, String address, LocalDateTime dateBirth, boolean doesHeWant) {
+        super(id, number, email, username, password, active, dateRegistration, role, country, name, typeState);
         this.idCourier = idCourier;
         this.city = city;
         this.address = address;

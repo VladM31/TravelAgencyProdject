@@ -205,7 +205,7 @@ public class TravelAgencyTemporary {
         travel.setRating(0.0f);
         travel.setCan_use(false);
         // -------- set ----------------
-        travel.setNumber(this.number);
+        travel.setNumber(""+this.number);
         travel.setEmail(this.email);
         travel.setUsername(this.username);
         travel.setPassword(this.password);

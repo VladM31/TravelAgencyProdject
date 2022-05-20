@@ -1,5 +1,5 @@
 package com.example.demo.entity.enums;
 
 public enum TypeState {
-    REGISTRATION,EDITING,REGISTERED
+    ALL,REGISTRATION,EDITING,REGISTERED
 }

@@ -1,12 +1,15 @@
 package com.example.demo.entity.important;
 
+import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
+import com.example.demo.entity.enums.TypeState;
 
 import java.time.LocalDateTime;
 
 public class Customer extends User{
     private Long customerId;////
     private Boolean male;
+
 
     public Long getCustomerId() {
         return customerId;
@@ -47,9 +50,9 @@ public class Customer extends User{
     public Customer() {
     }
 
-    public Customer(Long id, long number, String email, String username, String password, boolean active,
-                    LocalDateTime dateRegistration, Role role, String country, String name, Long customerId, Boolean male) {
-        super(id, number, email, username, password, active, dateRegistration, role, country, name);
+    public Customer(Long id, String number, String email, String username, String password, boolean active, LocalDateTime dateRegistration, Role role,
+                    String country, String name, TypeState typeState, Long customerId, Boolean male) {
+        super(id, number, email, username, password, active, dateRegistration, role, country, name, typeState);
         this.customerId = customerId;
         this.male = male;
     }

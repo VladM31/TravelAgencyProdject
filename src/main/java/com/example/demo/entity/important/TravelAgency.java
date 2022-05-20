@@ -1,6 +1,8 @@
 package com.example.demo.entity.important;
 
+import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
+import com.example.demo.entity.enums.TypeState;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -88,19 +90,9 @@ public class TravelAgency extends User{
         isEgrpoy = egrpoy;
     }
 
-    public TravelAgency(Long id, long number, String email, String username, String password, boolean active, LocalDateTime dateRegistration,
-                        Role role, String country, String name, Long travelId, float rating, long kved, Long egrpoy_or_rnekpn,
-                        boolean isEgrpoy, String address, String allNameDirector, String describeAgency, boolean can_use) {
-        super(id, number, email, username, password, active, dateRegistration, role, country, name);
-        this.travelId = travelId;
-        this.rating = rating;
-        this.kved = kved;
-        this.egrpoy_or_rnekpn = egrpoy_or_rnekpn;
-        this.isEgrpoy = isEgrpoy;
-        this.address = address;
-        this.allNameDirector = allNameDirector;
-        this.describeAgency = describeAgency;
-        this.can_use = can_use;
+    public TravelAgency(Long id, String number, String email, String username, String password, boolean active, LocalDateTime dateRegistration,
+                        Role role, String country, String name, TypeState typeState) {
+        super(id, number, email, username, password, active, dateRegistration, role, country, name, typeState);
     }
 
     public TravelAgency(){
