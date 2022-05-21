@@ -1,6 +1,6 @@
 package com.example.demo.database.dao.entity;
 
-import com.example.demo.database.dao.Handler;
+import com.example.demo.database.dao.HandlerSqlDAO;
 import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.database.idao.entity.IDAOTravelAgencySQL;
 import com.example.demo.entity.enums.Role;
@@ -224,7 +224,7 @@ public class DAOTravelAgencyMySQL implements IDAOTravelAgencySQL<TravelAgency> {
 
     @Override
     public List<TravelAgency> findAll() {
-        return Handler.useSelectScript(this.conn,Handler.concatScriptToEnd(SELECT_TRAVEL_AGENCY,SORT_TO_DATE_REGISTRATION),HandlerDAOTAMYSQL::resultSetToTravelAgency);
+        return HandlerSqlDAO.useSelectScript(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,SORT_TO_DATE_REGISTRATION),HandlerDAOTAMYSQL::resultSetToTravelAgency);
     }
 
     private static final String WHERE_USERNAME_IS =" AND user.username = ? ";
@@ -232,7 +232,7 @@ public class DAOTravelAgencyMySQL implements IDAOTravelAgencySQL<TravelAgency> {
     @Nullable
     @Override
     public TravelAgency findByUsername(String username) {
-        return Handler.useSelectScriptAndGetOneObject(this.conn,Handler.concatScriptToEnd(SELECT_TRAVEL_AGENCY,WHERE_USERNAME_IS,SORT_TO_DATE_REGISTRATION),
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,WHERE_USERNAME_IS,SORT_TO_DATE_REGISTRATION),
                 HandlerDAOTAMYSQL::resultSetToTravelAgency,username);
     }
 }

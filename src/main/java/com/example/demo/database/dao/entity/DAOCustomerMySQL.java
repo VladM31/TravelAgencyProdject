@@ -1,9 +1,9 @@
 package com.example.demo.database.dao.entity;
 
-import com.example.demo.database.dao.Handler;
+import com.example.demo.database.dao.HandlerSqlDAO;
 import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.database.idao.entity.IDAOCustomerSQL;
-import static com.example.demo.database.dao.Handler.*;
+import static com.example.demo.database.dao.HandlerSqlDAO.*;
 
 import com.example.demo.entity.enums.TypeState;
 import com.example.demo.entity.important.Customer;
@@ -31,7 +31,7 @@ public class DAOCustomerMySQL implements IDAOCustomerSQL<Customer> {
 
     @Override
     public List<Customer> findByMale(Boolean male) {
-        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_MALE_IS,SORT_TO_DATE_REGISTRATION),
+        return useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_MALE_IS,SORT_TO_DATE_REGISTRATION),
                 HandlerCustomer::resultSetToCustomer,male);
     }
 
@@ -41,11 +41,11 @@ public class DAOCustomerMySQL implements IDAOCustomerSQL<Customer> {
 
     @Override
     public List<Customer> findByCustomerIdIn(Iterable<Customer> ids) {
-        return useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,
-                WHERE_CUSTOMER_ID_IN.replace(REPLACE_SYMBOL,Handler.symbolsInDependsFromSize(ids)),
+        return useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,
+                WHERE_CUSTOMER_ID_IN.replace(REPLACE_SYMBOL, HandlerSqlDAO.symbolsInDependsFromSize(ids)),
                 SORT_TO_DATE_REGISTRATION),(p) -> {
             try {
-                Handler.substituteIds(p,ids, (customer)-> customer.getCustomerId());
+                HandlerSqlDAO.substituteIds(p,ids, (customer)-> customer.getCustomerId());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -56,7 +56,7 @@ public class DAOCustomerMySQL implements IDAOCustomerSQL<Customer> {
 
     @Override
     public Customer findByCustomerId(Long id) {
-        return useSelectScriptAndGetOneObject(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_CUSTOMER_ID_ID,SORT_TO_DATE_REGISTRATION),(p) -> {
+        return useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_CUSTOMER_ID_ID,SORT_TO_DATE_REGISTRATION),(p) -> {
             try {
                 p.setLong(1,id);
             } catch (SQLException e) {
@@ -112,7 +112,7 @@ public class DAOCustomerMySQL implements IDAOCustomerSQL<Customer> {
 
     @Override
     public List<Customer> findAll() {
-        return Handler.useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,SORT_TO_DATE_REGISTRATION), HandlerCustomer::resultSetToCustomer);
+        return HandlerSqlDAO.useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,SORT_TO_DATE_REGISTRATION), HandlerCustomer::resultSetToCustomer);
     }
 
     private static final String WHERE_user_id = " AND user.id = ? " + SORT_TO_DATE_REGISTRATION;
@@ -168,7 +168,7 @@ public class DAOCustomerMySQL implements IDAOCustomerSQL<Customer> {
 
     @Override
     public Customer findByNumber(String number) {
-        return Handler.useSelectScriptAndGetOneObject(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_NUMBER_IS,SORT_TO_DATE_REGISTRATION),
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_NUMBER_IS,SORT_TO_DATE_REGISTRATION),
                 HandlerCustomer::resultSetToCustomer,number);
     }
 
@@ -176,7 +176,7 @@ public class DAOCustomerMySQL implements IDAOCustomerSQL<Customer> {
 
     @Override
     public Customer findByEmail(String email) {
-        return useSelectScriptAndGetOneObject(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_EMAIL_IS,SORT_TO_DATE_REGISTRATION),
+        return useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_EMAIL_IS,SORT_TO_DATE_REGISTRATION),
                 HandlerCustomer::resultSetToCustomer,email);
     }
 
@@ -184,7 +184,7 @@ public class DAOCustomerMySQL implements IDAOCustomerSQL<Customer> {
 
     @Override
     public Customer findByUsername(String username) {
-        return useSelectScriptAndGetOneObject(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_USERNAME_IS,SORT_TO_DATE_REGISTRATION),
+        return useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_USERNAME_IS,SORT_TO_DATE_REGISTRATION),
                 HandlerCustomer::resultSetToCustomer,username);
     }
 
@@ -202,7 +202,7 @@ public class DAOCustomerMySQL implements IDAOCustomerSQL<Customer> {
 
     @Override
     public List<Customer> findByPassword(String password) {
-        return Handler.useSelectScript(conn,Handler.concatScriptToEnd(SELECT_ALL,WHERE_PASSWORD_IS,SORT_TO_DATE_REGISTRATION),
+        return HandlerSqlDAO.useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_PASSWORD_IS,SORT_TO_DATE_REGISTRATION),
                 HandlerCustomer::resultSetToCustomer,password);
     }
 

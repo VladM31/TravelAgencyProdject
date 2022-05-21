@@ -1,6 +1,6 @@
 package com.example.demo.database.dao.entity;
 
-import com.example.demo.database.dao.Handler;
+import com.example.demo.database.dao.HandlerSqlDAO;
 import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.entity.important.User;
 
@@ -41,7 +41,7 @@ public class HandlerUser {
                     preStat.addBatch();
                 }
 
-                if(Handler.arrayHasOnlyOne(preStat.executeBatch()) == HandlerUser.ERROR_BOOLEAN_ANSWER){
+                if(HandlerSqlDAO.arrayHasOnlyOne(preStat.executeBatch()) == HandlerUser.ERROR_BOOLEAN_ANSWER){
                     return HandlerUser.ERROR_BOOLEAN_ANSWER;
                 }
             }finally {
@@ -55,7 +55,7 @@ public class HandlerUser {
                     heirUserToMySqlScript.accept(preStat,entity);
                     preStat.addBatch();
                 }
-                return Handler.arrayHasOnlyOne(preStat.executeBatch());
+                return HandlerSqlDAO.arrayHasOnlyOne(preStat.executeBatch());
             }finally {
             }
 

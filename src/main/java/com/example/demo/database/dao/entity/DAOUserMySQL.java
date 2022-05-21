@@ -1,11 +1,12 @@
 package com.example.demo.database.dao.entity;
 
+import com.example.demo.database.dao.HandlerSqlDAO;
+import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.database.idao.entity.IDAOUserSQL;
-import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.enums.TypeState;
-import com.example.demo.entity.important.Courier;
 import com.example.demo.entity.important.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -16,6 +17,12 @@ import java.util.List;
 @Component("DAO_USER_MYSQL")
 public class DAOUserMySQL implements IDAOUserSQL<User> {
 
+    private IConnectorGetter conn;
+
+    @Autowired
+    public void setConn(com.example.demo.database.idao.IConnectorGetter conn) {
+        this.conn = conn;
+    }
 
     @Override
     public List<User> findAllById(Iterable<Long> ids) {
@@ -142,28 +149,34 @@ public class DAOUserMySQL implements IDAOUserSQL<User> {
 
     @Override
     public List<User> findAll() {
-        return null;
+
+        return HandlerSqlDAO.useSelectScript(this.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_USERS, HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerDAOUserMySQL::resultSetToUser);
     }
+
+    private static final String WHERE_TYPE_STATE_IS_REGISTERED = " WHERE type_state.name = ? ";
+    private static final String USERNAME_IS = " AND user.username = ? ";
 
     @Override
     public User findByUsername(String username) {
-        return null;
+
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(this.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_USERS,WHERE_TYPE_STATE_IS_REGISTERED,USERNAME_IS, HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerDAOUserMySQL::resultSetToUser,TypeState.REGISTERED,username);
     }
 
     @Override
     public boolean saveAll(Iterable<User> entities) {
-        return false;
+        return HandlerUser.useInsertForIterableUser(entities,this.conn);
     }
 
     @Override
     public boolean save(User entity) {
-        return false;
+        return this.saveAll(List.of(entity));
     }
 }
 
 class HandlerDAOUserMySQL{
-
-
 
     public static User resultSetToUser(ResultSet resultSet){
         User user = new User();

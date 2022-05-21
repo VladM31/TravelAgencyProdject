@@ -1,8 +1,6 @@
 package com.example.demo.database.dao;
 
-import com.example.demo.database.dao.entity.HandlerUser;
 import com.example.demo.database.idao.IConnectorGetter;
-import com.example.demo.entity.important.TravelAgency;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -14,8 +12,9 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class Handler {
+public class HandlerSqlDAO {
 
+    public static final String SORT_TO_DATE_REGISTRATION = " ORDER BY date_registration ASC;";
     public static final int EMPTY_CAPACITY = 0;
     public static final String REPLACE_SYMBOL = "?#!@#@_REPLACE_ME_@#@!#?";
     public static final Consumer<PreparedStatement> DEFAULT_PARAMETER = (PreparedStatement p) -> {};
@@ -78,7 +77,7 @@ public class Handler {
 
         }catch (SQLException e){
             e.printStackTrace();
-            return new ArrayList<>(Handler.EMPTY_CAPACITY);
+            return new ArrayList<>(HandlerSqlDAO.EMPTY_CAPACITY);
         }
     }
 
@@ -102,7 +101,7 @@ public class Handler {
 
         }catch (SQLException e){
             e.printStackTrace();
-            return new ArrayList<>(Handler.EMPTY_CAPACITY);
+            return new ArrayList<>(HandlerSqlDAO.EMPTY_CAPACITY);
         }
     }
 

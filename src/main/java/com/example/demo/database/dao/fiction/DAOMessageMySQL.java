@@ -1,6 +1,6 @@
 package com.example.demo.database.dao.fiction;
 
-import com.example.demo.database.dao.Handler;
+import com.example.demo.database.dao.HandlerSqlDAO;
 import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.database.idao.temporary.IDAOMessage;
 import com.example.demo.entity.subordinate.Message;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -68,8 +67,8 @@ public class DAOMessageMySQL implements IDAOMessage {
 
     @Override
     public List<MessageShortData> findMessageShortDataAllByToWhom(long toWhom) {
-        return Handler.useSelectScript(this.conn,
-                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,SORT_BY_DATE_SEND_DESC),
+        return HandlerSqlDAO.useSelectScript(this.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,SORT_BY_DATE_SEND_DESC),
                 MessageHandler::getMessageShortDataFromResultSet,toWhom);
     }
 
@@ -77,8 +76,8 @@ public class DAOMessageMySQL implements IDAOMessage {
 
     @Override
     public List<MessageShortData> findMSDByToWhomAndSendlerNameContaining(long toWhom, String sendlerName) {
-        return Handler.useSelectScript(this.conn,
-                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SENDLER_NAME_CONTAINING,SORT_BY_DATE_SEND_DESC),
+        return HandlerSqlDAO.useSelectScript(this.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SENDLER_NAME_CONTAINING,SORT_BY_DATE_SEND_DESC),
                 MessageHandler::getMessageShortDataFromResultSet,
                 toWhom,sendlerName);
     }
@@ -87,16 +86,16 @@ public class DAOMessageMySQL implements IDAOMessage {
 
     @Override
     public List<MessageShortData> findMSDByToWhomAndNameMessageContaining(long toWhom, String messageName) {
-        return Handler.useSelectScript(this.conn,
-                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_NAME_MESSAGE_CONTAINING,SORT_BY_DATE_SEND_DESC),
-                MessageHandler::getMessageShortDataFromResultSet,toWhom,Handler.containingString(messageName));
+        return HandlerSqlDAO.useSelectScript(this.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_NAME_MESSAGE_CONTAINING,SORT_BY_DATE_SEND_DESC),
+                MessageHandler::getMessageShortDataFromResultSet,toWhom, HandlerSqlDAO.containingString(messageName));
     }
 
     private static final String WHERE_ROLE_IS = " AND role.name = ? ";
 
     @Override
     public List<MessageShortData> findMSDByToWhomAndRole(long toWhom, Role role) {
-        return  Handler.useSelectScript(this.conn, Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_ROLE_IS,SORT_BY_DATE_SEND_DESC),
+        return  HandlerSqlDAO.useSelectScript(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_ROLE_IS,SORT_BY_DATE_SEND_DESC),
                 MessageHandler::getMessageShortDataFromResultSet,toWhom,role);
     }
 
@@ -104,8 +103,8 @@ public class DAOMessageMySQL implements IDAOMessage {
 
     @Override
     public List<MessageShortData> findMSDByToWhomAndSendDateBetween(long toWhom, LocalDateTime sendStartDate, LocalDateTime sendEndDate) {
-        return Handler.useSelectScript(this.conn,
-                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SEND_DATE_BETWEEN,SORT_BY_DATE_SEND_DESC),
+        return HandlerSqlDAO.useSelectScript(this.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SEND_DATE_BETWEEN,SORT_BY_DATE_SEND_DESC),
                 MessageHandler::getMessageShortDataFromResultSet,
                 toWhom,sendStartDate,sendEndDate);
     }
@@ -114,8 +113,8 @@ public class DAOMessageMySQL implements IDAOMessage {
 
     @Override
     public List<MessageShortData> findMSDByToWhomAndSendDateAfterAndEquals(long toWhom, LocalDateTime sendDateStart) {
-        return Handler.useSelectScript(this.conn,
-                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SEND_DATE_AFTER,SORT_BY_DATE_SEND_DESC),
+        return HandlerSqlDAO.useSelectScript(this.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SEND_DATE_AFTER,SORT_BY_DATE_SEND_DESC),
                 MessageHandler::getMessageShortDataFromResultSet,
                 toWhom,sendDateStart);
     }
@@ -126,8 +125,8 @@ public class DAOMessageMySQL implements IDAOMessage {
 
     @Override
     public List<MessageShortData> findMSDByToWhomAndSendDateBeforeAndEquals(long toWhom, LocalDateTime sendDateEnd) {
-        return Handler.useSelectScript(this.conn,
-                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SEND_DATE_BEFORE,SORT_BY_DATE_SEND_DESC),
+        return HandlerSqlDAO.useSelectScript(this.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SEND_DATE_BEFORE,SORT_BY_DATE_SEND_DESC),
                 MessageHandler::getMessageShortDataFromResultSet,
                 toWhom,sendDateEnd);
     }
@@ -136,8 +135,8 @@ public class DAOMessageMySQL implements IDAOMessage {
 
     @Override
     public List<MessageShortData> findMSDByToWhomAndItWasRead(long toWhom, boolean itWasRead) {
-        return Handler.useSelectScript(this.conn,
-                Handler.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_IT_WAS_READ_IS,SORT_BY_DATE_SEND_DESC),
+        return HandlerSqlDAO.useSelectScript(this.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_IT_WAS_READ_IS,SORT_BY_DATE_SEND_DESC),
                 MessageHandler::getMessageShortDataFromResultSet,
                 toWhom,itWasRead);
     }
@@ -218,10 +217,10 @@ class MessageHandler{
         return false;
     }
 
-    private static final String SELECT_USERS_ID_BY_EMEIL = "SELECT id FROM user WHERE email IN(" + Handler.REPLACE_SYMBOL + ");";
+    private static final String SELECT_USERS_ID_BY_EMEIL = "SELECT id FROM user WHERE email IN(" + HandlerSqlDAO.REPLACE_SYMBOL + ");";
     static Iterable<Long> findIdUserByEmail(String[] emails,IConnectorGetter conn){
-        final String HOMEMADE_SELECT_USERS_ID_BY_EMEIL = SELECT_USERS_ID_BY_EMEIL.replace(Handler.REPLACE_SYMBOL,
-        Handler.symbolsInDependsFromSize(List.of(emails)));
+        final String HOMEMADE_SELECT_USERS_ID_BY_EMEIL = SELECT_USERS_ID_BY_EMEIL.replace(HandlerSqlDAO.REPLACE_SYMBOL,
+        HandlerSqlDAO.symbolsInDependsFromSize(List.of(emails)));
 
         int index = 0;
         HashSet<Long> list = new HashSet<>();
@@ -246,14 +245,14 @@ class MessageHandler{
     }
 
 
-    private static final String SELECT_ROLES_ID_BY_NAME = "SELECT id FROM user WHERE role_id IN (SELECT id FROM role WHERE name IN(" + Handler.REPLACE_SYMBOL + "));";
+    private static final String SELECT_ROLES_ID_BY_NAME = "SELECT id FROM user WHERE role_id IN (SELECT id FROM role WHERE name IN(" + HandlerSqlDAO.REPLACE_SYMBOL + "));";
     static Iterable<Long> findIdUserByRole(Iterable<Role> roles, IConnectorGetter conn){
         HashSet<Long> list = new HashSet<>();
 
         int index = 0;
 
-        final String SELECT_USERS_ID_BY_ROLES = SELECT_ROLES_ID_BY_NAME.replace(Handler.REPLACE_SYMBOL,
-                Handler.symbolsInDependsFromSize(roles));
+        final String SELECT_USERS_ID_BY_ROLES = SELECT_ROLES_ID_BY_NAME.replace(HandlerSqlDAO.REPLACE_SYMBOL,
+                HandlerSqlDAO.symbolsInDependsFromSize(roles));
 
         try(java.sql.PreparedStatement preparedStatement =conn.getSqlPreparedStatement(SELECT_USERS_ID_BY_ROLES)){
 
@@ -292,7 +291,7 @@ class MessageHandler{
                 preparedStatement.setLong(POSITION_TO_WHOM_ID,toWhom);
                 preparedStatement.addBatch();
             }
-            return  Handler.arrayHasOnlyOne(preparedStatement.executeBatch());
+            return  HandlerSqlDAO.arrayHasOnlyOne(preparedStatement.executeBatch());
 
         } catch (SQLException e) {
             e.printStackTrace();

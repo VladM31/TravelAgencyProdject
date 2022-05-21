@@ -1,6 +1,6 @@
 package com.example.demo.database.dao.entity;
 
-import com.example.demo.database.dao.Handler;
+import com.example.demo.database.dao.HandlerSqlDAO;
 import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.database.idao.entity.IDAOCourierSQL;
 import com.example.demo.entity.enums.Role;
@@ -179,7 +179,7 @@ public class DAOCourierMySQL implements IDAOCourierSQL<Courier> {
     private static final String SORT_TO_DATE_REGISTRATION = " ORDER BY date_registration ASC;";
     @Override
     public List<Courier> findAll() {
-        return Handler.useSelectScript(this.conn,Handler.concatScriptToEnd(SELECT_ALL_COURIER,SORT_TO_DATE_REGISTRATION),
+        return HandlerSqlDAO.useSelectScript(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER,SORT_TO_DATE_REGISTRATION),
                 HandlerDAOCourier::resultSetToCustomer);
     }
 
@@ -187,7 +187,7 @@ public class DAOCourierMySQL implements IDAOCourierSQL<Courier> {
 
     @Override
     public Courier findByUsername(String username) {
-        return Handler.useSelectScriptAndGetOneObject(this.conn,Handler.concatScriptToEnd(SELECT_ALL_COURIER,USERNAME_IS,SORT_TO_DATE_REGISTRATION),
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER,USERNAME_IS,SORT_TO_DATE_REGISTRATION),
                 HandlerDAOCourier::resultSetToCustomer,username);
     }
 
