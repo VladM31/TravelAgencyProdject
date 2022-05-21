@@ -1,6 +1,6 @@
 package com.example.demo.tempClasses.verify;
 
-import com.example.demo.database.idao.entity.IDAOTravelAgency;
+import com.example.demo.database.idao.entity.IDAOTravelAgencySQL;
 import com.example.demo.entity.important.TravelAgency;
 import com.example.demo.forms.signup.TravelAgencyForm;
 import com.example.demo.tempClasses.verify.verify.inter.IVerifySyntaxErrors;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class VerifyTempTravelAgencyForm implements IVerifyTravelForm {
 
     @Autowired
-    private IDAOTravelAgency<TravelAgency> dataTravel;
+    private IDAOTravelAgencySQL<TravelAgency> dataTravel;
     @Autowired
     private IVerifySyntaxErrors syntaxErrors;
 

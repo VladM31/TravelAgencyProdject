@@ -2,11 +2,10 @@ package com.example.demo.database.dao.entity;
 
 import com.example.demo.database.dao.Handler;
 import com.example.demo.database.idao.IConnectorGetter;
-import com.example.demo.database.idao.entity.IDAOTravelAgency;
+import com.example.demo.database.idao.entity.IDAOTravelAgencySQL;
 import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.enums.TypeState;
-import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.TravelAgency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
@@ -21,15 +20,13 @@ import java.util.List;
 import static com.example.demo.database.dao.Handler.DEFAULT_PARAMETER;
 
 @Component
-public class DAOTravelAgencyMySQL implements IDAOTravelAgency<TravelAgency> {
+public class DAOTravelAgencyMySQL implements IDAOTravelAgencySQL<TravelAgency> {
     private IConnectorGetter conn;
 
     @Autowired
     public void setConn(com.example.demo.database.idao.IConnectorGetter conn) {
         this.conn = conn;
     }
-
-
 
     @Override
     public List<TravelAgency> findAllById(Iterable<Long> ids) {
@@ -146,8 +143,6 @@ public class DAOTravelAgencyMySQL implements IDAOTravelAgency<TravelAgency> {
     public TravelAgency findByEmail(String email) {
         return null;
     }
-
-
 
     @Override
     public List<TravelAgency> findByNumberContaining(String number) {
@@ -270,7 +265,6 @@ public class DAOTravelAgencyMySQL implements IDAOTravelAgency<TravelAgency> {
 }
 
 class HandlerDAOTAMYSQL{
-
 
     private static final int EMAIL_TRAVEL_AGENCY_FOR_INSERT = 1;
     private static final int RATING_TRAVEL_AGENCY_FOR_INSERT = 2;

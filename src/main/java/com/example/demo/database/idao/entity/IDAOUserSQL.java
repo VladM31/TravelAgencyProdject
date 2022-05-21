@@ -9,7 +9,7 @@ import org.springframework.lang.Nullable;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface IDAOUser<T extends User> extends IDAOCore<T> {
+public interface IDAOUserSQL<T extends User> extends IDAOCore<T> {
 
    public T findByNumber(String number);
    @Nullable

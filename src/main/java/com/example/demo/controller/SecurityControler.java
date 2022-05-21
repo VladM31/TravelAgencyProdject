@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.database.idao.entity.IDAOCustomer;
-import com.example.demo.database.idao.entity.IDAOTravelAgency;
+import com.example.demo.database.idao.entity.IDAOCustomerSQL;
+import com.example.demo.database.idao.entity.IDAOTravelAgencySQL;
 import com.example.demo.database.idao.temporary.IDAOCustomerTemporary;
 import com.example.demo.database.idao.temporary.IDAOTravelAgencyTemporaryCode;
 import com.example.demo.entity.important.Customer;
@@ -27,9 +27,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class SecurityControler {
     //--------------------------------------------------
     @Autowired
-    private IDAOCustomer<Customer> daoCustomer;
+    private IDAOCustomerSQL<Customer> daoCustomer;
     @Autowired
-    private IDAOTravelAgency<TravelAgency> daoTravelAgency;
+    private IDAOTravelAgencySQL<TravelAgency> daoTravelAgency;
     //--------------------------------------------------
     @Autowired
     private IDAOCustomerTemporary daoCustTemp;

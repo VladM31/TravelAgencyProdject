@@ -1,8 +1,8 @@
 package com.example.demo.tempClasses.dao;
 
-import com.example.demo.database.idao.entity.IDAOCustomer;
+import com.example.demo.database.idao.entity.IDAOCustomerSQL;
 import com.example.demo.database.idao.IDAOSecurity;
-import com.example.demo.database.idao.entity.IDAOTravelAgency;
+import com.example.demo.database.idao.entity.IDAOTravelAgencySQL;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.important.TravelAgency;
 import com.example.demo.entity.important.User;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 @Component("DAOSecurity")
 public class DAOSecurityHashSet implements IDAOSecurity {
     @Autowired
-    private IDAOTravelAgency<TravelAgency> dataTravel;
+    private IDAOTravelAgencySQL<TravelAgency> dataTravel;
     @Autowired
-    private IDAOCustomer<Customer> dataCustomer;
+    private IDAOCustomerSQL<Customer> dataCustomer;
 
     @Override
     public User getUserByUsernameDependingOnRole(String username) {

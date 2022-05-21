@@ -2,10 +2,11 @@ package com.example.demo.database.dao.entity;
 
 import com.example.demo.database.dao.Handler;
 import com.example.demo.database.idao.IConnectorGetter;
-import com.example.demo.database.idao.entity.IDAOCustomer;
+import com.example.demo.database.idao.entity.IDAOCustomerSQL;
 import static com.example.demo.database.dao.Handler.*;
 
 import com.example.demo.entity.enums.ConditionCommodity;
+import com.example.demo.entity.enums.TypeState;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.important.User;
@@ -21,7 +22,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 @Component("IDAOCustomer")
-public class DAOCustomerMySQL implements IDAOCustomer<Customer> {
+public class DAOCustomerMySQL implements IDAOCustomerSQL<Customer> {
 
     private IConnectorGetter conn;
 
@@ -340,6 +341,7 @@ class HandlerCustomer {
 
             customer.setDateRegistration(resultSet.getTimestamp("date_registration").toLocalDateTime());
             customer.setRole(Role.CUSTOMER);
+            customer.setTypeState(TypeState.REGISTERED);
 
         } catch (SQLException e) {
             e.printStackTrace();

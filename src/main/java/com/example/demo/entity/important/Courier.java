@@ -4,13 +4,14 @@ import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.enums.TypeState;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Courier extends User {
     private Long idCourier;
     private String city;
     private String address;
-    private LocalDateTime dateBirth;
+    private LocalDate dateBirth;
     private boolean doesHeWant;
 
     public Long getIdCourier() {
@@ -37,11 +38,11 @@ public class Courier extends User {
         this.address = address;
     }
 
-    public LocalDateTime getDateBirth() {
+    public LocalDate getDateBirth() {
         return dateBirth;
     }
 
-    public void setDateBirth(LocalDateTime dateBirth) {
+    public void setDateBirth(LocalDate dateBirth) {
         this.dateBirth = dateBirth;
     }
 
@@ -58,7 +59,7 @@ public class Courier extends User {
 
     public Courier(Long id, String number, String email, String username, String password, boolean active, LocalDateTime dateRegistration, Role role,
                    String country, String name, TypeState typeState,
-                   Long idCourier, String city, String address, LocalDateTime dateBirth, boolean doesHeWant) {
+                   Long idCourier, String city, String address, LocalDate dateBirth, boolean doesHeWant) {
         super(id, number, email, username, password, active, dateRegistration, role, country, name, typeState);
         this.idCourier = idCourier;
         this.city = city;

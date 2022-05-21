@@ -7,7 +7,7 @@ import org.springframework.lang.Nullable;
 
 import java.util.List;
 
-public interface IDAOTravelAgency<TA extends TravelAgency> extends IDAOUser<TA>, IDAOCoreEditing<TA> {
+public interface IDAOTravelAgencySQL<TA extends TravelAgency> extends IDAOUserSQL<TA>, IDAOCoreEditing<TA> {
 
      public  List<TA> findByTravelAgencyIdIn(@NonNull Iterable<Long> ids);
      public  List<TA> findByTravelAgencyObjectIdIn(@NonNull Iterable<TA> ids);

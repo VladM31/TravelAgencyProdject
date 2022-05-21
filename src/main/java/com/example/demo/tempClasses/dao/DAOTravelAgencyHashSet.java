@@ -1,6 +1,6 @@
 package com.example.demo.tempClasses.dao;
 
-import com.example.demo.database.idao.entity.IDAOTravelAgency;
+import com.example.demo.database.idao.entity.IDAOTravelAgencySQL;
 import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.important.TravelAgency;
@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component("DAOTravelAgency")
-public class DAOTravelAgencyHashSet implements IDAOTravelAgency<TravelAgency> {
+public class DAOTravelAgencyHashSet implements IDAOTravelAgencySQL<TravelAgency> {
 
     private static Set<TravelAgency> table = new HashSet<>();
 

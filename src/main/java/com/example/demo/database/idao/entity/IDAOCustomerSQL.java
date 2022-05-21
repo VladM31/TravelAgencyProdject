@@ -5,7 +5,7 @@ import org.springframework.lang.Nullable;
 
 import java.util.List;
 
-public interface IDAOCustomer<C extends Customer> extends IDAOUser<C>{
+public interface IDAOCustomerSQL<C extends Customer> extends IDAOUserSQL<C> {
      public List<C> findByMale(Boolean male);
      public List<C> findByCustomerIdIn(Iterable<C> ids);
      @Nullable

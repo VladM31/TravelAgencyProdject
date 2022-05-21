@@ -1,6 +1,6 @@
 package com.example.demo.tempClasses.verify;
 
-import com.example.demo.database.idao.entity.IDAOCustomer;
+import com.example.demo.database.idao.entity.IDAOCustomerSQL;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.forms.signup.CustomerForm;
 import com.example.demo.tempClasses.verify.verify.inter.IVerifyCustomerForm;
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class VerifyTempCustomerForm implements IVerifyCustomerForm {
 
-    private IDAOCustomer<Customer> dataCustomer;
+    private IDAOCustomerSQL<Customer> dataCustomer;
     private IVerifySyntaxErrors syntaxErrors;
 
-    public void setDataCustomer(@Autowired IDAOCustomer<Customer> dataCustomer) {
+    public void setDataCustomer(@Autowired IDAOCustomerSQL<Customer> dataCustomer) {
         this.dataCustomer = dataCustomer;
     }
 
