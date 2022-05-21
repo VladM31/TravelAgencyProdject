@@ -14,11 +14,12 @@ public class VerifyTempCustomerForm implements IVerifyCustomerForm {
     private IDAOCustomerSQL<Customer> dataCustomer;
     private IVerifySyntaxErrors syntaxErrors;
 
-    public void setDataCustomer(@Autowired IDAOCustomerSQL<Customer> dataCustomer) {
+    @Autowired
+    public void setDataCustomer(IDAOCustomerSQL<Customer> dataCustomer) {
         this.dataCustomer = dataCustomer;
     }
-
-    public void setSyntaxErrors(@Autowired IVerifySyntaxErrors syntaxErrors) {
+    @Autowired
+    public void setSyntaxErrors(IVerifySyntaxErrors syntaxErrors) {
         this.syntaxErrors = syntaxErrors;
     }
 

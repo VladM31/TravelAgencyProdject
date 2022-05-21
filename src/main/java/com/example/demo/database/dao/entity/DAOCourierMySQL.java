@@ -3,11 +3,9 @@ package com.example.demo.database.dao.entity;
 import com.example.demo.database.dao.Handler;
 import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.database.idao.entity.IDAOCourierSQL;
-import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.enums.TypeState;
 import com.example.demo.entity.important.Courier;
-import com.example.demo.entity.important.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,9 +17,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.example.demo.database.dao.Handler.DEFAULT_PARAMETER;
-
-@Component
+@Component("DAO_COURIER_MYSQL")
 public class DAOCourierMySQL implements IDAOCourierSQL<Courier> {
 
     private IConnectorGetter conn;
@@ -71,8 +67,6 @@ public class DAOCourierMySQL implements IDAOCourierSQL<Courier> {
         return 0;
     }
 
-
-
     @Override
     public int updateAllById(Iterable<Courier> entities) {
         return 0;
@@ -118,8 +112,6 @@ public class DAOCourierMySQL implements IDAOCourierSQL<Courier> {
         return null;
     }
 
-
-
     @Override
     public List<Courier> findByNumberContaining(String number) {
         return null;
@@ -156,7 +148,7 @@ public class DAOCourierMySQL implements IDAOCourierSQL<Courier> {
     }
 
     @Override
-    public List<Courier> findByConditionCommodity(ConditionCommodity conditionCommodity) {
+    public List<Courier> findByTypeState(TypeState typeState) {
         return null;
     }
 
@@ -205,34 +197,11 @@ public class DAOCourierMySQL implements IDAOCourierSQL<Courier> {
             " INSERT INTO courier (user_id,city,address,date_birth,does_he_want)" +
                     " VALUES ((select id from user WHERE email = ? AND user.type_state_id = 20 ),?,?,?,?);";
 
+    private static final boolean IT_IS_CLASS_COURIER = false;
+
     @Override
     public boolean saveAll(Iterable<Courier> entities) {
-        try {
-            try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(DAOCustomerMySQL.INSERT_USER)) {
-                for(Courier entity : entities) {
-                    HandlerCustomer.userToMySqlScript(preStat,entity,DEFAULT_PARAMETER);
-                    preStat.addBatch();
-                }
-
-                if(Handler.arrayHasOnlyOne(preStat.executeBatch()) == HandlerCustomer.ERROR_BOOLEAN_ANSWER){
-                    return HandlerCustomer.ERROR_BOOLEAN_ANSWER;
-                }
-            }finally {
-            }
-
-            try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(INSERT_COURIER)) {
-                for(Courier entity : entities) {
-                    HandlerDAOCourier.courierToMySqlScript(preStat,entity);
-                    preStat.addBatch();
-                }
-                return Handler.arrayHasOnlyOne(preStat.executeBatch());
-            }finally {
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return HandlerCustomer.ERROR_BOOLEAN_ANSWER;
-        }
+        return HandlerUser.useInsertForIterableHeirUser(entities,this.conn,IT_IS_CLASS_COURIER,INSERT_COURIER,HandlerDAOCourier::courierToMySqlScript);
     }
 
     @Override
@@ -264,22 +233,13 @@ class HandlerDAOCourier {
 
     public static Courier resultSetToCustomer(ResultSet resultSet){
         Courier courier = new Courier();
+        courier.setTypeState(TypeState.REGISTERED);
+        courier.setRole(Role.COURIER);
         try {
-            courier.setId(resultSet.getLong("user_pk"));
-            courier.setNumber(resultSet.getString("number"));
-            courier.setEmail(resultSet.getString("email"));
-            courier.setUsername(resultSet.getString("username"));
-            courier.setPassword(resultSet.getString("password"));
-            courier.setName(resultSet.getString("name"));
-            courier.setCountry(resultSet.getString("country"));
-            courier.setActive(resultSet.getBoolean("active"));
-            courier.setDateRegistration(resultSet.getTimestamp("date_registration").toLocalDateTime());
-            courier.setTypeState(TypeState.REGISTERED);
-
-
+            HandlerUser.resultSetToUserCore(resultSet,courier);
 
             courier.setIdCourier(resultSet.getLong("courier_pk"));
-            courier.setRole(Role.COURIER);
+
             courier.setCity(resultSet.getString("city"));
             courier.setAddress(resultSet.getString("address"));
             courier.setDateBirth(resultSet.getDate("date_birth").toLocalDate());

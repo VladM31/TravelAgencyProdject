@@ -3,6 +3,7 @@ package com.example.demo.database.idao.entity;
 import com.example.demo.database.idao.core.IDAOCore;
 import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
+import com.example.demo.entity.enums.TypeState;
 import com.example.demo.entity.important.User;
 import org.springframework.lang.Nullable;
 
@@ -26,7 +27,7 @@ public interface IDAOUserSQL<T extends User> extends IDAOCore<T> {
 
    public List<T> findByActive(boolean active);
    public List<T> findByRole(Role role);
-   public List<T> findByConditionCommodity(ConditionCommodity conditionCommodity);
+   public List<T> findByTypeState(TypeState conditionCommodity);
 
    public List<T> findByCountry(String country);
 

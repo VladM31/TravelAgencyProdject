@@ -5,23 +5,19 @@ import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.database.idao.entity.IDAOCustomerSQL;
 import static com.example.demo.database.dao.Handler.*;
 
-import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.TypeState;
 import com.example.demo.entity.important.Customer;
 import com.example.demo.entity.enums.Role;
-import com.example.demo.entity.important.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.function.Consumer;
 
-@Component("IDAOCustomer")
+@Component("DAO_CUSTOMER_MYSQL")
 public class DAOCustomerMySQL implements IDAOCustomerSQL<Customer> {
 
     private IConnectorGetter conn;
@@ -140,39 +136,13 @@ public class DAOCustomerMySQL implements IDAOCustomerSQL<Customer> {
         return 0;
     }
 
-    protected static final String INSERT_USER = "INSERT INTO user (number,email,username,password,name,active,date_registration,role_id,country_id,type_state_id) " +
-            "VALUES (?,?,?,?,?,?,?,(SELECT id from role WHERE name = ?) ,(SELECT id from country WHERE name = ?),(SELECT id from type_state WHERE name = 'REGISTERED'));";
+
 
     private static final String INSERT_CUSTOMER = " INSERT INTO customer (male,user_id) VALUES (?,(select id from user WHERE email = ? AND user.type_state_id = 20));";
 
     @Override
     public boolean saveAll(Iterable<Customer> entities) {
-        try {
-            try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(INSERT_USER)) {
-                for(Customer entity : entities) {
-                    HandlerCustomer.userToMySqlScript(preStat,entity,DEFAULT_PARAMETER);
-                    preStat.addBatch();
-                }
-
-                if(Handler.arrayHasOnlyOne(preStat.executeBatch()) == HandlerCustomer.ERROR_BOOLEAN_ANSWER){
-                    return HandlerCustomer.ERROR_BOOLEAN_ANSWER;
-                }
-            }finally {
-            }
-
-            try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(INSERT_CUSTOMER)) {
-                for(Customer entity : entities) {
-                    HandlerCustomer.customerToMySqlScript(preStat,entity,DEFAULT_PARAMETER);
-                    preStat.addBatch();
-                }
-                return Handler.arrayHasOnlyOne(preStat.executeBatch());
-            }finally {
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return HandlerCustomer.ERROR_BOOLEAN_ANSWER;
-        }
+        return HandlerUser.useInsertForIterableHeirUser(entities,this.conn,false,INSERT_CUSTOMER,HandlerCustomer::customerToMySqlScript);
     }
 
     @Override
@@ -254,7 +224,7 @@ public class DAOCustomerMySQL implements IDAOCustomerSQL<Customer> {
     }
 
     @Override
-    public List<Customer> findByConditionCommodity(ConditionCommodity conditionCommodity) {
+    public List<Customer> findByTypeState(TypeState typeState) {
         return null;
     }
 
@@ -279,45 +249,18 @@ public class DAOCustomerMySQL implements IDAOCustomerSQL<Customer> {
 
 class HandlerCustomer {
 
-    private static final int NUMBER_USER_POSITION_FOR_INSERT = 1;
-    private static final int EMAIL_USER_POSITION_FOR_INSERT = 2;
-    private static final int USERNAME_USER_POSITION_FOR_INSERT = 3;
-    private static final int PASSWORD_USER_POSITION_FOR_INSERT = 4;
-    private static final int NAME_USER_POSITION_FOR_INSERT = 5;
-    private static final int ACTIVE_USER_POSITION_FOR_INSERT = 6;
-    private static final int DATE_REGISTRATION_USER_POSITION_FOR_INSERT = 7;
-    private static final int ROLE_USER_POSITION_FOR_INSERT = 8;
-    private static final int COUNTRY_USER_POSITION_FOR_INSERT = 9;
 
-    static final boolean ERROR_BOOLEAN_ANSWER = false;
 
-    static void userToMySqlScript(PreparedStatement preStat, User user,  Consumer<PreparedStatement> extraSet){
-        try {
-            preStat.setString(NUMBER_USER_POSITION_FOR_INSERT,user.getNumber());
-            preStat.setString(EMAIL_USER_POSITION_FOR_INSERT,user.getEmail());
-            preStat.setString(USERNAME_USER_POSITION_FOR_INSERT,user.getUsername());
-            preStat.setString(PASSWORD_USER_POSITION_FOR_INSERT,user.getPassword());
-            preStat.setString(NAME_USER_POSITION_FOR_INSERT,user.getName());
-            preStat.setBoolean(ACTIVE_USER_POSITION_FOR_INSERT,user.isActive());
-            preStat.setTimestamp(DATE_REGISTRATION_USER_POSITION_FOR_INSERT, Timestamp.valueOf(user.getDateRegistration()));
-            preStat.setString(ROLE_USER_POSITION_FOR_INSERT,user.getRole().toString());
-            preStat.setString(COUNTRY_USER_POSITION_FOR_INSERT,user.getCountry());
 
-            extraSet.accept(preStat);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     private static final int MALE_CUSTOMER_POSITION_FOR_INSERT = 1;
     private static final int EMAIL_CUSTOMER_POSITION_FOR_INSERT = 2;
 
-    static void customerToMySqlScript(PreparedStatement preStat, Customer user, Consumer<PreparedStatement> extraSet){
+    static void customerToMySqlScript(PreparedStatement preStat, Customer user){
         try {
             preStat.setBoolean(MALE_CUSTOMER_POSITION_FOR_INSERT,user.isMale());
             preStat.setString(EMAIL_CUSTOMER_POSITION_FOR_INSERT,user.getEmail());
-            extraSet.accept(preStat);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -325,23 +268,14 @@ class HandlerCustomer {
 
     public static Customer resultSetToCustomer(ResultSet resultSet){
         Customer customer = new Customer();
+        customer.setRole(Role.CUSTOMER);
+        customer.setTypeState(TypeState.REGISTERED);
         try {
-            customer.setId(resultSet.getLong("user_pk"));
-            customer.setCustomerId(resultSet.getLong("customer_pk"));
-            customer.setNumber(resultSet.getString("number"));
+            HandlerUser.resultSetToUserCore(resultSet,customer);
 
-            customer.setEmail(resultSet.getString("email"));
-            customer.setUsername(resultSet.getString("username"));
-            customer.setPassword(resultSet.getString("password"));
-            customer.setName(resultSet.getString("name"));
-            customer.setCountry(resultSet.getString("country"));
+            customer.setCustomerId(resultSet.getLong("customer_pk"));
 
             customer.setMale(resultSet.getBoolean("male"));
-            customer.setActive(resultSet.getBoolean("active"));
-
-            customer.setDateRegistration(resultSet.getTimestamp("date_registration").toLocalDateTime());
-            customer.setRole(Role.CUSTOMER);
-            customer.setTypeState(TypeState.REGISTERED);
 
         } catch (SQLException e) {
             e.printStackTrace();

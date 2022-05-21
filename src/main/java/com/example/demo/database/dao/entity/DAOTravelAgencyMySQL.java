@@ -3,7 +3,6 @@ package com.example.demo.database.dao.entity;
 import com.example.demo.database.dao.Handler;
 import com.example.demo.database.idao.IConnectorGetter;
 import com.example.demo.database.idao.entity.IDAOTravelAgencySQL;
-import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.enums.TypeState;
 import com.example.demo.entity.important.TravelAgency;
@@ -17,9 +16,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.example.demo.database.dao.Handler.DEFAULT_PARAMETER;
-
-@Component
+@Component("DA0_TRAVEL_AGENCY_MYSQL")
 public class DAOTravelAgencyMySQL implements IDAOTravelAgencySQL<TravelAgency> {
     private IConnectorGetter conn;
 
@@ -180,7 +177,7 @@ public class DAOTravelAgencyMySQL implements IDAOTravelAgencySQL<TravelAgency> {
     }
 
     @Override
-    public List<TravelAgency> findByConditionCommodity(ConditionCommodity conditionCommodity) {
+    public List<TravelAgency> findByTypeState(TypeState typeState) {
         return null;
     }
 
@@ -199,32 +196,8 @@ public class DAOTravelAgencyMySQL implements IDAOTravelAgencySQL<TravelAgency> {
                     " VALUES ((select id from user WHERE email = ? AND user.type_state_id = 20 ),?,?,?,?,?,?,?,?,?);";
     @Override
     public boolean saveAll(Iterable<TravelAgency> entities) {
-        try {
-            try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(DAOCustomerMySQL.INSERT_USER)) {
-                for(TravelAgency entity : entities) {
-                    HandlerCustomer.userToMySqlScript(preStat,entity,DEFAULT_PARAMETER);
-                    preStat.addBatch();
-                }
-
-                if(Handler.arrayHasOnlyOne(preStat.executeBatch()) == HandlerCustomer.ERROR_BOOLEAN_ANSWER){
-                    return HandlerCustomer.ERROR_BOOLEAN_ANSWER;
-                }
-            }finally {
-            }
-
-            try(java.sql.PreparedStatement preStat = this.conn.getSqlPreparedStatement(INSERT_TRAVEL_AGENCY)) {
-                for(TravelAgency entity : entities) {
-                    HandlerDAOTAMYSQL.travelAgencyToMySqlScript(preStat,entity);
-                    preStat.addBatch();
-                }
-                return Handler.arrayHasOnlyOne(preStat.executeBatch());
-            }finally {
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return HandlerCustomer.ERROR_BOOLEAN_ANSWER;
-        }
+        return HandlerUser.useInsertForIterableHeirUser(entities,this.conn,false,
+                INSERT_TRAVEL_AGENCY,HandlerDAOTAMYSQL::travelAgencyToMySqlScript);
     }
 
     @Override
@@ -307,19 +280,10 @@ class HandlerDAOTAMYSQL{
         travelAgency.setTypeState(TypeState.REGISTERED);
 
         try {
-            travelAgency.setId(resultSet.getLong("user_pk"));
+            HandlerUser.resultSetToUserCore(resultSet,travelAgency);
+
             travelAgency.setTravelId(resultSet.getLong("travel_agency_pk"));
-            travelAgency.setNumber(resultSet.getString("number"));
 
-            travelAgency.setEmail(resultSet.getString("email"));
-            travelAgency.setUsername(resultSet.getString("username"));
-            travelAgency.setPassword(resultSet.getString("password"));
-
-            travelAgency.setName(resultSet.getString("name"));
-            travelAgency.setActive(resultSet.getBoolean("active"));
-            travelAgency.setDateRegistration(resultSet.getTimestamp("date_registration").toLocalDateTime());
-
-            travelAgency.setCountry(resultSet.getString("country"));
             travelAgency.setRating(resultSet.getFloat("rating"));
             travelAgency.setKved(resultSet.getString("kved"));
 

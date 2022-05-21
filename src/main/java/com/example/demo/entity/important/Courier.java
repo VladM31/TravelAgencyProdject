@@ -1,6 +1,5 @@
 package com.example.demo.entity.important;
 
-import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.enums.Role;
 import com.example.demo.entity.enums.TypeState;
 
