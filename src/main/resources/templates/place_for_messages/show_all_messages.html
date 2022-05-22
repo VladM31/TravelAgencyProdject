@@ -24,12 +24,14 @@
             <h1 class="main-travel-agency-naming" th:text="${nameUser}">
                 Назва турагенції
               </h1>
-            <h2 th:if="${IamAdmin}" th:text=""${nameRole}>
+            <h2 th:if="${IamAdmin}" th:text="${nameRole}">
 
             </h2>
         </div>
           <div style="display: flex; padding-left: 40%;" th:if="${haveReting}">
-            <span class="starts-style" th:each="option : ${countries}" th:text="${option}">&starf;</span>
+              <div th:each="option : ${stars}" >
+                  <span class="starts-style" th:utext="${option}">&starf;</span>
+              </div>
 
         </div>
     </div>

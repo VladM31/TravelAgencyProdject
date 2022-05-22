@@ -32,7 +32,6 @@ public class MySqlConnectorGetter implements IConnectorGetter{
         }
     }
 
-
     @PostConstruct
     public void init(){
         ///System.out.println("MySqlConnectorGetter void init()");

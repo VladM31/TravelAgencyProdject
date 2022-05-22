@@ -70,6 +70,11 @@ public class DAOTravelAgencyMySQL implements IDAOTravelAgencySQL<TravelAgency> {
         return false;
     }
 
+    @Override
+    public boolean saveForEditing(TravelAgency entity) {
+        return false;
+    }
+
 
     @Override
     public int updateAllById(Iterable<TravelAgency> entities) {
@@ -193,7 +198,7 @@ public class DAOTravelAgencyMySQL implements IDAOTravelAgencySQL<TravelAgency> {
 
     private static final String INSERT_TRAVEL_AGENCY =
             " INSERT INTO travel_agency (user_id,rating,kved,egrpoy_or_rnykpn,is_egrpoy,code_confirmed,address,full_name_director,describe_agency,url_photo)" +
-                    " VALUES ((select id from user WHERE email = ? AND user.type_state_id = 20 ),?,?,?,?,?,?,?,?,?);";
+                    " VALUES ((select id from user WHERE email = ? AND user.type_state_id = 20),?,?,?,?,?,?,?,?,?);";
     @Override
     public boolean saveAll(Iterable<TravelAgency> entities) {
         return HandlerUser.useInsertForIterableHeirUser(entities,this.conn,false,
@@ -235,6 +240,11 @@ public class DAOTravelAgencyMySQL implements IDAOTravelAgencySQL<TravelAgency> {
         return HandlerSqlDAO.useSelectScriptAndGetOneObject(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,WHERE_USERNAME_IS,SORT_TO_DATE_REGISTRATION),
                 HandlerDAOTAMYSQL::resultSetToTravelAgency,username);
     }
+
+    @Override
+    public boolean updateTypeStateById(Long id) {
+        return false;
+    }
 }
 
 class HandlerDAOTAMYSQL{
@@ -254,7 +264,6 @@ class HandlerDAOTAMYSQL{
 
     static void travelAgencyToMySqlScript(PreparedStatement preStat, TravelAgency travelAgency){
         try {
-
             preStat.setString(EMAIL_TRAVEL_AGENCY_FOR_INSERT,travelAgency.getEmail());
             preStat.setFloat(RATING_TRAVEL_AGENCY_FOR_INSERT,travelAgency.getRating());
             preStat.setString(KVED_TRAVEL_AGENCY_FOR_INSERT,travelAgency.getKved());
@@ -265,7 +274,6 @@ class HandlerDAOTAMYSQL{
             preStat.setString(FULL_NAME_DIRECTOR_TRAVEL_AGENCY_FOR_INSERT,travelAgency.getFullNameDirector());
             preStat.setString(DESCRIBE_AGENCY_TRAVEL_AGENCY_FOR_INSERT,travelAgency.getDescribeAgency());
             preStat.setString(URL_PHOTO_TRAVEL_AGENCY_FOR_INSERT,travelAgency.getUrlPhoto());
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
