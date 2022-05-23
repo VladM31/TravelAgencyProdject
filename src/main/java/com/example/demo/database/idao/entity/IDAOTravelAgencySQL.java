@@ -29,5 +29,5 @@ public interface IDAOTravelAgencySQL<TA extends TravelAgency> extends IDAOUserSQ
 
      public List<TA> findByAllNameDirectoContaining(String allNameDirector);
 
-
+     public List<TA> findAllAndLimit(int limit);
 }

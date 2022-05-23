@@ -17,6 +17,8 @@ public interface IDAOTourAd<T extends TourAd>  extends IDAOCoreSave<T>, IDAOCore
 
     ScriptTourAdWhere where();
 
+
+
     public List<T> findByCostOneCustomerBetween(int startCostOneCustomer, int endCostOneCustomer, Supplier<String> script);
 
     public List<T> findByCostServiceBetween(int startCostService,int endCostService, Supplier<String> script);

@@ -1,6 +1,8 @@
 package com.example.demo.database.idao.goods;
 
 import com.example.demo.database.idao.core.IDAOCore;
+import com.example.demo.database.idao.core.IDAOCoreFind;
+import com.example.demo.database.idao.core.IDAOCoreSave;
 import com.example.demo.entity.enums.ConditionCommodity;
 import com.example.demo.entity.goods.OrderFromTourAdCore;
 
@@ -8,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-public interface IDAOOrderFromTourAdCore<O extends OrderFromTourAdCore> extends IDAOCore<O> {
+public interface IDAOOrderFromTourAdCore<O extends OrderFromTourAdCore> extends IDAOCoreFind<O>, IDAOCoreSave<O> {
 
     public List<O> findByCostGreaterThanEqual(Long userOrTuodAdId,int cost);
     public List<O> findByCostLessThanEqual(Long userOrTuodAdId,int cost);

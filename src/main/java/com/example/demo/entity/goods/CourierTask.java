@@ -8,7 +8,8 @@ public class CourierTask {
     private Long id;
     private int numberOfFlyers;
     private String city;
-    private String email;
+    private String emailCourier;
+    private String emailAdmin;
     private String nameCourier;
     private String nameAdmin;
     private String describeTask;

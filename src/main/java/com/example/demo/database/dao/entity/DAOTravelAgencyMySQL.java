@@ -137,6 +137,11 @@ public class DAOTravelAgencyMySQL implements IDAOTravelAgencySQL<TravelAgency> {
     }
 
     @Override
+    public List<TravelAgency> findAllAndLimit(int limit) {
+        return null;
+    }
+
+    @Override
     public TravelAgency findByNumber(String number) {
         return null;
     }
@@ -241,8 +246,9 @@ public class DAOTravelAgencyMySQL implements IDAOTravelAgencySQL<TravelAgency> {
                 HandlerDAOTAMYSQL::resultSetToTravelAgency,username);
     }
 
+
     @Override
-    public boolean updateTypeStateById(Long id) {
+    public boolean updateTypeStateById(Long id, TypeState typeState) {
         return false;
     }
 }
