@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
+            rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="css/Main Page CSS.css" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <title>Популярні тур фірми</title>
+</head>
+<body>
+
+<main>
+
+    <th:block th:include="/Top Menu"></th:block>
+    <div class="container">
+        <h1>Популярні турфірми</h1>
+
+
+
+        <form th:each="Info : ${travelAgencies}">
+            <div th:class="@{(${Info.style})}">
+                <div>
+                    <h2 th:text="${Info.travelAgency.name}">Aida Hotel Sharm El Sheikh</h2>
+                    <div class="discription">
+                        <p>Все номера отеля Aida оформлены в традиционном стиле,
+                            обставлены деревянной мебелью и оборудованы кондиционером,
+                            телевизором и мини-баром.</p>
+                        <div class="rating-mini">
+                            <span th:each="star : ${Info.stars}" class="starts-style" th:utext="${star}"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="discription-image">
+                    <img th:src="@{(${Info.travelAgency.urlPhoto})}" alt="popular-photo1" class="image-size"/>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</main>
+<footer></footer>
+</body>
+</html>

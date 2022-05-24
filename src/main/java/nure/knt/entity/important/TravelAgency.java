@@ -4,6 +4,8 @@ import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class TravelAgency extends User{
@@ -139,5 +141,24 @@ public class TravelAgency extends User{
                 ", describeAgency='" + describeAgency + '\'' +
                 ", urlPhoto='" + urlPhoto + '\'' +
                 "} " + super.toString();
+    }
+
+    private static final String FULL_STAR = "&starf;";
+    private static final String EMPTY_STAR = "&star;";
+    private static final float MIN_RATING = 0.76f;
+    private static final int  NUMBER_OF_STARS = 5;
+    public static List<String> getRetingStars(float rating){
+        ArrayList<String> list = new ArrayList<>(NUMBER_OF_STARS);
+        for (int i = 0; i < NUMBER_OF_STARS; i++) {
+            if(rating-- > MIN_RATING){
+                list.add(FULL_STAR);
+            }else{
+                for (int j = i; j < NUMBER_OF_STARS; j++) {
+                    list.add(EMPTY_STAR);
+                }
+                break;
+            }
+        }
+        return list;
     }
 }

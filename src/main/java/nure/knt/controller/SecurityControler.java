@@ -43,15 +43,8 @@ public class SecurityControler {
 
     //--------------------------------------------------
 
-    // ************* Головна сторінка *****************
-    @RequestMapping(value = { "/", "/mainWindow","/hello" }, method = { RequestMethod.GET, RequestMethod.POST })
-    public String showMainWindow(@AuthenticationPrincipal User user, Model model) {
-        if (user != null) {
-            model.addAttribute("home", true);
-            this.setMenuModel(user,model);
-        }
-        return "mainWindowPage";
-    }
+
+
 
     // ************* Вхід і вихід *****************
     @RequestMapping(value = { "/login"}, method = { RequestMethod.GET })
@@ -61,7 +54,7 @@ public class SecurityControler {
 
     @RequestMapping(value = { "/logout"}, method = { RequestMethod.GET })
     public String signOutGet(@AuthenticationPrincipal User user,Model model) {
-        this.setMenuModel(user,model);
+        HandlerMainWindows.setMenuModel(user,model);
         return "logout";
     }
 
@@ -133,10 +126,9 @@ public class SecurityControler {
         return allc;
     }
 
-    private void setMenuModel(User user,Model model) {
-        model.addAttribute("sign_in", true);
-        model.addAttribute("name",user.getRole().equals(Role.CUSTOMER) ? user.getName().replace('/',' ') : user.getName());
-    }
+
 
 
 }
+
+

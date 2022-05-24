@@ -11,13 +11,17 @@
     <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
     <link href="css/signOutCss.css" rel="stylesheet"/>
     <link href="css/menuSign.css" rel="stylesheet"/>
+    <link href="css/topMenu.css" rel="stylesheet"/>
 </head>
 <body class="bodyBackground">
-    <th:block th:include="/menuTopSignUp"></th:block>
+    <main>
+
+
+    <th:block th:include="/Top Menu"></th:block>
 
     <form th:action="@{/logout}" method="post">
         <input type="submit" class="buttonAreYouSure" value="Are you sure">
     </form>
-
+    </main>
 </body>
 </html>

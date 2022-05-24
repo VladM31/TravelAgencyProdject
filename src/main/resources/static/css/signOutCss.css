@@ -28,8 +28,8 @@
 
 .bodyBackground{
     position: absolute;
-    width: 1600px;
-    height: 900px;
+    width: 1920px;
+    height: 1080px;
 
     background: url(../images/backgroundSignOut.jpg);
     background-repeat: no-repeat;

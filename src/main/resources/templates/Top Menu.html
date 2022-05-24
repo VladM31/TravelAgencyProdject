@@ -1,0 +1,30 @@
+<header>
+    <nav>
+        <ul class="site-nav">
+
+            <a href="/">
+                <li>
+                    <span>Головна сторінка</span>
+                </li>
+            </a>
+            <a href="#">
+                <li><span>Пошук</span></li>
+            </a>
+            <a href="/profile-message" th:if="${sign_in}">
+                <li>
+                    <span th:text="${name}">Зареєструватися</span>
+                </li>
+            </a>
+            <a href="/login" th:unless="${sign_in}">
+                <li>
+                    <span>Зареєструватися</span>
+                </li>
+            </a>
+            <a href="/logout" th:if="${sign_in}">
+                <li>
+                    <span>Вийти</span>
+                </li>
+            </a>
+        </ul>
+    </nav>
+</header>

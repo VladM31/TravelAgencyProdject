@@ -33,6 +33,11 @@ public class InsideMessageController {
     @RequestMapping(value = "/profile-message",method = {RequestMethod.GET})
     public String showProfileMessageGet(@AuthenticationPrincipal User user, Model model){
 
+        if (user != null) {
+            HandlerMainWindows.setMenuModel(user,model);
+        }
+
+
         model.addAttribute(ATTRIBUTE_FILTER,new MessageShowFilter());
         model.addAttribute(ATTRIBUTE_MESSAGES,idaoMessage.findMessageShortDataAllByToWhom(user.getId()));
         HendlerIMCForAll.setInformationAboutUserForShowAll(model,user);
@@ -42,6 +47,10 @@ public class InsideMessageController {
 
     @RequestMapping(value = "/profile-message",method = {RequestMethod.POST})
     public String showProfileMessagePOST(@AuthenticationPrincipal User user,Model model,MessageShowFilter filter){
+
+        if (user != null) {
+            HandlerMainWindows.setMenuModel(user,model);
+        }
 
         model.addAttribute(ATTRIBUTE_FILTER,filter);
         model.addAttribute(ATTRIBUTE_MESSAGES,filter.filtering(user.getId(),this.idaoMessage));
@@ -180,28 +189,12 @@ class HendlerIMCForTravelAgency{
                 HendlerIMCForAll.HAVE_THIRD_BUTTON,
                 TRAVEL_AGENCY_NAME_THIRD_BUTTON);
         model.addAttribute(ATTRIBUTE_HAVE_RATING,true);
-        model.addAttribute(ATTRIBUTE_RATING_STARS,getRetingStars(travelAgency.getRating()));
+        model.addAttribute(ATTRIBUTE_RATING_STARS,TravelAgency.getRetingStars(travelAgency.getRating()));
     }
 
-    private static final String FULL_STAR = "&starf;";
-    private static final String EMPTY_STAR = "&star;";
-    private static final float MIN_RATING = 0.76f;
-    private static final int  NUMBER_OF_STARS = 5;
 
-    private static List<String> getRetingStars(float rating){
-        ArrayList<String> list = new ArrayList<>(NUMBER_OF_STARS);
-        for (int i = 0; i < NUMBER_OF_STARS; i++) {
-            if(rating-- > MIN_RATING){
-                list.add(FULL_STAR);
-            }else{
-                for (int j = i; j < NUMBER_OF_STARS; j++) {
-                    list.add(EMPTY_STAR);
-                }
-                break;
-            }
-        }
-        return list;
-    }
+
+
 }
 
 class HendlerIMCForCourier {

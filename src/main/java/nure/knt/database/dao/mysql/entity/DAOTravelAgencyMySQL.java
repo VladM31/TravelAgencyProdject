@@ -123,9 +123,13 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
         return null;
     }
 
+    private static final String LIMIT_IS = " LIMIT ? ;";
+    private static final String SORT_BY_RATING = "  ORDER BY rating DESC ";
+
     @Override
     public List<TravelAgency> findAllAndLimit(int limit) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,SORT_BY_RATING,LIMIT_IS),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,limit);
     }
 
     @Override
