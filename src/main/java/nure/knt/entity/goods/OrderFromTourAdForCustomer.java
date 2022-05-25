@@ -9,14 +9,16 @@ public class OrderFromTourAdForCustomer extends OrderFromTourAdCore {
     private String nameTravelAgency;
     private String restingPlace;
     private Long idTourAd;
+    private Long idCustomer;
 
-    public OrderFromTourAdForCustomer(Long id, String country, String city, int cost, int numberOfPeople, LocalDate dateStart, LocalDate dateEnd,
-                                      LocalDateTime dateRegistration, ConditionCommodity conditionCommodity, String nameTravelAgency,
-                                      String restingPlace, Long idTourAd) {
+    public OrderFromTourAdForCustomer(Long id, String country, String city, int cost, int numberOfPeople, LocalDate dateStart,
+                                      LocalDate dateEnd, LocalDateTime dateRegistration, ConditionCommodity conditionCommodity,
+                                      String nameTravelAgency, String restingPlace, Long idTourAd, Long idCustomer) {
         super(id, country, city, cost, numberOfPeople, dateStart, dateEnd, dateRegistration, conditionCommodity);
         this.nameTravelAgency = nameTravelAgency;
         this.restingPlace = restingPlace;
         this.idTourAd = idTourAd;
+        this.idCustomer = idCustomer;
     }
 
     public OrderFromTourAdForCustomer() {
@@ -46,12 +48,21 @@ public class OrderFromTourAdForCustomer extends OrderFromTourAdCore {
         this.idTourAd = idTourAd;
     }
 
+    public Long getIdCustomer() {
+        return idCustomer;
+    }
+
+    public void setIdCustomer(Long idCustomer) {
+        this.idCustomer = idCustomer;
+    }
+
     @Override
     public String toString() {
         return "OrderFromTourAdForCustomer{" +
                 "nameTravelAgency='" + nameTravelAgency + '\'' +
                 ", restingPlace='" + restingPlace + '\'' +
                 ", idTourAd=" + idTourAd +
+                ", idCustomer=" + idCustomer +
                 "} " + super.toString();
     }
 }

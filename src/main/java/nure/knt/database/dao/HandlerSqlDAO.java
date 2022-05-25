@@ -32,7 +32,11 @@ public class HandlerSqlDAO {
         return true;
     }
 
-    public static <T> String symbolsInDependsFromSize(Iterable<T> ids){
+    public static String setInInsideScript(String script,Iterable<?> ids){
+        return script.replace(HandlerSqlDAO.REPLACE_SYMBOL,HandlerSqlDAO.symbolsInDependsFromSize(ids));
+    }
+
+    public static String symbolsInDependsFromSize(Iterable<?> ids){
         StringBuilder symbols = new StringBuilder();
         ids.forEach(i -> symbols.append("?,"));
         if(symbols.isEmpty()){
