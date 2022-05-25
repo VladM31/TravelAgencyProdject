@@ -117,4 +117,19 @@ public class OrderFromTourAdCore {
     public int hashCode() {
         return Objects.hash(id, dateRegistration);
     }
+
+    @Override
+    public String toString() {
+        return "OrderFromTourAdCore{" +
+                "id=" + id +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", cost=" + cost +
+                ", numberOfPeople=" + numberOfPeople +
+                ", dateStart=" + dateStart +
+                ", dateEnd=" + dateEnd +
+                ", dateRegistration=" + dateRegistration +
+                ", conditionCommodity=" + conditionCommodity +
+                '}';
+    }
 }

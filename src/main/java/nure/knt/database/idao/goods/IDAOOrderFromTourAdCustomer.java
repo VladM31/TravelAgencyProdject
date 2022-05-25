@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface IDAOOrderFromTourAdCustomer<O extends OrderFromTourAdForCustomer> extends IDAOOrderFromTourAdCore<O>{
 
-    public List<O> findByCountryContaining(Long userOrTuodAdId, String country);
-    public List<O> findByRestingPlaceContaining(Long userOrTuodAdId, String restingPlace);
+    public List<O> findByNameTravelAgencyContaining(Long userOrTuodAdId, String country);//Турфірма 1
+    public List<O> findByRestingPlaceContaining(Long userOrTuodAdId, String restingPlace);//Місце відпочинку 4
 }
