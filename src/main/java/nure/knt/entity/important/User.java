@@ -175,15 +175,16 @@ public  class User implements UserDetails {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", number=" + number +
+                ", number='" + number + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", active=" + active +
-                ", dateRegistration=" + dateRegistration.toString().replace('T',' ') +
+                ", dateRegistration=" + dateRegistration +
                 ", role=" + role +
                 ", country='" + country + '\'' +
                 ", name='" + name + '\'' +
+                ", typeState=" + typeState +
                 '}';
     }
 }

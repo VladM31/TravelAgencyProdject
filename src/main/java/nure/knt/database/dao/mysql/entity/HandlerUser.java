@@ -2,6 +2,9 @@ package nure.knt.database.dao.mysql.entity;
 
 import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.idao.IConnectorGetter;
+import nure.knt.entity.enums.Role;
+import nure.knt.entity.enums.TypeState;
+import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.User;
 
 import java.sql.PreparedStatement;
@@ -95,4 +98,7 @@ public class HandlerUser {
             e.printStackTrace();
         }
     }
+
+
+
 }

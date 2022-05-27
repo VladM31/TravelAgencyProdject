@@ -57,8 +57,8 @@ public class DAOUserMySQL extends MySQLCore implements IDAOUserSQL<User> {
     }
 
     @Override
-    public int updateAllById(Iterable<User> entities) {
-        return 0;
+    public int[] updateAllById(Iterable<User> entities) {
+        return new int[0];
     }
 
     @Override

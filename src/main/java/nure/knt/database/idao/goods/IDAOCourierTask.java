@@ -1,6 +1,7 @@
 package nure.knt.database.idao.goods;
 
 import nure.knt.database.idao.core.IDAOCoreSave;
+import nure.knt.database.idao.core.IDAOUpdateConditionCommodity;
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.goods.CourierTask;
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-public interface IDAOCourierTask<Task extends CourierTask> extends IDAOCoreSave<Task> {
+public interface IDAOCourierTask<Task extends CourierTask> extends IDAOCoreSave<Task>, IDAOUpdateConditionCommodity {
 
     public List<Task> findByRoleAndIdUserAndCityContaining(Role role,Long id,String city );
     public List<Task> findByRoleAndIdUserAndEmailContaining(Role role,Long id,String email);

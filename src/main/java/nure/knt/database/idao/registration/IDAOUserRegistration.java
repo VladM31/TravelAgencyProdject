@@ -5,14 +5,17 @@ import org.springframework.lang.Nullable;
 
 import java.sql.SQLException;
 
-public interface IDAOUserRegistration<U extends User> extends CodeError {
+public interface IDAOUserRegistration<U extends User>  {
+
+    public static final Long userIdNotFound = null;
 
     public boolean userIsBooked(U user);
+
+    public String generateCode();
+
     @Nullable
-    public U findUserByEmail(String email);
-    @Nullable
-    public U findUserByCode(long code);
-    public long findCodeByUser(U id);
-    public boolean saveForRegistration(U user) throws SQLException;
-    public boolean saveAsRegistered(U user);
+    public Long findUserIdByEmailAndCode(String email,String code);
+
+    public boolean saveForRegistration(U user,String code) throws SQLException;
+    public boolean saveAsRegistered(Long id);
 }

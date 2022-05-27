@@ -101,7 +101,7 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
             " left join country on user.country_id = country.id " +
             " WHERE user.type_state_id = 20 ;";
 
-    private static final String SORT_TO_DATE_REGISTRATION = " ORDER BY date_registration ASC;";
+    private static final String SORT_TO_DATE_REGISTRATION = "  ORDER BY date_registration ASC;";
 
     @Override
     public List<Customer> findAll() {
@@ -119,14 +119,30 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
         return null;
     }
 
+    private static final String UPDATE_ITERABLE_BY_ID = "UPDATE customer left join user on customer.user_id = user.id  SET email=? WHERE customer.id = ?;";
+
     @Override
-    public int updateAllById(Iterable<Customer> entities) {
-        return 0;
+    public int[] updateAllById(Iterable<Customer> entities) {
+        try(PreparedStatement statement= super.conn.getSqlPreparedStatement(UPDATE_ITERABLE_BY_ID)) {
+
+            for(Customer entity:entities){
+                statement.setString(1,entity.getEmail());
+                statement.setLong(2,entity.getCustomerId());
+                statement.addBatch();
+            }
+
+            return statement.executeBatch();
+
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return new int[]{-1};
     }
+
 
     @Override
     public int updateOneById(Customer entity) {
-        return 0;
+        return this.updateAllById(List.of(entity))[0];
     }
 
 
@@ -242,11 +258,6 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
 
 class HandlerCustomer {
 
-
-
-
-
-
     private static final int MALE_CUSTOMER_POSITION_FOR_INSERT = 1;
     private static final int EMAIL_CUSTOMER_POSITION_FOR_INSERT = 2;
 
@@ -258,8 +269,7 @@ class HandlerCustomer {
             e.printStackTrace();
         }
     }
-
-    public static Customer resultSetToCustomer(ResultSet resultSet){
+    static Customer resultSetToCustomer(ResultSet resultSet) {
         Customer customer = new Customer();
         customer.setRole(Role.CUSTOMER);
         customer.setTypeState(TypeState.REGISTERED);

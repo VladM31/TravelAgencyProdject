@@ -59,13 +59,13 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
     }
 
     @Override
-    public boolean editing(TravelAgency entity) {
+    public boolean editing(Long id,TravelAgency entity) {
         return false;
     }
 
     @Override
-    public int updateAllById(Iterable<TravelAgency> entities) {
-        return 0;
+    public int[] updateAllById(Iterable<TravelAgency> entities) {
+        return new int[0];
     }
 
     @Override
@@ -217,7 +217,7 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
             "address,full_name_director,describe_agency," +
             "url_photo " +
             "from travel_agency " +
-            "left join user on travel_agency.user_id = user.id " +
+            "right join user on travel_agency.user_id = user.id " +
             "left join country on user.country_id = country.id " +
             "WHERE user.type_state_id = 20 ;";
 

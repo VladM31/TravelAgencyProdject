@@ -60,8 +60,8 @@ public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier
     }
 
     @Override
-    public int updateAllById(Iterable<Courier> entities) {
-        return 0;
+    public int[] updateAllById(Iterable<Courier> entities) {
+        return new int[0];
     }
 
     @Override
@@ -163,7 +163,7 @@ public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier
             "country.name AS country, " +
             "city,address,date_birth,does_he_want " +
             "from courier " +
-            "left join user on courier.user_id = user.id  " +
+            "right join user on courier.user_id = user.id  " +
             "left join country on user.country_id = country.id  " +
             "WHERE user.type_state_id = 20 ;";
 
