@@ -6,6 +6,9 @@ import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.User;
+import nure.knt.tools.WorkWithCountries;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +16,16 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.function.BiConsumer;
 
+@Component
 public class HandlerUser {
+
+    private static WorkWithCountries countries;
+
+    @Autowired
+    public static void setCountries(WorkWithCountries countries) {
+        HandlerUser.countries = countries;
+    }
+
     public static <U extends User> void resultSetToUserCore(ResultSet resultSet, U user) throws SQLException {
         user.setId(resultSet.getLong("user_pk"));
         user.setNumber(resultSet.getString("number"));
@@ -27,7 +39,7 @@ public class HandlerUser {
     }
 
     public static final String INSERT_USER = "INSERT INTO user (number,email,username,password,name,active,date_registration,role_id,country_id,type_state_id) " +
-            "VALUES (?,?,?,?,?,?,?,(SELECT id from role WHERE name = ?) ,(SELECT id from country WHERE name = ?),(SELECT id from type_state WHERE name = ?));";
+            "VALUES (?,?,?,?,?,?,?,?,?,?);";
 
     public static <T extends User> boolean useInsertForIterableUser(Iterable<T> entities, IConnectorGetter conn){
         return HandlerUser.useInsertForIterableHeirUser(entities,conn,true,null,null);
@@ -93,11 +105,9 @@ public class HandlerUser {
             preStat.setString(NAME_USER_POSITION_FOR_INSERT,user.getName());
             preStat.setBoolean(ACTIVE_USER_POSITION_FOR_INSERT,user.isActive());
             preStat.setTimestamp(DATE_REGISTRATION_USER_POSITION_FOR_INSERT, Timestamp.valueOf(user.getDateRegistration()));
-            preStat.setString(ROLE_USER_POSITION_FOR_INSERT,user.getRole().toString());
-            preStat.setString(COUNTRY_USER_POSITION_FOR_INSERT,user.getCountry());
-            preStat.setString(TYPE_STATE_USER_POSITION_FOR_INSERT,user.getTypeState().toString());
-
-            
+            preStat.setInt(ROLE_USER_POSITION_FOR_INSERT,user.getRole().getId());
+            preStat.setLong(COUNTRY_USER_POSITION_FOR_INSERT,countries.getIdByCountry(user.getCountry()));
+            preStat.setInt(TYPE_STATE_USER_POSITION_FOR_INSERT,user.getTypeState().getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }

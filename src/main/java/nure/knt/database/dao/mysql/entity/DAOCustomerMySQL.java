@@ -20,7 +20,7 @@ import java.util.List;
 public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Customer> {
 
 
-    private static final String WHERE_MALE_IS = " AND customer.is_male = ? ";
+    private static final String WHERE_MALE_IS = " AND customer.male = ? ";
 
     @Override
     public List<Customer> findByMale(Boolean male) {
@@ -94,10 +94,10 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
         return 0;
     }
 
-    private static final String SELECT_ALL = "select user.id AS user_pk, customer.id AS customer_pk,  male," +
+    private static final String SELECT_ALL = "SELECT user.id AS user_pk, customer.id AS customer_pk,  male," +
             "number,email,username,password,user.name AS name,active,date_registration," +
-            "country.name AS country from customer " +
-            " left join user on customer.user_id = user.id" +
+            "country.name AS country FROM customer " +
+            " LEFT join user ON customer.user_id = user.id" +
             " left join country on user.country_id = country.id " +
             " WHERE user.type_state_id = 20 ;";
 
@@ -105,7 +105,9 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
 
     @Override
     public List<Customer> findAll() {
-        return HandlerSqlDAO.useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,SORT_TO_DATE_REGISTRATION), HandlerCustomer::resultSetToCustomer);
+        return HandlerSqlDAO.useSelectScript(conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,SORT_TO_DATE_REGISTRATION),
+                HandlerCustomer::resultSetToCustomer);
     }
 
     private static final String WHERE_user_id = " AND user.id = ? " + SORT_TO_DATE_REGISTRATION;
@@ -144,8 +146,6 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
     public int updateOneById(Customer entity) {
         return this.updateAllById(List.of(entity))[0];
     }
-
-
 
     private static final String INSERT_CUSTOMER = " INSERT INTO customer (male,user_id) VALUES (?,(select id from user WHERE email = ? AND user.type_state_id = 20));";
 
