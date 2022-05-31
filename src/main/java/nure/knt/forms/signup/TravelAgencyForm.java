@@ -189,9 +189,7 @@ public class TravelAgencyForm {
     public TravelAgencyTemporary toTravelAgencyTemporary(){
         TravelAgencyTemporary travelAgencyTemporary = new TravelAgencyTemporary();
 
-        travelAgencyTemporary.setIdTemp(CustomerForm.getIdGenerator());
         //travelAgencyTemporary.setIdTravelAgency(CustomerForm.getIdGenerator());
-        travelAgencyTemporary.setIdTempTA(CustomerForm.getIdGenerator());
 
         travelAgencyTemporary.setEmail(this.email);
         travelAgencyTemporary.setUsername(this.login);

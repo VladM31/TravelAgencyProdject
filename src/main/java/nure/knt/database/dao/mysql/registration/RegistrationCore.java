@@ -27,6 +27,8 @@ public abstract class RegistrationCore<U extends User> extends MySQLCore impleme
         this.countries = countries;
     }
 
+
+
     @Override
     public boolean userIsBooked(U user) {
         return HandlerRegistrationCore.checkForTheExistenceOfTheUser(user,super.conn);

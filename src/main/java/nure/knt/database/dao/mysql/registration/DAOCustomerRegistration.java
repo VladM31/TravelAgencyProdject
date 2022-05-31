@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @Component("Customer registration")
-public class CustomerRegistration extends RegistrationCore<Customer> {
+public class DAOCustomerRegistration extends RegistrationCore<Customer> {
 
     public static final String INSERT_USER = "INSERT INTO user (number,email,username,password,name,active,date_registration,role_id,country_id,type_state_id) " +
             "VALUES (?,?,?,?,?,?,?,(SELECT id from role WHERE name = ?) ,?,(SELECT id from type_state WHERE name = ?));";

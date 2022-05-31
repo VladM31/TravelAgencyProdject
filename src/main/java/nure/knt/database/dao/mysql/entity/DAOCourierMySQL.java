@@ -163,7 +163,7 @@ public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier
             "country.name AS country, " +
             "city,address,date_birth,does_he_want " +
             "from courier " +
-            "right join user on courier.user_id = user.id  " +
+            "left join user on courier.user_id = user.id  " +
             "left join country on user.country_id = country.id  " +
             "WHERE user.type_state_id = 20 ;";
 

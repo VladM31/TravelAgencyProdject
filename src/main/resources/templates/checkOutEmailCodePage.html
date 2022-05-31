@@ -18,10 +18,11 @@
         <p class="inputText">Input code for activate your account.</p>
         <p class="yourEmailText" th:text="${yourEmail}">Your email is “email”</p>
         <p class="codeMistakeText" th:if="${errorCode}">Code is mistake</p>
-        <form th:action="@{(${userURL})}" method="post">
+        <form th:action="@{(${userURL})}" th:method="POST">
             <input type="submit" value="Push" class="buttonPush">
-            <input type="text" class="labelCode" name="cod" placeholder="Enter code" th:value="${cod}">
+            <input type="text" class="labelCode" name="code" placeholder="Enter code" >
             <input type="hidden" name="email" th:value="${email}">
+            <input type="hidden" name="helloUser" th:value="${helloUser}">
         </form>
     </div>
 

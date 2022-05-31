@@ -197,7 +197,6 @@ public class TravelAgencyTemporary {
     public TravelAgency toTravelAgency(){
         TravelAgency travel = new TravelAgency();
         // -------- default -------------
-        travel.setId(CustomerForm.getIdGenerator());
         travel.setTravelId(travel.getId());
         travel.setActive(true);
         travel.setDateRegistration(LocalDateTime.now());

@@ -217,7 +217,7 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
             "address,full_name_director,describe_agency," +
             "url_photo " +
             "from travel_agency " +
-            "right join user on travel_agency.user_id = user.id " +
+            "left join user on travel_agency.user_id = user.id " +
             "left join country on user.country_id = country.id " +
             "WHERE user.type_state_id = 20 ;";
 
@@ -263,7 +263,7 @@ class HandlerDAOTAMYSQL{
     static void travelAgencyToMySqlScript(PreparedStatement preStat, TravelAgency travelAgency){
         try {
             preStat.setString(EMAIL_TRAVEL_AGENCY_FOR_INSERT,travelAgency.getEmail());
-            preStat.setString(TYPE_STATE_TRAVEL_AGENCY_FOR_INSERT,travelAgency.getRole().toString());
+            preStat.setString(TYPE_STATE_TRAVEL_AGENCY_FOR_INSERT,travelAgency.getTypeState().toString());
             preStat.setFloat(RATING_TRAVEL_AGENCY_FOR_INSERT,travelAgency.getRating());
             preStat.setString(KVED_TRAVEL_AGENCY_FOR_INSERT,travelAgency.getKved());
             preStat.setLong(EGRPOY_OR_RNYKPN_TRAVEL_AGENCY_FOR_INSERT,travelAgency.getEgrpoyOrRnekpn());

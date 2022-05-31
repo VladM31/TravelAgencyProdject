@@ -135,7 +135,7 @@ public class DAOUserMySQL extends MySQLCore implements IDAOUserSQL<User> {
             "role.name AS role, " +
             "type_state.name AS type_state " +
             "from user " +
-            "left join country on user.country_id = country.id  " +
+            "right join country on user.country_id = country.id  " +
             "left join role on user.role_id = role.id  " +
             "left join type_state on user.type_state_id = type_state.id ;";
 

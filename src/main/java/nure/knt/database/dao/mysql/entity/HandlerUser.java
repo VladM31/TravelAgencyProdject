@@ -52,7 +52,11 @@ public class HandlerUser {
             if(isItUserClass){
                 return true;
             }
-
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             try(java.sql.PreparedStatement preStat = conn.getSqlPreparedStatement(scriptInsert)) {
                 for(T entity : entities) {
                     heirUserToMySqlScript.accept(preStat,entity);

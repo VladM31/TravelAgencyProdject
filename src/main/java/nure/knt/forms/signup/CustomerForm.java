@@ -1,179 +1,67 @@
 package nure.knt.forms.signup;
 
-import nure.knt.entity.subordinate.CustomerTemporary;
+import nure.knt.entity.enums.Role;
+import nure.knt.entity.important.Customer;
 
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-public class CustomerForm {
+public class CustomerForm extends UserForm {
+    @Size(min=2,max=50, message = "Ім'я повинне бути більше 2 і не менше 50 символів")
+    private String firstname;
+    @Size(min=2,max=50, message = "Прізвище повинне бути більше 2 і не менше 50 символів")
+    private String lastname;
+    private boolean male;
 
-    public static long getIdGenerator() {
-        return idGenerator++;
-    }
-
-    private static long idGenerator =10;
-    private String username;
-    private String password;
-    private String name;
-    private String surname;
-    private long number;
-    private String email;
-    private String gender;
-    private String country;
-    private boolean hello;
-    private boolean error;
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public long getNumber() {
-        return number;
-    }
-
-    public void setNumber(long number) {
-        this.number = number;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public boolean isHello() {
-        return hello;
-    }
-
-    public void setHello(boolean hello) {
-        this.hello = hello;
-    }
-
-    public boolean isError() {
-        return error;
-    }
-
-    public void setError(boolean error) {
-        this.error = error;
-    }
-
-    public CustomerForm(String username, String password, String name,
-                        String surname, long number, String email, String gender,
-                        String country, boolean hello, boolean error) {
-        this.username = username;
-        this.password = password;
-        this.name = name;
-        this.surname = surname;
-        this.number = number;
-        this.email = email;
-        this.gender = gender;
-        this.country = country;
-        this.hello = hello;
-        this.error = error;
+    public CustomerForm(String username, String password, String number, String email, String country, String firstname, String lastname, boolean male) {
+        super(username, password, number, email, country);
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.male = male;
     }
 
     public CustomerForm() {
-        this.hello = true;
     }
 
-    @Override
-    public String toString() {
-        return "CustomerForm " +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", number=" + number +
-                ", email='" + email + '\'' +
-                ", gender='" + gender + '\'' +
-                ", country='" + country + '\'' +
-                ", hello=" + hello +
-                ", error=" + error ;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public CustomerTemporary toCustomerTemporary(){
-        CustomerTemporary custTemp = new CustomerTemporary();
-
-        custTemp.setIdTempCust(CustomerForm.getIdGenerator());
-        custTemp.setIdTemp(CustomerForm.getIdGenerator());
-        custTemp.setNumber(this.number);
-        custTemp.setEmail(this.email);
-        custTemp.setUsername(this.username);
-        custTemp.setPassword(this.password);
-        custTemp.setCountry(this.country);
-        custTemp.setIsMale(CustomerForm.getGender(this.gender));
-        custTemp.setFirstname(this.name);
-        custTemp.setSurname(this.surname);
-        custTemp.setDateRegistration(LocalDateTime.now());
-
-        return  custTemp;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
-
-    private static Boolean getGender(String gender) {
-        if (gender.equals("man")) {
-            return true;
-        } else if (gender.equals("woman")) {
-            return false;
-        } else {
-            return null;
-        }
+    public String getLastname() {
+        return lastname;
     }
 
-    public boolean hasGender() {
-        return this.gender != null;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
-    public CustomerForm getErrorForm()
-    {
-        this.hello = false;
-        this.error = true;
-        return this;
+    public boolean isMale() {
+        return male;
     }
 
+    public void setMale(boolean male) {
+        this.male = male;
+    }
+
+    public Customer toCustomer(){
+        Customer cust = new Customer();
+
+        cust.setUsername(super.getUsername());//3
+        cust.setPassword(super.getPassword());//4
+        cust.setEmail(super.getEmail());//2
+        cust.setNumber(super.getNumber());//1
+        cust.setCountry(super.getCountry());//9
+        cust.setName(this.firstname + "/" + this.lastname);//5
+
+        cust.setMale(this.male);//11
+        cust.setActive(true);//6
+        cust.setRole(Role.CUSTOMER);//10
+        cust.setDateRegistration(LocalDateTime.now());//7
+
+        return cust;
+    }
 }

@@ -2,14 +2,11 @@ package nure.knt.controller;
 
 import nure.knt.database.idao.entity.IDAOCustomerSQL;
 import nure.knt.database.idao.entity.IDAOTravelAgencySQL;
-import nure.knt.database.idao.temporary.IDAOCustomerTemporary;
 import nure.knt.database.idao.temporary.IDAOTravelAgencyTemporaryCode;
 import nure.knt.entity.important.Customer;
-import nure.knt.entity.enums.Role;
 import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
 import nure.knt.forms.signup.ChooseSignUpForm;
-import nure.knt.forms.signup.CustomerForm;
 import nure.knt.forms.signup.TravelAgencyForm;
 import nure.knt.tempClasses.verify.VerifyTempTravelAgencyForm;
 import nure.knt.tempClasses.verify.verify.inter.IVerifyCustomerForm;
@@ -31,13 +28,10 @@ public class SecurityControler {
     @Autowired
     private IDAOTravelAgencySQL<TravelAgency> daoTravelAgency;
     //--------------------------------------------------
-    @Autowired
-    private IDAOCustomerTemporary daoCustTemp;
+
     @Autowired
     private IDAOTravelAgencyTemporaryCode idaoTravelAgencyTemporaryCode;
     //--------------------------------------------------
-    @Autowired
-    private IVerifyCustomerForm chechCustForm;
     @Autowired
     private VerifyTempTravelAgencyForm checkTravAgenForm;
 
@@ -73,28 +67,13 @@ public class SecurityControler {
         }
 
         if (form.isCustomer()) {
-            model.addAttribute("customer",new CustomerForm());
-            return "sign_up_customerPage";
+            return "redirect:/customer-registration";
         }else{
             model.addAttribute("travel",new TravelAgencyForm());
             return "sign_up_travel_agencyPage";
         }
     }
 
-    // ************* Реєстрація користувача *****************
-    @RequestMapping(value= {"/sign_up_error_customer"},method = { RequestMethod.POST })
-    public String signUpCustomerPOST(RedirectAttributes modelEmail,Model model, CustomerForm form) {
-        if(!chechCustForm.checkOut(form).equals("Successful")) {
-            model.addAttribute("customer", form.getErrorForm());
-            return "sign_up_customerPage";
-        }
-       // System.out.println(form.toCustomerTemporary());
-        this.daoCustTemp.save(form.toCustomerTemporary());
-
-        modelEmail.addAttribute("email", form.getEmail());
-
-        return "redirect:/confirm.mail.customer";
-    }
 
     // ************* Реєстрація агенції *****************
     @RequestMapping(value= {"/sign_up_error_travel"},method = { RequestMethod.POST })
