@@ -7,14 +7,16 @@
     <title>Profile message</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script th:src="@{/jquery/jquery.min.js}"></script>
-    <script th:src="@{/popper/popper.min.js}"></script>
-    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
     <link href="css/show_all_messages_css_file.css" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Neucha" />
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+
+
     <link rel="stylesheet" href="css/Main Page CSS.css" />
+    <link rel="stylesheet" href="css/sort_button/sortBlock.css" />
+
+
 </head>
 
 <body class="main-body">
@@ -94,32 +96,6 @@
     
             </div>
     
-            <div id="SortBy">
-                <h6>Сортувати по:</h6>
-                <select id="phone" name="SortBy" class="box-filter">
-                    <option value="sendler">Відправнику</option>
-                    <option value="nameMessage">Назві повідомлення</option>
-                    <option value="date">Даті</option>
-                    <option value="state">Стану</option>
-                    <option value="role">Ролі</option>
-                </select>
-                <br>
-                <br>
-                <div class="labelOr">
-                    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked
-                            value="EGRPOY">
-                        <label class="btn btn-outline-primary"
-                            for="btnradio1">&nbsp;&nbsp;&nbsp;&nbsp;\/&nbsp;&nbsp;&nbsp;&nbsp;</label>
-    
-                        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off"
-                            value="RNYKPN">
-                        <label class="btn btn-outline-primary"
-                            for="btnradio2">&nbsp;&nbsp;&nbsp;&nbsp;/\&nbsp;&nbsp;&nbsp;&nbsp;</label>
-                    </div>
-                </div>
-            </div>
-    
             <div>
                 <input type="submit" value="ШУКАТИ" class="filter-find-button">
             </div>
@@ -127,12 +103,12 @@
         </form>
 
         <div class="message-block-for-all-tabs" >
-            <div th:each="Info : ${messages}">
 
-                <form class="message_block" th:action="@{/show-message}"   th:object="${Info}" method="POST" >
+
+                <form  th:each="Info : ${messages}" class="message_block" th:action="@{/show-message}"   th:object="${Info}" method="POST" >
                     <div class="message_block-all-info">
                         <div class="message_block-all-info-name">
-                            <p class="messages-name" th:text="${Info.messageName}"> Name</p>
+                            <p class="messages-name item_name-message" th:text="${Info.messageName}" > Name</p>
                             <input type="hidden" name="messageName" th:value="${Info.messageName}">
                             <input type="hidden" name="sendlerEmail" th:value="${Info.sendlerEmail}">
                             <input type="hidden" name="idUserMessage" th:value="${Info.idUserMessage}">
@@ -142,55 +118,81 @@
                         <div class="message_block-all-info-other">
                             <div class="message-info-text">
                                 <small class="message-info-text-name-top"> Відправник</small>
-                                <p class="message-info-text-name-bottom"  th:text="${Info.sendlerName}"> Імя</p>
+                                <p class="message-info-text-name-bottom item_name-sendler"  th:text="${Info.sendlerName}"> Імя</p>
                                 <input type="hidden" name="sendlerName" th:value="${Info.sendlerName}">
                             </div>
                             <div class="message-info-text">
                                 <small class="message-info-text-name-top"> Роль</small>
-                                <p class="message-info-text-name-bottom"   th:text="${Info.sendlerRole}">  Імя</p>
+                                <p class="message-info-text-name-bottom item_name-role"   th:text="${Info.sendlerRole}">  Імя</p>
                             </div>
                             <div class="message-info-text">
                                 <small class="message-info-text-name-top"> Дата відправлення</small>
-                                <p class="message-info-text-name-bottom" th:text="${Info.getFromatSendDate()}"> Імя</p>
+                                <p class="message-info-text-name-bottom item_date-send" th:text="${Info.getFromatSendDate()}"> Імя</p>
                                 <input type="hidden" name="sendDateTxt" th:value="${Info.sendDate}">
                             </div>
 
                         </div>
                     </div>
+                    <p type="hidden" class="hidden-text item_state-message" th:text="${Info.itWasRead}"></p>
                     <div class="message_block-button">
+
                         <input type="submit" class="message-button color-read" value="ПЕРЕГЛЯНУТИ" th:if="${Info.itWasRead}">
                         <input type="submit" class="message-button color-new" value="ПЕРЕГЛЯНУТИ" th:unless="${Info.itWasRead}">
                     </div>
                 </form>
-            </div>
-        </div>
-    
-        <form th:action="@{${urlChoose}}" class="watch-travel-agency">
-            <div>
-                <h2 class="watch-user-choose-see"><b>Перегляд</b></h2>
-                
-                <div style="display: flex;align-items: flex-start;margin-left: 4%">
-                    <input type="submit" class="watch-travel-agency-choose-servise-submit wtacss-right" th:value="${nameChoose}" >
-                    <input type="button" class="watch-travel-agency-choose-servise-submit wtacss-left wtacss-not-work" value="Повідомлень">
-                </div>
-    
-                
-            </div>
-    
-            <div>
-                <input id="ChangeProfile" type="submit"  class="watch-travel-agency-other-submit" rows="2" value="Редагувати профіль" >
-            </div>
-    
-            <div>
 
-                <input id="WriteMessage" type="submit" formaction="/send-message"  formmethod="get" class="watch-travel-agency-other-submit" rows="2" value="Написати повідомлення" >
+        </div>
+
+        <div class="block-right width-right">
+            <div id="SortByBlock" class="box-sort">
+                <div style="  display: flex;">
+                    <h6>Сортувати по:</h6>
+                </div>
+
+                <select id="selectSort" name="SortBy" class="box-filter">
+                    <option id="sortByNameMessage">Навзі повідомлення</option>
+                    <option id="sortByNameSendler">Імені відправника</option>
+                    <option id="sortByRole">Ролі</option>
+                    <option id="sortByDateSend">Даті відправлення</option>
+                    <option id="sortByStateMessage">Стану</option>
+
+                </select>
+
+                <div>
+                    <button id="sortDescending" class="button-sort">\/</button>
+                    <button id="sortAscending" class="button-sort button-sort-used">/\</button>
+                </div>
             </div>
-    
-            <div th:if="${haveButton}">
-                <input id="MakeTheService" type="submit"  class="watch-travel-agency-other-submit" rows="2" th:value="${nameButton}" >
-            </div>
-    
-        </form>
+            <script th:src="@{js/sort_messages.js}"></script>
+            <br>
+            <form th:action="@{${urlChoose}}" class="watch-travel-agency width-right">
+                <div>
+                    <h2 class="watch-user-choose-see"><b>Перегляд</b></h2>
+
+                    <div style="display: flex;align-items: flex-start;margin-left: 4%">
+                        <input type="submit" class="watch-travel-agency-choose-servise-submit wtacss-right" th:value="${nameChoose}" >
+                        <input type="button" class="watch-travel-agency-choose-servise-submit wtacss-left wtacss-not-work" value="Повідомлень">
+                    </div>
+
+
+                </div>
+
+                <div>
+                    <input id="ChangeProfile" type="submit"  class="watch-travel-agency-other-submit" rows="2" value="Редагувати профіль" >
+                </div>
+
+                <div>
+
+                    <input id="WriteMessage" type="submit" formaction="/send-message"  formmethod="get" class="watch-travel-agency-other-submit" rows="2" value="Написати повідомлення" >
+                </div>
+
+                <div th:if="${haveButton}">
+                    <input id="MakeTheService" type="submit"  class="watch-travel-agency-other-submit" rows="2" th:value="${nameButton}" >
+                </div>
+
+            </form>
+        </div>
+
     </div>
 
 </body>

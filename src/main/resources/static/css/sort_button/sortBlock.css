@@ -1,0 +1,56 @@
+.button-sort{
+    width: 80px;
+    height: 40px;
+
+    border-radius: 5px;
+    border: 1px solid #2759ff;
+    color:#2759ff;
+}
+
+.button-sort-used{
+    background-color:#2759ff;
+    color:#ffffff;
+}
+
+.box-filter{
+    box-sizing: border-box;
+    width: 175px;
+    height: 66px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    background: rgba(102, 255, 218, 0.9);
+    border: 3px solid #FFFFFF;
+    border-radius: 15px;
+}
+
+.box-sort{
+
+    height: 150px;
+
+    background: rgba(242, 245, 245, 0.93);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+
+.width-right {
+    width: 280px;
+}
+
+.block-right{
+    display: flex;
+    flex-direction: column;
+}
+
+.hidden-text{
+    width: 0px;
+    height: 0px;
+    font-size: 0px;
+}
