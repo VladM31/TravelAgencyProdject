@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
-public  class User implements UserDetails {
+public class User implements UserDetails {
     private Long id;
     private String number;
     private String email;

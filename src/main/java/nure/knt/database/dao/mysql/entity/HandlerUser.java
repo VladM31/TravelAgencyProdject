@@ -19,12 +19,7 @@ import java.util.function.BiConsumer;
 @Component
 public class HandlerUser {
 
-    private static WorkWithCountries countries;
 
-    @Autowired
-    public static void setCountries(WorkWithCountries countries) {
-        HandlerUser.countries = countries;
-    }
 
     public static <U extends User> void resultSetToUserCore(ResultSet resultSet, U user) throws SQLException {
         user.setId(resultSet.getLong("user_pk"));
@@ -106,7 +101,7 @@ public class HandlerUser {
             preStat.setBoolean(ACTIVE_USER_POSITION_FOR_INSERT,user.isActive());
             preStat.setTimestamp(DATE_REGISTRATION_USER_POSITION_FOR_INSERT, Timestamp.valueOf(user.getDateRegistration()));
             preStat.setInt(ROLE_USER_POSITION_FOR_INSERT,user.getRole().getId());
-            preStat.setLong(COUNTRY_USER_POSITION_FOR_INSERT,countries.getIdByCountry(user.getCountry()));
+            preStat.setLong(COUNTRY_USER_POSITION_FOR_INSERT,HandlerSqlDAO.getCountries().getIdByCountry(user.getCountry()));
             preStat.setInt(TYPE_STATE_USER_POSITION_FOR_INSERT,user.getTypeState().getId());
         } catch (SQLException e) {
             e.printStackTrace();

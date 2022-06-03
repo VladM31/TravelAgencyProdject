@@ -22,7 +22,7 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
 
     private static long id;
 
-    private static final String SELECT_MAX_ID_MESSAGE = "select max(id) as max_id from message;";
+    private static final String SELECT_MAX_ID_MESSAGE = "SELECT max(id) AS max_id FROM message;";
     @PostConstruct
     public void init(){
         try(java.sql.Statement statement = conn.getSqlStatement();
@@ -54,7 +54,6 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
             "JOIN user ON user.Id=user_message.from_whom_id " +
             "JOIN role ON user.role_id = role.id " +
             "WHERE user_message.to_whom_id = ? ;";
-    private static final int POSITION_TO_WHOM_FOR_SELECT = 1;
 
     @Override
     public List<MessageShortData> findMessageShortDataAllByToWhom(long toWhom) {
@@ -112,7 +111,6 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
 
     private static final String WHERE_SEND_DATE_BEFORE = " AND message.date_registration <= ? ";
 
-    private static final int POSITION_SEND_DATE_BEFORE = 2;
 
     @Override
     public List<MessageShortData> findMSDByToWhomAndSendDateBeforeAndEquals(long toWhom, LocalDateTime sendDateEnd) {

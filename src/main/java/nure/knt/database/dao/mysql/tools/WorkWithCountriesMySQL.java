@@ -59,4 +59,9 @@ public class WorkWithCountriesMySQL implements WorkWithCountries {
         return WorkWithCountries.NAME_NOT_FOUND;
     }
 
+    @Override
+    public String getCountryById(int id) {
+        return countries[id-1];
+    }
+
 }

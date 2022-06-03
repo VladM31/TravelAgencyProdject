@@ -1,8 +1,13 @@
 package nure.knt.database.dao;
 
+import nure.knt.database.dao.mysql.entity.HandlerUser;
 import nure.knt.database.idao.IConnectorGetter;
+import nure.knt.tools.WorkWithCountries;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -12,11 +17,23 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+@Component
 public class HandlerSqlDAO {
+
+    private static WorkWithCountries countries;
+
+    public static WorkWithCountries getCountries() {
+        return countries;
+    }
+
+    @Autowired
+    protected static void setCountries(WorkWithCountries countries) {
+        HandlerSqlDAO.countries = countries;
+    }
 
     public static final String SORT_TO_DATE_REGISTRATION = " ORDER BY date_registration ASC;";
     public static final int EMPTY_CAPACITY = 0;
-    public static final String REPLACE_SYMBOL = "?#!@#@_REPLACE_ME_@#@!#?";
+    public static final String REPLACE_SYMBOL = "!?#!@#@_REPLACE_ME_@#@!#?!";
     public static final Consumer<PreparedStatement> DEFAULT_PARAMETER = (PreparedStatement p) -> {};
 
     public static String containingString(String str){
@@ -32,8 +49,8 @@ public class HandlerSqlDAO {
         return true;
     }
 
-    public static String setInInsideScript(String script,Iterable<?> ids){
-        return script.replace(HandlerSqlDAO.REPLACE_SYMBOL,HandlerSqlDAO.symbolsInDependsFromSize(ids));
+    public static @NotNull String setInInsideScript(@NonNull String script, Iterable<?> ids){
+        return script.replaceFirst(HandlerSqlDAO.REPLACE_SYMBOL,HandlerSqlDAO.symbolsInDependsFromSize(ids));
     }
 
     public static String symbolsInDependsFromSize(Iterable<?> ids){
@@ -85,7 +102,7 @@ public class HandlerSqlDAO {
         }
     }
 
-    public static final int START_POSITION = 0;
+    private static final int START_POSITION = 0;
     public static <T> List<T> useSelectScript(IConnectorGetter connectorGetter, final String script,
                                               Function<ResultSet,T> getObject, @NonNull Object ...array){
         try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
@@ -135,6 +152,7 @@ public class HandlerSqlDAO {
             throw new SQLException("substituteVariable: object is " + object.getClass().getName());
         }
     }
+
     @Nullable
     public static <T> T useSelectScriptAndGetOneObject(IConnectorGetter connectorGetter, final String script, Consumer<java.sql.PreparedStatement> extraSet, Function<ResultSet, T> getObject){
         try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {

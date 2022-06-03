@@ -192,9 +192,6 @@ class HendlerIMCForTravelAgency{
         model.addAttribute(ATTRIBUTE_RATING_STARS,TravelAgency.getRetingStars(travelAgency.getRating()));
     }
 
-
-
-
 }
 
 class HendlerIMCForCourier {
