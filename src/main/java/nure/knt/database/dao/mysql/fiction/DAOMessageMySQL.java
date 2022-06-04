@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Component("idaoMessage")
+@Component("DAO_MySQL_Message")
 public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
 
     private static long id;

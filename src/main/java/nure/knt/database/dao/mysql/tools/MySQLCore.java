@@ -4,7 +4,6 @@ import nure.knt.database.idao.IConnectorGetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("My_SQL_Core")
 public class MySQLCore {
     protected IConnectorGetter conn;
 

@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -27,7 +28,7 @@ public class HandlerSqlDAO {
     }
 
     @Autowired
-    protected static void setCountries(WorkWithCountries countries) {
+    public void setCountries(WorkWithCountries countries) {
         HandlerSqlDAO.countries = countries;
     }
 
@@ -188,5 +189,26 @@ public class HandlerSqlDAO {
         return null;
     }
 
+    // new 03.06.2022
+    public static final int[] ERROR_UPDATE = new int[]{Integer.MIN_VALUE,Integer.MAX_VALUE};
+    public static final boolean ERROR_BOOLEAN_ANSWER = false;
+    public static final boolean HAVE_NO_ERROR = true;
+
+    public static <T> int[] updateById(IConnectorGetter connectorGetter, final String script, Iterable<T> collection, BiFunction<PreparedStatement,T,Boolean> setField){
+
+        try(PreparedStatement statement = connectorGetter.getSqlPreparedStatement(script)){
+
+            for (T entity: collection) {
+                if(setField.apply(statement,entity) == ERROR_BOOLEAN_ANSWER){
+                    return ERROR_UPDATE;
+                }
+                statement.addBatch();
+            }
+            return statement.executeBatch();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ERROR_UPDATE;
+    }
 
 }

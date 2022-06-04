@@ -18,7 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-@Component("DAOOrderForCustomer")
+@Component("DAO_MySQL_Order_For_Customer")
 public class DAOOrderForCustomerMySQL extends MySQLCore implements IDAOOrderFromTourAdCustomer<OrderFromTourAdForCustomer> {
 
     private static final String SELECT_ALL = "select \n" +

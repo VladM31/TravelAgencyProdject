@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Component("DAO_COURIER_MYSQL")
+@Component("DAO_MySQL_Courier")
 public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier> {
 
     @Override

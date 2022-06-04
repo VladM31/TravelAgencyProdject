@@ -6,4 +6,5 @@
 
 
     <context:component-scan base-package="nure.knt.database"/>
+    <context:property-placeholder location="classpath:travelAgency.properties"/>
 </beans>

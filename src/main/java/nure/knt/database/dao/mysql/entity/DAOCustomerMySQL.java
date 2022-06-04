@@ -4,6 +4,7 @@ import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
 import nure.knt.database.idao.entity.IDAOCustomerSQL;
 import static nure.knt.database.dao.HandlerSqlDAO.*;
+import static nure.knt.database.dao.HandlerSqlDAO.useSelectScriptAndGetOneObject;
 
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.important.Customer;
@@ -16,7 +17,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Component("DAO_CUSTOMER_MYSQL")
+@Component("DAO_MySQL_Customer")
 public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Customer> {
 
 
@@ -101,7 +102,7 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
             " left join country on user.country_id = country.id " +
             " WHERE user.type_state_id = 20 ;";
 
-    private static final String SORT_TO_DATE_REGISTRATION = "  ORDER BY date_registration ASC;";
+    private static final String SORT_TO_DATE_REGISTRATION = "  ORDER BY date_registration DESC;";
 
     @Override
     public List<Customer> findAll() {
@@ -121,24 +122,12 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
         return null;
     }
 
-    private static final String UPDATE_ITERABLE_BY_ID = "UPDATE customer left join user on customer.user_id = user.id  SET email=? WHERE customer.id = ?;";
+    private static final String UPDATE_ITERABLE_BY_ID = "UPDATE customer left join user on customer.user_id = user.id  " +
+            "SET number = ?, email = ?,username = ?,password = ?,name = ?,active = ?,date_registration = ?,role_id = ?,country_id = ?,type_state_id = ?,male = ? WHERE user.id = ?;";
 
     @Override
     public int[] updateAllById(Iterable<Customer> entities) {
-        try(PreparedStatement statement= super.conn.getSqlPreparedStatement(UPDATE_ITERABLE_BY_ID)) {
-
-            for(Customer entity:entities){
-                statement.setString(1,entity.getEmail());
-                statement.setLong(2,entity.getCustomerId());
-                statement.addBatch();
-            }
-
-            return statement.executeBatch();
-
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return new int[]{-1};
+        return HandlerSqlDAO.updateById(super.conn,UPDATE_ITERABLE_BY_ID,entities,HandlerCustomer::customerToMySqlUpdateScript);
     }
 
 
@@ -197,14 +186,24 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
                 HandlerCustomer::resultSetToCustomer,username);
     }
 
+    private static final String WHERE_NUMBER_CONTAINING = " AND user.number LIKE ? ";
+
     @Override
     public List<Customer> findByNumberContaining(String number) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,
+                WHERE_NUMBER_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerCustomer::resultSetToCustomer,
+                HandlerSqlDAO.containingString(number));
     }
+
+    private static final String WHERE_USERNAME_CONTAINING = " AND user.username LIKE ? ";
 
     @Override
     public List<Customer> findByUsernameContaining(String username) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,
+                        WHERE_USERNAME_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerCustomer::resultSetToCustomer,
+                HandlerSqlDAO.containingString(username));
     }
 
     private static final String WHERE_PASSWORD_IS = " AND user.password = ? ";
@@ -284,5 +283,26 @@ class HandlerCustomer {
             e.printStackTrace();
         }
         return customer;
+    }
+
+    private static int POSITION_MALE_FOR_UPDATE = 11;
+    private static int POSITION_USER_ID_FOR_UPDATE = 12;
+
+
+    static boolean customerToMySqlUpdateScript(PreparedStatement preStat, Customer user){
+
+        if(HandlerUser.userToMySqlScript(preStat,user) == ERROR_BOOLEAN_ANSWER){
+            return ERROR_BOOLEAN_ANSWER;
+        }
+
+        try {
+            preStat.setBoolean(POSITION_MALE_FOR_UPDATE,user.isMale());
+            preStat.setLong(POSITION_USER_ID_FOR_UPDATE,user.getId());
+            return HAVE_NO_ERROR;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ERROR_BOOLEAN_ANSWER;
     }
 }

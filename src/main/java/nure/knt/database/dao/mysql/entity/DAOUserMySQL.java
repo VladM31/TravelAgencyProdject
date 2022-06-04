@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Component("DAO_USER_MYSQL")
+@Component("DAO_MySQL_User")
 public class DAOUserMySQL extends MySQLCore implements IDAOUserSQL<User> {
 
     @Override

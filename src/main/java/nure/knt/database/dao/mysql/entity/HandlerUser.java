@@ -16,7 +16,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.function.BiConsumer;
 
-@Component
 public class HandlerUser {
 
 
@@ -51,8 +50,8 @@ public class HandlerUser {
                     preStat.addBatch();
                 }
 
-                if(HandlerSqlDAO.arrayHasOnlyOne(preStat.executeBatch()) == HandlerUser.ERROR_BOOLEAN_ANSWER){
-                    return HandlerUser.ERROR_BOOLEAN_ANSWER;
+                if(HandlerSqlDAO.arrayHasOnlyOne(preStat.executeBatch()) == HandlerSqlDAO.ERROR_BOOLEAN_ANSWER){
+                    return HandlerSqlDAO.ERROR_BOOLEAN_ANSWER;
                 }
             }finally {
             }
@@ -75,7 +74,7 @@ public class HandlerUser {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return HandlerUser.ERROR_BOOLEAN_ANSWER;
+            return HandlerSqlDAO.ERROR_BOOLEAN_ANSWER;
         }
 
     }
@@ -90,8 +89,8 @@ public class HandlerUser {
     private static final int COUNTRY_USER_POSITION_FOR_INSERT = 9;
     private static final int TYPE_STATE_USER_POSITION_FOR_INSERT = 10;
 
-    public static final boolean ERROR_BOOLEAN_ANSWER = false;
-    static void userToMySqlScript(PreparedStatement preStat, User user){
+
+    static boolean userToMySqlScript(PreparedStatement preStat, User user){
         try {
             preStat.setString(NUMBER_USER_POSITION_FOR_INSERT,user.getNumber());
             preStat.setString(EMAIL_USER_POSITION_FOR_INSERT,user.getEmail());
@@ -103,9 +102,11 @@ public class HandlerUser {
             preStat.setInt(ROLE_USER_POSITION_FOR_INSERT,user.getRole().getId());
             preStat.setLong(COUNTRY_USER_POSITION_FOR_INSERT,HandlerSqlDAO.getCountries().getIdByCountry(user.getCountry()));
             preStat.setInt(TYPE_STATE_USER_POSITION_FOR_INSERT,user.getTypeState().getId());
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
 
 

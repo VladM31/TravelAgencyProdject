@@ -3,14 +3,17 @@ package nure.knt.database.dao.mysql.tools;
 import nure.knt.database.idao.IConnectorGetter;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-@Component("Countries_MySQL")
+@Component("MySQL Countries")
+@Scope("singleton")
 public class WorkWithCountriesMySQL implements WorkWithCountries {
 
     private String[] countries;
@@ -64,4 +67,10 @@ public class WorkWithCountriesMySQL implements WorkWithCountries {
         return countries[id-1];
     }
 
+    @Override
+    public String toString() {
+        return "WorkWithCountriesMySQL{" +
+                "countries=" + Arrays.toString(countries) +
+                '}';
+    }
 }

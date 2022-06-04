@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Component("DA0_TRAVEL_AGENCY_MYSQL")
+@Component("DA0_MySQL_Travel_Agency")
 public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencySQL<TravelAgency> {
 
     @Override

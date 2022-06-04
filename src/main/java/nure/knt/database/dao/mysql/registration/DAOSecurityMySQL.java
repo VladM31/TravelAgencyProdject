@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.function.Function;
 
-@Component("DA0_SECURITY_MYSQL")
+@Component("DA0_MySQL_Security")
 public class DAOSecurityMySQL implements IDAOSecurity {
 
     private List<IDAOUserSQL> daoUsers;
