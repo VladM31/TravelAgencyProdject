@@ -19,18 +19,41 @@ import java.util.List;
 @Component("DAO_MySQL_Courier")
 public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier> {
 
+    private static final String WHERE_ALL_ID = " AND user.id in ("+HandlerSqlDAO.REPLACE_SYMBOL+") ";
     @Override
     public List<Courier> findAllById(Iterable<Long> ids) {
-        return null;
+        String scriptId = HandlerSqlDAO.setInInsideScript(HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, WHERE_ALL_ID, HandlerSqlDAO.SORT_TO_DATE_REGISTRATION), ids);
+        return HandlerSqlDAO.useSelectScript(super.conn, scriptId, p -> {
+            int index = 0;
+            try {
+                for (long id : ids) {
+                    p.setLong(++index, id);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }, HandlerDAOCourier::resultSetToCourier);
     }
 
+    private static final String WHERE_ID_IS = " AND user.id = ? ";
     @Override
     public Courier findOneById(Long id) {
-        return null;
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, WHERE_ID_IS, HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier, id);
     }
 
+    private static final String COURIER_SIZE = "SELECT COUNT(*) AS size_courier FROM courier;";
     @Override
     public long size() {
+        try(java.sql.Statement statement = conn.getSqlStatement();
+            ResultSet resultSet = statement.executeQuery(COURIER_SIZE)){
+            if(resultSet.next()) {
+                return resultSet.getLong("size_courier");
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
         return 0;
     }
 
@@ -69,89 +92,141 @@ public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier
         return 0;
     }
 
+    private static final String CITY_CONTAINING_IS = " AND courier.address LIKE ? ";
     @Override
     public List<Courier> findByCityContaining(String city) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, CITY_CONTAINING_IS, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                HandlerSqlDAO.containingString(city));
     }
 
+    private static final String ADDRESS_CONTAINING_IS = " AND courier.address LIKE ? ";
     @Override
     public List<Courier> findByAddressContaining(String address) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, ADDRESS_CONTAINING_IS, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                HandlerSqlDAO.containingString(address));
     }
 
+    private static final String BIRTH_DATE_BETWEEN = " AND courier.date_birth BETWEEN ? AND ? ";
     @Override
     public List<Courier> findByDateBirthBetween(LocalDate start, LocalDate end) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, BIRTH_DATE_BETWEEN, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                start, end);
     }
 
+    private static final String DOES_HE_WANT = " AND courier.does_he_want = ? ";
     @Override
     public List<Courier> findByDoesHeWant(boolean doesHeWant) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, DOES_HE_WANT, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                doesHeWant);
     }
 
+    private static final String COURIER_ID_IS = " AND courier.id = ? ";
     @Override
     public Courier findByIdCourier(Long idCourier) {
-        return null;
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, COURIER_ID_IS, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                idCourier);
     }
 
+    private static final String NUMBER_IS = " AND user.number = ? ";
     @Override
     public Courier findByNumber(String number) {
-        return null;
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, NUMBER_IS, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                number);
     }
 
+    private static final String EMAIL_IS = " AND user.email = ? ";
     @Override
     public Courier findByEmail(String email) {
-        return null;
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, EMAIL_IS, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                email);
     }
 
+    private static final String NUMBER_CONTAINING = " AND user.number LIKE ? ";
     @Override
     public List<Courier> findByNumberContaining(String number) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, NUMBER_CONTAINING, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                HandlerSqlDAO.containingString(number));
     }
 
+    private static final String USERNAME_CONTAINING = " AND user.username LIKE ? ";
     @Override
     public List<Courier> findByUsernameContaining(String username) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, USERNAME_CONTAINING, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                HandlerSqlDAO.containingString(username));
     }
 
+    private static final String EMAIL_CONTAINING = " AND user.email LIKE ? ";
     @Override
     public List<Courier> findByEmailContaining(String start) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, EMAIL_CONTAINING, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                HandlerSqlDAO.containingString(start));
     }
 
+    private static final String PASSWORD_IS = " AND user.password = ? ";
     @Override
     public List<Courier> findByPassword(String password) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, PASSWORD_IS, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                password);
     }
 
+    private static final String REG_DATE_BETWEEN = " AND user.date_registration BETWEEN ? AND ? ";
     @Override
     public List<Courier> findByDateRegistrationBetween(LocalDateTime start, LocalDateTime end) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, REG_DATE_BETWEEN, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                start, end);
     }
 
+    private static final String ACTIVE_IS = " AND user.active = ? ";
     @Override
     public List<Courier> findByActive(boolean active) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, ACTIVE_IS, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                active);
     }
 
+    private static final String ROLE_IS = " AND user.role_id = ? ";
     @Override
     public List<Courier> findByRole(Role role) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, ROLE_IS, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                role.getId());
     }
 
+    private static final String TYPE_STATE_IS = " AND user.type_state_id = ? ";
     @Override
     public List<Courier> findByTypeState(TypeState typeState) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, TYPE_STATE_IS, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                typeState.getId());
     }
 
+    private static final String COUNTRY_IS = " AND country.name = ? ";
     @Override
     public List<Courier> findByCountry(String country) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, COUNTRY_IS, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                country);
     }
+
+    private static final String NAME_CONTAINING = " AND user.name LIKE ? ";
 
     @Override
     public List<Courier> findByNameContaining(String name) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, NAME_CONTAINING, SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,
+                HandlerSqlDAO.containingString(name));
     }
 
     private static final String SELECT_ALL_COURIER = "select  " +
@@ -172,7 +247,7 @@ public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier
     @Override
     public List<Courier> findAll() {
         return HandlerSqlDAO.useSelectScript(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER,SORT_TO_DATE_REGISTRATION),
-                HandlerDAOCourier::resultSetToCustomer);
+                HandlerDAOCourier::resultSetToCourier);
     }
 
     private static final String USERNAME_IS = " AND user.username = ? ";
@@ -180,7 +255,7 @@ public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier
     @Override
     public Courier findByUsername(String username) {
         return HandlerSqlDAO.useSelectScriptAndGetOneObject(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER,USERNAME_IS,SORT_TO_DATE_REGISTRATION),
-                HandlerDAOCourier::resultSetToCustomer,username);
+                HandlerDAOCourier::resultSetToCourier,username);
     }
 
 
@@ -223,7 +298,7 @@ class HandlerDAOCourier {
         }
     }
 
-    public static Courier resultSetToCustomer(ResultSet resultSet){
+    public static Courier resultSetToCourier(ResultSet resultSet){
         Courier courier = new Courier();
         courier.setTypeState(TypeState.REGISTERED);
         courier.setRole(Role.COURIER);
