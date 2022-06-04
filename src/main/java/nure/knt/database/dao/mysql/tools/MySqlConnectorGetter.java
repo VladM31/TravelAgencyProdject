@@ -19,9 +19,9 @@ public class MySqlConnectorGetter implements IConnectorGetter{
     private Connection conn;
 
     @Autowired
-    public MySqlConnectorGetter(@Value("mysql.connector.url") String url,@Value("mysql.connector.user") String user,@Value("mysql.connector.password") String password){
+    public MySqlConnectorGetter(@Value("${mysql.connector.url}") String url,@Value("${mysql.connector.user}") String user,@Value("${mysql.connector.password}") String password){
         try {
-            this.conn = DriverManager.getConnection(MyConstants.URL, MyConstants.MYSQL_USER, MyConstants.MYSQL_PASSWORD);
+            this.conn = DriverManager.getConnection(url, user,password);
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(-1);
