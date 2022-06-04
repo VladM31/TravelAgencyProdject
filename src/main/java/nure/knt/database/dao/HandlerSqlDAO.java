@@ -101,6 +101,8 @@ public class HandlerSqlDAO {
             e.printStackTrace();
             return new ArrayList<>(HandlerSqlDAO.EMPTY_CAPACITY);
         }
+
+
     }
 
     private static final int START_POSITION = 0;
