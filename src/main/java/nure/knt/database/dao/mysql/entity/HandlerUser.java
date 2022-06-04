@@ -109,6 +109,27 @@ public class HandlerUser {
         return false;
     }
 
+}
 
+class HandlerUserPartScript{
+    public static final String AND = " AND ";
+    public static final String OR = " OR ";
+    public static final String WHERE_USER_ID_IS = " user.id = ? ";
+    public static final String WHERE_NAME_COUNTRY_IS = " country.name = ? ";
+    public static final String WHERE_ROLE_ID_IS = " user.role_id = ? ";
+    public static final String WHERE_ACTIVE_IS = " user.active = ? ";
+    public static final String WHERE_DATE_REGISTRATION_BETWEEN = " user.date_registration BETWEEN ? AND ?";
+    public static final String WHERE_PASSWORD_IS = " user.password = ? ";
+
+    public static final String WHERE_USERNAME_IS = " user.username = ? ";
+    public static final String WHERE_EMAIL_IS = " user.email = ? ";
+    public static final String WHERE_NUMBER_IS = " user.number = ? ";
+
+    public static final String WHERE_USERNAME_CONTAINING = " user.username LIKE ? ";
+    public static final String WHERE_NUMBER_CONTAINING = " user.number LIKE ? ";
+    public static final String WHERE_EMAIL_CONTAINING = " user.email LIKE ? ";
+    public static final String WHERE_NAME_CONTAINING = " user.name LIKE ? ";
+
+    public static final String WHERE_USER_ID_IN = " user.id IN(" + HandlerSqlDAO.REPLACE_SYMBOL + ") ";
 
 }
