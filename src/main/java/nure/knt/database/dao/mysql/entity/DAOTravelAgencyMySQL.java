@@ -5,6 +5,7 @@ import nure.knt.database.dao.mysql.tools.MySQLCore;
 import nure.knt.database.idao.entity.IDAOTravelAgencySQL;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
+import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.TravelAgency;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
@@ -15,17 +16,22 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static nure.knt.database.dao.HandlerSqlDAO.*;
+import static nure.knt.database.dao.HandlerSqlDAO.ERROR_BOOLEAN_ANSWER;
+
 @Component("DA0_MySQL_Travel_Agency")
 public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencySQL<TravelAgency> {
 
 
+    private static final String WHERE_ID_IS = " AND user.id = ? ";
 
     @Override
     public List<TravelAgency> findAllById(Iterable<Long> ids) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                WHERE_ID_IS,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION), HandlerDAOTAMYSQL::resultSetToTravelAgency,ids);
+
     }
 
-    private static final String WHERE_ID_IS = " AND user.id = ? ";
 
     @Override
     public TravelAgency findOneById(Long id) {
@@ -33,12 +39,20 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
                 HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY, WHERE_ID_IS, HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
                 HandlerDAOTAMYSQL::resultSetToTravelAgency, id);
 
-
     }
+
+    private static final String SELECT_COUNT = "SELECT COUNT(*) AS size_travel_agency FROM travel_agency;";
 
     @Override
     public long size() {
-        return 0;
+        try(java.sql.Statement statement = this.conn.getSqlStatement();
+            ResultSet resultSet = statement.executeQuery(SELECT_COUNT)){
+            resultSet.next();
+            return resultSet.getLong("size_travel_agency");
+        }catch(SQLException e){
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override
@@ -57,9 +71,7 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
     }
 
     @Override
-    public int deleteById(Long id) {
-        return 0;
-    }
+    public int deleteById(Long id) { return 0;   }
 
     @Override
     public int deleteAll() {
@@ -71,10 +83,22 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
         return false;
     }
 
+
+
+
+    private static final String UPDATE_ITERABLE_BY_ID = "UPDATE travel_agency left join user on travel_agency.user_id = user.id  " +
+            "SET number = ?, email = ?,username = ?,password = ?,name = ?,active = ?,date_registration = ?,role_id = ?," +
+            "country_id = ?,type_state_id = ?,rating = ?,kved = ?," +
+            "egrpoy_or_rnykpn = ?,is_egrpoy = ?,address = ?," +
+            "full_name_director = ?,describe_agency = ?,url_photo = ? WHERE user.id = ?;";
+
+
+
     @Override
     public int[] updateAllById(Iterable<TravelAgency> entities) {
-        return new int[0];
+        return HandlerSqlDAO.updateById(super.conn,UPDATE_ITERABLE_BY_ID,entities,HandlerDAOTAMYSQL::travelAgencyToMySqlUpdateScript);
     }
+
 
     @Override
     public int updateOneById(TravelAgency entity) {
@@ -215,6 +239,10 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
     }
 
 
+    private static final String DELETE_TRAVEL_AGENCY = "delete " +
+            "from travel_agency;";
+
+
     private static final String SELECT_TRAVEL_AGENCY = "select " +
             "user.id AS user_pk, " +
             "travel_agency.id AS travel_agency_pk," +
@@ -284,6 +312,44 @@ class HandlerDAOTAMYSQL{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+
+
+    private static int POSITION_RATING_FOR_UPDATE = 11;
+    private static int POSITION_KVED_FOR_UPDATE = 12;
+    private static int POSITION_EGRPOY_OR_MYKPN_FOR_UPDATE = 13;
+    private static int POSITION_IS_EGRPOY_FOR_UPDATE = 14;
+    private static int POSITION_ADDRESS_FOR_UPDATE = 15;
+    private static int POSITION_FULL_NAME_DIRECTOR_FOR_UPDATE = 16;
+    private static int POSITION_DESCRIBE_AGENCY_FOR_UPDATE = 17;
+    private static int POSITION_URL_PHOTO_FOR_UPDATE = 18;
+    private static int POSITION_USER_ID_FOR_UPDATE = 19;
+
+
+    static boolean travelAgencyToMySqlUpdateScript(PreparedStatement preStat, TravelAgency travelAgency){
+
+        if(HandlerUser.userToMySqlScript(preStat,travelAgency) == ERROR_BOOLEAN_ANSWER){
+            return ERROR_BOOLEAN_ANSWER;
+        }
+
+        try {
+            preStat.setFloat(POSITION_RATING_FOR_UPDATE,travelAgency.getRating());
+            preStat.setString(POSITION_KVED_FOR_UPDATE,travelAgency.getKved());
+            preStat.setLong(POSITION_EGRPOY_OR_MYKPN_FOR_UPDATE, travelAgency.getEgrpoyOrRnekpn());
+            preStat.setBoolean(POSITION_IS_EGRPOY_FOR_UPDATE, travelAgency.isEgrpoy());
+            preStat.setString(POSITION_ADDRESS_FOR_UPDATE, travelAgency.getAddress());
+            preStat.setString(POSITION_FULL_NAME_DIRECTOR_FOR_UPDATE, travelAgency.getFullNameDirector());
+            preStat.setString(POSITION_DESCRIBE_AGENCY_FOR_UPDATE, travelAgency.getDescribeAgency());
+            preStat.setString(POSITION_URL_PHOTO_FOR_UPDATE, travelAgency.getUrlPhoto());
+            preStat.setLong(POSITION_USER_ID_FOR_UPDATE, travelAgency.getId());
+            return HAVE_NO_ERROR;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ERROR_BOOLEAN_ANSWER;
     }
 
 
