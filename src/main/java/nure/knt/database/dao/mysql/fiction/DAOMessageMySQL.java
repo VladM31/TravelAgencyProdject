@@ -27,11 +27,16 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
     public void init(){
         try(java.sql.Statement statement = conn.getSqlStatement();
             java.sql.ResultSet resultSet = statement.executeQuery(SELECT_MAX_ID_MESSAGE)) {
-            resultSet.next();
-            id = resultSet.getLong("max_id");
+
+            if(resultSet.next()){
+                id = resultSet.getLong("max_id");
+            }else {
+               // todo
+            }
+
+
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
         }
     }
 
@@ -146,8 +151,6 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
                 if(resultSet.next()){
                         return resultSet.getString("describe_message");
                 }
-            }
-            finally{
             }
 
         } catch (SQLException e) {

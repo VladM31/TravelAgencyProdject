@@ -104,5 +104,19 @@ public class FilterHendler {
         return LocalDateTime.parse(dateString,STRING_TO_DATE_TIME_FORMAT);
     }
 
+
+    public static <T> List<T> checkTwoBooleanForOneState(boolean isState, boolean isNotState, List<T> list,Function<Boolean,List<T>> workWithDatabase,Consumer<Boolean> elseDidNotWorkWithDatabase){
+
+        if (isState == isNotState ){
+            return list;
+        }
+
+        if(list == LIST_IS_NOT_CREATED_FROM_DATABASE){
+            return workWithDatabase.apply(isState);
+        }
+
+        elseDidNotWorkWithDatabase.accept(isState);
+        return list;
+    }
 }
 

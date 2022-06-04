@@ -108,13 +108,9 @@ public class MessageShowFilter {
             list = idaoMessage.findMSDByToWhomAndRole(toWhom,this.byRole);
         }
 
-        if (this.byRead != this.byNotRead){
-            if(list == null){
-                list = idaoMessage.findMSDByToWhomAndItWasRead(toWhom,this.byRead);
-            }else{
-                filterList.add((msd) -> msd.isItWasRead() == this.byRead);
-            }
-        }
+        list = FilterHendler.checkTwoBooleanForOneState(this.byRead,this.byNotRead,list,
+                (state) -> idaoMessage.findMSDByToWhomAndItWasRead(toWhom,state),
+                (state) -> filterList.add(msd -> msd.isItWasRead() == state.booleanValue() ));
 
         list = FilterHendler.checkString(this.byNameSendler,list,
                 (nameSendler)-> idaoMessage.findMSDByToWhomAndSendlerNameContaining(toWhom,nameSendler),
