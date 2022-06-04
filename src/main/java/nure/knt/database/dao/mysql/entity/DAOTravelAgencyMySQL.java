@@ -157,6 +157,8 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
         return null;
     }
 
+
+
     private static final String LIMIT_IS = " LIMIT ? ;";
     private static final String SORT_BY_RATING = "  ORDER BY rating DESC ";
 
@@ -195,49 +197,100 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
                 HandlerSqlDAO.containingString(number));
     }
 
+
+    private static final String WHERE_USER_NAME_CONTAINING = " AND user.name LIKE ? ";
+
     @Override
     public List<TravelAgency> findByUsernameContaining(String username) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_USER_NAME_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,
+                HandlerSqlDAO.containingString(username));
     }
+
+
+    private static final String WHERE_EMAIL_CONTAINING = " AND user.email LIKE ? ";
 
     @Override
     public List<TravelAgency> findByEmailContaining(String start) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_EMAIL_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,
+                HandlerSqlDAO.containingString(start));
     }
+
+
+    private static final String WHERE_PASSWORD_IS = " AND user.password = ? ";
+
 
     @Override
     public List<TravelAgency> findByPassword(String password) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_PASSWORD_IS,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,password);
     }
+
+
+    private static final String WHERE_DATE_REGISTRATION_BETWEEN = " AND user.date_registration BETWEEN ? AND ? ";
 
     @Override
     public List<TravelAgency> findByDateRegistrationBetween(LocalDateTime start, LocalDateTime end) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_DATE_REGISTRATION_BETWEEN,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,start,end);
     }
+
+
+
+
+    private static final String WHERE_ACTIVE_IS = " AND user.active = ? ";
 
     @Override
     public List<TravelAgency> findByActive(boolean active) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_ACTIVE_IS,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,active);
     }
+
+
+
+    private static final String WHERE_ROLE_IS = " AND user.role_id = ? ";
 
     @Override
     public List<TravelAgency> findByRole(Role role) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_ROLE_IS,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,role.getId());
     }
+
+
 
     @Override
     public List<TravelAgency> findByTypeState(TypeState typeState) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY.replace("20", "?"),SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,typeState.getId());
     }
+
+
+
+    private static final String WHERE_COUNTRY_IS = " AND country.name = ? ";
 
     @Override
     public List<TravelAgency> findByCountry(String country) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_COUNTRY_IS,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,country);
     }
+
+
+    private static final String WHERE_NAME_CONTAINING = " AND user.name LIKE ? ";
 
     @Override
     public List<TravelAgency> findByNameContaining(String name) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_NAME_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,
+                HandlerSqlDAO.containingString(name));
     }
 
     private static final String INSERT_TRAVEL_AGENCY =
@@ -286,9 +339,25 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
     }
 
 
+
+
+
+    private static final String UPDATE_TYPE_STATE_BY_ID = "UPDATE travel_agency left join user on travel_agency.user_id = user.id  " +
+            "SET type_state_id = ? WHERE user.id = ?;";
+
+
+
     @Override
     public boolean updateTypeStateById(Long id, TypeState typeState) {
-        return false;
+        try(PreparedStatement preStatement = super.conn.getSqlPreparedStatement(UPDATE_TYPE_STATE_BY_ID)){
+            preStatement.setInt(1,typeState.getId());
+            preStatement.setLong(2, id);
+            return preStatement.executeUpdate()!=0;
+
+        }catch(Exception exc){
+            exc.printStackTrace();
+        }
+        return ERROR_BOOLEAN_ANSWER;
     }
 }
 
