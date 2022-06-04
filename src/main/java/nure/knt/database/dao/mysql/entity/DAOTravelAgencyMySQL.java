@@ -102,8 +102,10 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
 
     @Override
     public int updateOneById(TravelAgency entity) {
-        return 0;
+        return this.updateAllById(List.of(entity))[0];
     }
+
+
 
     @Override
     public List<TravelAgency> findByTravelAgencyIdIn(Iterable<Long> ids) {
@@ -164,19 +166,33 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
                 HandlerDAOTAMYSQL::resultSetToTravelAgency,limit);
     }
 
+
+    private static final String WHERE_NUMBER_IS = " AND user.number = ? ";
+
     @Override
     public TravelAgency findByNumber(String number) {
-        return null;
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,WHERE_NUMBER_IS,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,number);
     }
+
+
+    private static final String WHERE_EMAIL_IS = " AND user.email = ? ";
 
     @Override
     public TravelAgency findByEmail(String email) {
-        return null;
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,WHERE_EMAIL_IS,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,email);
     }
+
+
+    private static final String WHERE_NUMBER_CONTAINING = " AND user.number LIKE ? ";
 
     @Override
     public List<TravelAgency> findByNumberContaining(String number) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_NUMBER_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,
+                HandlerSqlDAO.containingString(number));
     }
 
     @Override
@@ -237,10 +253,6 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
     public boolean save(TravelAgency entity) {
         return this.saveAll(List.of(entity));
     }
-
-
-    private static final String DELETE_TRAVEL_AGENCY = "delete " +
-            "from travel_agency;";
 
 
     private static final String SELECT_TRAVEL_AGENCY = "select " +
