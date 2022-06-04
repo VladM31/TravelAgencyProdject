@@ -18,14 +18,22 @@ import java.util.List;
 @Component("DA0_MySQL_Travel_Agency")
 public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencySQL<TravelAgency> {
 
+
+
     @Override
     public List<TravelAgency> findAllById(Iterable<Long> ids) {
         return null;
     }
 
+    private static final String WHERE_ID_IS = " AND user.id = ? ";
+
     @Override
     public TravelAgency findOneById(Long id) {
-        return null;
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY, WHERE_ID_IS, HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency, id);
+
+
     }
 
     @Override
@@ -219,7 +227,7 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
             "from travel_agency " +
             "left join user on travel_agency.user_id = user.id " +
             "left join country on user.country_id = country.id " +
-            "WHERE user.type_state_id = 20 ;";
+            "WHERE user.type_state_id = 20;";
 
     private static final String SORT_TO_DATE_REGISTRATION = " ORDER BY date_registration ASC;";
 
