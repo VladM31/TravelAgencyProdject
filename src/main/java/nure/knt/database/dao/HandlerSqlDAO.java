@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.ToLongFunction;
 
 @Component
 public class HandlerSqlDAO {
@@ -35,6 +36,7 @@ public class HandlerSqlDAO {
     public static final String SORT_TO_DATE_REGISTRATION = " ORDER BY date_registration ASC;";
     public static final int EMPTY_CAPACITY = 0;
     public static final String REPLACE_SYMBOL = "!?#!@#@_REPLACE_ME_@#@!#?!";
+
     public static final Consumer<PreparedStatement> DEFAULT_PARAMETER = (PreparedStatement p) -> {};
 
     public static String containingString(String str){
@@ -68,7 +70,6 @@ public class HandlerSqlDAO {
         for (T iter:ids) {
             preparedStatement.setLong(++index,function.apply(iter));
         }
-
     }
 
     public static <T> boolean isEmpty(Iterable<T> items){
@@ -101,11 +102,10 @@ public class HandlerSqlDAO {
             e.printStackTrace();
             return new ArrayList<>(HandlerSqlDAO.EMPTY_CAPACITY);
         }
-
-
     }
 
     private static final int START_POSITION = 0;
+
     public static <T> List<T> useSelectScript(IConnectorGetter connectorGetter, final String script,
                                               Function<ResultSet,T> getObject, @NonNull Object ...array){
         try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
@@ -164,7 +164,6 @@ public class HandlerSqlDAO {
                 if(resultSet.next()){
                     return getObject.apply(resultSet);
                 }
-            }finally {
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -183,7 +182,6 @@ public class HandlerSqlDAO {
                 if(resultSet.next()){
                     return getObject.apply(resultSet);
                 }
-            }finally {
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -211,6 +209,35 @@ public class HandlerSqlDAO {
             e.printStackTrace();
         }
         return ERROR_UPDATE;
+    }
+
+    // new 05.06.2022
+    public static final int ERROR_DELETE = Integer.MIN_VALUE;
+
+    public static <T>  int deleteByIdIn(IConnectorGetter connectorGetter, String script,Iterable<T> collection,Function<T,Long> entityToLong){
+
+        if(script.contains(HandlerSqlDAO.REPLACE_SYMBOL)){
+            script = setInInsideScript(script,collection);
+        }
+
+        try(PreparedStatement statement = connectorGetter.getSqlPreparedStatement(script)){
+
+            HandlerSqlDAO.substituteIds(statement,collection,entityToLong);
+
+            return statement.executeUpdate();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ERROR_DELETE;
+    }
+
+    private static final Function<Long,Long> LONG_TO_LONG = (id) -> id;
+
+    public static int deleteByIdIn(IConnectorGetter connectorGetter, String script,Iterable<Long> collection){
+        return HandlerSqlDAO.deleteByIdIn(connectorGetter,script,collection,LONG_TO_LONG);
     }
 
 }
