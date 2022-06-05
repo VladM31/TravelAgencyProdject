@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.function.*;
 
-public class FilterHendler {
+public class HandlerFilter {
     public static final DateTimeFormatter STRING_TO_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public static <T> boolean predicateList(List<Predicate<T>> filters, T obj){
@@ -68,8 +68,8 @@ public class FilterHendler {
             return list;
         }
 
-        if(FilterHendler.isEmptyOneOfThem(startDate,endDate) == NOT_EMPTY){
-            List<LocalDateTime> dateList = FilterHendler.twoStringsToSortListLocalDateTime(startDate,endDate,FilterHendler::stringToLDT);
+        if(HandlerFilter.isEmptyOneOfThem(startDate,endDate) == NOT_EMPTY){
+            List<LocalDateTime> dateList = HandlerFilter.twoStringsToSortListLocalDateTime(startDate,endDate, HandlerFilter::stringToLDT);
             if(list == LIST_IS_NOT_CREATED_FROM_DATABASE){
                return dateBetween.apply(dateList.get(START_DATE),dateList.get(END_DATE));
             }
@@ -79,21 +79,21 @@ public class FilterHendler {
 
         if(startDate.isEmpty() == NOT_EMPTY){
             if(list == LIST_IS_NOT_CREATED_FROM_DATABASE){
-                return dateStart.apply(FilterHendler.stringToLDT(startDate));
+                return dateStart.apply(HandlerFilter.stringToLDT(startDate));
             }
-            elseDidNotStart.accept(FilterHendler.stringToLDT(startDate));
+            elseDidNotStart.accept(HandlerFilter.stringToLDT(startDate));
             return list;
         }
 
         if(list == LIST_IS_NOT_CREATED_FROM_DATABASE){
-            return dateEnd.apply(FilterHendler.stringToLDT(endDate));
+            return dateEnd.apply(HandlerFilter.stringToLDT(endDate));
         }
-        elseDidNotEnd.accept(FilterHendler.stringToLDT(endDate));
+        elseDidNotEnd.accept(HandlerFilter.stringToLDT(endDate));
         return list;
     }
 
     public static <T extends ChronoLocalDateTime> List<T> twoStringsToSortListLocalDateTime(String dateFirst,String dateSecond,Function<String,T> parseString){
-        if (FilterHendler.isItNotNeedSwap(dateFirst,dateSecond)) {
+        if (HandlerFilter.isItNotNeedSwap(dateFirst,dateSecond)) {
             return List.of(parseString.apply(dateFirst),parseString.apply(dateSecond));
         }
         return List.of(parseString.apply(dateSecond),parseString.apply(dateFirst));
@@ -116,6 +116,34 @@ public class FilterHendler {
         }
 
         elseDidNotWorkWithDatabase.accept(isState);
+        return list;
+    }
+
+    @Deprecated
+    public static <T,N extends Number & Comparable<N>> List<T> checkNumberBetween(N start,N end,final N MIN,final N MAX, List<T> list,BiFunction<N,N,List<T>> workWithDatabase,BiConsumer<N,N> elseDidNotWorkWithDatabase){
+
+        if(start == null && end == null){
+            return list;
+        }
+
+        if(start == null){
+            start = MIN;
+        }
+        if(end == null){
+            end = MAX;
+        }
+        if(start.compareTo(end) > 1){
+            N temp = start;
+            start =end;
+            end = temp;
+        }
+
+
+        if(list == LIST_IS_NOT_CREATED_FROM_DATABASE){
+            return workWithDatabase.apply(start,end);
+        }
+
+        elseDidNotWorkWithDatabase.accept(start,end);
         return list;
     }
 }

@@ -108,19 +108,19 @@ public class MessageShowFilter {
             list = idaoMessage.findMSDByToWhomAndRole(toWhom,this.byRole);
         }
 
-        list = FilterHendler.checkTwoBooleanForOneState(this.byRead,this.byNotRead,list,
+        list = HandlerFilter.checkTwoBooleanForOneState(this.byRead,this.byNotRead,list,
                 (state) -> idaoMessage.findMSDByToWhomAndItWasRead(toWhom,state),
                 (state) -> filterList.add(msd -> msd.isItWasRead() == state.booleanValue() ));
 
-        list = FilterHendler.checkString(this.byNameSendler,list,
+        list = HandlerFilter.checkString(this.byNameSendler,list,
                 (nameSendler)-> idaoMessage.findMSDByToWhomAndSendlerNameContaining(toWhom,nameSendler),
                 (nameSendler) ->filterList.add((msd) -> msd.getSendlerName().contains(nameSendler)));
 
-        list = FilterHendler.checkString(this.byNameMessage,list,
+        list = HandlerFilter.checkString(this.byNameMessage,list,
                 (nameMessage)-> idaoMessage.findMSDByToWhomAndNameMessageContaining(toWhom,nameMessage),
                 (nameMessage) ->filterList.add((msd) -> msd.getMessageName().contains(nameMessage)));
 
-        list = FilterHendler.checkDate(this.getStartDate(),this.getEndDate(),list,
+        list = HandlerFilter.checkDate(this.getStartDate(),this.getEndDate(),list,
                 (d1,d2) -> idaoMessage.findMSDByToWhomAndSendDateBetween(toWhom,d1,d2),
                 (d1,d2) ->filterList.add((msd) -> msd.getSendDate().isAfter(d1)  && msd.getSendDate().isBefore(d2)),
                 (d) -> idaoMessage.findMSDByToWhomAndSendDateAfterAndEquals(toWhom, d),
@@ -129,7 +129,7 @@ public class MessageShowFilter {
                 (d) -> filterList.add((msd) -> msd.getSendDate().isBefore(d)));
 
 
-        if(list == FilterHendler.LIST_IS_NOT_CREATED_FROM_DATABASE){
+        if(list == HandlerFilter.LIST_IS_NOT_CREATED_FROM_DATABASE){
             return idaoMessage.findMessageShortDataAllByToWhom(toWhom);
         }
         if (list.isEmpty() || filterList.isEmpty()){
@@ -138,7 +138,7 @@ public class MessageShowFilter {
 
         return  list.stream()
                 .collect(
-                        Collectors.filtering((msd)-> FilterHendler.predicateList(filterList,msd)
+                        Collectors.filtering((msd)-> HandlerFilter.predicateList(filterList,msd)
                                 ,Collectors.toList()));
     }
 
