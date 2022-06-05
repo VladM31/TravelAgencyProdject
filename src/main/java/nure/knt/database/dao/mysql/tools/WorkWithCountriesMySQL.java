@@ -56,7 +56,7 @@ public class WorkWithCountriesMySQL implements WorkWithCountries {
     public int getIdByCountry(String country) {
         for (int id = 0; id < this.countries.length; id++) {
             if(this.countries[id].equals(country)){
-                return id;
+                return id+1;
             }
         }
         return WorkWithCountries.NAME_NOT_FOUND;
