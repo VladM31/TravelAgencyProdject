@@ -53,7 +53,7 @@ public class HandlerSqlDAO {
     }
 
     public static @NotNull String setInInsideScript(@NonNull String script, Iterable<?> ids){
-        return script.replaceFirst(HandlerSqlDAO.REPLACE_SYMBOL,HandlerSqlDAO.symbolsInDependsFromSize(ids));
+        return script.replace(HandlerSqlDAO.REPLACE_SYMBOL,HandlerSqlDAO.symbolsInDependsFromSize(ids));
     }
 
     public static String symbolsInDependsFromSize(Iterable<?> ids){

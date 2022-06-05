@@ -17,6 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Function;
 
 @Component("DAO_MySQL_Customer")
 public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Customer> {
@@ -74,24 +75,38 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
                 HandlerCustomer::resultSetToCustomer, "%/%"+part+"%");
     }
 
+    private static final String DELETE_FROM_CODE_TABLE_FOR_CUSTOMER_WHERE_USER_ID_IN = "delete from code_table WHERE code_table.user_id IN(" + REPLACE_SYMBOL + ")";
+    private static final String DELETE_FROM_CUSTOMER_WHERE_USER_ID_IN = "delete from customer WHERE customer.user_id IN(" + REPLACE_SYMBOL + ")";
+    private static final String DELETE_FROM_USER_WHERE_USER_ID_IN = "delete from user WHERE user.id IN(" + REPLACE_SYMBOL + ")";
+
     @Override
     public int deleteAllById(Iterable<Long> ids) {
-        return 0;
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CODE_TABLE_FOR_CUSTOMER_WHERE_USER_ID_IN,ids);
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CUSTOMER_WHERE_USER_ID_IN,ids);
+        return HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_USER_WHERE_USER_ID_IN,ids);
     }
+
+    private static final Function<Customer,Long> CUSTOMER_TO_LONG = customer -> customer.getId();
 
     @Override
     public int deleteAllByEntity(Iterable<Customer> entities) {
-        return 0;
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CODE_TABLE_FOR_CUSTOMER_WHERE_USER_ID_IN,entities,CUSTOMER_TO_LONG);
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CUSTOMER_WHERE_USER_ID_IN,entities,CUSTOMER_TO_LONG);
+        return HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_USER_WHERE_USER_ID_IN,entities,CUSTOMER_TO_LONG);
     }
 
     @Override
     public int deleteByEntity(Customer entity) {
-        return 0;
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CODE_TABLE_FOR_CUSTOMER_WHERE_USER_ID_IN,List.of(entity),CUSTOMER_TO_LONG);
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CUSTOMER_WHERE_USER_ID_IN,List.of(entity),CUSTOMER_TO_LONG);
+        return HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_USER_WHERE_USER_ID_IN,List.of(entity),CUSTOMER_TO_LONG);
     }
 
     @Override
     public int deleteById(Long id) {
-        return 0;
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CODE_TABLE_FOR_CUSTOMER_WHERE_USER_ID_IN,List.of(id));
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CUSTOMER_WHERE_USER_ID_IN,List.of(id));
+        return HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_USER_WHERE_USER_ID_IN,List.of(id));
     }
 
     @Override
