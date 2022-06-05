@@ -111,7 +111,7 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
 
     @Override
     public int deleteAll() {
-        return 0;
+        return ERROR_DELETE;
     }
 
     private static final String SELECT_ALL = "SELECT user.id AS user_pk, customer.id AS customer_pk,  male," +
@@ -200,7 +200,6 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
     @Override
     public Customer findByNumber(String number) {
         return this.wrapperForUseSelectOneObject(AND + HandlerUserPartScript.WHERE_NUMBER_IS,number);
-
     }
 
     @Override

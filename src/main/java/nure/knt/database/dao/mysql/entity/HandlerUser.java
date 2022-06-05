@@ -18,8 +18,6 @@ import java.util.function.BiConsumer;
 
 public class HandlerUser {
 
-
-
     public static <U extends User> void resultSetToUserCore(ResultSet resultSet, U user) throws SQLException {
         user.setId(resultSet.getLong("user_pk"));
         user.setNumber(resultSet.getString("number"));
