@@ -23,7 +23,9 @@ import static nure.knt.database.dao.HandlerSqlDAO.ERROR_BOOLEAN_ANSWER;
 public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencySQL<TravelAgency> {
 
 
-    private static final String WHERE_ID_IS = " AND user.id = ? ";
+
+
+    private static final String WHERE_ID_IN = " AND user.id IN ( "+ REPLACE_SYMBOL+" )";
 
     @Override
     public List<TravelAgency> findAllById(Iterable<Long> ids) {
@@ -32,6 +34,9 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
 
     }
 
+
+
+    private static final String WHERE_ID_IS = " AND user.id = ? ";
 
     @Override
     public TravelAgency findOneById(Long id) {
@@ -107,9 +112,13 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
 
 
 
+
+    private static final String WHERE_IDS_ARE = " AND travel_agency.id = ? ";
+
     @Override
     public List<TravelAgency> findByTravelAgencyIdIn(Iterable<Long> ids) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                WHERE_IDS_ARE,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION), HandlerDAOTAMYSQL::resultSetToTravelAgency,ids);
     }
 
     @Override
