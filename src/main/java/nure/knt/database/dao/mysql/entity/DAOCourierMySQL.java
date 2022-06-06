@@ -6,6 +6,7 @@ import nure.knt.database.idao.entity.IDAOCourierSQL;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.important.Courier;
+import nure.knt.entity.important.Customer;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
@@ -15,6 +16,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static nure.knt.database.dao.HandlerSqlDAO.ERROR_BOOLEAN_ANSWER;
+import static nure.knt.database.dao.HandlerSqlDAO.HAVE_NO_ERROR;
 
 @Component("DAO_MySQL_Courier")
 public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier> {
@@ -82,14 +86,16 @@ public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier
         return 0;
     }
 
+    private static final String UPDATE_ITERABLE_BY_ID = "UPDATE courier left join user on courier.user_id = user.id  " +
+            "SET number = ?, email = ?,username = ?,password = ?,name = ?,active = ?,date_registration = ?,role_id = ?,country_id = ?,type_state_id = ?,city = ?,address = ?, date_birth = ?, does_he_want = ? WHERE user.id = ?;";
     @Override
     public int[] updateAllById(Iterable<Courier> entities) {
-        return new int[0];
+        return HandlerSqlDAO.updateById(super.conn,UPDATE_ITERABLE_BY_ID,entities,HandlerDAOCourier::courierToMySqlUpdateScript);
     }
 
     @Override
     public int updateOneById(Courier entity) {
-        return 0;
+        return updateAllById(List.of(entity))[0];
     }
 
     private static final String CITY_CONTAINING_IS = " AND courier.address LIKE ? ";
@@ -316,5 +322,32 @@ class HandlerDAOCourier {
             e.printStackTrace();
         }
         return courier;
+    }
+
+    private static int POSITION_CITY_FOR_UPDATE = 11;
+    private static int POSITION_ADDRESS_FOR_UPDATE = 12;
+    private static int POSITION_DATE_BIRTH_FOR_UPDATE = 13;
+    private static int POSITION_DOES_HE_WANT_FOR_UPDATE = 14;
+    private static int POSITION_USER_ID_FOR_UPDATE = 15;
+
+
+    static boolean courierToMySqlUpdateScript(PreparedStatement preStat, Courier courier){
+
+        if(HandlerUser.userToMySqlScript(preStat,courier) == ERROR_BOOLEAN_ANSWER){
+            return ERROR_BOOLEAN_ANSWER;
+        }
+
+        try {
+            preStat.setString(POSITION_CITY_FOR_UPDATE,courier.getCity());
+            preStat.setString(POSITION_ADDRESS_FOR_UPDATE,courier.getAddress());
+            preStat.setDate(POSITION_DATE_BIRTH_FOR_UPDATE,Date.valueOf(courier.getDateBirth()));
+            preStat.setBoolean(POSITION_DOES_HE_WANT_FOR_UPDATE, courier.isDoesHeWant());
+            preStat.setLong(POSITION_USER_ID_FOR_UPDATE,courier.getId());
+            return HAVE_NO_ERROR;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ERROR_BOOLEAN_ANSWER;
     }
 }
