@@ -53,7 +53,7 @@ public class HandlerSqlDAO {
     }
 
     public static @NotNull String setInInsideScript(@NonNull String script, Iterable<?> ids){
-        return script.replaceFirst(HandlerSqlDAO.REPLACE_SYMBOL,HandlerSqlDAO.symbolsInDependsFromSize(ids));
+        return script.replace(HandlerSqlDAO.REPLACE_SYMBOL,HandlerSqlDAO.symbolsInDependsFromSize(ids));
     }
 
     public static String symbolsInDependsFromSize(Iterable<?> ids){
@@ -239,5 +239,7 @@ public class HandlerSqlDAO {
     public static int deleteByIdIn(IConnectorGetter connectorGetter, String script,Iterable<Long> collection){
         return HandlerSqlDAO.deleteByIdIn(connectorGetter,script,collection,LONG_TO_LONG);
     }
+
+
 
 }

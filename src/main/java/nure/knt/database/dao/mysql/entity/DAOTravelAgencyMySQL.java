@@ -27,10 +27,28 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
 
     private static final String WHERE_ID_IN = " AND user.id IN ( "+ REPLACE_SYMBOL+" )";
 
+
     @Override
     public List<TravelAgency> findAllById(Iterable<Long> ids) {
-        return HandlerSqlDAO.useSelectScript(super.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
-                WHERE_ID_IS,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION), HandlerDAOTAMYSQL::resultSetToTravelAgency,ids);
+        return HandlerSqlDAO.useSelectScript(super.conn,
+                HandlerSqlDAO.setInInsideScript(
+                        HandlerSqlDAO.concatScriptToEnd(
+                                SELECT_TRAVEL_AGENCY,
+                                WHERE_ID_IN,
+                                SORT_TO_DATE_REGISTRATION),
+                        ids),
+                (statement -> {
+                    int position = 0;
+                    try {
+                        for(long id: ids){
+                            statement.setLong(++position,id);
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+
+                }),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency);
 
     }
 
@@ -113,57 +131,127 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
 
 
 
-    private static final String WHERE_IDS_ARE = " AND travel_agency.id = ? ";
+    private static final String WHERE_IDS_ARE = " AND travel_agency.id IN ( "+ REPLACE_SYMBOL+" )";
+
 
     @Override
     public List<TravelAgency> findByTravelAgencyIdIn(Iterable<Long> ids) {
-        return HandlerSqlDAO.useSelectScript(super.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
-                WHERE_IDS_ARE,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION), HandlerDAOTAMYSQL::resultSetToTravelAgency,ids);
+        return HandlerSqlDAO.useSelectScript(super.conn,
+                HandlerSqlDAO.setInInsideScript(
+                        HandlerSqlDAO.concatScriptToEnd(
+                                SELECT_TRAVEL_AGENCY,
+                                WHERE_IDS_ARE,
+                                SORT_TO_DATE_REGISTRATION),
+                        ids),
+                (statement -> {
+                    int position = 0;
+                    try {
+                        for(long id: ids){
+                            statement.setLong(++position,id);
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+
+                }),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency);
     }
+
+
 
     @Override
     public List<TravelAgency> findByTravelAgencyObjectIdIn(Iterable<TravelAgency> ids) {
         return null;
     }
 
+
+
+
+    private static final String WHERE_TRAVEL_AGENCY_ID_IS = " AND travel_agency.id = ? ";
+
     @Override
     public TravelAgency findByTravelAgencyId(Long id) {
-        return null;
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY, WHERE_TRAVEL_AGENCY_ID_IS, HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency, id);
     }
+
+
+    private static final String WHERE_RATING_BETWEEN = " AND travel_agency.rating BETWEEN ? AND ? ";
 
     @Override
     public List<TravelAgency> findByRatingBetween(float ratingF, float ratingE) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_RATING_BETWEEN,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,ratingF,ratingE);
     }
+
+
+
+    private static final String WHERE_KVED_CONTAINING = " AND travel_agency.kved LIKE ? ";
 
     @Override
     public List<TravelAgency> findByKVEDContaining(String kved) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_KVED_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,
+                HandlerSqlDAO.containingString(kved));
     }
+
+
+
+    private static final String WHERE_EGRPOY_IS = " AND travel_agency.egrpoy_or_rnykpn = ? ";
+
 
     @Override
     public TravelAgency findByEGRPOY(Long egrpoy) {
-        return null;
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY, WHERE_EGRPOY_IS, HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency, egrpoy);
     }
+
+
+    private static final String WHERE_IS_EGRPOY_IS = " AND travel_agency.is_egrpoy = ? ";
+
 
     @Override
     public List<TravelAgency> findByEGRPOY(boolean isEGRPOY) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY, WHERE_IS_EGRPOY_IS, HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency, isEGRPOY);
     }
+
+
 
     @Override
     public TravelAgency findByRNEKPN(Long rnekpn) {
-        return null;
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY, WHERE_EGRPOY_IS, HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency, rnekpn);
     }
+
+
+
+
+    private static final String WHERE_ADDRESS_CONTAINING = " AND travel_agency.address LIKE ? ";
 
     @Override
     public List<TravelAgency> findByAddressContaining(String address) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_ADDRESS_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,
+                HandlerSqlDAO.containingString(address));
     }
+
+
+    private static final String WHERE_DIRECTOR_NAME_CONTAINING = " AND travel_agency.full_name_director LIKE ? ";
 
     @Override
     public List<TravelAgency> findByAllNameDirectoContaining(String allNameDirector) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_DIRECTOR_NAME_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,
+                HandlerSqlDAO.containingString(allNameDirector));
     }
 
 
