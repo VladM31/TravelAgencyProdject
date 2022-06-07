@@ -10,8 +10,9 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-public interface IDAOOrderFromTourAdCore<O extends OrderFromTourAdCore> extends IDAOCoreFind<O>, IDAOCoreSave<O>, IDAOUpdateConditionCommodity {
+public interface IDAOOrderFromTourAdCore<O extends OrderFromTourAdCore> extends IDAOUpdateConditionCommodity {
 
+    public List<O> findAllById(Long userOrTuodAdId);
     public List<O> findByCostBetween(Long userOrTuodAdId,int startCost,int endCost);//Ціна 5
 
     public List<O> findByNumberOfPeopleBetween(Long userOrTuodAdId,int startNumberOfPeople,int endNumberOfPeople);//Кількість людей 6

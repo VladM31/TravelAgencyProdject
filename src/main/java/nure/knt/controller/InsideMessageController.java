@@ -8,7 +8,9 @@ import nure.knt.entity.subordinate.Message;
 import nure.knt.entity.subordinate.MessageShortData;
 import nure.knt.forms.filter.MessageShowFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +36,7 @@ public class InsideMessageController {
     public String showProfileMessageGet(@AuthenticationPrincipal User user, Model model){
 
         if (user != null) {
-            HandlerMainWindows.setMenuModel(user,model);
+            HandlerController.setMenuModel(user,model);
         }
 
 
@@ -49,7 +51,7 @@ public class InsideMessageController {
     public String showProfileMessagePOST(@AuthenticationPrincipal User user,Model model,MessageShowFilter filter){
 
         if (user != null) {
-            HandlerMainWindows.setMenuModel(user,model);
+            HandlerController.setMenuModel(user,model);
         }
 
         model.addAttribute(ATTRIBUTE_FILTER,filter);
@@ -162,9 +164,11 @@ class HendlerIMCForAll {
 
 }
 
+@Component
 class HendlerIMCForCustomer{
     private static final String CUSTOMER_NAME_CHOOSE = "Замовлень";
-    private static final String CUSTOMER_URL_CHOOSE = "/";
+    private static final String CUSTOMER_URL = "";
+    private static String CUSTOMER_URL_CHOOSE;
 
     static void setCustomer(Model model){
         HendlerIMCForAll.setAllInfo(model,
@@ -172,6 +176,11 @@ class HendlerIMCForCustomer{
                 CUSTOMER_URL_CHOOSE,
                 HendlerIMCForAll.NO_THIRD_BUTTON,
                 HendlerIMCForAll.EMPTY_NAME);
+    }
+
+    @Autowired
+    public void setUrl(@Value("${customer.profile.order.url}") String CUSTOMER_URL_CHOOSE){
+        HendlerIMCForCustomer.CUSTOMER_URL_CHOOSE = CUSTOMER_URL + CUSTOMER_URL_CHOOSE;
     }
 }
 

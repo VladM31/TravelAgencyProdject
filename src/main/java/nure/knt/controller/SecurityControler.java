@@ -48,7 +48,7 @@ public class SecurityControler {
 
     @RequestMapping(value = { "/logout"}, method = { RequestMethod.GET })
     public String signOutGet(@AuthenticationPrincipal User user,Model model) {
-        HandlerMainWindows.setMenuModel(user,model);
+        HandlerController.setMenuModel(user,model);
         return "logout";
     }
 

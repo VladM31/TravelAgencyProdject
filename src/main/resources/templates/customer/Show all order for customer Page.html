@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <link rel="stylesheet" th:href="@{../css/Show_all_order_for_customer_css.css}"/>
+    <link rel="stylesheet" th:href="@{../css/sort_button/sortBlock.css}"/>
+    <link rel="stylesheet" th:href="@{../css/Main Page CSS.css}"/>
+
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Neucha" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+
+</head>
+
+<body class="main-body">
+
+    <th:block th:include="/Top Menu"></th:block>
+
+    <div class="main-body-top">
+        <h1 class="main-travel-agency-naming" th:text="${nameUser}">
+            Назва турагенції
+        </h1>
+    </div>
+
+    <div class="main-body-buttom">
+
+        <form id="filter-right" class="filter-mail-block-for-all-info">
+            <div>
+                <h2 style="font-family: 'Neucha';font-style: normal;font-size: 45px;">
+                    <b>
+                        ШУКАТИ ЗА
+                    </b>
+                </h2>
+            </div>
+
+            <div id="Name_order">
+                <h6>Назвою турагенції</h6>
+                <input type="text" class="box-filter">
+            </div>
+
+            <div id="Role">
+                <h6>Країною</h6>
+                <select id="phone" name="role" class="box-filter">
+                    <option value="country">Франція</option>
+                    <option value="country">Україна</option>
+                    <option value="country">Італія</option>
+                    <option value="country">Чехія</option>
+                </select>
+            </div>
+
+            <div id="Nameorder">
+                <h6>Назвою міста</h6>
+                <input type="text" class="box-filter">
+            </div>
+
+            <div id="NameSendler">
+                <h6>Назвою місця відпочинку</h6>
+                <input type="text" class="box-filter">
+            </div>
+
+            <div id="Chose_number">
+                <h6>Ціною</h6>
+                <div style=" display:flex; justify-content: space-around;">
+                    <input type="text" name="start" class="box-filter-number">
+                    <p class="line-between-date">-</p>
+                    <input type="text" name="ends" class="box-filter-number">
+                </div>
+            </div>
+
+            <div id="Chose_number">
+                <h6>Кількістю людей</h6>
+                <div style=" display:flex; justify-content: space-around;">
+                    <input type="text" name="start" class="box-filter-number">
+                    <p class="line-between-date">-</p>
+                    <input type="text" name="ends" class="box-filter-number">
+                </div>
+            </div>
+
+            <div id="Chose_date">
+                <h6>Датою початку і кінця</h6>
+                <div style=" display:flex; justify-content: space-around;">
+                    <input type="date" name="start" class="box-filter-date">
+                    <p class="line-between-date">-</p>
+                    <input type="date" name="ends" class="box-filter-date">
+                </div>
+            </div>
+
+            <div id="Chose_date">
+                <h6>Датою оформлення</h6>
+                <div style=" display:flex; justify-content: space-around;">
+                    <input type="date" name="start" class="box-filter-date">
+                    <p class="line-between-date">-</p>
+                    <input type="date" name="ends" class="box-filter-date">
+                </div>
+            </div>
+
+            <div id="State" class="filter-order-state">
+                <h5>За станом</h5>
+
+                <div class="box-filter-check">
+                    <input type="checkbox" checked name="html5" />
+                    Не підтверджені
+                </div>
+                <div class="box-filter-check">
+                    <input type="checkbox" checked name="html5" />
+                    Підтверджені&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="box-filter-check">
+                    <input type="checkbox" checked name="html5" />
+                    Скасовані&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+                <div class="box-filter-check">
+                    <input type="checkbox" checked name="html5" />
+                    Викоритсані&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
+            </div>
+
+
+
+            <div>
+                <input type="submit" value="ШУКАТИ" class="filter-find-button">
+            </div>
+
+        </form>
+
+        <div class="block-order-info">
+            <form class="order_block" th:each="order : ${orders}">
+                <div class="order_block-all-info-column">
+
+                    <div class="order_block-all-info-row">
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Турфірма</small>
+                            <p class="order-info-text-name-bottom item_name-travel-agency" th:text="${order.nameTravelAgency}"> Одесса</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Країна</small>
+                            <p class="order-info-text-name-bottom item_name-country" th:text="${order.country}"> Одесса</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Місто</small>
+                            <p class="order-info-text-name-bottom item_name-city" th:text="${order.city}"> Одесса</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Місце відпочинку</small>
+                            <p class="order-info-text-name-bottom item_name-rest-place" th:text="${order.restingPlace}"> Одесса</p>
+                        </div>
+
+                    </div>
+
+                    <div class="order_block-all-info-row">
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Ціна</small>
+                            <p class="order-info-text-name-bottom item_cost" th:text="${order.cost}"> 1</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Кількість людей</small>
+                            <p class="order-info-text-name-bottom item_number-of-people" th:text="${order.numberOfPeople}"> 1</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> id</small>
+                            <p class="order-info-text-name-bottom item_id" th:text="${order.id}"> 1</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Стан</small>
+                            <p class="order-info-text-name-bottom item_state" th:text="${state_name.apply(order.conditionCommodity)}"> Одесса</p>
+                        </div>
+
+                    </div>
+
+                    <div class="order_block-all-info-row">
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Дата початку</small>
+                            <p class="order-info-text-name-bottom item_start-date" th:text="${order.dateStart}"> 1</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Дата кінця</small>
+                            <p class="order-info-text-name-bottom item_end-date" th:text="${order.dateEnd}"> 1</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Дата оформлення</small>
+                            <p class="order-info-text-name-bottom item_date-made" th:text="${order.getDateRegistration().toString().replace('T',' ')}"> 1</p>
+                        </div>
+
+
+                        <input type="submit" class ="order-button " th:classappend="${color_for_canceled_button.apply(order.conditionCommodity)}" value="Відминити">
+
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+        <div>
+            <div id="SortBy" class="box-sort box-rigth">
+                <div style="  display: flex;">
+                    <h6>Сортувати по:</h6>
+                </div>
+
+                <select id="selectSort" name="SortBy" class="box-filter">
+                    <option id="sortByDateMade">Даті оформлення</option>
+                    <option id="sortByNameTravelAgency">Назві турагенції</option>
+                    <option id="sortByNameCountry">Назві країни</option>
+                    <option id="sortByNameCity">Назві міста</option>
+
+                    <option id="sortByNameRest">Назві місця відпочинку</option>
+                    <option id="sortByCost">Ціні</option>
+                    <option id="sortByNumberOfPeople">Кількісті людей</option>
+                    <option id="sortById">Номеру білету</option>
+
+                    <option id="sortByState">Стану</option>
+                    <option id="sortByStartDate">Даті кінця</option>
+                    <option id="sortByEndDate">Даті закінчення</option>
+
+                </select>
+
+                <div>
+                    <button id="sortDescending" class="button-sort">\/</button>
+                    <button id="sortAscending" class="button-sort button-sort-used">/\</button>
+                </div>
+            </div>
+            <br>
+            <form action="/profile-message" class="watch-travel-agency">
+                <div>
+                    <h2 class="watch-travel-agency-choose-see"><b>Перегляд</b></h2>
+
+                    <div style="display: flex;align-items: flex-start;margin-left: 4%">
+                        <input type="submit"
+                            class="watch-travel-agency-choose-servise-submit wtacss-right wtacss-not-work"
+                            value="Замовлень">
+                        <input type="submit" class="watch-travel-agency-choose-servise-submit wtacss-left " value="СМС">
+                    </div>
+
+
+                </div>
+
+                <div>
+                    <input id="ChangeProfile" type="submit" class="watch-travel-agency-other-submit" rows="2"
+                        value="Редагувати профіль">
+                </div>
+
+                <div>
+                    <input id="Writeorder" formaction="/send-message"  formmethod="get" type="submit" class="watch-travel-agency-other-submit" rows="2"
+                        value="Написати повідомлення">
+                </div>
+
+                <div>
+                    <input id="MakeTheService" type="submit" class="watch-travel-agency-other-submit" rows="2"
+                        value="Створити послугу">
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <script>
+        const nameBox = ".order_block";
+        const STYLE_SORT_BUTTON = "button-sort-used";
+
+        // -+-+---+-+-+-+-+-+--+-++--+-+-+-+-+-+-+-+-+-+-++--+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++--+-+-+-+-+-+-+
+        const sortDescendingBtn = document.getElementById('sortDescending');
+        const sortAscendingBtn = document.getElementById('sortAscending');
+
+        let how_sort_number = function(a,b) { return a-b};
+        let how_sort_string = function(a,b) {return (a > b) - (a < b)};
+
+        function sortDescending(){
+
+            sortDescendingBtn.classList.add(STYLE_SORT_BUTTON);
+            sortAscendingBtn.classList.remove(STYLE_SORT_BUTTON);
+
+            how_sort_number = function(a,b) { return b-a};
+            how_sort_string = function(a,b) {return (b > a) - (b < a)};
+
+            getMethodBySelectedName(sb.options[sb.selectedIndex].id);
+            btn.classList.remove(styleSelectSort);
+        }
+
+        function sortAscending(){
+
+            sortAscendingBtn.classList.add(STYLE_SORT_BUTTON);
+            sortDescendingBtn.classList.remove(STYLE_SORT_BUTTON);
+
+            how_sort_number = function(a,b) { return a-b};
+            how_sort_string = function(a,b) {return (a > b) - (a < b)};
+
+            getMethodBySelectedName(sb.options[sb.selectedIndex].id);
+            btn.classList.remove(styleSelectSort);
+        }
+
+        sortDescendingBtn.addEventListener('click', sortDescending);
+        sortAscendingBtn.addEventListener('click', sortAscending);
+
+        // -+-+---+-+-+-+-+-+--+-++--+-+-+-+-+-+-+-+-+-+-++--+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++--+-+-+-+-+-+-+
+        const btn = document.querySelector('#selectSort');
+        const sb = document.querySelector('#selectSort');
+        const styleSelectSort = "user-selected-button";
+        btn.onclick = (event) => {
+
+            if(btn.classList.contains(styleSelectSort)){
+                event.preventDefault();
+                getMethodBySelectedName(sb.options[sb.selectedIndex].id);
+                btn.classList.remove(styleSelectSort);
+            }else{
+                btn.classList.add(styleSelectSort);
+            }
+
+        };
+
+        // -+-+---+-+-+-+-+-+--+-++--+-+-+-+-+-+-+-+-+-+-++--+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++--+-+-+-+-+-+-+
+        const classDateMade = '.item_date-made'; // 9
+
+        const classNameTravelAgency = '.item_name-travel-agency';//2
+
+        const classNameCountry = '.item_name-country';//3
+
+        const classNameCity = '.item_name-city';//4
+
+        const classNameRest = '.item_name-rest-place';//5
+
+        const classCost = '.item_cost';
+
+        const clasNumberOfPeople = '.item_number-of-people';
+
+        const classId = '.item_id';
+
+        const classState = '.item_state';
+
+        const classStartDate = '.item_start-date';
+
+        const classEndDate = '.item_end-date';
+        // -+-+---+-+-+-+-+-+--+-++--+-+-+-+-+-+-+-+-+-+-++--+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++--+-+-+-+-+-+-+
+
+        function getMethodBySelectedName(selectedName){
+            //console.log(selectedName);
+            if(selectedName == 'sortByDateMade'){
+                sortDivs(classDateMade,how_sort_string);
+                return;
+            }
+            if(selectedName == 'sortByNameTravelAgency'){
+                sortDivs(classNameTravelAgency,how_sort_string);
+                return;
+            }
+            if(selectedName == 'sortByNameCountry'){
+                sortDivs(classNameCountry,how_sort_string);
+                return;
+            }
+            if(selectedName == 'sortByNameCity'){
+                sortDivs(classNameCity,how_sort_string);
+                return;
+            }
+            if(selectedName == 'sortByNameRest'){
+                sortDivs(classNameRest,how_sort_string);
+                return;
+            }
+            if(selectedName == 'sortByCost'){
+                sortDivs(classCost,how_sort_number);
+                return;
+            }
+            if(selectedName == 'sortByNumberOfPeople'){
+                sortDivs(clasNumberOfPeople,how_sort_number);
+                return;
+            }
+            if(selectedName == 'sortById'){
+                sortDivs(classId,how_sort_number);
+                return;
+            }
+            if(selectedName == 'sortByState'){
+                sortDivs(classState,how_sort_string);
+                return;
+            }
+            if(selectedName == 'sortByStartDate'){
+                sortDivs(classStartDate,how_sort_string);
+                return;
+            }
+            if(selectedName == 'sortByEndDate'){
+                sortDivs(classEndDate,how_sort_string);
+                return;
+            }
+        }
+
+        function sortDivs(fieldForSort,sortFunction){
+            var items = document.querySelectorAll(nameBox);
+
+            // get all items as an array and call the sort method
+            Array.from(items).sort(function(a, b) {
+                // get the text content
+                a = a.querySelector(fieldForSort).innerText.toLowerCase()
+                b = b.querySelector(fieldForSort).innerText.toLowerCase()
+                return sortFunction(a,b);
+            }).forEach(function(n, i) {
+                n.style.order = i
+            })
+        }
+    </script>
+
+
+
+</body>
+
+</html>
