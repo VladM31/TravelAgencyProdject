@@ -160,6 +160,24 @@ public class DAOOrderForCustomerMySQL extends MySQLCore implements IDAOOrderFrom
     public List<OrderFromTourAdForCustomer> findByRestingPlaceContaining(Long customerId, String restingPlace) {
         return null;
     }
+
+    private static final String SELECT_ORDER_ID_WHERE_ORDER_ID_IS_AND_CUSTOMER_ID_IS =
+            "SELECT order_tour.id FROM order_tour WHERE order_tour.customer_id = ? AND order_tour.id = ? ;";
+    private static final int POSITION_CUSTOMER_ID_FOR_SELECT_ID = 1;
+    private static final int POSITION_ORDER_ID_FOR_SELECT_ID = 2;
+
+
+    @Override
+    public boolean isThisCustomerOrder(Long customerId, Long orderId) {
+        try(PreparedStatement statement = conn.getSqlPreparedStatement(SELECT_ORDER_ID_WHERE_ORDER_ID_IS_AND_CUSTOMER_ID_IS)){
+            statement.setLong(POSITION_CUSTOMER_ID_FOR_SELECT_ID,customerId);
+            statement.setLong(POSITION_ORDER_ID_FOR_SELECT_ID,orderId);
+            return statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 
 class HandlerOrderCustomer{

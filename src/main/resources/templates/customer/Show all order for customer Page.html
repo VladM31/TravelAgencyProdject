@@ -129,7 +129,8 @@
         </form>
 
         <div class="block-order-info">
-            <form class="order_block" th:each="order : ${orders}">
+            <form th:action="@{/customer/canceled}" th:metodth="GET" class="order_block" th:each="order : ${orders}">
+                <input type="hidden" name="orderId" th:value="${order.id}">
                 <div class="order_block-all-info-column">
 
                     <div class="order_block-all-info-row">
@@ -187,7 +188,7 @@
                         </div>
 
 
-                        <input type="submit" class ="order-button " th:classappend="${color_for_canceled_button.apply(order.conditionCommodity)}" value="Відминити">
+                        <input th:type="${type_button.apply(order.conditionCommodity)}" class ="order-button " th:classappend="${color_for_canceled_button.apply(order.conditionCommodity)}" value="Відминити">
 
                     </div>
 
