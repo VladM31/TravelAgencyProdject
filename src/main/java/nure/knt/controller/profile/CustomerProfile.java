@@ -5,6 +5,8 @@ import nure.knt.database.idao.goods.IDAOOrderFromTourAdCustomer;
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.goods.OrderFromTourAdForCustomer;
 import nure.knt.entity.important.Customer;
+import nure.knt.forms.filter.FilterOrdersForCustomer;
+import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,17 +26,19 @@ public class CustomerProfile {
     private String profileCustomerOrder;
     @Autowired
     private IDAOOrderFromTourAdCustomer<OrderFromTourAdForCustomer> daoOrder;
+    @Autowired
+    private WorkWithCountries countries;
 
     @RequestMapping(value = "${customer.profile.order.url}",method = {RequestMethod.GET})
-    public String showOrderGet(@AuthenticationPrincipal Customer user, Model model){
+    public String showOrderGet(@AuthenticationPrincipal Customer user, Model model, FilterOrdersForCustomer filter){
+        System.out.println(filter);
 
-       this.start(user,model);
+        model.addAttribute("filter",filter);
+        this.start(user,model);
         return HandlerCustomerProfile.PAGE_PROFILE_ORDER;
     }
 
-
-
-    @RequestMapping(value ="${customer.profile.order.update.state.cancelet}",method = {RequestMethod.GET})
+    @RequestMapping(value ="${customer.profile.order.update.state.cancelet}",method = {RequestMethod.PATCH})
     public String updateStateOrder(@AuthenticationPrincipal Customer user,@ModelAttribute("orderId") long orderId) {
 
         if(daoOrder.isThisCustomerOrder(user.getCustomerId(),orderId)){
@@ -43,9 +47,6 @@ public class CustomerProfile {
         return "redirect:"+profileCustomerOrder;
     }
 
-
-
-
     public void start(Customer user, Model model){
         HandlerCustomerProfile.setNameInPage(model,user.getName().replace('/',' '));
         model.addAttribute("orders",daoOrder.findAllById(user.getCustomerId()));
@@ -53,6 +54,8 @@ public class CustomerProfile {
         HandlerCustomerProfile.setUkraineName(model);
         HandlerController.setMenuModel(user,model);
         HandlerCustomerProfile.setButtonType(model);
+        model.addAttribute("countries",countries.getCountry());
+
     }
 }
 

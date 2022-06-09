@@ -29,7 +29,7 @@
 
     <div class="main-body-buttom">
 
-        <form id="filter-right" class="filter-mail-block-for-all-info">
+        <form th:action="@{/customer/profile-order}" id="filter-right" class="filter-mail-block-for-all-info" th:method="get" th:object="${filter}">
             <div>
                 <h2 style="font-family: 'Neucha';font-style: normal;font-size: 45px;">
                     <b>
@@ -38,64 +38,58 @@
                 </h2>
             </div>
 
-            <div id="Name_order">
-                <h6>Назвою турагенції</h6>
-                <input type="text" class="box-filter">
+            <div id="NameTravelAgency">
+                <input type="text" placeholder="Назвою турагенції" class="box-filter" th:field="*{nameTravelAgency}">
             </div>
 
-            <div id="Role">
-                <h6>Країною</h6>
-                <select id="phone" name="role" class="box-filter">
-                    <option value="country">Франція</option>
-                    <option value="country">Україна</option>
-                    <option value="country">Італія</option>
-                    <option value="country">Чехія</option>
-                </select>
+            <div id="NameCountry">
+                <input list="countries" class="box-filter" placeholder="Країною" type="text" name="country" th:field="*{country}" />
+                <datalist  name="country" id="countries">
+                    <option th:each="country : ${countries}" th:value="${country}" th:text="${country}">...</option>
+                </datalist>
             </div>
 
-            <div id="Nameorder">
-                <h6>Назвою міста</h6>
-                <input type="text" class="box-filter">
+            <div id="NameCity">
+                <input type="text" class="box-filter"  placeholder="Назвою міста" th:field="*{city}">
             </div>
 
-            <div id="NameSendler">
-                <h6>Назвою місця відпочинку</h6>
-                <input type="text" class="box-filter">
+            <div id="NameRestingPlace">
+                <input type="text" placeholder="Назвою місця відпочинку" class="box-filter" th:field="*{restingPlace}">
             </div>
 
-            <div id="Chose_number">
+            <div id="CostBetween">
                 <h6>Ціною</h6>
                 <div style=" display:flex; justify-content: space-around;">
-                    <input type="text" name="start" class="box-filter-number">
+                    <input type="number" class="box-filter-number" th:field="*{startCost}">
                     <p class="line-between-date">-</p>
-                    <input type="text" name="ends" class="box-filter-number">
+                    <input type="number" class="box-filter-number" th:field="*{endCost}">
                 </div>
             </div>
 
-            <div id="Chose_number">
+            <div id="NumberOfPeopleBetween">
                 <h6>Кількістю людей</h6>
                 <div style=" display:flex; justify-content: space-around;">
-                    <input type="text" name="start" class="box-filter-number">
+                    <input type="number" class="box-filter-number" th:field="*{startNumberOfPeople}">
                     <p class="line-between-date">-</p>
-                    <input type="text" name="ends" class="box-filter-number">
+                    <input type="number" class="box-filter-number" th:field="*{endNumberOfPeople}">
                 </div>
             </div>
 
-            <div id="Chose_date">
+            <div id="OrderDateBetween">
                 <h6>Датою початку і кінця</h6>
                 <div style=" display:flex; justify-content: space-around;">
-                    <input type="date" name="start" class="box-filter-date">
+                    <input type="date" class="box-filter-date" th:field="*{startDateOrder}">
                     <p class="line-between-date">-</p>
-                    <input type="date" name="ends" class="box-filter-date">
+                    <input type="date" class="box-filter-date" th:field="*{endDateOrder}">
                 </div>
             </div>
 
-            <div id="Chose_date">
+            <div id="DateRegistrationBetween">
                 <h6>Датою оформлення</h6>
                 <div style=" display:flex; justify-content: space-around;">
-                    <input type="date" name="start" class="box-filter-date">
+                    <input type="datetime-local" class="box-filter-date" th:field="*{startDateRegistration}">
                     <p class="line-between-date">-</p>
-                    <input type="date" name="ends" class="box-filter-date">
+                    <input type="datetime-local" class="box-filter-date" th:field="*{endDateRegistration}">
                 </div>
             </div>
 
@@ -103,19 +97,23 @@
                 <h5>За станом</h5>
 
                 <div class="box-filter-check">
-                    <input type="checkbox" checked name="html5" />
+                    <input type="checkbox"  name="conditionCommodities" value="NOT_CONFIRMED"
+                           th:checked="${filter.conditionCommodities.contains(T(nure.knt.entity.enums.ConditionCommodity).NOT_CONFIRMED)}"/>
                     Не підтверджені
                 </div>
                 <div class="box-filter-check">
-                    <input type="checkbox" checked name="html5" />
+                    <input type="checkbox"  name="conditionCommodities"  value="CONFIRMED"
+                           th:checked="${filter.conditionCommodities.contains(T(nure.knt.entity.enums.ConditionCommodity).CONFIRMED)}"/>
                     Підтверджені&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div class="box-filter-check">
-                    <input type="checkbox" checked name="html5" />
+                    <input type="checkbox"  name="conditionCommodities" value="CANCELED"
+                           th:checked="${filter.conditionCommodities.contains(T(nure.knt.entity.enums.ConditionCommodity).CANCELED)}"/>
                     Скасовані&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div class="box-filter-check">
-                    <input type="checkbox" checked name="html5" />
+                    <input type="checkbox" name="conditionCommodities" value="GONE"
+                           th:checked="${filter.conditionCommodities.contains(T(nure.knt.entity.enums.ConditionCommodity).GONE)}" />
                     Викоритсані&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
             </div>
@@ -129,7 +127,7 @@
         </form>
 
         <div class="block-order-info">
-            <form th:action="@{/customer/canceled}" th:metodth="GET" class="order_block" th:each="order : ${orders}">
+            <form th:action="@{/customer/canceled}" th:method="PATCH" class="order_block" th:each="order : ${orders}">
                 <input type="hidden" name="orderId" th:value="${order.id}">
                 <div class="order_block-all-info-column">
 
@@ -214,8 +212,8 @@
                     <option id="sortById">Номеру білету</option>
 
                     <option id="sortByState">Стану</option>
-                    <option id="sortByStartDate">Даті кінця</option>
-                    <option id="sortByEndDate">Даті закінчення</option>
+                    <option id="sortByStartDate">Даті початку</option>
+                    <option id="sortByEndDate">Даті кінця</option>
 
                 </select>
 

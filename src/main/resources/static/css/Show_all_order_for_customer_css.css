@@ -150,6 +150,7 @@
     background: rgba(102, 255, 218, 0.9);
     border: 3px solid #FFFFFF;
     border-radius: 15px;
+    text-align: center;
 }
 
 .box-filter-date{
@@ -200,17 +201,13 @@
 
     color: #000000;
 }
-
+input[type=datetime-local]:focus,
+input[type=number]:focus,
+input[type=date]:focus,
 input[type=text]:focus {
     border: 3px solid rgb(86, 207, 255);
     outline: none;
 }
-
-input[type=date]:focus {
-    border: 3px solid rgb(86, 207, 255);
-    outline: none;
-}
-
 
 select:focus {
     border: 3px solid rgb(86, 207, 255);
@@ -327,3 +324,6 @@ select:focus {
     background: linear-gradient(180deg, rgba(242, 245, 245, 0.73) 60.73%, rgba(242, 245, 245, 0) 100%);
 }
 
+::placeholder {
+    color: black;
+}
