@@ -112,6 +112,10 @@ public class FilterOrdersCore {
         this.endDateRegistration = endDateRegistration;
     }
 
+    public FilterOrdersCore() {
+        this.conditionCommodities = Set.of();
+    }
+
     @Override
     public String toString() {
         return "FilterOrders{" +

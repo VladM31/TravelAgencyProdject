@@ -98,22 +98,22 @@
 
                 <div class="box-filter-check">
                     <input type="checkbox"  name="conditionCommodities" value="NOT_CONFIRMED"
-                           th:checked="${filter.conditionCommodities.contains(T(nure.knt.entity.enums.ConditionCommodity).NOT_CONFIRMED)}"/>
+                           th:checked="${filter.getConditionCommodities().contains(T(nure.knt.entity.enums.ConditionCommodity).NOT_CONFIRMED)}"/>
                     Не підтверджені
                 </div>
                 <div class="box-filter-check">
                     <input type="checkbox"  name="conditionCommodities"  value="CONFIRMED"
-                           th:checked="${filter.conditionCommodities.contains(T(nure.knt.entity.enums.ConditionCommodity).CONFIRMED)}"/>
+                           th:checked="${filter.getConditionCommodities().contains(T(nure.knt.entity.enums.ConditionCommodity).CONFIRMED)}"/>
                     Підтверджені&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div class="box-filter-check">
                     <input type="checkbox"  name="conditionCommodities" value="CANCELED"
-                           th:checked="${filter.conditionCommodities.contains(T(nure.knt.entity.enums.ConditionCommodity).CANCELED)}"/>
+                           th:checked="${filter.getConditionCommodities().contains(T(nure.knt.entity.enums.ConditionCommodity).CANCELED)}"/>
                     Скасовані&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
                 <div class="box-filter-check">
                     <input type="checkbox" name="conditionCommodities" value="GONE"
-                           th:checked="${filter.conditionCommodities.contains(T(nure.knt.entity.enums.ConditionCommodity).GONE)}" />
+                           th:checked="${filter.getConditionCommodities().contains(T(nure.knt.entity.enums.ConditionCommodity).GONE)}" />
                     Викоритсані&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
             </div>

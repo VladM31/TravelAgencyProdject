@@ -22,7 +22,7 @@ public class DAOOrderForCustomerMySQL extends MySQLCore implements IDAOOrderFrom
             "user.name as 'travel agency name',\n" +
             "country.name as country,\n" +
             "tour_ad.city as 'tour ad city',\n" +
-            "place,\n" +
+            "tour_ad.place,\n" +
             "cost,\n" +
             "number_of_people,\n" +
             "order_tour.id as order_id,\n" +
@@ -146,19 +146,42 @@ public class DAOOrderForCustomerMySQL extends MySQLCore implements IDAOOrderFrom
         return null;
     }
 
+    private static final String RESTING_CONDITION_COMMODITY_ID_IN = " condition_commodity.id IN ( " + HandlerSqlDAO.REPLACE_SYMBOL + " ) ";
     @Override
     public List<OrderFromTourAdForCustomer> findByConditionCommodities(Long customerId, Set<ConditionCommodity> conditionCommodities) {
-        return null;
+        final String SCRIPT_WITH_SYMBOL = HandlerSqlDAO.setInInsideScript(RESTING_CONDITION_COMMODITY_ID_IN,conditionCommodities);
+        return HandlerSqlDAO.useSelectScript(super.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_CUSTOMER_ID_IS,AND,SCRIPT_WITH_SYMBOL,SORT_TO_ORDER_TOUR_DATE_REGISTRATION),
+        (statement) -> {
+            try {
+                int position = 0;
+                statement.setLong(++position,customerId);
+                for (ConditionCommodity commodity:conditionCommodities) {
+                    statement.setInt(++position,commodity.getId());
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        },HandlerOrderCustomer::scriptToOrderFromTourAdForCustomer);
     }
 
+    private static final String RESTING_NAME_TRAVEL_AGENCY_CONTAINING = " user.name LIKE ? ";
     @Override
-    public List<OrderFromTourAdForCustomer> findByNameTravelAgencyContaining(Long customerId, String country) {
-        return null;
+    public List<OrderFromTourAdForCustomer> findByNameTravelAgencyContaining(Long customerId, String nameTravelAgency) {
+        return this.wrapperForUseSelectList(RESTING_NAME_TRAVEL_AGENCY_CONTAINING,customerId,HandlerSqlDAO.containingString(nameTravelAgency));
     }
 
+    private static final String RESTING_PLACE_CONTAINING = " tour_ad.place LIKE ? ";
     @Override
     public List<OrderFromTourAdForCustomer> findByRestingPlaceContaining(Long customerId, String restingPlace) {
-        return null;
+        return this.wrapperForUseSelectList(RESTING_PLACE_CONTAINING,customerId,HandlerSqlDAO.containingString(restingPlace));
+    }
+
+    private List<OrderFromTourAdForCustomer> wrapperForUseSelectList(String script,Object ...arrayObjects){
+        return HandlerSqlDAO.useSelectScript(super.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_CUSTOMER_ID_IS,AND,script,SORT_TO_ORDER_TOUR_DATE_REGISTRATION),
+                HandlerOrderCustomer::scriptToOrderFromTourAdForCustomer,
+                arrayObjects);
     }
 
     private static final String SELECT_ORDER_ID_WHERE_ORDER_ID_IS_AND_CUSTOMER_ID_IS =
