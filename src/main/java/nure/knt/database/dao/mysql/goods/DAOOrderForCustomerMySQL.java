@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -121,29 +122,34 @@ public class DAOOrderForCustomerMySQL extends MySQLCore implements IDAOOrderFrom
                 customerId,HandlerSqlDAO.containingString(city));
     }
 
+    private static final String NAME_COUNTRY_CONTAINING = " country.name LIKE ? ";
     @Override
     public List<OrderFromTourAdForCustomer> findByCountryContaining(Long customerId, String country) {
-        return null;
+        return this.wrapperForUseSelectList(NAME_COUNTRY_CONTAINING,customerId,HandlerSqlDAO.containingString(country));
     }
 
+    private static final String DATE_REGISTRATION_BETWEEN = " order_tour.date_registration BETWEEN ? AND ?  ";
     @Override
-    public List<OrderFromTourAdForCustomer> findByDateRegistrationBetween(Long customerId, LocalDate startDateRegistration, LocalDate endDateRegistration) {
-        return null;
+    public List<OrderFromTourAdForCustomer> findByDateRegistrationBetween(Long customerId, LocalDateTime startDateRegistration, LocalDateTime endDateRegistration) {
+        return this.wrapperForUseSelectList(DATE_REGISTRATION_BETWEEN,customerId,startDateRegistration,endDateRegistration);
     }
 
+    private static final String START_DATE_ORDER_AFTER = " order_tour.date_start > ?";
     @Override
     public List<OrderFromTourAdForCustomer> findByStartDateOrderAfter(Long customerId, LocalDate startDateOrder) {
-        return null;
+        return this.wrapperForUseSelectList(START_DATE_ORDER_AFTER,customerId,startDateOrder);
     }
 
+    private static final String END_DATE_ORDER_BEFORE = " order_tour.date_end < ?";
     @Override
     public List<OrderFromTourAdForCustomer> findByEndDateOrderBefore(Long customerId, LocalDate endDateOrder) {
-        return null;
+        return this.wrapperForUseSelectList(END_DATE_ORDER_BEFORE,customerId,endDateOrder);
     }
 
+    private static final String START_DATE_ORDER_AFTER_AND_END_DATE_ORDER_BEFORE = " order_tour.date_start > ? AND order_tour.date_end < ? ";
     @Override
     public List<OrderFromTourAdForCustomer> findByStartDateOrderAfterAndEndDateOrderBefore(Long customerId, LocalDate startDateOrder, LocalDate endDateOrder) {
-        return null;
+        return this.wrapperForUseSelectList(START_DATE_ORDER_AFTER_AND_END_DATE_ORDER_BEFORE,customerId,startDateOrder,endDateOrder);
     }
 
     private static final String RESTING_CONDITION_COMMODITY_ID_IN = " condition_commodity.id IN ( " + HandlerSqlDAO.REPLACE_SYMBOL + " ) ";
