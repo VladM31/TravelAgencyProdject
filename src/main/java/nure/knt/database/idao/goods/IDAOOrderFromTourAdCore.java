@@ -7,6 +7,7 @@ import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.goods.OrderFromTourAdCore;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ public interface IDAOOrderFromTourAdCore<O extends OrderFromTourAdCore> extends 
     public List<O> findByCityContaining(Long userOrTuodAdId,String city);//Місто 3
     public List<O> findByCountryContaining(Long userOrTuodAdId,String country);//Країна 2
 
-    public List<O> findByDateRegistrationBetween(Long userOrTuodAdId,LocalDate startDateRegistration,LocalDate endDateRegistration);// 10
+    public List<O> findByDateRegistrationBetween(Long userOrTuodAdId, LocalDateTime startDateRegistration, LocalDateTime endDateRegistration);// 10
 
     public List<O> findByStartDateOrderAfter(Long userOrTuodAdId,LocalDate startDateOrder);// 8
     public List<O> findByEndDateOrderBefore(Long userOrTuodAdId,LocalDate endDateOrder);// 9

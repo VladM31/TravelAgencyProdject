@@ -3,18 +3,34 @@ package nure.knt.forms.filter;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 import java.time.chrono.ChronoLocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.function.*;
+import java.util.stream.Collectors;
 
 public class HandlerFilter {
+
+    public static final LocalDateTime MAX_LOCAL_DATE_TIME = LocalDateTime.of(2038, 01, 01, 1, 1);
+    public static final LocalDateTime MIN_LOCAL_DATE_TIME = LocalDateTime.of(1970, 01, 01, 1, 1);
+
+    public static final LocalDate MAX_DATE_TIME = LocalDate.of(2038, 01, 01);
+    public static final LocalDate MIN_DATE_TIME = LocalDate.of(1970, 01, 01);
+
     public static final DateTimeFormatter STRING_TO_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    public static <T> boolean predicateList(List<Predicate<T>> filters, T obj){
-        for(Predicate<T> filter : filters){
-            if(!filter.test(obj)){
+    public static boolean NOT_EMPTY = false;
+    public static int START_DATE = 0;
+    public static int END_DATE = 1;
+
+    public static <T> boolean predicateList(List<Predicate<T>> filters, T obj) {
+        for (Predicate<T> filter : filters) {
+            if (!filter.test(obj)) {
                 return false;
             }
         }
@@ -23,14 +39,19 @@ public class HandlerFilter {
 
 
     public static List<?> LIST_IS_NOT_CREATED_FROM_DATABASE = null;
+
     @Nullable
-    public static <T> List<T> checkString(String string, List<T> list, Function<String,List<T>> workWithDatabase,Consumer<String> elseDidNotWorkWithDatabase){
-        if (string.isEmpty()){
+    public static <T> List<T> checkString(String string, List<T> list, Function<String, List<T>> workWithDatabase, Consumer<String> elseDidNotWorkWithDatabase) {
+        if (string == null) {
+            return list;
+        }
+
+        if (string.isEmpty()) {
             return list;
         }
 
         string = string.trim();
-        if(list == LIST_IS_NOT_CREATED_FROM_DATABASE){
+        if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
             return workWithDatabase.apply(string);
         }
 
@@ -38,13 +59,13 @@ public class HandlerFilter {
         return list;
     }
 
-    public static boolean isItNotNeedSwap(String first, String second){
+    public static boolean isItNotNeedSwap(String first, String second) {
         return first.compareTo(second) < 1;
     }
 
-    public static <S extends CharSequence> boolean isEmptyOneOfThem(@NonNull S ...strings){
-        for (S string:strings) {
-            if(string.isEmpty()){
+    public static <S extends CharSequence> boolean isEmptyOneOfThem(@NonNull S... strings) {
+        for (S string : strings) {
+            if (string.isEmpty()) {
                 return true;
             }
         }
@@ -52,66 +73,61 @@ public class HandlerFilter {
     }
 
 
-    public static boolean NOT_EMPTY = false;
-    public static int START_DATE = 0;
-    public static int END_DATE = 1;
-
     public static <T> List<T> checkDate(String startDate, String endDate, List<T> list,
-                                         BiFunction<LocalDateTime,LocalDateTime,List<T>> dateBetween,
-                                         BiConsumer<LocalDateTime,LocalDateTime> elseDidNotBetween,
-                                         Function<LocalDateTime,List<T>> dateStart,
-                                         Consumer<LocalDateTime> elseDidNotStart,
-                                         Function<LocalDateTime,List<T>> dateEnd,
-                                         Consumer<LocalDateTime> elseDidNotEnd){
+                                        BiFunction<LocalDateTime, LocalDateTime, List<T>> dateBetween,
+                                        BiConsumer<LocalDateTime, LocalDateTime> elseDidNotBetween,
+                                        Function<LocalDateTime, List<T>> dateStart,
+                                        Consumer<LocalDateTime> elseDidNotStart,
+                                        Function<LocalDateTime, List<T>> dateEnd,
+                                        Consumer<LocalDateTime> elseDidNotEnd) {
 
-        if(startDate.isEmpty() && endDate.isEmpty()){
+        if (startDate.isEmpty() && endDate.isEmpty()) {
             return list;
         }
 
-        if(HandlerFilter.isEmptyOneOfThem(startDate,endDate) == NOT_EMPTY){
-            List<LocalDateTime> dateList = HandlerFilter.twoStringsToSortListLocalDateTime(startDate,endDate, HandlerFilter::stringToLDT);
-            if(list == LIST_IS_NOT_CREATED_FROM_DATABASE){
-               return dateBetween.apply(dateList.get(START_DATE),dateList.get(END_DATE));
+        if (HandlerFilter.isEmptyOneOfThem(startDate, endDate) == NOT_EMPTY) {
+            List<LocalDateTime> dateList = HandlerFilter.twoStringsToSortListLocalDateTime(startDate, endDate, HandlerFilter::stringToLDT);
+            if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
+                return dateBetween.apply(dateList.get(START_DATE), dateList.get(END_DATE));
             }
-            elseDidNotBetween.accept(dateList.get(START_DATE),dateList.get(END_DATE));
+            elseDidNotBetween.accept(dateList.get(START_DATE), dateList.get(END_DATE));
             return list;
         }
 
-        if(startDate.isEmpty() == NOT_EMPTY){
-            if(list == LIST_IS_NOT_CREATED_FROM_DATABASE){
+        if (startDate.isEmpty() == NOT_EMPTY) {
+            if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
                 return dateStart.apply(HandlerFilter.stringToLDT(startDate));
             }
             elseDidNotStart.accept(HandlerFilter.stringToLDT(startDate));
             return list;
         }
 
-        if(list == LIST_IS_NOT_CREATED_FROM_DATABASE){
+        if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
             return dateEnd.apply(HandlerFilter.stringToLDT(endDate));
         }
         elseDidNotEnd.accept(HandlerFilter.stringToLDT(endDate));
         return list;
     }
 
-    public static <T extends ChronoLocalDateTime> List<T> twoStringsToSortListLocalDateTime(String dateFirst,String dateSecond,Function<String,T> parseString){
-        if (HandlerFilter.isItNotNeedSwap(dateFirst,dateSecond)) {
-            return List.of(parseString.apply(dateFirst),parseString.apply(dateSecond));
+    public static <T extends ChronoLocalDateTime> List<T> twoStringsToSortListLocalDateTime(String dateFirst, String dateSecond, Function<String, T> parseString) {
+        if (HandlerFilter.isItNotNeedSwap(dateFirst, dateSecond)) {
+            return List.of(parseString.apply(dateFirst), parseString.apply(dateSecond));
         }
-        return List.of(parseString.apply(dateSecond),parseString.apply(dateFirst));
+        return List.of(parseString.apply(dateSecond), parseString.apply(dateFirst));
     }
 
 
-    public static LocalDateTime stringToLDT(String dateString){
-        return LocalDateTime.parse(dateString,STRING_TO_DATE_TIME_FORMAT);
+    public static LocalDateTime stringToLDT(String dateString) {
+        return LocalDateTime.parse(dateString, STRING_TO_DATE_TIME_FORMAT);
     }
 
+    public static <T> List<T> checkTwoBooleanForOneState(boolean isState, boolean isNotState, List<T> list, Function<Boolean, List<T>> workWithDatabase, Consumer<Boolean> elseDidNotWorkWithDatabase) {
 
-    public static <T> List<T> checkTwoBooleanForOneState(boolean isState, boolean isNotState, List<T> list,Function<Boolean,List<T>> workWithDatabase,Consumer<Boolean> elseDidNotWorkWithDatabase){
-
-        if (isState == isNotState ){
+        if (isState == isNotState) {
             return list;
         }
 
-        if(list == LIST_IS_NOT_CREATED_FROM_DATABASE){
+        if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
             return workWithDatabase.apply(isState);
         }
 
@@ -119,32 +135,159 @@ public class HandlerFilter {
         return list;
     }
 
-    @Deprecated
-    public static <T,N extends Number & Comparable<N>> List<T> checkNumberBetween(N start,N end,final N MIN,final N MAX, List<T> list,BiFunction<N,N,List<T>> workWithDatabase,BiConsumer<N,N> elseDidNotWorkWithDatabase){
+    public static <T, N extends Number & Comparable<N>> List<T> checkNumberBetween(N start, N end, final N MIN, final N MAX, List<T> list, BiFunction<N, N, List<T>> workWithDatabase, BiConsumer<N, N> elseDidNotWorkWithDatabase) {
+        return filtering(start, end, MIN, MAX, list, workWithDatabase, elseDidNotWorkWithDatabase);
+    }
 
-        if(start == null && end == null){
+    public static <T> List<T> endFiltering(List<T> list, List<Predicate<T>> filterList) {
+        if (list.isEmpty() || filterList.isEmpty()) {
             return list;
         }
 
-        if(start == null){
-            start = MIN;
+        return list.stream()
+                .collect(
+                        Collectors.filtering((order) -> HandlerFilter.predicateList(filterList, order)
+                                , Collectors.toList()));
+    }
+
+    private static <T> T setOtherValueIftThisIsNull(T canNull, T otherValue) {
+        return (canNull == null) ? otherValue : canNull;
+    }
+
+    private static boolean isAllNull(Object... array) {
+        for (Object obj : array) {
+            if (obj != null) {
+                return false;
+            }
         }
-        if(end == null){
-            end = MAX;
+        return true;
+    }
+
+    private static boolean isAllNonNull(Object... array) {
+        for (Object obj : array) {
+            if (obj == null) {
+                return false;
+            }
         }
-        if(start.compareTo(end) > 1){
-            N temp = start;
-            start =end;
+        return true;
+    }
+
+    private static <Entity, FilteringBy> List<Entity> lastWorkWith(FilteringBy startDate, FilteringBy endDate, List<Entity> list,
+                                                                   BiFunction<FilteringBy, FilteringBy, List<Entity>> workWithDatabase,
+                                                                   BiConsumer<FilteringBy, FilteringBy> elseDidNotWorkWithDatabase) {
+        if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
+            return workWithDatabase.apply(startDate, endDate);
+        }
+
+        elseDidNotWorkWithDatabase.accept(startDate, endDate);
+        return list;
+    }
+
+    private static <Entity, FilteringBy extends Comparable<FilteringBy>> List<Entity> filtering(FilteringBy start, FilteringBy end, final FilteringBy MIN, final FilteringBy MAX,
+                                                                                                List<Entity> list, BiFunction<FilteringBy, FilteringBy, List<Entity>> workWithDatabase,
+                                                                                                BiConsumer<FilteringBy, FilteringBy> elseDidNotWorkWithDatabase) {
+        if (isAllNull(start, end)) {
+            return list;
+        }
+
+        start = setOtherValueIftThisIsNull(start, MIN);
+
+        end = setOtherValueIftThisIsNull(end, MAX);
+
+        if (start.compareTo(end) > -1) {
+            FilteringBy temp = start;
+            start = end;
             end = temp;
         }
 
+        return lastWorkWith(start, end, list, workWithDatabase, elseDidNotWorkWithDatabase);
 
-        if(list == LIST_IS_NOT_CREATED_FROM_DATABASE){
-            return workWithDatabase.apply(start,end);
+    }
+
+    public static <T, D extends ChronoLocalDateTime> List<T> checkDateTime(D startDate, D endDate, final D MIN, final D MAX, List<T> list, BiFunction<D, D, List<T>> workWithDatabase, BiConsumer<D, D> elseDidNotWorkWithDatabase) {
+        return filtering(startDate, endDate, MIN, MAX, list, workWithDatabase, elseDidNotWorkWithDatabase);
+    }
+
+
+    public static <T, D extends ChronoLocalDate> List<T> checkDate(D startDate, D endDate, final D MIN, final D MAX, List<T> list, BiFunction<D, D, List<T>> workWithDatabase, BiConsumer<D, D> elseDidNotWorkWithDatabase) {
+        if (isAllNull(startDate, endDate)) {
+            return list;
         }
 
-        elseDidNotWorkWithDatabase.accept(start,end);
+        startDate = setOtherValueIftThisIsNull(startDate, MIN);
+
+        endDate = setOtherValueIftThisIsNull(endDate, MAX);
+
+        if (startDate.compareTo(endDate) > -1) {
+            D temp = startDate;
+            startDate = endDate;
+            endDate = temp;
+        }
+
+        return lastWorkWith(startDate, endDate, list, workWithDatabase, elseDidNotWorkWithDatabase);
+    }
+
+    public static <Entity, D extends ChronoLocalDate> List<Entity> checkDate(D startDate, D endDate, List<Entity> list,
+                                                                             BiFunction<D, D, List<Entity>> dateBetween,
+                                                                             BiConsumer<D, D> elseDidNotBetween,
+                                                                             Function<D, List<Entity>> dateStart,
+                                                                             Consumer<D> elseDidNotStart,
+                                                                             Function<D, List<Entity>> dateEnd,
+                                                                             Consumer<D> elseDidNotEnd) {
+
+        if (isAllNull(startDate, endDate)) {
+            return list;
+        }
+
+        if (HandlerFilter.isAllNonNull(startDate, endDate)) {
+            if (startDate.compareTo(endDate) > -1) {
+                D temp = startDate;
+                startDate = endDate;
+                endDate = temp;
+            }
+            if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
+                return dateBetween.apply(startDate, endDate);
+            }
+            elseDidNotBetween.accept(startDate, endDate);
+            return list;
+        }
+
+        if (startDate != null) {
+            if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
+                return dateStart.apply(startDate);
+            }
+            elseDidNotStart.accept(startDate);
+            return list;
+        }
+
+        if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
+            return dateEnd.apply(endDate);
+        }
+        elseDidNotEnd.accept(endDate);
         return list;
     }
-}
 
+    public static <T, E extends Enum<?>> List<T> checkEnums(Set<E> enums, List<T> list, Function<Set<E>, List<T>> workWithDatabase, Consumer<Set<E>> elseDidNotWorkWithDatabase) {
+
+        if(enums.isEmpty()){
+            return list;
+        }
+
+        if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
+            return workWithDatabase.apply(enums);
+        }
+        elseDidNotWorkWithDatabase.accept(enums);
+        return list;
+
+    }
+
+    public static <E extends Enum<?>> boolean isEnumFromCollection(Set<? extends E> collection,E filedEnum){
+        for(E oneEnum : collection){
+            if(oneEnum.equals(filedEnum)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.function.Function;
 
 @Controller
-public class CustomerProfile {
+public class ControllerCustomer {
 
 
     @Value("${customer.profile.order.url}")
@@ -34,6 +34,7 @@ public class CustomerProfile {
         System.out.println(filter);
 
         model.addAttribute("filter",filter);
+        model.addAttribute("orders",filter.filtering(user.getCustomerId(),daoOrder));
         this.start(user,model);
         return HandlerCustomerProfile.PAGE_PROFILE_ORDER;
     }
@@ -49,7 +50,7 @@ public class CustomerProfile {
 
     public void start(Customer user, Model model){
         HandlerCustomerProfile.setNameInPage(model,user.getName().replace('/',' '));
-        model.addAttribute("orders",daoOrder.findAllById(user.getCustomerId()));
+
         HandlerCustomerProfile.setColorButton(model);
         HandlerCustomerProfile.setUkraineName(model);
         HandlerController.setMenuModel(user,model);
