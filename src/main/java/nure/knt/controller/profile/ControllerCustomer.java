@@ -1,6 +1,7 @@
 package nure.knt.controller.profile;
 
 import nure.knt.controller.HandlerController;
+import nure.knt.controller.handlers.HandlerCustomerControllerInformation;
 import nure.knt.database.idao.goods.IDAOOrderFromTourAdCustomer;
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.goods.OrderFromTourAdForCustomer;
@@ -8,7 +9,6 @@ import nure.knt.entity.important.Customer;
 import nure.knt.forms.filter.FilterOrdersForCustomer;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +22,7 @@ import java.util.function.Function;
 public class ControllerCustomer {
 
 
-    @Value("${customer.profile.order.url}")
-    private String profileCustomerOrder;
+
     @Autowired
     private IDAOOrderFromTourAdCustomer<OrderFromTourAdForCustomer> daoOrder;
     @Autowired
@@ -33,30 +32,29 @@ public class ControllerCustomer {
     public String showOrderGet(@AuthenticationPrincipal Customer user, Model model, FilterOrdersForCustomer filter){
         System.out.println(filter);
 
-        model.addAttribute("filter",filter);
+        model.addAttribute("filter",(filter == null) ? new FilterOrdersForCustomer(): filter);
         model.addAttribute("orders",filter.filtering(user.getCustomerId(),daoOrder));
         this.start(user,model);
         return HandlerCustomerProfile.PAGE_PROFILE_ORDER;
     }
 
-    @RequestMapping(value ="${customer.profile.order.update.state.cancelet}",method = {RequestMethod.PATCH})
+    @RequestMapping(value ="${customer.profile.order.update.state.canceled}",method = {RequestMethod.PATCH})
     public String updateStateOrder(@AuthenticationPrincipal Customer user,@ModelAttribute("orderId") long orderId) {
 
         if(daoOrder.isThisCustomerOrder(user.getCustomerId(),orderId)){
             daoOrder.updateConditionCommodity(orderId,ConditionCommodity.CANCELED);
         }
-        return "redirect:"+profileCustomerOrder;
+        return "redirect:"+ HandlerCustomerControllerInformation.getProfileCustomerOrderUrl();
     }
+
 
     public void start(Customer user, Model model){
         HandlerCustomerProfile.setNameInPage(model,user.getName().replace('/',' '));
-
         HandlerCustomerProfile.setColorButton(model);
         HandlerCustomerProfile.setUkraineName(model);
         HandlerController.setMenuModel(user,model);
         HandlerCustomerProfile.setButtonType(model);
         model.addAttribute("countries",countries.getCountry());
-
     }
 }
 

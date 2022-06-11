@@ -167,7 +167,6 @@ class HendlerIMCForAll {
 @Component
 class HendlerIMCForCustomer{
     private static final String CUSTOMER_NAME_CHOOSE = "Замовлень";
-    private static final String CUSTOMER_URL = "";
     private static String CUSTOMER_URL_CHOOSE;
 
     static void setCustomer(Model model){
@@ -180,8 +179,10 @@ class HendlerIMCForCustomer{
 
     @Autowired
     public void setUrl(@Value("${customer.profile.order.url}") String CUSTOMER_URL_CHOOSE){
-        HendlerIMCForCustomer.CUSTOMER_URL_CHOOSE = CUSTOMER_URL + CUSTOMER_URL_CHOOSE;
+        HendlerIMCForCustomer.CUSTOMER_URL_CHOOSE = CUSTOMER_URL_CHOOSE;
     }
+
+
 }
 
 class HendlerIMCForTravelAgency{

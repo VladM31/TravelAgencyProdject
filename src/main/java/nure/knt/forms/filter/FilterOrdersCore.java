@@ -28,7 +28,6 @@ public class FilterOrdersCore {
     //+
     public void setConditionCommodities(ConditionCommodity[] conditionCommodities) {
         this.conditionCommodities = Arrays.stream(conditionCommodities).collect(Collectors.toSet());
-
     }
     //+
     public String getCountry() {
