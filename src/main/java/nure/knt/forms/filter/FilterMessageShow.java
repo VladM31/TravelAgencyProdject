@@ -3,22 +3,23 @@ package nure.knt.forms.filter;
 import nure.knt.database.idao.temporary.IDAOMessage;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.subordinate.MessageShortData;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
-public class MessageShowFilter {
+public class FilterMessageShow {
     private Role byRole;
     private String byNameSendler;
     private String byNameMessage;
-    private String byStartSendDate;
-    private String byEndSendDate;
-    private boolean byRead;
-    private boolean byNotRead;
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime byStartSendDate,byEndSendDate;
+    private boolean byRead,byNotRead;
 
-    public MessageShowFilter(Role byRole, String byNameSendler, String byNameMessage, String byStartSendDate, String byEndSendDate, boolean byRead, boolean byNotRead) {
+    public FilterMessageShow(Role byRole, String byNameSendler, String byNameMessage,
+                             LocalDateTime byStartSendDate, LocalDateTime byEndSendDate, boolean byRead, boolean byNotRead) {
         this.byRole = byRole;
         this.byNameSendler = byNameSendler;
         this.byNameMessage = byNameMessage;
@@ -28,7 +29,7 @@ public class MessageShowFilter {
         this.byNotRead = byNotRead;
     }
 
-    public MessageShowFilter() {
+    public FilterMessageShow() {
     }
 
     public Role getByRole() {
@@ -55,49 +56,46 @@ public class MessageShowFilter {
         this.byNameMessage = byNameMessage;
     }
 
-    public String getByStartSendDate() {
-        return byStartSendDate;
-    }
 
     public String getStartDate(){
-        return byStartSendDate.replace('T',' ');
+        return byStartSendDate.toString().replace('T',' ');
     }
 
     public String getEndDate(){
-        return byEndSendDate.replace('T',' ');
+        return byEndSendDate.toString().replace('T',' ');
     }
 
-    public void setByStartSendDate(String byStartSendDate) {
+    public LocalDateTime getByStartSendDate() {
+        return byStartSendDate;
+    }
+
+    public void setByStartSendDate(LocalDateTime byStartSendDate) {
         this.byStartSendDate = byStartSendDate;
     }
 
-    public String getByEndSendDate() {
+    public LocalDateTime getByEndSendDate() {
         return byEndSendDate;
     }
 
-    public void setByEndSendDate(String byEndSendDate) {
+    public void setByEndSendDate(LocalDateTime byEndSendDate) {
         this.byEndSendDate = byEndSendDate;
     }
 
-    public boolean getByRead() {
+    public boolean isByRead() {
         return byRead;
+    }
+
+    public boolean isByNotRead() {
+        return byNotRead;
     }
 
     public void setByRead(boolean byRead) {
         this.byRead = byRead;
     }
 
-    public boolean getByNotRead() {
-        return byNotRead;
-    }
-
     public void setByNotRead(boolean byNotRead) {
         this.byNotRead = byNotRead;
     }
-
-    public static boolean NOT_EMPTY = false;
-    public static int START_DATE = 0;
-    public static int END_DATE = 1;
 
     public List<MessageShortData> filtering(long toWhom, IDAOMessage idaoMessage){
         List<MessageShortData> list = null;
@@ -120,26 +118,17 @@ public class MessageShowFilter {
                 (nameMessage)-> idaoMessage.findMSDByToWhomAndNameMessageContaining(toWhom,nameMessage),
                 (nameMessage) ->filterList.add((msd) -> msd.getMessageName().contains(nameMessage)));
 
-        list = HandlerFilter.checkDate(this.getStartDate(),this.getEndDate(),list,
+        list = HandlerFilter.checkDateTime(this.byStartSendDate,this.byEndSendDate,
+                HandlerFilter.MIN_LOCAL_DATE_TIME,HandlerFilter.MAX_LOCAL_DATE_TIME,list,
                 (d1,d2) -> idaoMessage.findMSDByToWhomAndSendDateBetween(toWhom,d1,d2),
-                (d1,d2) ->filterList.add((msd) -> msd.getSendDate().isAfter(d1)  && msd.getSendDate().isBefore(d2)),
-                (d) -> idaoMessage.findMSDByToWhomAndSendDateAfterAndEquals(toWhom, d),
-                (d) ->  filterList.add((msd) -> msd.getSendDate().isAfter(d) ),
-                (d) -> idaoMessage.findMSDByToWhomAndSendDateBeforeAndEquals(toWhom, d),
-                (d) -> filterList.add((msd) -> msd.getSendDate().isBefore(d)));
+                (d1,d2) ->filterList.add((msd) -> msd.getSendDate().isAfter(d1) && msd.getSendDate().isBefore(d2)));
 
 
         if(list == HandlerFilter.LIST_IS_NOT_CREATED_FROM_DATABASE){
             return idaoMessage.findMessageShortDataAllByToWhom(toWhom);
         }
-        if (list.isEmpty() || filterList.isEmpty()){
-            return list;
-        }
 
-        return  list.stream()
-                .collect(
-                        Collectors.filtering((msd)-> HandlerFilter.predicateList(filterList,msd)
-                                ,Collectors.toList()));
+        return HandlerFilter.endFiltering(list,filterList);
     }
 
     @Override

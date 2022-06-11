@@ -23,10 +23,8 @@ public class HandlerFilter {
     public static final LocalDate MIN_DATE_TIME = LocalDate.of(1970, 01, 01);
 
     public static final DateTimeFormatter STRING_TO_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-
+    public static List<?> LIST_IS_NOT_CREATED_FROM_DATABASE = null;
     public static boolean NOT_EMPTY = false;
-    public static int START_DATE = 0;
-    public static int END_DATE = 1;
 
     public static <T> boolean predicateList(List<Predicate<T>> filters, T obj) {
         for (Predicate<T> filter : filters) {
@@ -36,9 +34,6 @@ public class HandlerFilter {
         }
         return true;
     }
-
-
-    public static List<?> LIST_IS_NOT_CREATED_FROM_DATABASE = null;
 
     @Nullable
     public static <T> List<T> checkString(String string, List<T> list, Function<String, List<T>> workWithDatabase, Consumer<String> elseDidNotWorkWithDatabase) {
@@ -59,9 +54,6 @@ public class HandlerFilter {
         return list;
     }
 
-    public static boolean isItNotNeedSwap(String first, String second) {
-        return first.compareTo(second) < 1;
-    }
 
     public static <S extends CharSequence> boolean isEmptyOneOfThem(@NonNull S... strings) {
         for (S string : strings) {
@@ -70,55 +62,6 @@ public class HandlerFilter {
             }
         }
         return false;
-    }
-
-
-    public static <T> List<T> checkDate(String startDate, String endDate, List<T> list,
-                                        BiFunction<LocalDateTime, LocalDateTime, List<T>> dateBetween,
-                                        BiConsumer<LocalDateTime, LocalDateTime> elseDidNotBetween,
-                                        Function<LocalDateTime, List<T>> dateStart,
-                                        Consumer<LocalDateTime> elseDidNotStart,
-                                        Function<LocalDateTime, List<T>> dateEnd,
-                                        Consumer<LocalDateTime> elseDidNotEnd) {
-
-        if (startDate.isEmpty() && endDate.isEmpty()) {
-            return list;
-        }
-
-        if (HandlerFilter.isEmptyOneOfThem(startDate, endDate) == NOT_EMPTY) {
-            List<LocalDateTime> dateList = HandlerFilter.twoStringsToSortListLocalDateTime(startDate, endDate, HandlerFilter::stringToLDT);
-            if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
-                return dateBetween.apply(dateList.get(START_DATE), dateList.get(END_DATE));
-            }
-            elseDidNotBetween.accept(dateList.get(START_DATE), dateList.get(END_DATE));
-            return list;
-        }
-
-        if (startDate.isEmpty() == NOT_EMPTY) {
-            if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
-                return dateStart.apply(HandlerFilter.stringToLDT(startDate));
-            }
-            elseDidNotStart.accept(HandlerFilter.stringToLDT(startDate));
-            return list;
-        }
-
-        if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
-            return dateEnd.apply(HandlerFilter.stringToLDT(endDate));
-        }
-        elseDidNotEnd.accept(HandlerFilter.stringToLDT(endDate));
-        return list;
-    }
-
-    public static <T extends ChronoLocalDateTime> List<T> twoStringsToSortListLocalDateTime(String dateFirst, String dateSecond, Function<String, T> parseString) {
-        if (HandlerFilter.isItNotNeedSwap(dateFirst, dateSecond)) {
-            return List.of(parseString.apply(dateFirst), parseString.apply(dateSecond));
-        }
-        return List.of(parseString.apply(dateSecond), parseString.apply(dateFirst));
-    }
-
-
-    public static LocalDateTime stringToLDT(String dateString) {
-        return LocalDateTime.parse(dateString, STRING_TO_DATE_TIME_FORMAT);
     }
 
     public static <T> List<T> checkTwoBooleanForOneState(boolean isState, boolean isNotState, List<T> list, Function<Boolean, List<T>> workWithDatabase, Consumer<Boolean> elseDidNotWorkWithDatabase) {

@@ -6,7 +6,7 @@ import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
 import nure.knt.entity.subordinate.Message;
 import nure.knt.entity.subordinate.MessageShortData;
-import nure.knt.forms.filter.MessageShowFilter;
+import nure.knt.forms.filter.FilterMessageShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -40,7 +40,7 @@ public class InsideMessageController {
         }
 
 
-        model.addAttribute(ATTRIBUTE_FILTER,new MessageShowFilter());
+        model.addAttribute(ATTRIBUTE_FILTER,new FilterMessageShow());
         model.addAttribute(ATTRIBUTE_MESSAGES,idaoMessage.findMessageShortDataAllByToWhom(user.getId()));
         HendlerIMCForAll.setInformationAboutUserForShowAll(model,user);
 
@@ -48,7 +48,7 @@ public class InsideMessageController {
     }
 
     @RequestMapping(value = "/profile-message",method = {RequestMethod.POST})
-    public String showProfileMessagePOST(@AuthenticationPrincipal User user,Model model,MessageShowFilter filter){
+    public String showProfileMessagePOST(@AuthenticationPrincipal User user, Model model, FilterMessageShow filter){
 
         if (user != null) {
             HandlerController.setMenuModel(user,model);
