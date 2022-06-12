@@ -52,6 +52,12 @@ public class SecurityControler {
     }
 
     // ************* Вибір реєстрації *****************
+
+    @RequestMapping(value= {"${registration.choose.sign.up}"},method = { RequestMethod.GET,RequestMethod.POST })
+    public String showSignUpPage(Model model) {
+        return "registration/Choose registration Page";
+    }
+
     @RequestMapping(value= {"/sign_up"},method = { RequestMethod.GET })
     public String signUpGet(Model model) {
         model.addAttribute("setSignUp",new ChooseSignUpForm(null,false,true));

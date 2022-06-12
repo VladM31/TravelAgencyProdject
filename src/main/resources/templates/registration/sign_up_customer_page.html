@@ -21,7 +21,9 @@
 
 <body>
   <div class="container">
-    <form th:action="@{/free/customer-registration}" th:object="${customerForm}" method="post">
+
+
+    <form th:action="${@environment.getProperty('customer.registration')}" th:object="${customerForm}" method="post">
       <h1>Реєстрація</h1>
       <div class="box-info">
         <div>
