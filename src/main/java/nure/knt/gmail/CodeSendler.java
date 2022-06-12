@@ -7,21 +7,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CodeSendler {
-    public JavaMailSender emailSender;
+    private ISendTextOnEmail emailSender;
     @Autowired
-    public void setEmailSender(JavaMailSender emailSender) {
+    public void setEmailSender(ISendTextOnEmail emailSender) {
         this.emailSender = emailSender;
     }
 
+    private static final String NAME_MESSAGE = "Sign up Email";
+    private static final String TEMPLATE_DESCRIBE_MESSAGE = "Hello %s, your email use for sign up at site \"Tangerine summer\", use this code --> %s <--.";
+
     public void sendCode(String email,String name,String cod){
-        SimpleMailMessage message = new SimpleMailMessage();
-
-        message.setTo(email);
-
-        message.setSubject("Sign up Email");
-
-        message.setText(String.format("Hello %s, your email use for sign up at site \"Tangerine summer\", use this code --> %s <--.",name,cod));
-        // Send Message!
-        this.emailSender.send(message);
+        emailSender.sendMessageOnEmail(email,NAME_MESSAGE,
+                String.format(TEMPLATE_DESCRIBE_MESSAGE,name,cod)
+        );
     }
 }

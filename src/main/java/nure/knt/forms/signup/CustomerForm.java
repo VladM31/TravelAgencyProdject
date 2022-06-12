@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
 public class CustomerForm extends UserForm {
 
     @Size(min=2,max=50, message = "Ім'я повинне бути більше 2 і не менше 50 символів")
-    @Pattern(regexp = "^((?!/).)*$",message = "Не повинно в імені бути знаку \"/\"")
+    @Pattern(regexp = "^((?![/;-=*+?!]).)*$",message = "Не повинно в імені бути знаку \"/\"")
     private String firstname;
     @Size(min=2,max=50, message = "Прізвище повинне бути більше 2 і не менше 50 символів")
-    @Pattern(regexp = "^((?!/).)*$",message = "Не повинно в прізвище бути знаку \"/\"")
+    @Pattern(regexp = "^((?![/;-=*+?!]).)*$",message = "Не повинно в прізвище бути знаку \"/\"")
     private String lastname;
     private boolean male;
 
