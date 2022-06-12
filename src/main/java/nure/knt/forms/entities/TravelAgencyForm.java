@@ -1,4 +1,4 @@
-package nure.knt.forms.signup;
+package nure.knt.forms.entities;
 
 import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.subordinate.TravelAgencyTemporary;

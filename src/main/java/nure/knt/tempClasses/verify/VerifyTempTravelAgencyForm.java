@@ -2,7 +2,7 @@ package nure.knt.tempClasses.verify;
 
 import nure.knt.database.idao.entity.IDAOTravelAgencySQL;
 import nure.knt.entity.important.TravelAgency;
-import nure.knt.forms.signup.TravelAgencyForm;
+import nure.knt.forms.entities.TravelAgencyForm;
 import nure.knt.tempClasses.verify.verify.inter.IVerifySyntaxErrors;
 import nure.knt.tempClasses.verify.verify.inter.IVerifyTravelForm;
 import org.springframework.beans.factory.annotation.Autowired;

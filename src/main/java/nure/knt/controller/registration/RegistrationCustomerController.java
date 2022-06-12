@@ -2,12 +2,11 @@ package nure.knt.controller.registration;
 
 import nure.knt.database.idao.registration.IDAOUserRegistration;
 import nure.knt.entity.important.Customer;
-import nure.knt.forms.signup.CustomerForm;
+import nure.knt.forms.entities.CustomerForm;
 import nure.knt.gmail.CodeSendler;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +24,6 @@ public class RegistrationCustomerController {
     private CodeSendler codeSendler;
     private WorkWithCountries countries;
 
-    private static final String URL = "/customer-registration";
     private static final String URL_CODE = "/customer-check-code";
     private static final String DIRECTORY = "registration/";
     private static final String SIGN_UP_FORM = DIRECTORY + "sign_up_customer_page";
@@ -35,14 +33,14 @@ public class RegistrationCustomerController {
     private static final String EMAIL_ATTRIBUTE = "email";
     private static final String NAME_ATTRIBUTE = "name";
 
-    @RequestMapping(value = URL,method = {RequestMethod.GET})
+    @RequestMapping(value = "${customer.registration}",method = {RequestMethod.GET})
     public String showInputForm(Model model){
 
         this.setFormOnPage(model,new CustomerForm());
         return SIGN_UP_FORM;
     }
 
-    @RequestMapping(value = URL,method = {RequestMethod.POST})
+    @RequestMapping(value = "${customer.registration}",method = {RequestMethod.POST})
     public String checkInputForm(Model model, @Valid @ModelAttribute(CUSTOMER_FORM_ATTRIBUTE) CustomerForm customerForm, @NotNull  BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){

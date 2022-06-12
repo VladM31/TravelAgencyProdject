@@ -10,19 +10,18 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
     rel="stylesheet" />
-  <link href="../../node_modules/normalize.css/normalize.css" rel="stylesheet" />
-  <link rel="stylesheet" href="css/sign_up_customer_css.css" />
+
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-  <script th:src="@{/jquery/jquery.min.js}"></script>
-  <script th:src="@{/popper/popper.min.js}"></script>
-  <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+  <link th:href="@{../css/sign_up_customer_css.css}" rel="stylesheet"  />
   <title>Реєстрація</title>
 </head>
 
 <body>
   <div class="container">
-    <form th:action="@{/customer-registration}" th:object="${customerForm}" method="post">
+    <form th:action="@{/free/customer-registration}" th:object="${customerForm}" method="post">
       <h1>Реєстрація</h1>
       <div class="box-info">
         <div>

@@ -6,10 +6,9 @@ import nure.knt.database.idao.temporary.IDAOTravelAgencyTemporaryCode;
 import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
-import nure.knt.forms.signup.ChooseSignUpForm;
-import nure.knt.forms.signup.TravelAgencyForm;
+import nure.knt.forms.entities.ChooseSignUpForm;
+import nure.knt.forms.entities.TravelAgencyForm;
 import nure.knt.tempClasses.verify.VerifyTempTravelAgencyForm;
-import nure.knt.tempClasses.verify.verify.inter.IVerifyCustomerForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -67,7 +66,7 @@ public class SecurityControler {
         }
 
         if (form.isCustomer()) {
-            return "redirect:/customer-registration";
+            return "redirect:/free/customer-registration";
         }else{
             model.addAttribute("travel",new TravelAgencyForm());
             return "sign_up_travel_agencyPage";

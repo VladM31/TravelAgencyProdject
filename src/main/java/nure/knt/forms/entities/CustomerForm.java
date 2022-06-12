@@ -1,4 +1,4 @@
-package nure.knt.forms.signup;
+package nure.knt.forms.entities;
 
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.important.Customer;

@@ -1,4 +1,4 @@
-package nure.knt.forms.signup;
+package nure.knt.forms.entities;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;

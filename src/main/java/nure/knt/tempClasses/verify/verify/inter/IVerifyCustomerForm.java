@@ -1,6 +1,6 @@
 package nure.knt.tempClasses.verify.verify.inter;
 
-import nure.knt.forms.signup.CustomerForm;
+import nure.knt.forms.entities.CustomerForm;
 
 public interface IVerifyCustomerForm {
 

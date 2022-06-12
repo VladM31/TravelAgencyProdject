@@ -2,7 +2,7 @@ package nure.knt.tempClasses.verify;
 
 import nure.knt.database.idao.entity.IDAOCustomerSQL;
 import nure.knt.entity.important.Customer;
-import nure.knt.forms.signup.CustomerForm;
+import nure.knt.forms.entities.CustomerForm;
 import nure.knt.tempClasses.verify.verify.inter.IVerifyCustomerForm;
 import nure.knt.tempClasses.verify.verify.inter.IVerifySyntaxErrors;
 import org.springframework.beans.factory.annotation.Autowired;

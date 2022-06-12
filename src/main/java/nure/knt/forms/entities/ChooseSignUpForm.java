@@ -1,4 +1,4 @@
-package nure.knt.forms.signup;
+package nure.knt.forms.entities;
 
 public class ChooseSignUpForm {
     private static String decsribeCustomer = "Таки купить";
