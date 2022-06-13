@@ -6,7 +6,6 @@ import nure.knt.database.idao.entity.IDAOCourierSQL;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.important.Courier;
-import nure.knt.entity.important.Customer;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;

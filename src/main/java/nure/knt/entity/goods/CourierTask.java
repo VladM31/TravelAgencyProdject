@@ -8,6 +8,25 @@ public class CourierTask {
     private Long id;
     private int numberOfFlyers;
     private String city;
+
+    @Override
+    public String toString() {
+        return "CourierTask{" +
+                "id=" + id +
+                ", numberOfFlyers=" + numberOfFlyers +
+                ", city='" + city + '\'' +
+                ", idAdmin=" + idAdmin +
+                ", idCourier=" + idCourier +
+                ", emailCourier='" + emailCourier + '\'' +
+                ", emailAdmin='" + emailAdmin + '\'' +
+                ", nameCourier='" + nameCourier + '\'' +
+                ", nameAdmin='" + nameAdmin + '\'' +
+                ", describeTask='" + describeTask + '\'' +
+                ", dateRegistration=" + dateRegistration +
+                ", conditionCommodity=" + conditionCommodity +
+                '}';
+    }
+
     private Long idAdmin;
     private Long idCourier;
 

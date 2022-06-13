@@ -1,18 +1,18 @@
 package nure.knt.database.dao.mysql.goods;
 
 import nure.knt.database.dao.HandlerSqlDAO;
-import nure.knt.database.dao.mysql.entity.HandlerUser;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
 import nure.knt.database.idao.goods.IDAOCourierTask;
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.enums.Role;
-import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.goods.CourierTask;
-import nure.knt.entity.important.Courier;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -34,7 +34,7 @@ public class DAOCourierTaskMySQL extends MySQLCore implements IDAOCourierTask<Co
             "condition_commodity.name as condition_name from courier_task " +
             "left join user AS admin on courier_task.user_id = admin.id " +
             "left join courier on courier_task.courier_id = courier.id " +
-            "left join user AS active_courier on courier.user_id = active_courier.id" +
+            "left join user AS active_courier on courier.user_id = active_courier.id " +
             "left join condition_commodity on courier_task.condition_commodity_id = condition_commodity.id;";
 
     private static final String INSERT_COURIER_TASK = "INSERT INTO courier_task(number_of_flyers, describe_task," +
@@ -73,45 +73,63 @@ public class DAOCourierTaskMySQL extends MySQLCore implements IDAOCourierTask<Co
         }
     }
 
+    private static final String ADMIN_ROLE_AND_ID_USER_AND_CITY_CONTAINING = " WHERE admin.id = ? AND courier_task.city LIKE ?";
+    private static final String COURIER_ROLE_AND_ID_USER_AND_CITY_CONTAINING = " WHERE courier.id = ? AND courier_task.city LIKE ?";
+
     @Override
     public List<CourierTask> findByRoleAndIdUserAndCityContaining(Role role, Long id, String city) {
-        return null;
+        if(role.equals(Role.COURIER)) {
+            return wrapperForUseSelectList(COURIER_ROLE_AND_ID_USER_AND_CITY_CONTAINING, id, HandlerSqlDAO.containingString(city));
+        }
+        return wrapperForUseSelectList(ADMIN_ROLE_AND_ID_USER_AND_CITY_CONTAINING, id, HandlerSqlDAO.containingString(city));
     }
+
+    private static final String ADMIN_ROLE_AND_ID_USER_AND_EMAIL_CONTAINING = " WHERE admin.id = ? AND admin.email LIKE ?";
+    private static final String COURIER_ROLE_AND_ID_USER_AND_EMAIL_CONTAINING = " WHERE courier.id = ? AND active_courier.email LIKE ?";
 
     @Override
     public List<CourierTask> findByRoleAndIdUserAndEmailContaining(Role role, Long id, String email) {
-        return null;
+        if(role.equals(Role.COURIER)) {
+            return wrapperForUseSelectList(COURIER_ROLE_AND_ID_USER_AND_EMAIL_CONTAINING, id, HandlerSqlDAO.containingString(email));
+        }
+        return wrapperForUseSelectList(ADMIN_ROLE_AND_ID_USER_AND_EMAIL_CONTAINING, id, HandlerSqlDAO.containingString(email));
     }
+
+    private static final String ADMIN_ROLE_AND_ID_USER_AND_ADMIN_NAME_CONTAINING = " WHERE admin.id = ? AND active_courier.name LIKE ?";
+    private static final String COURIER_ROLE_AND_ID_USER_AND_ADMIN_NAME_CONTAINING = " WHERE courier.id = ? AND active_courier.name LIKE ?";
 
     @Override
     public List<CourierTask> findByRoleAndIdUserAndNameCourierContaining(Role role, Long id, String name) {
-        return null;
+        if(role.equals(Role.ADMINISTRATOR)) {
+            return wrapperForUseSelectList(ADMIN_ROLE_AND_ID_USER_AND_ADMIN_NAME_CONTAINING, id, HandlerSqlDAO.containingString(name));
+        }
+        return wrapperForUseSelectList(COURIER_ROLE_AND_ID_USER_AND_ADMIN_NAME_CONTAINING, id, HandlerSqlDAO.containingString(name));
     }
 
-    private static final String ADMIN_ROLE_AND_ID_USER_AND_NAME_CONTAINING = "WHERE admin.id = ? active_courier.name LIKE ?";
-    private static final String COURIER_ROLE_AND_ID_USER_AND_NAME_CONTAINING = "WHERE courier.id = ? AND active_courier.name LIKE ?";
+    private static final String ADMIN_ROLE_AND_ID_USER_AND_COURIER_NAME_CONTAINING = " WHERE admin.id = ? AND admin.name LIKE ?";
+    private static final String COURIER_ROLE_AND_ID_USER_AND_NAME_CONTAINING = " WHERE courier.id = ? AND admin.name LIKE ?";
 
     @Override
     public List<CourierTask> findByRoleAndIdUserAndNameAdminContaining(Role role, Long id, String name) {
         if(role.equals(Role.COURIER)) {
-            return wrapperForUseSelectList(COURIER_ROLE_AND_ID_USER_AND_NAME_CONTAINING, id, name);
+            return wrapperForUseSelectList(COURIER_ROLE_AND_ID_USER_AND_NAME_CONTAINING, id, HandlerSqlDAO.containingString(name));
         }
-        return wrapperForUseSelectList(ADMIN_ROLE_AND_ID_USER_AND_NAME_CONTAINING, id, name);
+        return wrapperForUseSelectList(ADMIN_ROLE_AND_ID_USER_AND_COURIER_NAME_CONTAINING, id, HandlerSqlDAO.containingString(name));
     }
 
-    private static final String ADMIN_ROLE_AND_ID_USER_AND_DESCRIBE_CONTAINING = "WHERE admin.id = ? AND describe_task = ?";
-    private static final String COURIER_ROLE_AND_ID_USER_AND_DESCRIBE_CONTAINING = "WHERE courier.id = ? AND describe_task = ?";
+    private static final String ADMIN_ROLE_AND_ID_USER_AND_DESCRIBE_CONTAINING = " WHERE admin.id = ? AND describe_task LIKE ?";
+    private static final String COURIER_ROLE_AND_ID_USER_AND_DESCRIBE_CONTAINING = " WHERE courier.id = ? AND describe_task LIKE ?";
 
     @Override
-    public List<CourierTask> findByRoleAndIdUserAndDescribeContaining(Role role, Long id, String city) {
+    public List<CourierTask> findByRoleAndIdUserAndDescribeContaining(Role role, Long id, String describe) {
         if(role.equals(Role.COURIER)) {
-            return wrapperForUseSelectList(COURIER_ROLE_AND_ID_USER_AND_DESCRIBE_CONTAINING, id, city);
+            return wrapperForUseSelectList(COURIER_ROLE_AND_ID_USER_AND_DESCRIBE_CONTAINING, id, HandlerSqlDAO.containingString(describe));
         }
-        return wrapperForUseSelectList(ADMIN_ROLE_AND_ID_USER_AND_DESCRIBE_CONTAINING, id, city);
+        return wrapperForUseSelectList(ADMIN_ROLE_AND_ID_USER_AND_DESCRIBE_CONTAINING, id, HandlerSqlDAO.containingString(describe));
     }
 
-    private static final String ADMIN_ROLE_AND_ID_USER_AND_DATE_REGISTRATION = "WHERE admin.id = ? AND date_registration BETWEEN ? AND ? ";
-    private static final String COURIER_ROLE_AND_ID_USER_AND_DATE_REGISTRATION = "WHERE courier.id = ? AND date_registration BETWEEN ? AND ? ";
+    private static final String ADMIN_ROLE_AND_ID_USER_AND_DATE_REGISTRATION = " WHERE admin.id = ? AND courier_task.date_registration BETWEEN ? AND ? ";
+    private static final String COURIER_ROLE_AND_ID_USER_AND_DATE_REGISTRATION = " WHERE courier.id = ? AND courier_task.date_registration BETWEEN ? AND ? ";
 
     @Override
     public List<CourierTask> findByRoleAndIdUserAndDateRegistrationBetween(Role role, Long id, LocalDateTime startDate, LocalDateTime endDate) {
@@ -121,8 +139,9 @@ public class DAOCourierTaskMySQL extends MySQLCore implements IDAOCourierTask<Co
         return wrapperForUseSelectList(ADMIN_ROLE_AND_ID_USER_AND_DATE_REGISTRATION, id, startDate, endDate);
     }
 
-    private static final String ADMIN_ROLE_AND_ID_USER_AND_NUMBER_OF_FLYERS = "WHERE admin.id = ? AND number_of_flyers BETWEEN ? AND ? ";
-    private static final String COURIER_ROLE_AND_ID_USER_AND_NUMBER_OF_FLYERS = "WHERE courier.id = ? AND number_of_flyers BETWEEN ? AND ? ";
+    //+
+    private static final String ADMIN_ROLE_AND_ID_USER_AND_NUMBER_OF_FLYERS = " WHERE admin.id = ? AND number_of_flyers BETWEEN ? AND ? ";
+    private static final String COURIER_ROLE_AND_ID_USER_AND_NUMBER_OF_FLYERS = " WHERE courier.id = ? AND number_of_flyers BETWEEN ? AND ? ";
 
     @Override
     public List<CourierTask> findByRoleAndIdUserAndNumberOfFlyersBetween(Role role, Long id, int start, int end) {
@@ -132,15 +151,20 @@ public class DAOCourierTaskMySQL extends MySQLCore implements IDAOCourierTask<Co
         return wrapperForUseSelectList(ADMIN_ROLE_AND_ID_USER_AND_NUMBER_OF_FLYERS, id, start, end);
     }
 
+    //+
+    private static final String ADMIN_ROLE_AND_ID_USER_AND_CONDITION_COMMODITY = " WHERE admin.id = ? AND condition_commodity.name IN ( "+HandlerSqlDAO.REPLACE_SYMBOL+" )";
+    private static final String COURIER_ROLE_AND_ID_USER_AND_CONDITION_COMMODITY = " WHERE courier.id = ? AND condition_commodity.name IN ( "+HandlerSqlDAO.REPLACE_SYMBOL+" )";
 
-    private static final String ROLE_AND_ID_USER_AND_CONDITION_COMMODITY = "AND ";
     @Override
     public List<CourierTask> findByRoleAndIdUserAndConditionCommodityIn(Role role, Long id, Set<ConditionCommodity> conditionCommodities) {
-        return null;
+        if(role.equals(Role.COURIER)) {
+            return wrapperForUseSelectList(HandlerSqlDAO.setInInsideScript(COURIER_ROLE_AND_ID_USER_AND_CONDITION_COMMODITY, conditionCommodities), id, conditionCommodities);
+        }
+        return wrapperForUseSelectList(HandlerSqlDAO.setInInsideScript(ADMIN_ROLE_AND_ID_USER_AND_CONDITION_COMMODITY, conditionCommodities), id, conditionCommodities);
     }
 
     private List<CourierTask> wrapperForUseSelectList(String part, @NonNull Object ...arrayField){
-        return HandlerSqlDAO.useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_TASK,part,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+        return HandlerSqlDAO.useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_TASK,part," ORDER BY courier_task.date_registration ASC;"),
                 HandlerCourierTask::resultSetToCourierTask,arrayField);
     }
 }
