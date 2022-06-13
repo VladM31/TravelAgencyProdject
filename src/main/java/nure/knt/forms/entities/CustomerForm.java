@@ -74,10 +74,13 @@ public class CustomerForm extends UserForm {
         super.setCountry(customer.getCountry());
         super.setEmail(customer.getEmail());
         super.setNumber(customer.getNumber());
-        super.setUsername(customer.getUsername());
+
         this.lastname = customer.getFirstName();
         this.firstname = customer.getFirstName();
         this.male = customer.isMale();
+
+        super.setUsername("here_must_be_username");
+        super.setPassword("here_must_be_password");
 
         return this;
     }

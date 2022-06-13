@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.function.Function;
 
 @Controller
@@ -67,15 +69,31 @@ public class ControllerCustomer {
         return PAGE_PROFILE_EDIT;
     }
 
-    private sta
+    private static final String ATTRIBUTE_ERROR_MESSAGE = "error_message";
     @RequestMapping(value = "${customer.profile.edit}",method = {RequestMethod.PATCH})
-    public String editCustomer(@AuthenticationPrincipal Customer user, Model model, CustomerForm customerForm, BindingResult bindingResult){
+    public String editCustomer(@AuthenticationPrincipal Customer user, Model model, @Valid CustomerForm customerForm,@NotNull BindingResult bindingResult){
         model.addAttribute("countries",countries.getCountry());
-        if(true){
+        model.addAttribute(CUSTOMER_FORM_ATTRIBUTE, customerForm);
+        if(setErrors(user, model, customerForm, bindingResult)){
             return PAGE_PROFILE_EDIT;
         }
 
         return "redirect:/profile-message";
+    }
+
+    private boolean setErrors(Customer user, Model model, CustomerForm customerForm, BindingResult bindingResult){
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute(ATTRIBUTE_ERROR_MESSAGE,bindingResult.getAllErrors().get(0).getDefaultMessage());
+            return true;
+        }
+
+        if(countries.getIdByCountry(customerForm.getCountry()) == WorkWithCountries.NAME_NOT_FOUND){
+            model.addAttribute(ATTRIBUTE_ERROR_MESSAGE,"Країна не знайдена або введена не правильно");
+            return true;
+        }
+
+        return false;
     }
 }
 

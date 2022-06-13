@@ -16,6 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -35,19 +36,14 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
     @Override
     public List<Customer> findByCustomerIdIn(Iterable<Customer> ids) {
 
+        List<Long> listIds = new LinkedList<>();
+        ids.forEach(customer -> listIds.add(customer.getCustomerId()));
         return HandlerSqlDAO.useSelectScript(super.conn,
                 HandlerSqlDAO.setInInsideScript(
                         HandlerSqlDAO.concatScriptToEnd(
                                 SELECT_ALL, WHERE_CUSTOMER_ID_IN, SORT_TO_DATE_REGISTRATION),
                         ids),
-                (statement -> {
-                    try {
-                        HandlerSqlDAO.substituteIds(statement,ids, (customer)-> customer.getCustomerId());
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }),
-                HandlerCustomer::resultSetToCustomer);
+                HandlerCustomer::resultSetToCustomer,listIds);
     }
 
     private static final String WHERE_CUSTOMER_ID_ID = " AND customer.id = ? ";
@@ -133,22 +129,11 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
         return HandlerSqlDAO.useSelectScript(super.conn,
                 HandlerSqlDAO.setInInsideScript(
                     HandlerSqlDAO.concatScriptToEnd(
-                        SELECT_ALL,
+                        SELECT_ALL,AND ,
                         HandlerUserPartScript.WHERE_USER_ID_IN,
                         SORT_TO_DATE_REGISTRATION),
                         ids),
-                (statement -> {
-                    int position = 0;
-                    try {
-                        for(long id: ids){
-                            statement.setLong(++position,1l);
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-
-                }),
-                HandlerCustomer::resultSetToCustomer);
+                HandlerCustomer::resultSetToCustomer,ids);
     }
 
 

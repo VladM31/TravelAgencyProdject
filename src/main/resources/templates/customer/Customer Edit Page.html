@@ -70,15 +70,11 @@
                         </main>
                     </main>
                 </div>
-                <ul style="margin-left: 50px;" th:if="${fields}">
-                    <li class="text-error" th:text="${fields.getAllErrors().get(0).getDefaultMessage()}" />
+                <ul style="color: red;" th:if="${error_message}">
+                    <li  th:text="${error_message}" />
                 </ul>
-                <ul style="margin-left: 50px;" th:if="${hasCountry}">
-                    <li class="text-error" th:text="${hasCountry}" />
-                </ul>
-                <ul style="margin-left: 50px;" th:if="${userIsBooked}">
-                    <li class="text-error" th:text="${userIsBooked}" />
-                </ul>
+                <input type="hidden" name="username" value="customerForm.username">
+                <input type="hidden" name="password" value="customerForm.password">
                 <div class="box-for-item-center">
                     <input type="submit" class="input-submit" value="Підтвердити">
                 </div>
