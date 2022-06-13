@@ -111,7 +111,14 @@ public class HandlerSqlDAO {
         try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
             int position = START_POSITION;
             for(Object obj : array){
-                substituteVariable(stat,++position,obj);
+                if(obj instanceof Iterable){
+                    Iterable<?> iter = (Iterable<?>) obj;
+                    for (Object it:iter) {
+                        substituteVariable(stat,++position,it);
+                    }
+                }else {
+                    substituteVariable(stat,++position,obj);
+                }
             }
 
             try(ResultSet resultSet = stat.executeQuery()){
