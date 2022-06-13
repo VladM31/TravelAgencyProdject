@@ -30,4 +30,8 @@ public interface IDAOUserSQL<T extends User> extends IDAOCore<T> {
 
    public List<T> findByCountry(String country);
    public List<T> findByNameContaining(String name);
+
+   default public boolean canUpdate(T origin,T update){
+      return false;
+   }
 }

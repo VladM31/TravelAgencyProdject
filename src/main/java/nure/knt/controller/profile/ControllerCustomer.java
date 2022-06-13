@@ -2,6 +2,7 @@ package nure.knt.controller.profile;
 
 import nure.knt.controller.HandlerController;
 import nure.knt.controller.handlers.HandlerCustomerControllerInformation;
+import nure.knt.database.idao.entity.IDAOCustomerSQL;
 import nure.knt.database.idao.goods.IDAOOrderFromTourAdCustomer;
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.goods.OrderFromTourAdForCustomer;
@@ -29,6 +30,8 @@ public class ControllerCustomer {
 
     @Autowired
     private IDAOOrderFromTourAdCustomer<OrderFromTourAdForCustomer> daoOrder;
+    @Autowired
+    private IDAOCustomerSQL<Customer> daoCustomer;
     @Autowired
     private WorkWithCountries countries;
 
@@ -72,11 +75,15 @@ public class ControllerCustomer {
     private static final String ATTRIBUTE_ERROR_MESSAGE = "error_message";
     @RequestMapping(value = "${customer.profile.edit}",method = {RequestMethod.PATCH})
     public String editCustomer(@AuthenticationPrincipal Customer user, Model model, @Valid CustomerForm customerForm,@NotNull BindingResult bindingResult){
-        model.addAttribute("countries",countries.getCountry());
-        model.addAttribute(CUSTOMER_FORM_ATTRIBUTE, customerForm);
+
         if(setErrors(user, model, customerForm, bindingResult)){
+            model.addAttribute("countries",countries.getCountry());
+            model.addAttribute(CUSTOMER_FORM_ATTRIBUTE, customerForm);
             return PAGE_PROFILE_EDIT;
         }
+
+        customerForm.setUsername(user.getUsername());
+        daoCustomer.updateOneById(customerForm.toCustomer(user));
 
         return "redirect:/profile-message";
     }
@@ -90,6 +97,11 @@ public class ControllerCustomer {
 
         if(countries.getIdByCountry(customerForm.getCountry()) == WorkWithCountries.NAME_NOT_FOUND){
             model.addAttribute(ATTRIBUTE_ERROR_MESSAGE,"Країна не знайдена або введена не правильно");
+            return true;
+        }
+
+        if(!daoCustomer.canUpdate(user,customerForm.toCustomer())){
+            model.addAttribute(ATTRIBUTE_ERROR_MESSAGE,"Номер або пошта зайнята");
             return true;
         }
 

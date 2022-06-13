@@ -73,8 +73,8 @@
                 <ul style="color: red;" th:if="${error_message}">
                     <li  th:text="${error_message}" />
                 </ul>
-                <input type="hidden" name="username" value="customerForm.username">
-                <input type="hidden" name="password" value="customerForm.password">
+                <input type="hidden" name="username" th:value="${customerForm.username}">
+                <input type="hidden" name="password" th:value="${customerForm.password}">
                 <div class="box-for-item-center">
                     <input type="submit" class="input-submit" value="Підтвердити">
                 </div>

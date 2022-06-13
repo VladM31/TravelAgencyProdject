@@ -23,6 +23,29 @@ import java.util.function.Function;
 @Component("DAO_MySQL_Customer")
 public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Customer> {
 
+    private static final String CHANGED_NOT_IMPOTENT_FIELD = HandlerUser.CAN_UPDATE + "(" +
+    HandlerUserPartScript.WHERE_USERNAME_IS + ")" +
+            HandlerUser.WHERE_DATE_REGISTRATION_GREATE_THAN;
+    @Override
+    public boolean canUpdate(Customer origin,Customer update){
+        LinkedList<Object>  list = new LinkedList<>();
+        String where = HandlerUser.getScriptOfImportantFieldsThatAreDifferent(origin,update,list);
+
+        if(where.equals(CHANGED_NOT_IMPOTENT_FIELD)){
+            return true;
+        }
+
+        return !HandlerUser.doesScriptReturnSomething(super.conn,where,list);
+    }
+
+    private String addAnd(String script){
+        if(script.isEmpty()){
+            return script;
+        }
+        return script + " AND ";
+    }
+
+
     private static final String AND = HandlerUserPartScript.AND;
     private static final String WHERE_MALE_IS = " AND customer.male = ? ";
 
@@ -39,10 +62,7 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
         List<Long> listIds = new LinkedList<>();
         ids.forEach(customer -> listIds.add(customer.getCustomerId()));
         return HandlerSqlDAO.useSelectScript(super.conn,
-                HandlerSqlDAO.setInInsideScript(
-                        HandlerSqlDAO.concatScriptToEnd(
-                                SELECT_ALL, WHERE_CUSTOMER_ID_IN, SORT_TO_DATE_REGISTRATION),
-                        ids),
+                HandlerSqlDAO.setInInsideScript(HandlerSqlDAO.concatScriptToEnd(SELECT_ALL, WHERE_CUSTOMER_ID_IN, SORT_TO_DATE_REGISTRATION), ids),
                 HandlerCustomer::resultSetToCustomer,listIds);
     }
 
@@ -123,6 +143,8 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
         return this.wrapperForUseSelectList("");
 
     }
+
+
 
     @Override
     public List<Customer> findAllById(Iterable<Long> ids) {
