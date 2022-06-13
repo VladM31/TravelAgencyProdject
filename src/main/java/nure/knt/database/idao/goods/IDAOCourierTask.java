@@ -14,9 +14,9 @@ public interface IDAOCourierTask<Task extends CourierTask> extends IDAOCoreSave<
 
     public List<Task> findByRoleAndIdUserAndCityContaining(Role role,Long id,String city );
     public List<Task> findByRoleAndIdUserAndEmailContaining(Role role,Long id,String email);
-    public List<Task> findByRoleAndIdUserAndNameCourierContaining(Role role,Long id,String city);
-    public List<Task> findByRoleAndIdUserAndNameAdminContaining(Role role,Long id,String city);
-    public List<Task> findByRoleAndIdUserAndDescribeContaining(Role role,Long id,String city);
+    public List<Task> findByRoleAndIdUserAndNameCourierContaining(Role role,Long id,String nameCourier);
+    public List<Task> findByRoleAndIdUserAndNameAdminContaining(Role role,Long id,String nameAdmin);
+    public List<Task> findByRoleAndIdUserAndDescribeContaining(Role role,Long id,String describe);
     public List<Task> findByRoleAndIdUserAndDateRegistrationBetween(Role role, Long id, LocalDateTime startDate,LocalDateTime endDate);
     public List<Task> findByRoleAndIdUserAndNumberOfFlyersBetween(Role role, Long id, int start,int end);
     public List<Task> findByRoleAndIdUserAndConditionCommodityIn(Role role, Long id, Set<ConditionCommodity> conditionCommodities);
