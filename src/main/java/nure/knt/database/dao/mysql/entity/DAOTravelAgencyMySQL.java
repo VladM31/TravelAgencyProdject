@@ -23,8 +23,6 @@ import static nure.knt.database.dao.HandlerSqlDAO.ERROR_BOOLEAN_ANSWER;
 public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencySQL<TravelAgency> {
 
 
-
-
     private static final String WHERE_ID_IN = " AND user.id IN ( "+ REPLACE_SYMBOL+" )";
 
 
@@ -78,10 +76,9 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
         }
     }
 
+
     @Override
-    public int deleteAllById(Iterable<Long> ids) {
-        return 0;
-    }
+    public int deleteAllById(Iterable<Long> ids){return 0; }
 
     @Override
     public int deleteAllByEntity(Iterable<TravelAgency> entities) {
@@ -129,8 +126,6 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
     }
 
 
-
-
     private static final String WHERE_IDS_ARE = " AND travel_agency.id IN ( "+ REPLACE_SYMBOL+" )";
 
 
@@ -159,10 +154,9 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
 
 
 
+
     @Override
-    public List<TravelAgency> findByTravelAgencyObjectIdIn(Iterable<TravelAgency> ids) {
-        return null;
-    }
+    public List<TravelAgency> findByTravelAgencyObjectIdIn(Iterable<TravelAgency> ids) {return null;}
 
 
 

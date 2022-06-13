@@ -17,6 +17,11 @@ public class TourAd {
     private float discountPercentage;
     private float ratingAgency;
 
+
+
+    private Long travelAgencyId;
+
+
     private boolean hidden;
 
     private LocalDate dateStart;
@@ -30,4 +35,148 @@ public class TourAd {
 
     private TypeState typeState;
     private ConditionCommodity conditionCommodity;
+
+    public long getTravelAgencyId() {
+        return travelAgencyId;
+    }
+
+    public void setTravelAgencyId(long travelAgencyId) {
+        this.travelAgencyId = travelAgencyId;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getCostOneCustomer() {
+        return costOneCustomer;
+    }
+
+    public void setCostOneCustomer(int costOneCustomer) {
+        this.costOneCustomer = costOneCustomer;
+    }
+
+    public int getCostService() {
+        return costService;
+    }
+
+    public void setCostService(int costService) {
+        this.costService = costService;
+    }
+
+    public int getDiscountSizePeople() {
+        return discountSizePeople;
+    }
+
+    public void setDiscountSizePeople(int discountSizePeople) {
+        this.discountSizePeople = discountSizePeople;
+    }
+
+    public int getOrderQuantity() {
+        return orderQuantity;
+    }
+
+    public void setOrderQuantity(int orderQuantity) {
+        this.orderQuantity = orderQuantity;
+    }
+
+    public float getDiscountPercentage() {
+        return discountPercentage;
+    }
+
+    public void setDiscountPercentage(float discountPercentage) {
+        this.discountPercentage = discountPercentage;
+    }
+
+    public float getRatingAgency() {
+        return ratingAgency;
+    }
+
+    public void setRatingAgency(float ratingAgency) {
+        this.ratingAgency = ratingAgency;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
+    public LocalDate getDateStart() {
+        return dateStart;
+    }
+
+    public void setDateStart(LocalDate dateStart) {
+        this.dateStart = dateStart;
+    }
+
+    public LocalDate getDateEnd() {
+        return dateEnd;
+    }
+
+    public void setDateEnd(LocalDate dateEnd) {
+        this.dateEnd = dateEnd;
+    }
+
+    public LocalDateTime getDateRegistration() {
+        return dateRegistration;
+    }
+
+    public void setDateRegistration(LocalDateTime dateRegistration) {
+        this.dateRegistration = dateRegistration;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getNameAgency() {
+        return nameAgency;
+    }
+
+    public void setNameAgency(String nameAgency) {
+        this.nameAgency = nameAgency;
+    }
+
+    public TypeState getTypeState() {
+        return typeState;
+    }
+
+    public void setTypeState(TypeState typeState) {
+        this.typeState = typeState;
+    }
+
+    public ConditionCommodity getConditionCommodity() {
+        return conditionCommodity;
+    }
+
+    public void setConditionCommodity(ConditionCommodity conditionCommodity) {
+        this.conditionCommodity = conditionCommodity;
+    }
 }
