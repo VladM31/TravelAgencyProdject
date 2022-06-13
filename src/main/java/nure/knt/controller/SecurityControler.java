@@ -58,27 +58,6 @@ public class SecurityControler {
         return "registration/Choose registration Page";
     }
 
-    @RequestMapping(value= {"/sign_up"},method = { RequestMethod.GET })
-    public String signUpGet(Model model) {
-        model.addAttribute("setSignUp",new ChooseSignUpForm(null,false,true));
-        return "choose_sign_upPage";
-    }
-
-    @RequestMapping(value= {"/sign_up"},method = { RequestMethod.POST })
-    public String signUpPOST(Model model,ChooseSignUpForm form) {
-        if (form.isEmpty()) {
-            model.addAttribute("setSignUp", new ChooseSignUpForm(null, true, false));
-            return "choose_sign_upPage";
-        }
-
-        if (form.isCustomer()) {
-            return "redirect:/free/customer-registration";
-        }else{
-            model.addAttribute("travel",new TravelAgencyForm());
-            return "sign_up_travel_agencyPage";
-        }
-    }
-
 
     // ************* Реєстрація агенції *****************
     @RequestMapping(value= {"/sign_up_error_travel"},method = { RequestMethod.POST })

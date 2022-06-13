@@ -6,12 +6,14 @@ import nure.knt.database.idao.goods.IDAOOrderFromTourAdCustomer;
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.goods.OrderFromTourAdForCustomer;
 import nure.knt.entity.important.Customer;
+import nure.knt.forms.entities.CustomerForm;
 import nure.knt.forms.filter.FilterOrdersForCustomer;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -47,7 +49,6 @@ public class ControllerCustomer {
         return "redirect:"+ HandlerCustomerControllerInformation.getProfileCustomerOrderUrl();
     }
 
-
     public void start(Customer user, Model model){
         HandlerCustomerProfile.setNameInPage(model,user.getName().replace('/',' '));
         HandlerCustomerProfile.setColorButton(model);
@@ -56,11 +57,32 @@ public class ControllerCustomer {
         HandlerCustomerProfile.setButtonType(model);
         model.addAttribute("countries",countries.getCountry());
     }
+
+    private static final String CUSTOMER_FORM_ATTRIBUTE = "customerForm";
+    private static final String PAGE_PROFILE_EDIT ="customer/Customer Edit Page";
+    @RequestMapping(value = "${customer.profile.edit}",method = {RequestMethod.GET})
+    public String showEditPage(@AuthenticationPrincipal Customer user, Model model){
+        model.addAttribute("countries",countries.getCountry());
+        model.addAttribute(CUSTOMER_FORM_ATTRIBUTE, new CustomerForm().setFieldFromCustomer(user));
+        return PAGE_PROFILE_EDIT;
+    }
+
+    private sta
+    @RequestMapping(value = "${customer.profile.edit}",method = {RequestMethod.PATCH})
+    public String editCustomer(@AuthenticationPrincipal Customer user, Model model, CustomerForm customerForm, BindingResult bindingResult){
+        model.addAttribute("countries",countries.getCountry());
+        if(true){
+            return PAGE_PROFILE_EDIT;
+        }
+
+        return "redirect:/profile-message";
+    }
 }
 
 class HandlerCustomerProfile{
     private static final String DIRECTORY = "customer/";
     protected static final String PAGE_PROFILE_ORDER = DIRECTORY + "Show all order for customer Page.html";
+
 
     private final static String NAME_USER = "nameUser";
 

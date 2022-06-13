@@ -7,6 +7,7 @@ import nure.knt.gmail.CodeSendler;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,9 +31,6 @@ public class RegistrationCustomerController {
     private static final String CUSTOMER_FORM_ATTRIBUTE = "customerForm";
     private static final String CHECK_CODE_PAGE = "checkOutEmailCodePage";
 
-    private static final String EMAIL_ATTRIBUTE = "email";
-    private static final String NAME_ATTRIBUTE = "name";
-
     @RequestMapping(value = "${customer.registration}",method = {RequestMethod.GET})
     public String showInputForm(Model model){
 
@@ -43,21 +41,11 @@ public class RegistrationCustomerController {
     @RequestMapping(value = "${customer.registration}",method = {RequestMethod.POST})
     public String checkInputForm(Model model, @Valid @ModelAttribute(CUSTOMER_FORM_ATTRIBUTE) CustomerForm customerForm, @NotNull  BindingResult bindingResult){
 
-        if(bindingResult.hasErrors()){
-            this.setErrorField(model,customerForm,bindingResult);
-            return SIGN_UP_FORM;
-        }
-        if (countries.getIdByCountry(customerForm.getCountry()) == WorkWithCountries.NAME_NOT_FOUND) {
-            this.setErrorCountry(model,customerForm);
+        if(checkCustomerForm(model,customerForm,bindingResult)){
             return SIGN_UP_FORM;
         }
 
         Customer customer = customerForm.toCustomer();
-        if(daoRegistration.userIsBooked(customer)){
-            this.setErrorBooked(model,customerForm);
-            return SIGN_UP_FORM;
-        }
-
 
         final String CODE = daoRegistration.generateCode();
 
@@ -71,19 +59,36 @@ public class RegistrationCustomerController {
 
         codeSendler.sendCode(customer.getEmail(),customer.getFormatName(),CODE);
 
-        this.setAttributeCheck(model,customer.getFormatName(),customer.getEmail(),URL_CODE,false);
+        HandlerRegistration.setAttributeCheck(model,customer.getFormatName(),customer.getEmail(),URL_CODE,false);
 
         return CHECK_CODE_PAGE;
     }
 
+    private boolean checkCustomerForm(Model model,CustomerForm customerForm,BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            this.setErrorField(model,customerForm,bindingResult);
+            return true;
+        }
+        if (countries.getIdByCountry(customerForm.getCountry()) == WorkWithCountries.NAME_NOT_FOUND) {
+            this.setErrorCountry(model,customerForm);
+            return true;
+        }
+
+        if(daoRegistration.userIsBooked(customerForm.toCustomer())){
+            this.setErrorBooked(model,customerForm);
+            return true;
+        }
+        return false;
+    }
+
     @RequestMapping(value = URL_CODE,method = {RequestMethod.POST})
-    public String checkCode(Model model,@ModelAttribute(NAME_ATTRIBUTE) String name,
-                            @ModelAttribute(EMAIL_ATTRIBUTE) String email,@ModelAttribute("code")String code){
+    public String checkCode(Model model,@ModelAttribute(HandlerRegistration.NAME_ATTRIBUTE) String name,
+                            @ModelAttribute(HandlerRegistration.EMAIL_ATTRIBUTE) String email,@ModelAttribute("code")String code){
 
         Long id = daoRegistration.findUserIdByEmailAndCode(email,code);
 
         if(id == IDAOUserRegistration.userIdNotFound){
-            this.setAttributeCheck(model,name,email,URL_CODE,true);
+            HandlerRegistration.setAttributeCheck(model,name,email,URL_CODE,true);
             return CHECK_CODE_PAGE;
         }
 
@@ -91,6 +96,8 @@ public class RegistrationCustomerController {
 
         return "redirect:/login";
     }
+
+
 
     private void setFormOnPage(Model model, CustomerForm customerForm){
         model.addAttribute("countries",countries.getCountry());
@@ -112,15 +119,6 @@ public class RegistrationCustomerController {
         model.addAttribute("userIsBooked","Вибачте але почта або номер, або логін вже зайняті");
     }
 
-    private void setAttributeCheck(Model model,String name,String email,String url,boolean error) {
-        model.addAttribute("helloUser","Hello " + name + "!!!");
-        model.addAttribute("yourEmail","Your email is " + email + ".");
-        model.addAttribute("errorCode", error);
-        model.addAttribute("userURL",url);
-
-        model.addAttribute(EMAIL_ATTRIBUTE,email);
-        model.addAttribute(NAME_ATTRIBUTE,name);
-    }
 
     @Autowired
     @Qualifier("DAO_MySQL_Customer_Registration")

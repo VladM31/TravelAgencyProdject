@@ -154,12 +154,14 @@ class HendlerIMCForAll {
     static final String EMPTY_NAME = "";
     static final boolean NO_THIRD_BUTTON = false;
     static final boolean HAVE_THIRD_BUTTON = true;
+    static final String ATTRIBUTE_USER_EDIT = "urlEdit";
 
-    static void setAllInfo(Model model, String nameChoose, String urlChose,boolean haveThirdButton,String nameThirdButton){
+    static void setAllInfo(Model model, String nameChoose, String urlChose,boolean haveThirdButton,String nameThirdButton,String urlProfileEdit){
         model.addAttribute(ATTRIBUTE_NAME_CHOOSE,nameChoose);
         model.addAttribute(ATTRIBUTE_URL_CHOOSE,urlChose);
         model.addAttribute(ATTRIBUTE_HAVE_THIRD_BUTTON,haveThirdButton);
         model.addAttribute(ATTRIBUTE_NAME_THIRD_BUTTON,nameThirdButton);
+        model.addAttribute(ATTRIBUTE_USER_EDIT,urlProfileEdit);
     }
 
 }
@@ -168,21 +170,25 @@ class HendlerIMCForAll {
 class HendlerIMCForCustomer{
     private static final String CUSTOMER_NAME_CHOOSE = "Замовлень";
     private static String CUSTOMER_URL_CHOOSE;
+    private static String CUSTOMER_PROFILE_EDIT;
 
     static void setCustomer(Model model){
         HendlerIMCForAll.setAllInfo(model,
                 CUSTOMER_NAME_CHOOSE,
                 CUSTOMER_URL_CHOOSE,
                 HendlerIMCForAll.NO_THIRD_BUTTON,
-                HendlerIMCForAll.EMPTY_NAME);
+                HendlerIMCForAll.EMPTY_NAME,
+                CUSTOMER_PROFILE_EDIT);
     }
 
     @Autowired
     public void setUrl(@Value("${customer.profile.order.url}") String CUSTOMER_URL_CHOOSE){
         HendlerIMCForCustomer.CUSTOMER_URL_CHOOSE = CUSTOMER_URL_CHOOSE;
     }
-
-
+    @Autowired
+    public void setCustomerProfileEdit(@Value("${customer.profile.edit}") String customerProfileEdit) {
+        CUSTOMER_PROFILE_EDIT = customerProfileEdit;
+    }
 }
 
 class HendlerIMCForTravelAgency{
@@ -197,7 +203,8 @@ class HendlerIMCForTravelAgency{
                 TRAVEL_AGENCY_NAME_CHOOSE,
                 TRAVEL_AGENCY_URL_CHOOSE,
                 HendlerIMCForAll.HAVE_THIRD_BUTTON,
-                TRAVEL_AGENCY_NAME_THIRD_BUTTON);
+                TRAVEL_AGENCY_NAME_THIRD_BUTTON,
+                HendlerIMCForAll.EMPTY_NAME);
         model.addAttribute(ATTRIBUTE_HAVE_RATING,true);
         model.addAttribute(ATTRIBUTE_RATING_STARS,TravelAgency.getRetingStars(travelAgency.getRating()));
     }
@@ -213,6 +220,7 @@ class HendlerIMCForCourier {
                 COURIER_NAME_CHOOSE,
                 COURIER_URL_CHOOSE,
                 HendlerIMCForAll.NO_THIRD_BUTTON,
+                HendlerIMCForAll.EMPTY_NAME,
                 HendlerIMCForAll.EMPTY_NAME);
     }
 }
@@ -228,6 +236,7 @@ class HendlerIMCForAdministrations {
                 ADMINISTRATIONS_NAME_CHOOSE,
                 ADMINISTRATIONS_URL_CHOOSE,
                 HendlerIMCForAll.NO_THIRD_BUTTON,
+                HendlerIMCForAll.EMPTY_NAME,
                 HendlerIMCForAll.EMPTY_NAME);
         model.addAttribute(ATTRIBUTE_ARE_YOU_ADMINS,true);
         model.addAttribute(ATTRIBUTE_NAME_ROLE,user.getRole());

@@ -70,7 +70,7 @@ public class CustomerForm extends UserForm {
         return customer;
     }
 
-    public void setFieldFromCustomer(Customer customer){
+    public CustomerForm setFieldFromCustomer(Customer customer){
         super.setCountry(customer.getCountry());
         super.setEmail(customer.getEmail());
         super.setNumber(customer.getNumber());
@@ -78,6 +78,8 @@ public class CustomerForm extends UserForm {
         this.lastname = customer.getFirstName();
         this.firstname = customer.getFirstName();
         this.male = customer.isMale();
+
+        return this;
     }
 
     private static void setFormInsideCustomer(CustomerForm form,Customer customer){

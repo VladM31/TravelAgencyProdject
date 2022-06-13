@@ -238,7 +238,7 @@
                 </div>
 
                 <div>
-                    <input id="ChangeProfile" formaction="/send-message"  formmethod="get" type="submit" class="watch-travel-agency-other-submit" rows="2"
+                    <input id="ChangeProfile" th:formaction="${@environment.getProperty('customer.profile.edit')}"  formmethod="get" type="submit" class="watch-travel-agency-other-submit" rows="2"
                         value="Редагувати профіль">
                 </div>
 
