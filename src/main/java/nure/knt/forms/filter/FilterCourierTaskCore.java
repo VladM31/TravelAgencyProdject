@@ -1,6 +1,7 @@
 package nure.knt.forms.filter;
 
 import nure.knt.entity.enums.ConditionCommodity;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -10,10 +11,12 @@ import java.util.stream.Collectors;
 public class FilterCourierTaskCore {
     private String city;
     private String describeTask;
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateRegistrationStart;
+    @DateTimeFormat(pattern="yyyy-MM-dd'T'HH:mm")
     private LocalDateTime dateRegistrationEnd;
-    private int numberOfFlyersStart;
-    private int numberOfFlyersEnd;
+    private Integer numberOfFlyersStart;
+    private Integer numberOfFlyersEnd;
     private Set<ConditionCommodity> conditionCommodities;
 
     public String getCity() {
@@ -48,19 +51,19 @@ public class FilterCourierTaskCore {
         this.dateRegistrationEnd = dateRegistrationEnd;
     }
 
-    public int getNumberOfFlyersStart() {
+    public Integer getNumberOfFlyersStart() {
         return numberOfFlyersStart;
     }
 
-    public void setNumberOfFlyersStart(int numberOfFlyersStart) {
+    public void setNumberOfFlyersStart(Integer numberOfFlyersStart) {
         this.numberOfFlyersStart = numberOfFlyersStart;
     }
 
-    public int getNumberOfFlyersEnd() {
+    public Integer getNumberOfFlyersEnd() {
         return numberOfFlyersEnd;
     }
 
-    public void setNumberOfFlyersEnd(int numberOfFlyersEnd) {
+    public void setNumberOfFlyersEnd(Integer numberOfFlyersEnd) {
         this.numberOfFlyersEnd = numberOfFlyersEnd;
     }
 
@@ -72,7 +75,7 @@ public class FilterCourierTaskCore {
         this.conditionCommodities = Arrays.stream(conditionCommodities).collect(Collectors.toSet());
     }
 
-    public FilterCourierTaskCore(String city, String describeTask, LocalDateTime dateRegistrationStart, LocalDateTime dateRegistrationEnd, int numberOfFlyersStart, int numberOfFlyersEnd, Set<ConditionCommodity> conditionCommodities) {
+    public FilterCourierTaskCore(String city, String describeTask, LocalDateTime dateRegistrationStart, LocalDateTime dateRegistrationEnd, Integer numberOfFlyersStart, Integer numberOfFlyersEnd, Set<ConditionCommodity> conditionCommodities) {
         this.city = city;
         this.describeTask = describeTask;
         this.dateRegistrationStart = dateRegistrationStart;

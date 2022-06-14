@@ -46,7 +46,7 @@ public class FilterCourierTaskAdmin extends FilterCourierTaskCore {
 
         list = HandlerFilter.checkEnums(super.getConditionCommodities(),list,
                 (setEnum) -> dao.findByRoleAndIdUserAndConditionCommodityIn(Role.ADMINISTRATOR,adminId,setEnum),
-                (setEnum) -> filterList.add((order -> HandlerFilter.isEnumFromCollection(super.getConditionCommodities(),order.getConditionCommodity()))));
+                (setEnum) -> filterList.add((task -> HandlerFilter.isEnumFromCollection(super.getConditionCommodities(),task.getConditionCommodity()))));
 
         if(list == HandlerFilter.LIST_IS_NOT_CREATED_FROM_DATABASE){
             return dao.findByRoleAndIdUser(Role.ADMINISTRATOR,adminId);
@@ -86,6 +86,6 @@ public class FilterCourierTaskAdmin extends FilterCourierTaskCore {
         return "FilterCourierTaskAdmin{" +
                 "emailCourier='" + emailCourier + '\'' +
                 ", nameCourier='" + nameCourier + '\'' +
-                '}';
+                '}' + super.toString();
     }
 }

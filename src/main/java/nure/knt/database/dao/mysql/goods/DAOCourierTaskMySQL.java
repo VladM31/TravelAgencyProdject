@@ -95,8 +95,8 @@ public class DAOCourierTaskMySQL extends MySQLCore implements IDAOCourierTask<Co
         return wrapperForUseSelectList(ADMIN_ROLE_AND_ID_USER_AND_CITY_CONTAINING, id, HandlerSqlDAO.containingString(city));
     }
 
-    private static final String ADMIN_ROLE_AND_ID_USER_AND_EMAIL_CONTAINING = " WHERE admin.id = ? AND admin.email LIKE ?";
-    private static final String COURIER_ROLE_AND_ID_USER_AND_EMAIL_CONTAINING = " WHERE courier.id = ? AND active_courier.email LIKE ?";
+    private static final String ADMIN_ROLE_AND_ID_USER_AND_EMAIL_CONTAINING = " WHERE admin.id = ? AND active_courier.email LIKE ?";
+    private static final String COURIER_ROLE_AND_ID_USER_AND_EMAIL_CONTAINING = " WHERE courier.id = ? AND admin.email LIKE ?";
 
     @Override
     public List<CourierTask> findByRoleAndIdUserAndEmailContaining(Role role, Long id, String email) {

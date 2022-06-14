@@ -37,7 +37,6 @@ public class ControllerCustomer {
 
     @RequestMapping(value = "${customer.profile.order.url}",method = {RequestMethod.GET})
     public String showOrderGet(@AuthenticationPrincipal Customer user, Model model, FilterOrdersForCustomer filter){
-        System.out.println(filter);
 
         model.addAttribute("filter",(filter == null) ? new FilterOrdersForCustomer(): filter);
         model.addAttribute("orders",filter.filtering(user.getCustomerId(),daoOrder));
