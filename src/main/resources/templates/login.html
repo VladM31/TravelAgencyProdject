@@ -36,7 +36,7 @@
         </div>
 
         <!-- #region th:href="@{/male} -->
-        <a class="signinLink" th:href="@{/sign_up}"  formmethod="get">Sign up</a>
+        <a class="signinLink" th:href="${@environment.getProperty('registration.choose.sign.up')}" formmethod="get">Sign up</a>
         <a class="forgotPassword" href="/">Forgot password?</a>
 
 

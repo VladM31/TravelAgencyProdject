@@ -18,11 +18,11 @@
 
 <body class="main-body">
 
-   
+    <div class="center-column-box">
         <div class="message-box">
-            
+
             <h1 class="message-main-info">Повідомлення</h1>
-            
+
 
             <form th:action="@{/send-message}"  class="message-box-inputs" method="GET">
                 <div>
@@ -42,7 +42,7 @@
                     <div>
                         <h3 class="text-under-box">Пошта відправника</h3>
                         <p class="text-box-center text-box-color text-box-form text-box-pleace-for-center" th:text="${messageShortData.sendlerEmail}">
-                                Lili
+                            Lili
                         </p>
                         <input type="hidden" name="sendlerEmail" th:value="${messageShortData.sendlerEmail}">
                     </div>
@@ -64,8 +64,11 @@
                     </div>
                 </div>
             </form>
-            
+
         </div>
+    </div>
+   
+
 
    
 

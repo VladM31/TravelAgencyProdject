@@ -74,7 +74,7 @@
                 <input type="text" class="box-filter" th:field="*{byNameSendler}">
             </div>
     
-            <div id="Chose_date">
+            <div id="DateRegistrationBetween">
                 <h5 style="color: white;">Датою</h5>
                 <div style=" display:flex; justify-content: space-around;">
                     <input type="datetime-local" class="box-filter-date" th:field="*{byStartSendDate}">
@@ -163,6 +163,7 @@
                     <button id="sortAscending" class="button-sort button-sort-used">/\</button>
                 </div>
             </div>
+
             <script th:src="@{js/sort_messages.js}"></script>
             <br>
             <form th:action="@{${urlChoose}}" class="watch-travel-agency width-right">
@@ -178,7 +179,7 @@
                 </div>
 
                 <div>
-                    <input id="ChangeProfile" type="submit"  class="watch-travel-agency-other-submit" rows="2" value="Редагувати профіль" >
+                    <input id="ChangeProfile" type="submit" th:formaction="@{${urlEdit}}" class="watch-travel-agency-other-submit" rows="2" value="Редагувати профіль" >
                 </div>
 
                 <div>

@@ -14,11 +14,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.BiConsumer;
 
 public class HandlerUser {
 
-
+    public static boolean doesScriptReturnSomething(IConnectorGetter connector,String script,Iterable<Object> objects){
+        try(PreparedStatement statement = connector.getSqlPreparedStatement(script)){
+            HandlerSqlDAO.setFieldsInsideScript(statement,objects);
+            try(ResultSet resultSet = statement.executeQuery()){
+                return resultSet.next();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public static <U extends User> void resultSetToUserCore(ResultSet resultSet, U user) throws SQLException {
         user.setId(resultSet.getLong("user_pk"));
@@ -109,6 +122,64 @@ public class HandlerUser {
         return false;
     }
 
+    public static final String CAN_UPDATE = "SELECT id FROM user WHERE ";
+    public static final String WHERE_DATE_REGISTRATION_GREATE_THAN = " OR (type_state_id = 1 AND user.date_registration > ? )";
 
+    public static String getScriptOfImportantFieldsThatAreDifferent(User origin, User update, List<Object> list){
+
+        String where = "";
+        if(!origin.getEmail().equalsIgnoreCase(update.getEmail())){
+            where = HandlerUserPartScript.WHERE_EMAIL_IS;
+            list.add(update.getEmail());
+        }
+
+        if(!origin.getNumber().equals(update.getNumber())){
+            where = addOr(where) + HandlerUserPartScript.WHERE_NUMBER_IS;
+            list.add(update.getNumber());
+        }
+
+        if(!origin.getUsername().equals(update.getUsername())){
+            where = addOr(where) + HandlerUserPartScript.WHERE_USERNAME_IS;
+            list.add(update.getUsername());
+        }
+
+        where = CAN_UPDATE + "(" + where + ")";
+
+        if(where.equals(CAN_UPDATE)){
+            return "";
+        }
+        list.add(LocalDateTime.now().minusMinutes(15l));
+        return where + WHERE_DATE_REGISTRATION_GREATE_THAN;
+
+    }
+
+    public static String addOr(String script){
+        if(script.isEmpty()){
+            return script;
+        }
+        return script + HandlerUserPartScript.OR;
+    }
+}
+
+class HandlerUserPartScript{
+    public static final String AND = " AND ";
+    public static final String OR = " OR ";
+    public static final String WHERE_USER_ID_IS = " user.id = ? ";
+    public static final String WHERE_NAME_COUNTRY_IS = " country.name = ? ";
+    public static final String WHERE_ROLE_ID_IS = " user.role_id = ? ";
+    public static final String WHERE_ACTIVE_IS = " user.active = ? ";
+    public static final String WHERE_DATE_REGISTRATION_BETWEEN = " user.date_registration BETWEEN ? AND ?";
+    public static final String WHERE_PASSWORD_IS = " user.password = ? ";
+
+    public static final String WHERE_USERNAME_IS = " user.username = ? ";
+    public static final String WHERE_EMAIL_IS = " user.email = ? ";
+    public static final String WHERE_NUMBER_IS = " user.number = ? ";
+
+    public static final String WHERE_USERNAME_CONTAINING = " user.username LIKE ? ";
+    public static final String WHERE_NUMBER_CONTAINING = " user.number LIKE ? ";
+    public static final String WHERE_EMAIL_CONTAINING = " user.email LIKE ? ";
+    public static final String WHERE_NAME_CONTAINING = " user.name LIKE ? ";
+
+    public static final String WHERE_USER_ID_IN = " user.id IN(" + HandlerSqlDAO.REPLACE_SYMBOL + ") ";
 
 }

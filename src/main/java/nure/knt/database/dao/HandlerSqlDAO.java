@@ -1,6 +1,5 @@
 package nure.knt.database.dao;
 
-import nure.knt.database.dao.mysql.entity.HandlerUser;
 import nure.knt.database.idao.IConnectorGetter;
 import nure.knt.tools.WorkWithCountries;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.ToLongFunction;
 
 @Component
 public class HandlerSqlDAO {
@@ -160,6 +158,14 @@ public class HandlerSqlDAO {
             preparedStatement.setString(position, object.toString());
         }else{
             throw new SQLException("substituteVariable: object is " + object.getClass().getName());
+        }
+    }
+
+
+    public static void setFieldsInsideScript(PreparedStatement statement,Iterable<Object> objects) throws SQLException {
+        int position = START_POSITION;
+        for (Object object:objects) {
+            substituteVariable(statement,++position,object);
         }
     }
 
