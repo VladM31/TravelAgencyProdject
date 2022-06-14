@@ -1,14 +1,10 @@
 package nure.knt.forms.entities;
 
-import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.TravelAgency;
-import nure.knt.entity.subordinate.TravelAgencyTemporary;
-import org.springframework.lang.NonNull;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
 public class TravelAgencyForm extends UserForm {
     @Pattern(regexp = "^((?![/;-=*+?!]).)*$",message = "Не повино в назві тур агенції бути знаків \"/;-=*+?!\"")
@@ -16,7 +12,7 @@ public class TravelAgencyForm extends UserForm {
     @NotBlank(message = "Логін не повинен бути з пробілів")
     private String nameTravelAgency;// Назва турагенції
 
-    @Pattern(regexp = "^((?![/-;=*+?!]).)*$",message = "Не повино в КВЕДі бути знаків \"/-;=*+?!\"")
+    @Pattern(regexp = "^((?![/-=*+?!]).)*$",message = "Не повино в КВЕДі бути знаків \"/-=*+?!\"")
     @Size(min=2,max=100, message = "КВЕД повинен бути більше 2 і не менше 10 символів")
     @NotBlank(message = "КВЕД не повинен бути з пробілів")
     private String addressTravelAgency;// Адреса офісу турагенції
@@ -31,7 +27,7 @@ public class TravelAgencyForm extends UserForm {
     @NotBlank(message = "ЕГРПОУ або РНУКПН не повинен бути з пробілів")
     private String EGRPOYorRNYKPN;// ЕГРПОУ або РНУКПН
 
-    private boolean whatChoose;// ЕГРПОУ/РНУКПН
+    private boolean EGRPOY;// ЕГРПОУ/РНУКПН
 
     @Pattern(regexp = "^((?![/;-=*+?!]).)*$",message = "Не повино в імені голови агенції бути знаків \"/;-=*+?!\"")
     @Size(min=3,max=150, message = "Повне ім'я голови агенції повине бути більше 3 і не менше 150 символів")
@@ -77,12 +73,12 @@ public class TravelAgencyForm extends UserForm {
         this.EGRPOYorRNYKPN = EGRPOYorRNYKPN;
     }
 
-    public boolean isWhatChoose() {
-        return whatChoose;
+    public boolean isEGRPOY() {
+        return EGRPOY;
     }
 
-    public void setWhatChoose(boolean whatChoose) {
-        this.whatChoose = whatChoose;
+    public void setEGRPOY(boolean EGRPOY) {
+        this.EGRPOY = EGRPOY;
     }
 
     public String getNameHeadAgency() {
@@ -118,7 +114,7 @@ public class TravelAgencyForm extends UserForm {
         this.addressTravelAgency = addressTravelAgency;
         this.KVED = KVED;
         this.EGRPOYorRNYKPN = EGRPOYorRNYKPN;
-        this.whatChoose = whatChoose;
+        this.EGRPOY = whatChoose;
         this.nameHeadAgency = nameHeadAgency;
         this.urlPhoto = urlPhoto;
         this.describeAgency = describeAgency;
@@ -158,7 +154,7 @@ public class TravelAgencyForm extends UserForm {
 
         travelAgency.setKved(form.KVED);
         travelAgency.setEgrpoyOrRnekpn(Long.valueOf(form.EGRPOYorRNYKPN));
-        travelAgency.setEgrpoy(form.whatChoose);
+        travelAgency.setEgrpoy(form.EGRPOY);
 
     }
 
@@ -176,7 +172,7 @@ public class TravelAgencyForm extends UserForm {
 
         this.KVED = travelAgency.getKved();
         this.EGRPOYorRNYKPN = travelAgency.getEgrpoyOrRnekpn().toString();
-        this.whatChoose = travelAgency.isEgrpoy();
+        this.EGRPOY = travelAgency.isEgrpoy();
 
         this.urlPhoto = travelAgency.getUrlPhoto();
         this.describeAgency = travelAgency.getDescribeAgency();
@@ -191,7 +187,7 @@ public class TravelAgencyForm extends UserForm {
                 ", addressTravelAgency='" + addressTravelAgency + '\'' +
                 ", KVED='" + KVED + '\'' +
                 ", EGRPOYorRNYKPN='" + EGRPOYorRNYKPN + '\'' +
-                ", whatChoose=" + whatChoose +
+                ", whatChoose=" + EGRPOY +
                 ", nameHeadAgency='" + nameHeadAgency + '\'' +
                 ", urlPhoto='" + urlPhoto + '\'' +
                 ", describeAgency='" + describeAgency + '\'' +
