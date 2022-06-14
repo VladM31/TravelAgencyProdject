@@ -1,0 +1,398 @@
+.main-body{
+    background-color: black;
+}
+
+.box-main{
+    display: flex;
+    justify-content: space-around;
+}
+
+.box-for-keep-information{
+    box-sizing: border-box;
+
+
+    width: 1300px;
+    height: 265px;
+
+    background: rgba(37, 208, 245, 0.94);
+    border: 6px solid #FFFFFF;
+    border-radius: 20px;
+
+    display: flex;
+    justify-content: space-around;
+
+    margin-bottom: 10px;
+}
+
+.box-text{
+    display:flex;
+    
+    width: 300px;
+    flex-direction: column;
+
+    
+    height: 50px;
+    margin-left: 1%;
+    margin-right: 1%;
+
+    background: rgba(253, 240, 240, 0.72);
+    border-radius: 10px;
+    
+}
+
+.info-text-top{
+    text-align: center;
+    font-size: 10px;
+}
+
+.info-text-bottom{
+    text-align: center;
+    font-family: 'Piazzolla';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 120%;
+}
+
+.box-info-text{
+    flex-direction: column;
+    display:flex;
+    justify-content: space-around;
+}
+
+.box-info-text-center-bottom{
+    flex-direction: row;
+    display:flex;
+    justify-content: space-around;
+}
+
+.box-describe{
+    width: 590px;
+    height: 134px;
+}
+
+.box-buttons{
+    display:flex;
+    flex-direction: column;
+    
+    height: 80px;
+    justify-content: space-around;
+}
+
+.small-button{
+    font-family: 'Neucha';
+    font-style: normal;
+    width: 300px;
+    height: 35px;
+    
+    border: 3px solid #FFFFFF;
+    border-radius: 10px;
+    font-weight: 400;
+    font-size: 21px;
+
+    margin-left: 1%;
+    margin-right: 1%;
+}
+
+.color-green{
+    background: #01FD66;
+}
+
+.color-red{
+    background: #E75D32;
+}
+
+.color-gray{
+    background: #A1ADA6;
+}
+
+.color-yellow{
+    background-color: #D3CD30;
+}
+
+.box-text-and-buttons{
+    height: 135px;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.box-state{
+    border: 3px solid #FFFFFF;
+}
+
+.text-describe{
+    text-align:left;
+    padding-left: 10px;
+}
+
+
+
+/*             filter                */
+
+.filter-mail-block-for-all-info{
+    display:flex;
+    justify-content: space-around;
+    flex-direction: column;
+    text-align: center;
+    width: 260px;
+    height: 850px;
+    
+    background: linear-gradient(180deg, rgba(242, 245, 245, 0.93) 0%, rgba(242, 245, 245, 0) 100%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 30px;
+}
+
+.box-filter{
+    box-sizing: border-box;
+    width: 175px;
+    height: 66px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+
+    background: rgba(102, 255, 218, 0.9);
+    border: 3px solid #FFFFFF;
+    border-radius: 15px;
+}
+
+.box-filter-between{
+    width: 100px;
+    height: 45px;
+    background: rgba(17, 121, 242, 0.65);
+    border: 1px solid  rgba(17, 121, 242, 0.65);
+    border-radius: 10px;
+    text-align: center;
+}
+
+
+.filter-find-button{
+    box-sizing: border-box;
+
+    width: 170px;
+    height: 80px;
+
+    background: rgba(255, 255, 255, 0.84);
+    border: 4px solid #01FD66;
+    border-radius: 20px;
+    margin-left: auto;
+    margin-right: auto;
+
+    font-family: 'Neucha';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 33px;
+    
+    text-align: center;
+    letter-spacing: 0.1em;
+
+    color: #000000;
+}
+
+input:focus {
+    border: 3px solid rgb(86, 207, 255);
+    outline: none;
+}
+
+
+select:focus {
+    border: 3px solid rgb(86, 207, 255);
+    outline: none;
+}
+
+.line-between-date{
+    width: 20px;
+    height: 45px;
+
+    font-family: 'Neucha';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 55px;
+    display: flex;
+    align-items: flex-end;
+    text-align: center;
+    letter-spacing: 0.05em;
+
+    color: #000000;
+}
+
+
+.box-filter-check{
+    width: 200px;
+    height: 25px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 28px;
+
+    background: rgba(17, 121, 242, 0.65);
+    border-radius: 10px;
+}
+
+/*             sort                */
+.box-rigth{
+    background: rgba(242, 245, 245, 0.93);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+
+.box-sort{
+    height: 150px;
+}
+
+/*        right blocks                 */
+
+.width-right {
+    width: 280px;
+}
+
+.block-right{
+    display: flex;
+    flex-direction: column;
+}
+
+.watch-travel-agency{
+   
+    height: 500px;
+
+    background: rgba(242, 245, 245, 0.93);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+
+    display:flex;
+    justify-content: space-around;
+    flex-direction: column;
+    text-align: center;
+}
+
+.watch-travel-agency-choose-see{
+    font-family: 'Neucha';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 44px;
+    letter-spacing: 0.1em;
+
+    color: #000000;
+}
+
+.watch-travel-agency-choose-servise-submit{
+    width: 120px;
+    height: 60px;
+    
+    background: rgba(255, 255, 255);
+    border: 3px solid #01FD66;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 19px;
+
+    color: #000000;
+}
+
+.wtacss-right{
+    border-radius: 30px 0px 0px 30px;
+}
+
+.wtacss-left{
+    border-radius: 0px 30px 30px 0px;
+}
+
+.wtacss-not-work{
+    background: #01FD66;
+}
+
+.watch-travel-agency-other-submit{
+    width: 220px;
+    height: 120px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255);
+    border: 3px solid #01FD66;
+
+    font-family: 'Neucha';
+    font-style: bold;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 28px;
+    letter-spacing: 0.1em;
+    white-space: pre-wrap;
+    color: #000000;
+}
+
+
+.button-sort{
+    width: 80px;
+    height: 40px;
+
+    border-radius: 5px;
+    border: 1px solid #2759ff;
+    color:#2759ff;
+}
+
+.button-sort-used{
+    background-color:#2759ff;
+    color:#ffffff;
+}
+
+/**********************************/
+
+.make-task-lable{
+    font-family: 'Neucha';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 35px;
+    line-height: 39px;
+
+    color: #000000;
+}
+
+.text-over-input{
+    font-family: 'Neucha';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    
+}
+
+.submit-make-task{
+    text-align: center;
+    width: 175px;
+    height: 66px;
+
+
+    background: #01FD66;
+    border: 4px solid #01FD66;
+    border-radius: 20px;
+
+    font-family: 'Neucha';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 28px;
+   
+    letter-spacing: 0.1em;
+
+    color: #000000;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #000000;
+    opacity: 1; /* Firefox */
+  }
+
+.margin-make-task{
+    margin-top: 7px;
+    margin-bottom: 7px;
+}

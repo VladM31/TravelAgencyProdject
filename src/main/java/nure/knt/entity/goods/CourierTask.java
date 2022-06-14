@@ -8,6 +8,15 @@ public class CourierTask {
     private Long id;
     private int numberOfFlyers;
     private String city;
+    private Long idAdmin;
+    private Long idCourier;
+    private String emailCourier;
+    private String emailAdmin;
+    private String nameCourier;
+    private String nameAdmin;
+    private String describeTask;
+    private LocalDateTime dateRegistration;
+    private ConditionCommodity conditionCommodity;
 
     @Override
     public String toString() {
@@ -27,9 +36,6 @@ public class CourierTask {
                 '}';
     }
 
-    private Long idAdmin;
-    private Long idCourier;
-
     public Long getIdAdmin() {
         return idAdmin;
     }
@@ -45,14 +51,6 @@ public class CourierTask {
     public void setIdCourier(Long idCourier) {
         this.idCourier = idCourier;
     }
-
-    private String emailCourier;
-    private String emailAdmin;
-    private String nameCourier;
-    private String nameAdmin;
-    private String describeTask;
-    private LocalDateTime dateRegistration;
-    private ConditionCommodity conditionCommodity;
 
     public Long getId() {
         return id;
