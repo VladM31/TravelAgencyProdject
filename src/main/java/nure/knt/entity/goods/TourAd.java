@@ -179,4 +179,52 @@ public class TourAd {
     public void setConditionCommodity(ConditionCommodity conditionCommodity) {
         this.conditionCommodity = conditionCommodity;
     }
+
+    public TourAd(Long id, int costOneCustomer, int costService, int discountSizePeople, int orderQuantity, float discountPercentage, float ratingAgency, Long travelAgencyId, boolean hidden, LocalDate dateStart, LocalDate dateEnd, LocalDateTime dateRegistration, String place, String city, String country, String nameAgency, TypeState typeState, ConditionCommodity conditionCommodity) {
+        this.id = id;
+        this.costOneCustomer = costOneCustomer;
+        this.costService = costService;
+        this.discountSizePeople = discountSizePeople;
+        this.orderQuantity = orderQuantity;
+        this.discountPercentage = discountPercentage;
+        this.ratingAgency = ratingAgency;
+        this.travelAgencyId = travelAgencyId;
+        this.hidden = hidden;
+        this.dateStart = dateStart;
+        this.dateEnd = dateEnd;
+        this.dateRegistration = dateRegistration;
+        this.place = place;
+        this.city = city;
+        this.country = country;
+        this.nameAgency = nameAgency;
+        this.typeState = typeState;
+        this.conditionCommodity = conditionCommodity;
+    }
+
+    public TourAd() {
+    }
+
+    @Override
+    public String toString() {
+        return "TourAd{" +
+                "id=" + id +
+                ", costOneCustomer=" + costOneCustomer +
+                ", costService=" + costService +
+                ", discountSizePeople=" + discountSizePeople +
+                ", orderQuantity=" + orderQuantity +
+                ", discountPercentage=" + discountPercentage +
+                ", ratingAgency=" + ratingAgency +
+                ", travelAgencyId=" + travelAgencyId +
+                ", hidden=" + hidden +
+                ", dateStart=" + dateStart +
+                ", dateEnd=" + dateEnd +
+                ", dateRegistration=" + dateRegistration +
+                ", place='" + place + '\'' +
+                ", city='" + city + '\'' +
+                ", country='" + country + '\'' +
+                ", nameAgency='" + nameAgency + '\'' +
+                ", typeState=" + typeState +
+                ", conditionCommodity=" + conditionCommodity +
+                '}';
+    }
 }
