@@ -1,58 +1,49 @@
 package nure.knt.forms.entities;
 
+import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.subordinate.TravelAgencyTemporary;
 import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-public class TravelAgencyForm {
-    private boolean hello;
-    private boolean error;
-    private String nameTravelAgency;
-    private String addressTravelAgency;
-    private String numberPhone;
-    private long KVED;
-    private String login;
-    private String password;
-    private String email;
-    private Long EGRPOYorRNYKPN;
-    private String whatChoose;
-    private String nameHeadAgency;
-    private String country;
-    private long emailCheckCod = -1;
+public class TravelAgencyForm extends UserForm {
+    @Pattern(regexp = "^((?![/;-=*+?!]).)*$",message = "Не повино в назві тур агенції бути знаків \"/;-=*+?!\"")
+    @Size(min=2,max=101, message = "Назва тур агенції повина бути більше 2 і не менше 101 символів")
+    @NotBlank(message = "Логін не повинен бути з пробілів")
+    private String nameTravelAgency;// Назва турагенції
 
-    public long getEmailCheckCod() {
-        return emailCheckCod;
-    }
+    @Pattern(regexp = "^((?![/-;=*+?!]).)*$",message = "Не повино в КВЕДі бути знаків \"/-;=*+?!\"")
+    @Size(min=2,max=100, message = "КВЕД повинен бути більше 2 і не менше 10 символів")
+    @NotBlank(message = "КВЕД не повинен бути з пробілів")
+    private String addressTravelAgency;// Адреса офісу турагенції
 
-    public void setEmailCheckCod(long emailCheckCod) {
-        this.emailCheckCod = emailCheckCod;
-    }
+    @Pattern(regexp = "^((?![/-=*+?!]).)*$",message = "Не повино в адресі турагенції бути знаків \"/-=*+?!\"")
+    @Size(min=2,max=10, message = "Адрес турагенції повинен бути більше 2 і не менше 10 символів")
+    @NotBlank(message = "Адрес турагенції не повинен бути з пробілів")
+    private String KVED;//КВЕД
 
-    public String getCountry() {
-        return country;
-    }
+    @Pattern(regexp = "\\d.",message = "ЕГРПОУ або РНУКПН повинен складатися з чисел")
+    @Size(min=8,max=15, message = "ЕГРПОУ або РНУКПН повинен бути більше 8 і не менше 15 символів")
+    @NotBlank(message = "ЕГРПОУ або РНУКПН не повинен бути з пробілів")
+    private String EGRPOYorRNYKPN;// ЕГРПОУ або РНУКПН
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+    private boolean whatChoose;// ЕГРПОУ/РНУКПН
 
-    public boolean isHello() {
-        return hello;
-    }
+    @Pattern(regexp = "^((?![/;-=*+?!]).)*$",message = "Не повино в імені голови агенції бути знаків \"/;-=*+?!\"")
+    @Size(min=3,max=150, message = "Повне ім'я голови агенції повине бути більше 3 і не менше 150 символів")
+    @NotBlank(message = "овне ім'я голови агенції не повине бути з пробілів")
+    private String nameHeadAgency;// Голова турагенції (ПІБ)
 
-    public void setHello(boolean hello) {
-        this.hello = hello;
-    }
 
-    public boolean isError() {
-        return error;
-    }
+    @Size(max=1000, message = "URL фото повине бути більше 1000 символів")
+    private String urlPhoto;//
 
-    public void setError(boolean error) {
-        this.error = error;
-    }
+    @Size(max=1000, message = "Опис агенції повине бути більше 1000 символів")
+    private String describeAgency;//
 
     public String getNameTravelAgency() {
         return nameTravelAgency;
@@ -70,63 +61,27 @@ public class TravelAgencyForm {
         this.addressTravelAgency = addressTravelAgency;
     }
 
-    public String getNumberPhone() {
-        return numberPhone;
-    }
-
-    public void setNumberPhone(String numberPhone) {
-        this.numberPhone = numberPhone;
-    }
-
-    public long getKVED() {
+    public String getKVED() {
         return KVED;
     }
 
-    public void setKVED(long KVED) {
+    public void setKVED(String KVED) {
         this.KVED = KVED;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Long getEGRPOYorRNYKPN() {
+    public String getEGRPOYorRNYKPN() {
         return EGRPOYorRNYKPN;
     }
 
-    public void setEGRPOYorRNYKPN(Long EGRPOYorRNYKPN) {
+    public void setEGRPOYorRNYKPN(String EGRPOYorRNYKPN) {
         this.EGRPOYorRNYKPN = EGRPOYorRNYKPN;
     }
 
-    public String getWhatChoose() {
+    public boolean isWhatChoose() {
         return whatChoose;
     }
 
-    public String getUsername() { return this.login;}
-
-    public String getName() { return this.nameTravelAgency;}
-
-    public void setWhatChoose(String whatChoose) {
+    public void setWhatChoose(boolean whatChoose) {
         this.whatChoose = whatChoose;
     }
 
@@ -138,88 +93,108 @@ public class TravelAgencyForm {
         this.nameHeadAgency = nameHeadAgency;
     }
 
-    public TravelAgencyForm(boolean hello, boolean error, String nameTravelAgency, String addressTravelAgency,
-                            String numberPhone, long KVED, String login, String password, String email,
-                            Long EGRPOYorRNYKPN, String whatChoose, String nameHeadAgency, long emailCheckCod) {
-        this.hello = hello;
-        this.error = error;
+    public String getUrlPhoto() {
+        return urlPhoto;
+    }
+
+    public void setUrlPhoto(String urlPhoto) {
+        this.urlPhoto = urlPhoto;
+    }
+
+    public String getDescribeAgency() {
+        return describeAgency;
+    }
+
+    public void setDescribeAgency(String describeAgency) {
+        this.describeAgency = describeAgency;
+    }
+
+    public TravelAgencyForm(String username, String password, String number, String email,
+                            String country, String nameTravelAgency, String addressTravelAgency,
+                            String KVED, String EGRPOYorRNYKPN, boolean whatChoose, String nameHeadAgency,
+                            String urlPhoto, String describeAgency) {
+        super(username, password, number, email, country);
         this.nameTravelAgency = nameTravelAgency;
         this.addressTravelAgency = addressTravelAgency;
-        this.numberPhone = numberPhone;
         this.KVED = KVED;
-        this.login = login;
-        this.password = password;
-        this.email = email;
         this.EGRPOYorRNYKPN = EGRPOYorRNYKPN;
         this.whatChoose = whatChoose;
         this.nameHeadAgency = nameHeadAgency;
-        this.emailCheckCod = emailCheckCod;
+        this.urlPhoto = urlPhoto;
+        this.describeAgency = describeAgency;
     }
 
     public TravelAgencyForm() {
+    }
 
-        this.hello = true;
-        this.EGRPOYorRNYKPN = 0L;
+    TravelAgency toTravelAgency(){
+        TravelAgency travelAgency = new TravelAgency();
+
+        setFormInsideTravelAgency(travelAgency,this);
+
+        travelAgency.setUsername(super.getUsername());
+        travelAgency.setPassword(super.getPassword());
+
+        return travelAgency;
+    }
+
+    TravelAgency toTravelAgency(TravelAgency travelAgency){
+        setFormInsideTravelAgency(travelAgency,this);
+        return travelAgency;
+    }
+
+    public static void setFormInsideTravelAgency(TravelAgency travelAgency,TravelAgencyForm form){
+
+        travelAgency.setEmail(form.getEmail());//2
+        travelAgency.setNumber(form.getNumber());//1
+        travelAgency.setCountry(form.getCountry());//9
+
+        travelAgency.setName(form.nameTravelAgency);
+        travelAgency.setFullNameDirector(form.nameHeadAgency);
+
+        travelAgency.setDescribeAgency(form.describeAgency);
+        travelAgency.setAddress(form.addressTravelAgency);
+        travelAgency.setUrlPhoto(form.urlPhoto);
+
+        travelAgency.setKved(form.KVED);
+        travelAgency.setEgrpoyOrRnekpn(Long.valueOf(form.EGRPOYorRNYKPN));
+        travelAgency.setEgrpoy(form.whatChoose);
+
+    }
+
+    public TravelAgencyForm setFieldFromCustomer(TravelAgency travelAgency){
+        super.setCountry(travelAgency.getCountry());
+        super.setEmail(travelAgency.getEmail());
+        super.setNumber(travelAgency.getNumber());
+
+        super.setUsername("here_must_be_username");
+        super.setPassword("here_must_be_password");
+
+        this.addressTravelAgency = travelAgency.getAddress();
+        this.nameTravelAgency = travelAgency.getName();
+        this.nameHeadAgency = travelAgency.getFullNameDirector();
+
+        this.KVED = travelAgency.getKved();
+        this.EGRPOYorRNYKPN = travelAgency.getEgrpoyOrRnekpn().toString();
+        this.whatChoose = travelAgency.isEgrpoy();
+
+        this.urlPhoto = travelAgency.getUrlPhoto();
+        this.describeAgency = travelAgency.getDescribeAgency();
+
+        return this;
     }
 
     @Override
     public String toString() {
-        return "TravelAgencyForm{\n" +
-                "hello=" + hello +
-                ",\n error=" + error +
-                ",\n nameTravelAgency='" + nameTravelAgency + '\'' +
-                ",\n addressTravelAgency='" + addressTravelAgency + '\'' +
-                ",\n numberPhone='" + numberPhone + '\'' +
-                ",\n KVED=" + KVED +
-                ",\n login='" + login + '\'' +
-                ",\n password='" + password + '\'' +
-                ",\n email='" + email + '\'' +
-                ",\n EGRPOYorRNYKPN=" + EGRPOYorRNYKPN +
-                ",\n whatChoose='" + whatChoose + '\'' +
-                ",\n nameHeadAgency='" + nameHeadAgency + '\'' +
-                '}';
+        return "TravelAgencyForm{" +
+                "nameTravelAgency='" + nameTravelAgency + '\'' +
+                ", addressTravelAgency='" + addressTravelAgency + '\'' +
+                ", KVED='" + KVED + '\'' +
+                ", EGRPOYorRNYKPN='" + EGRPOYorRNYKPN + '\'' +
+                ", whatChoose=" + whatChoose +
+                ", nameHeadAgency='" + nameHeadAgency + '\'' +
+                ", urlPhoto='" + urlPhoto + '\'' +
+                ", describeAgency='" + describeAgency + '\'' +
+                "} " + super.toString();
     }
-
-    public TravelAgency getTravelAgency()
-    {
-        return null;
-    }
-
-    @NonNull
-    public TravelAgencyTemporary toTravelAgencyTemporary(){
-        TravelAgencyTemporary travelAgencyTemporary = new TravelAgencyTemporary();
-
-        //travelAgencyTemporary.setIdTravelAgency(CustomerForm.getIdGenerator());
-
-        travelAgencyTemporary.setEmail(this.email);
-        travelAgencyTemporary.setUsername(this.login);
-        travelAgencyTemporary.setPassword(this.password);
-        travelAgencyTemporary.setCountry(this.country);
-        travelAgencyTemporary.setAddress(this.addressTravelAgency);
-        travelAgencyTemporary.setFullNameDirector(this.nameHeadAgency);
-        travelAgencyTemporary.setName(this.nameTravelAgency);
-
-        travelAgencyTemporary.setDateRegistration(LocalDateTime.now());
-        travelAgencyTemporary.setUsed(Boolean.FALSE);
-        travelAgencyTemporary.setEGRPOY(this.whatChoose.equals("setEGRPOY"));
-
-        travelAgencyTemporary.setValueEGRPOYorRNYKPN(this.EGRPOYorRNYKPN);
-        travelAgencyTemporary.setKved(this.KVED);
-        travelAgencyTemporary.setNumber(Long.parseLong(this.numberPhone));
-
-        return  travelAgencyTemporary;
-    }
-
-    public boolean isChooseEmpty() {
-        return this.whatChoose == null;
-    }
-
-    public TravelAgencyForm getErrorForm()
-    {
-        this.hello = false;
-        this.error = true;
-        return this;
-    }
-
-
 }

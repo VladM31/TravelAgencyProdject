@@ -73,5 +73,14 @@ public class UserForm {
     public UserForm() {
     }
 
-
+    @Override
+    public String toString() {
+        return "UserForm{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", number='" + number + '\'' +
+                ", email='" + email + '\'' +
+                ", country='" + country + '\'' +
+                '}';
+    }
 }
