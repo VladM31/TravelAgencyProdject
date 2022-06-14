@@ -27,6 +27,9 @@ public class HandlerRegistrationUser {
         return true;
     }
 
+    public static final String INSERT_USER = "INSERT INTO user (number,email,username,password,name,active,date_registration,role_id,country_id,type_state_id) " +
+            "VALUES (?,?,?,?,?,?,?,(SELECT id from role WHERE name = ?) ,?,?);";
+
     protected static void saveUserAsRegistration(PreparedStatement statement, User user,int idCountry) {
         int index = 0;
 
@@ -41,7 +44,7 @@ public class HandlerRegistrationUser {
 
             statement.setString(++index,user.getRole().toString());
             statement.setInt(++index,idCountry);
-            statement.setString(++index, TypeState.REGISTRATION.toString());
+            statement.setInt(++index, TypeState.REGISTRATION.getId());
         } catch (SQLException e) {
             e.printStackTrace();
         }
