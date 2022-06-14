@@ -5,12 +5,14 @@ import nure.knt.database.idao.registration.IDAOUserRegistrationConfirm;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+@Repository
 public class DAOTravelAgencyRegistration extends RegistrationCore<TravelAgency> implements IDAOUserRegistrationConfirm<TravelAgency> {
     @Override
     public boolean saveForRegistration(TravelAgency user, String code) throws SQLException {
