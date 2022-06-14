@@ -75,7 +75,7 @@ public class CustomerForm extends UserForm {
         super.setEmail(customer.getEmail());
         super.setNumber(customer.getNumber());
 
-        this.lastname = customer.getFirstName();
+        this.lastname = customer.getLastName();
         this.firstname = customer.getFirstName();
         this.male = customer.isMale();
 
