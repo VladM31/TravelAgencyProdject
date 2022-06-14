@@ -19,7 +19,8 @@
 <body class="main-body">
 
 
-    <form action="" class="box-main">
+    <form th:action="${@environment.getProperty('registration.travel.agency.url')}" th:method="PATCH"
+          th:object="${travelAgencyForm}" class="box-main">
 
 
         <div style=" display: flex;justify-content: center;">
@@ -29,31 +30,31 @@
         <div class="flex-row">
             <div class="flex-column">
                 <h5 class="text-up">Назва турагенції</h5>
-                <input type="text" class="box-input">
+                <input type="text" class="box-input" minlength="2" maxlength="101" pattern="^((?![/-=*+?!]).)*$" th:field="*{nameTravelAgency}">
             </div>
             <div class="flex-column">
                 <h5 class="text-up">Адреса офісу турагенції</h5>
-                <input type="text" class="box-input">
+                <input type="text" class="box-input" minlength="2" maxlength="100" pattern="^((?![/-=*+?!]).)*$" th:field="*{addressTravelAgency}">
             </div>
         </div>
         <div class="flex-row">
             <div class="flex-column">
                 <h5 class="text-up">Номер телефону</h5>
-                <input type="text" class="box-input">
+                <input type="text" class="box-input" minlength="10" maxlength="10" pattern="\d{10}" th:field="*{number}">
             </div>
             <div class="flex-column">
                 <h5 class="text-up">Поштова адреса</h5>
-                <input type="text" class="box-input">
+                <input type="email" class="box-input" maxlength="60" th:field="*{email}">
             </div>
         </div>
         <div class="flex-row">
             <div class="flex-column">
                 <h5 class="text-up">Логін</h5>
-                <input type="text" class="box-input">
+                <input type="text" class="box-input" minlength="2" maxlength="60" pattern="^((?![/;-=*+?!]).)*$" th:field="*{username}">
             </div>
             <div class="flex-column">
                 <h5 class="text-up">Країна</h5>
-                <input type="text" list="countries-name" class="box-input">
+                <input type="text" list="countries-name" class="box-input" maxlength="60" pattern="^((?![/;-=*+?!]).)*$" th:field="*{country}">
                 <datalist name="country" id="countries-name">
                     <option th:each="country : ${countries}" th:value="${country}" th:text="${country}">...</option>
                 </datalist>
@@ -62,31 +63,31 @@
         <div class="flex-row">
             <div class="flex-column">
                 <h5 class="text-up">Пароль</h5>
-                <input type="text" class="box-input">
+                <input type="text" class="box-input" minlength="8" maxlength="60"  th:field="*{password}">
             </div>
             <div class="flex-column">
                 <h5 class="text-up">КВЕД</h5>
-                <input type="text" class="box-input">
+                <input type="text" class="box-input" minlength="2" maxlength="10"  th:field="*{KVED}">
             </div>
         </div>
         <div class="flex-row">
             <div class="flex-column">
                 <h5 class="text-up">Голова турагенції (ПІБ)</h5>
-                <input type="text" class="box-input">
+                <input type="text" class="box-input" minlength="3" maxlength="150" pattern="^((?![/;-=*+?!]).)*$" th:field="*{nameHeadAgency}">
             </div>
             <div class="flex-column">
                 <h5 class="text-up">ЕГРПОУ або РНУКПН</h5>
-                <input type="text" class="box-input">
+                <input type="text" class="box-input" minlength="8" maxlength="15" pattern="^((?[0-9]).)*$"  name="EGRPOYorRNYKPN" th:field="*{EGRPOYorRNYKPN}">
             </div>
         </div>
         <div style=" display: flex;justify-content: end; padding-right: 8%;">
             <main class=" display:flex; justify-content: center;align-items: flex-direction: row;">
                 <main class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                    <input type="radio" class="btn-check" name="male" id="btnradio1" autocomplete="off" value="true"
+                    <input type="radio" class="btn-check" name="EGRPOY" id="btnradio1" autocomplete="off" value="true"
                         checked>
                     <label class="btn btn-lg btn-outline-success " for="btnradio1">ЕГРПОУ</label>
 
-                    <input type="radio" class="btn-check" name="male" id="btnradio2" autocomplete="on" value="false">
+                    <input type="radio" class="btn-check" name="EGRPOY" id="btnradio2" autocomplete="on" value="false">
                     <label class="btn btn-lg btn-outline-success " for="btnradio2">РНУКПН</label>
                 </main>
             </main>
@@ -94,7 +95,8 @@
         <div style=" display: flex;justify-content: center;">
             <input type="submit" value="ПІДТВЕРДИТИ" class="submit-input">
         </div>
-
+        <input type="hidden" name="urlPhoto" value="" >
+        <input type="hidden" name="describeAgency" value="" >
     </form>
 
 
