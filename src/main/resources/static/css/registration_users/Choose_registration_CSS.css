@@ -1,0 +1,96 @@
+.main-body{
+    background:url(http://localhost:8080/images/registration_img/Choose_registration_Image.png) ;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+
+    display: flex;
+    justify-content: space-around;
+}
+
+.box-main{
+    box-sizing: border-box;
+
+    width: 440px;
+    height: 550px;
+    margin-top: 8%;
+
+    background: rgba(255, 255, 255, 0.86);
+    border: 6px solid #01FD66;
+    border-radius: 40px;
+
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+
+
+h1{
+
+    font-family: 'Neucha';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 60px;
+
+    display: flex;
+    align-items: flex-end;
+    text-align: center;
+    letter-spacing: 0.1em;
+
+    color: #000000;
+
+}
+
+.flex-row{
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.flex-column{
+    display: flex;
+    flex-direction: column;
+
+}
+
+.box-input{
+    box-sizing: border-box;
+
+    width: 300px;
+    height: 70px;
+
+    background: #43ff8e62;
+    border: 3px solid #01FD66;
+    border-radius: 15px;
+
+    font-family: 'Neucha';
+    font-style: normal;
+   
+    font-size: 35px;
+    line-height: 33px;
+    
+    align-items: center;
+    text-align: center;
+
+    color:rgb(0, 0, 0);
+    	
+    transition-duration: 0.5s;
+}
+
+.to-return{
+    background: #01FD66;
+}
+
+.box-input:hover{
+    background: #01FD66;
+    color:rgb(255, 255, 255);
+    width: 340px;
+    height: 90px;
+    font-size: 45px;
+    
+}
+
+
+

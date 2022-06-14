@@ -6,9 +6,11 @@ import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
 import nure.knt.entity.subordinate.Message;
 import nure.knt.entity.subordinate.MessageShortData;
-import nure.knt.forms.filter.MessageShowFilter;
+import nure.knt.forms.filter.FilterMessageShow;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,11 +36,11 @@ public class InsideMessageController {
     public String showProfileMessageGet(@AuthenticationPrincipal User user, Model model){
 
         if (user != null) {
-            HandlerMainWindows.setMenuModel(user,model);
+            HandlerController.setMenuModel(user,model);
         }
 
 
-        model.addAttribute(ATTRIBUTE_FILTER,new MessageShowFilter());
+        model.addAttribute(ATTRIBUTE_FILTER,new FilterMessageShow());
         model.addAttribute(ATTRIBUTE_MESSAGES,idaoMessage.findMessageShortDataAllByToWhom(user.getId()));
         HendlerIMCForAll.setInformationAboutUserForShowAll(model,user);
 
@@ -46,10 +48,10 @@ public class InsideMessageController {
     }
 
     @RequestMapping(value = "/profile-message",method = {RequestMethod.POST})
-    public String showProfileMessagePOST(@AuthenticationPrincipal User user,Model model,MessageShowFilter filter){
+    public String showProfileMessagePOST(@AuthenticationPrincipal User user, Model model, FilterMessageShow filter){
 
         if (user != null) {
-            HandlerMainWindows.setMenuModel(user,model);
+            HandlerController.setMenuModel(user,model);
         }
 
         model.addAttribute(ATTRIBUTE_FILTER,filter);
@@ -152,26 +154,40 @@ class HendlerIMCForAll {
     static final String EMPTY_NAME = "";
     static final boolean NO_THIRD_BUTTON = false;
     static final boolean HAVE_THIRD_BUTTON = true;
+    static final String ATTRIBUTE_USER_EDIT = "urlEdit";
 
-    static void setAllInfo(Model model, String nameChoose, String urlChose,boolean haveThirdButton,String nameThirdButton){
+    static void setAllInfo(Model model, String nameChoose, String urlChose,boolean haveThirdButton,String nameThirdButton,String urlProfileEdit){
         model.addAttribute(ATTRIBUTE_NAME_CHOOSE,nameChoose);
         model.addAttribute(ATTRIBUTE_URL_CHOOSE,urlChose);
         model.addAttribute(ATTRIBUTE_HAVE_THIRD_BUTTON,haveThirdButton);
         model.addAttribute(ATTRIBUTE_NAME_THIRD_BUTTON,nameThirdButton);
+        model.addAttribute(ATTRIBUTE_USER_EDIT,urlProfileEdit);
     }
 
 }
 
+@Component
 class HendlerIMCForCustomer{
     private static final String CUSTOMER_NAME_CHOOSE = "Замовлень";
-    private static final String CUSTOMER_URL_CHOOSE = "/";
+    private static String CUSTOMER_URL_CHOOSE;
+    private static String CUSTOMER_PROFILE_EDIT;
 
     static void setCustomer(Model model){
         HendlerIMCForAll.setAllInfo(model,
                 CUSTOMER_NAME_CHOOSE,
                 CUSTOMER_URL_CHOOSE,
                 HendlerIMCForAll.NO_THIRD_BUTTON,
-                HendlerIMCForAll.EMPTY_NAME);
+                HendlerIMCForAll.EMPTY_NAME,
+                CUSTOMER_PROFILE_EDIT);
+    }
+
+    @Autowired
+    public void setUrl(@Value("${customer.profile.order.url}") String CUSTOMER_URL_CHOOSE){
+        HendlerIMCForCustomer.CUSTOMER_URL_CHOOSE = CUSTOMER_URL_CHOOSE;
+    }
+    @Autowired
+    public void setCustomerProfileEdit(@Value("${customer.profile.edit}") String customerProfileEdit) {
+        CUSTOMER_PROFILE_EDIT = customerProfileEdit;
     }
 }
 
@@ -187,7 +203,8 @@ class HendlerIMCForTravelAgency{
                 TRAVEL_AGENCY_NAME_CHOOSE,
                 TRAVEL_AGENCY_URL_CHOOSE,
                 HendlerIMCForAll.HAVE_THIRD_BUTTON,
-                TRAVEL_AGENCY_NAME_THIRD_BUTTON);
+                TRAVEL_AGENCY_NAME_THIRD_BUTTON,
+                HendlerIMCForAll.EMPTY_NAME);
         model.addAttribute(ATTRIBUTE_HAVE_RATING,true);
         model.addAttribute(ATTRIBUTE_RATING_STARS,TravelAgency.getRetingStars(travelAgency.getRating()));
     }
@@ -203,6 +220,7 @@ class HendlerIMCForCourier {
                 COURIER_NAME_CHOOSE,
                 COURIER_URL_CHOOSE,
                 HendlerIMCForAll.NO_THIRD_BUTTON,
+                HendlerIMCForAll.EMPTY_NAME,
                 HendlerIMCForAll.EMPTY_NAME);
     }
 }
@@ -218,6 +236,7 @@ class HendlerIMCForAdministrations {
                 ADMINISTRATIONS_NAME_CHOOSE,
                 ADMINISTRATIONS_URL_CHOOSE,
                 HendlerIMCForAll.NO_THIRD_BUTTON,
+                HendlerIMCForAll.EMPTY_NAME,
                 HendlerIMCForAll.EMPTY_NAME);
         model.addAttribute(ATTRIBUTE_ARE_YOU_ADMINS,true);
         model.addAttribute(ATTRIBUTE_NAME_ROLE,user.getRole());

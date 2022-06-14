@@ -13,4 +13,18 @@ public enum ConditionCommodity implements IEnumId{
     public void setId(int id) {
         this.id = id;
     }
+
+    public static String getUkraineName(ConditionCommodity state){
+        switch (state){
+            case GONE:
+                return "Використано";
+            case CANCELED:
+                return "Скасовано";
+            case CONFIRMED:
+                return "Підтвердженно";
+            case NOT_CONFIRMED:
+                return "Не підтвердженно";
+        }
+        return "";
+    }
 }

@@ -23,10 +23,6 @@ import java.util.function.Supplier;
 @Component("DAO_MySQL_Customer_Registration")
 public class DAOCustomerRegistration extends RegistrationCore<Customer> {
 
-    public static final String INSERT_USER = "INSERT INTO user (number,email,username,password,name,active,date_registration,role_id,country_id,type_state_id) " +
-            "VALUES (?,?,?,?,?,?,?,(SELECT id from role WHERE name = ?) ,?,(SELECT id from type_state WHERE name = ?));";
-
-
     private static final String INSERT_CUSTOMER =
             "INSERT INTO customer (male,user_id) VALUES (?,?);";
 
@@ -35,7 +31,7 @@ public class DAOCustomerRegistration extends RegistrationCore<Customer> {
 
         if( HandlerRegistrationUser.tryStatement(super.conn,
                 (p) -> HandlerRegistrationUser.saveUserAsRegistration(p,user,countries.getIdByCountry(user.getCountry())),
-                INSERT_USER) == NOT_SAVE){
+                HandlerRegistrationUser.INSERT_USER) == NOT_SAVE){
             return NOT_SAVE;
         }
 

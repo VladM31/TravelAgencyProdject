@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.sql.SQLException;
+import java.util.function.Function;
 
 @Component
 public class WorkerWithEnumsMySQL extends MySQLCore {
@@ -23,33 +24,31 @@ public class WorkerWithEnumsMySQL extends MySQLCore {
     private void setIdForEnums(){
         try(java.sql.Statement statement = conn.getSqlStatement()){
 
-            try(java.sql.ResultSet resultSet = statement.executeQuery(SELECT_ALL_ROLES)){
-                Role role = null;
-                while (resultSet.next()){
-                    role = Role.valueOf(resultSet.getString("name"));
-                    role.setId(resultSet.getInt("id"));
-                }
-            }
+            HandlerWorkerWithEnumsMySQL.setId(statement,SELECT_ALL_ROLES,Role::valueOf);
 
-            try(java.sql.ResultSet resultSet = statement.executeQuery(SELECT_ALL_CONDITION_COMMODITY)){
-                ConditionCommodity commodity = null;
-                while (resultSet.next()){
-                    commodity = ConditionCommodity.valueOf(resultSet.getString("name"));
-                    commodity.setId(resultSet.getInt("id"));
-                }
-            }
+            HandlerWorkerWithEnumsMySQL.setId(statement,SELECT_ALL_CONDITION_COMMODITY,ConditionCommodity::valueOf);
 
-            try(java.sql.ResultSet resultSet = statement.executeQuery(SELECT_ALL_TYPE_STATE)){
-                TypeState typeState = null;
-                while (resultSet.next()){
-                    typeState = TypeState.valueOf(resultSet.getString("name"));
-                    typeState.setId(resultSet.getInt("id"));
-                }
-            }
+            HandlerWorkerWithEnumsMySQL.setId(statement,SELECT_ALL_TYPE_STATE,TypeState::valueOf);
+
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+}
+
+
+class HandlerWorkerWithEnumsMySQL{
+
+    protected static <E extends Enum & IEnumId> void setId(java.sql.Statement statement, final String SCRIPT, Function<String,E> valueOf) throws SQLException {
+        try(java.sql.ResultSet resultSet = statement.executeQuery(SCRIPT)){
+            E enumEntity = null;
+            while (resultSet.next()){
+                enumEntity = valueOf.apply(resultSet.getString("name"));
+
+                enumEntity.setId(resultSet.getInt("id"));
+            }
+        }
+    }
 }

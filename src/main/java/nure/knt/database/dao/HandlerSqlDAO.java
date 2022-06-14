@@ -161,6 +161,14 @@ public class HandlerSqlDAO {
         }
     }
 
+
+    public static void setFieldsInsideScript(PreparedStatement statement,Iterable<Object> objects) throws SQLException {
+        int position = START_POSITION;
+        for (Object object:objects) {
+            substituteVariable(statement,++position,object);
+        }
+    }
+
     @Nullable
     public static <T> T useSelectScriptAndGetOneObject(IConnectorGetter connectorGetter, final String script, Consumer<java.sql.PreparedStatement> extraSet, Function<ResultSet, T> getObject){
         try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {

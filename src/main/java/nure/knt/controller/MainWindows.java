@@ -29,7 +29,7 @@ public class MainWindows {
 
         model.addAttribute(ATTRIBUTE_TRAVEL_AGENCIES,HandlerMainWindows.getNodes(dapTravelAgency.findAllAndLimit(3)));
         if (user != null) {
-            HandlerMainWindows.setMenuModel(user,model);
+            HandlerController.setMenuModel(user,model);
         }
 
         return MAIN_PAGE;
@@ -41,7 +41,7 @@ public class MainWindows {
     public String showHelloWindow(@AuthenticationPrincipal User user, Model model) {
         if (user != null) {
             model.addAttribute("home", true);
-            HandlerMainWindows.setMenuModel(user,model);
+            HandlerController.setMenuModel(user,model);
         }
 
         return PAGE_HELLO;
@@ -51,10 +51,7 @@ public class MainWindows {
 }
 
 class HandlerMainWindows{
-    public static void setMenuModel(User user,Model model) {
-        model.addAttribute("sign_in", true);
-        model.addAttribute("name",user.getRole().equals(Role.CUSTOMER) ? user.getName().replace('/',' ') : user.getName());
-    }
+
 
     public static String[] styles = {"Popular-1 color-first","Popular-1 color-second","Popular-1 color-third"};
 
