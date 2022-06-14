@@ -6,6 +6,7 @@ import nure.knt.database.idao.entity.IDAOCourierSQL;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.important.Courier;
+import nure.knt.entity.important.Customer;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
@@ -14,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 
 import static nure.knt.database.dao.HandlerSqlDAO.ERROR_BOOLEAN_ANSWER;
@@ -279,6 +281,21 @@ public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier
     @Override
     public boolean save(Courier entity) {
         return this.saveAll(List.of(entity));
+    }
+
+    private static final String CHANGED_NOT_IMPOTENT_FIELD = HandlerUser.CAN_UPDATE + "(" +
+            HandlerUserPartScript.WHERE_USERNAME_IS + ")" +
+            HandlerUser.WHERE_DATE_REGISTRATION_GREATE_THAN;
+    @Override
+    public boolean canUpdate(Courier origin, Courier update){
+        LinkedList<Object> list = new LinkedList<>();
+        String where = HandlerUser.getScriptOfImportantFieldsThatAreDifferent(origin,update,list);
+
+        if(where.equals(CHANGED_NOT_IMPOTENT_FIELD)){
+            return true;
+        }
+
+        return !HandlerUser.doesScriptReturnSomething(super.conn,where,list);
     }
 }
 

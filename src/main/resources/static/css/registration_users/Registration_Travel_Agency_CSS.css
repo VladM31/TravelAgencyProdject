@@ -1,0 +1,101 @@
+.main-body{
+    background: url(http://localhost:8080/images/registration_img/registration_travel_agency_image.png);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+
+    display: flex;
+    justify-content: space-around;
+}
+
+.box-main{
+    box-sizing: border-box;
+
+    width: 1040px;
+    height: 800px;
+    margin-top: 4%;
+
+    background: rgba(255, 255, 255, 0.86);
+    border: 6px solid #01FD66;
+    border-radius: 40px;
+
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+h1{
+
+    font-family: 'Neucha';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 55px;
+    line-height: 60px;
+
+    display: flex;
+    align-items: flex-end;
+    text-align: center;
+    letter-spacing: 0.1em;
+
+    color: #000000;
+
+}
+
+.flex-row{
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+.flex-column{
+    display: flex;
+    flex-direction: column;
+
+}
+
+.text-up{
+    padding-left: 4%;
+    font-family: 'Roboto';
+    font-style: italic;
+    font-weight: 400;
+    font-size: 25px;
+    line-height: 27px;
+    /* identical to box height */
+
+    
+   
+}
+
+.box-input{
+    box-sizing: border-box;
+
+    width: 360px;
+    height: 55px;
+
+    background: #AFEDC8;
+    border: 3px solid #00712D;
+    border-radius: 15px;
+    font-size: 23px;
+}
+
+.submit-input{
+    width: 200px;
+    height: 85px;
+
+    font-family: 'Neucha';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 23px;
+    line-height: 25px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.1em;
+    justify-content: center;
+    border: 0.5px solid rgba(0, 0, 0, 0.8);
+}
+
+input:focus {
+    border:  3px solid  rgb(86, 207, 255);
+    outline: none;
+}

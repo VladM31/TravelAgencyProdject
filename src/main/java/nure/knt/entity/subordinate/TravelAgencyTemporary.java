@@ -2,7 +2,6 @@ package nure.knt.entity.subordinate;
 
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.important.TravelAgency;
-import nure.knt.forms.signup.CustomerForm;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

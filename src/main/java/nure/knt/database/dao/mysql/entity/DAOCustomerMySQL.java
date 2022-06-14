@@ -9,90 +9,125 @@ import static nure.knt.database.dao.HandlerSqlDAO.useSelectScriptAndGetOneObject
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.important.Customer;
 import nure.knt.entity.enums.Role;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 @Component("DAO_MySQL_Customer")
 public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Customer> {
 
+    private static final String CHANGED_NOT_IMPOTENT_FIELD = HandlerUser.CAN_UPDATE + "(" +
+    HandlerUserPartScript.WHERE_USERNAME_IS + ")" +
+            HandlerUser.WHERE_DATE_REGISTRATION_GREATE_THAN;
+    @Override
+    public boolean canUpdate(Customer origin,Customer update){
+        LinkedList<Object>  list = new LinkedList<>();
+        String where = HandlerUser.getScriptOfImportantFieldsThatAreDifferent(origin,update,list);
 
+        if(where.equals(CHANGED_NOT_IMPOTENT_FIELD)){
+            return true;
+        }
+
+        return !HandlerUser.doesScriptReturnSomething(super.conn,where,list);
+    }
+
+    private String addAnd(String script){
+        if(script.isEmpty()){
+            return script;
+        }
+        return script + " AND ";
+    }
+
+
+    private static final String AND = HandlerUserPartScript.AND;
     private static final String WHERE_MALE_IS = " AND customer.male = ? ";
 
     @Override
     public List<Customer> findByMale(Boolean male) {
-        return useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_MALE_IS,SORT_TO_DATE_REGISTRATION),
-                HandlerCustomer::resultSetToCustomer,male);
+        return this.wrapperForUseSelectList(WHERE_MALE_IS,male);
     }
 
-    private static final String REPLACE_SYMBOL = "@#@_REPLACE_ME_@#@";
-
-    private static final String WHERE_CUSTOMER_ID_IN = " AND customer.id in (" + REPLACE_SYMBOL + ") ";
+    private static final String WHERE_CUSTOMER_ID_IN = " AND customer.id in (" + HandlerSqlDAO.REPLACE_SYMBOL + ") ";
 
     @Override
     public List<Customer> findByCustomerIdIn(Iterable<Customer> ids) {
-        return useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,
-                WHERE_CUSTOMER_ID_IN.replace(REPLACE_SYMBOL, HandlerSqlDAO.symbolsInDependsFromSize(ids)),
-                SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                HandlerSqlDAO.substituteIds(p,ids, (customer)-> customer.getCustomerId());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, HandlerCustomer::resultSetToCustomer);
+
+        List<Long> listIds = new LinkedList<>();
+        ids.forEach(customer -> listIds.add(customer.getCustomerId()));
+        return HandlerSqlDAO.useSelectScript(super.conn,
+                HandlerSqlDAO.setInInsideScript(HandlerSqlDAO.concatScriptToEnd(SELECT_ALL, WHERE_CUSTOMER_ID_IN, SORT_TO_DATE_REGISTRATION), ids),
+                HandlerCustomer::resultSetToCustomer,listIds);
     }
 
     private static final String WHERE_CUSTOMER_ID_ID = " AND customer.id = ? ";
 
     @Override
     public Customer findByCustomerId(Long id) {
-        return useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_CUSTOMER_ID_ID,SORT_TO_DATE_REGISTRATION),(p) -> {
-            try {
-                p.setLong(1,id);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, HandlerCustomer::resultSetToCustomer);
+        return this.wrapperForUseSelectOneObject(WHERE_CUSTOMER_ID_ID,id);
     }
 
+    private static final String WHERE_FIRSTNAME_CONTAINING_IS = " AND user.name LIKE ? ";
 
     @Override
     public List<Customer> findByFirstNameContaining(String part) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_FIRSTNAME_CONTAINING_IS,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerCustomer::resultSetToCustomer, "%"+part+"%/%");
     }
+
+    private static final String WHERE_LASTNAME_CONTAINING_IS = WHERE_FIRSTNAME_CONTAINING_IS;
 
     @Override
     public List<Customer> findByLastNameContaining(String part) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_LASTNAME_CONTAINING_IS,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerCustomer::resultSetToCustomer, "%/%"+part+"%");
     }
+
+    private static final String DELETE_FROM_CODE_TABLE_FOR_CUSTOMER_WHERE_USER_ID_IN = "delete from code_table WHERE code_table.user_id IN(" + REPLACE_SYMBOL + ")";
+    private static final String DELETE_FROM_CUSTOMER_WHERE_USER_ID_IN = "delete from customer WHERE customer.user_id IN(" + REPLACE_SYMBOL + ")";
+    private static final String DELETE_FROM_USER_WHERE_USER_ID_IN = "delete from user WHERE user.id IN(" + REPLACE_SYMBOL + ")";
 
     @Override
     public int deleteAllById(Iterable<Long> ids) {
-        return 0;
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CODE_TABLE_FOR_CUSTOMER_WHERE_USER_ID_IN,ids);
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CUSTOMER_WHERE_USER_ID_IN,ids);
+        return HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_USER_WHERE_USER_ID_IN,ids);
     }
+
+    private static final Function<Customer,Long> CUSTOMER_TO_LONG = customer -> customer.getId();
 
     @Override
     public int deleteAllByEntity(Iterable<Customer> entities) {
-        return 0;
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CODE_TABLE_FOR_CUSTOMER_WHERE_USER_ID_IN,entities,CUSTOMER_TO_LONG);
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CUSTOMER_WHERE_USER_ID_IN,entities,CUSTOMER_TO_LONG);
+        return HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_USER_WHERE_USER_ID_IN,entities,CUSTOMER_TO_LONG);
     }
 
     @Override
     public int deleteByEntity(Customer entity) {
-        return 0;
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CODE_TABLE_FOR_CUSTOMER_WHERE_USER_ID_IN,List.of(entity),CUSTOMER_TO_LONG);
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CUSTOMER_WHERE_USER_ID_IN,List.of(entity),CUSTOMER_TO_LONG);
+        return HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_USER_WHERE_USER_ID_IN,List.of(entity),CUSTOMER_TO_LONG);
     }
 
     @Override
     public int deleteById(Long id) {
-        return 0;
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CODE_TABLE_FOR_CUSTOMER_WHERE_USER_ID_IN,List.of(id));
+        HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_CUSTOMER_WHERE_USER_ID_IN,List.of(id));
+        return HandlerSqlDAO.deleteByIdIn(super.conn,DELETE_FROM_USER_WHERE_USER_ID_IN,List.of(id));
     }
 
     @Override
     public int deleteAll() {
-        return 0;
+        return ERROR_DELETE;
     }
 
     private static final String SELECT_ALL = "SELECT user.id AS user_pk, customer.id AS customer_pk,  male," +
@@ -102,24 +137,31 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
             " left join country on user.country_id = country.id " +
             " WHERE user.type_state_id = 20 ;";
 
-    private static final String SORT_TO_DATE_REGISTRATION = "  ORDER BY date_registration DESC;";
 
     @Override
     public List<Customer> findAll() {
-        return HandlerSqlDAO.useSelectScript(conn,
-                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,SORT_TO_DATE_REGISTRATION),
-                HandlerCustomer::resultSetToCustomer);
+        return this.wrapperForUseSelectList("");
+
     }
 
-    private static final String WHERE_user_id = " AND user.id = ? " + SORT_TO_DATE_REGISTRATION;
+
+
     @Override
     public List<Customer> findAllById(Iterable<Long> ids) {
-        return null;//useSelectScript(conn,SELECT_ALL.replace(";",WHERE_user_id),);
+        return HandlerSqlDAO.useSelectScript(super.conn,
+                HandlerSqlDAO.setInInsideScript(
+                    HandlerSqlDAO.concatScriptToEnd(
+                        SELECT_ALL,AND ,
+                        HandlerUserPartScript.WHERE_USER_ID_IN,
+                        SORT_TO_DATE_REGISTRATION),
+                        ids),
+                HandlerCustomer::resultSetToCustomer,ids);
     }
+
 
     @Override
     public Customer findOneById(Long id) {
-        return null;
+        return this.wrapperForUseSelectOneObject(AND + HandlerUserPartScript.WHERE_USER_ID_IS,id);
     }
 
     private static final String UPDATE_ITERABLE_BY_ID = "UPDATE customer left join user on customer.user_id = user.id  " +
@@ -162,96 +204,85 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
         }
     }
 
-    private static final String WHERE_NUMBER_IS = " AND user.number = ? ";
-
     @Override
     public Customer findByNumber(String number) {
-        return HandlerSqlDAO.useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_NUMBER_IS,SORT_TO_DATE_REGISTRATION),
-                HandlerCustomer::resultSetToCustomer,number);
+        return this.wrapperForUseSelectOneObject(AND + HandlerUserPartScript.WHERE_NUMBER_IS,number);
     }
-
-    private static final String WHERE_EMAIL_IS = " AND user.email = ? ";
 
     @Override
     public Customer findByEmail(String email) {
-        return useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_EMAIL_IS,SORT_TO_DATE_REGISTRATION),
-                HandlerCustomer::resultSetToCustomer,email);
-    }
+        return this.wrapperForUseSelectOneObject(AND + HandlerUserPartScript.WHERE_EMAIL_IS,email);
 
-    private static final String WHERE_USERNAME_IS = " AND user.username = ? ";
+    }
 
     @Override
     public Customer findByUsername(String username) {
-        return useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_USERNAME_IS,SORT_TO_DATE_REGISTRATION),
-                HandlerCustomer::resultSetToCustomer,username);
+        return this.wrapperForUseSelectOneObject(AND + HandlerUserPartScript.WHERE_USERNAME_IS,username);
     }
-
-    private static final String WHERE_NUMBER_CONTAINING = " AND user.number LIKE ? ";
 
     @Override
     public List<Customer> findByNumberContaining(String number) {
-        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,
-                WHERE_NUMBER_CONTAINING,SORT_TO_DATE_REGISTRATION),
-                HandlerCustomer::resultSetToCustomer,
-                HandlerSqlDAO.containingString(number));
+        return this.wrapperForUseSelectList(AND + HandlerUserPartScript.WHERE_NUMBER_CONTAINING, HandlerSqlDAO.containingString(number));
     }
-
-    private static final String WHERE_USERNAME_CONTAINING = " AND user.username LIKE ? ";
 
     @Override
     public List<Customer> findByUsernameContaining(String username) {
-        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,
-                        WHERE_USERNAME_CONTAINING,SORT_TO_DATE_REGISTRATION),
-                HandlerCustomer::resultSetToCustomer,
-                HandlerSqlDAO.containingString(username));
+       return this.wrapperForUseSelectList(AND + HandlerUserPartScript.WHERE_USERNAME_CONTAINING, HandlerSqlDAO.containingString(username));
     }
-
-    private static final String WHERE_PASSWORD_IS = " AND user.password = ? ";
 
     @Override
     public List<Customer> findByPassword(String password) {
-        return HandlerSqlDAO.useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_PASSWORD_IS,SORT_TO_DATE_REGISTRATION),
-                HandlerCustomer::resultSetToCustomer,password);
+        return this.wrapperForUseSelectList(AND + HandlerUserPartScript.WHERE_PASSWORD_IS,password);
     }
-
-
 
     @Override
     public List<Customer> findByDateRegistrationBetween(LocalDateTime start, LocalDateTime end) {
-        return null;
+        return this.wrapperForUseSelectList(AND + HandlerUserPartScript.WHERE_DATE_REGISTRATION_BETWEEN,start,end);
+
     }
 
     @Override
     public List<Customer> findByActive(boolean active) {
-        return null;
+        return this.wrapperForUseSelectList(AND + HandlerUserPartScript.WHERE_ACTIVE_IS,active);
     }
 
     @Override
     public List<Customer> findByRole(Role role) {
-        return null;
+        return this.wrapperForUseSelectList(AND + HandlerUserPartScript.WHERE_ROLE_ID_IS,role.getId());
     }
+
+    private static final String SELECT_WHERE_TYPE_STATE_IS = SELECT_ALL.replace("20","?");
 
     @Override
     public List<Customer> findByTypeState(TypeState typeState) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_WHERE_TYPE_STATE_IS,SORT_TO_DATE_REGISTRATION),
+                HandlerCustomer::resultSetToCustomer,typeState.getId());
     }
 
     @Override
     public List<Customer> findByCountry(String country) {
-        return null;
+        return this.wrapperForUseSelectList(AND + HandlerUserPartScript.WHERE_NAME_COUNTRY_IS,country);
     }
 
-
     @Override
-    public List<Customer> findByEmailContaining(String start) {
-        return null;
+    public List<Customer> findByEmailContaining(String emailPart) {
+        return this.wrapperForUseSelectList(AND + HandlerUserPartScript.WHERE_EMAIL_CONTAINING,HandlerSqlDAO.containingString(emailPart));
     }
 
     @Override
     public List<Customer> findByNameContaining(String name) {
-        return null;
+        return this.wrapperForUseSelectList(AND + HandlerUserPartScript.WHERE_NAME_CONTAINING,HandlerSqlDAO.containingString(name));
     }
 
+    private List<Customer> wrapperForUseSelectList(String part,@NonNull Object ...arrayField){
+        return HandlerSqlDAO.useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,part,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerCustomer::resultSetToCustomer,arrayField);
+    }
+
+    private Customer wrapperForUseSelectOneObject(String part,@NonNull Object ...arrayField){
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,part,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerCustomer::resultSetToCustomer,arrayField);
+    }
 }
 
 
