@@ -39,11 +39,11 @@
                 <input type="text" placeholder="Назвою міста" class="box-filter">
             </div>
 
-            <div id="nameCourier">
+            <div id="nameCourier" th:if="${RoleAdmin}">
                 <input type="text" placeholder="Іменем кур'єра" class="box-filter">
             </div>
 
-            <div id="nameGiveTask">
+            <div id="nameGiveTask" th:unless="${RoleAdmin}">
 
                 <input type="text" placeholder="Іменем відправника" class="box-filter">
             </div>
@@ -136,12 +136,17 @@
                         <form class="box-buttons">
                             <input type="hidden" name="circle" value="123">
                             <input type="hidden" class="small-button color-gray" value="Виконати">
-                            <input type="submit" class="small-button color-green" value="Підтвердити">
-                            <input type="submit" class="small-button color-red" value="Скасувати">
+                            <input type="hidden" class="small-button color-green" value="Підтвердити">
+                            <input type="submit" class="small-button color-red" value="Скасувати" th:if="${RoleAdmin
+                            && (task.conditionCommodity.equals(T(nure.knt.entity.enums.ConditionCommodity).CONFIRMED)
+                            || task.conditionCommodity.equals(T(nure.knt.entity.enums.ConditionCommodity).NOT_CONFIRMED))}">
+                            <input type="button" class="small-button color-gray" value="Скасувати" th:if="${RoleAdmin
+                            && (task.conditionCommodity.equals(T(nure.knt.entity.enums.ConditionCommodity).CANCELED)
+                            || task.conditionCommodity.equals(T(nure.knt.entity.enums.ConditionCommodity).GONE))}">
                         </form>
-                        <div class=" box-text color-red box-state">
+                        <div class=" box-text box-state" th:classappend="${ChooseColor.apply(task.conditionCommodity)}">
                             <small class="info-text-top"> Стан</small>
-                            <p class="info-text-bottom item_state"> Скасовано</p>
+                            <p class="info-text-bottom item_state" th:text="${T(nure.knt.entity.enums.ConditionCommodity).getUkraineName(task.conditionCommodity)}"> Скасовано</p>
                         </div>
                     </div>
 
@@ -214,14 +219,13 @@
 
             </form>
 
-            <script src="sort.js"></script>
         </div>
 
     </div>
 
 
     <!-- ****************************************************************************** -->
-
+    <script type="text/javascript" th:src="@{/js/sort_courier.js}"></script>
 
 </body>
 
