@@ -1,6 +1,5 @@
 package nure.knt.database.dao;
 
-import nure.knt.database.dao.mysql.entity.HandlerUser;
 import nure.knt.database.idao.IConnectorGetter;
 import nure.knt.tools.WorkWithCountries;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.ToLongFunction;
 
 @Component
 public class HandlerSqlDAO {
@@ -53,7 +51,7 @@ public class HandlerSqlDAO {
     }
 
     public static @NotNull String setInInsideScript(@NonNull String script, Iterable<?> ids){
-        return script.replaceFirst(HandlerSqlDAO.REPLACE_SYMBOL,HandlerSqlDAO.symbolsInDependsFromSize(ids));
+        return script.replace(HandlerSqlDAO.REPLACE_SYMBOL,HandlerSqlDAO.symbolsInDependsFromSize(ids));
     }
 
     public static String symbolsInDependsFromSize(Iterable<?> ids){

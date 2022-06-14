@@ -5,7 +5,7 @@ const STYLE_SORT_BUTTON = "button-sort-used";
 const sortDescendingBtn = document.getElementById('sortDescending');
 const sortAscendingBtn = document.getElementById('sortAscending');
 
-let how_sort_number = function(a,b) { return a-b};
+let how_sort_number = function(a,b) { return a - b};
 let how_sort_string = function(a,b) {return (a > b) - (a < b)};
 
 function sortDescending(){
