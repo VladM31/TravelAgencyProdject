@@ -253,4 +253,6 @@ public class HandlerSqlDAO {
         return HandlerSqlDAO.deleteByIdIn(connectorGetter,script,collection,LONG_TO_LONG);
     }
 
+
+
 }
