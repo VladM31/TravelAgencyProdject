@@ -127,7 +127,7 @@ public class RegistrationCustomerController {
 
 
     @Autowired
-    @Qualifier("DAO_MySQL_Customer_Registration")
+    @Qualifier("DAO_Customer_Registration_MySQL")
     public void setDaoRegistration(IDAOUserRegistration daoRegistration) {
         this.daoRegistration = daoRegistration;
     }
