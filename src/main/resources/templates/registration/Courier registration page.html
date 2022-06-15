@@ -63,6 +63,11 @@
                 </datalist>
               </div>
             </div>
+
+            <ul style="color:red; display:flex; justify-content:center;" th:if="${error}">
+              <li th:text="${error}" />
+            </ul>
+
             <div class="buttons">
               <input type="submit" value="Підтвердити" />
             </div>

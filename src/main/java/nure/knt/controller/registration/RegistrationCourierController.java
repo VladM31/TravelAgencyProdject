@@ -50,7 +50,7 @@ private WorkWithCountries countries;
         this.setAttributes(model,courierForm);
 
         if(bindingResult.hasErrors()){
-            System.out.println(bindingResult.getFieldErrors().get(0).getDefaultMessage());
+           model.addAttribute("error",bindingResult.getFieldErrors().get(0).getDefaultMessage());
         }
         return PAGE_COURIER_REGISTRATION;
     }
