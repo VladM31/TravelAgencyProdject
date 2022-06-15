@@ -3,6 +3,7 @@ package nure.knt.controller.registration;
 import nure.knt.database.idao.registration.IDAOUserRegistration;
 import nure.knt.database.idao.registration.IDAOUserRegistrationConfirm;
 import nure.knt.entity.important.TravelAgency;
+import nure.knt.entity.important.User;
 import nure.knt.forms.entities.CustomerForm;
 import nure.knt.forms.entities.TravelAgencyForm;
 import nure.knt.forms.entities.UserForm;
@@ -64,8 +65,9 @@ public class RegistrationTravelAgencyController {
     @RequestMapping(value = "${registration.travel.agency.url}",method = {RequestMethod.PATCH})
     public String checkInputForm(Model model, @Valid @ModelAttribute("nameTravelAgency") TravelAgencyForm travelAgencyForm, @NotNull BindingResult bindingResult){
 
-        if(Handler.hasError(model,travelAgencyForm,bindingResult,countries,daoRegistrationAgency,ATTRIBUTE_ERROR)){
-            Handler.setInformationInPage(model,travelAgencyForm,countries,ATTRIBUTE_TRAVEL_AGENCY_FORM);
+        if(HandlerRegistration.hasError(model,travelAgencyForm,bindingResult,countries,
+                daoRegistrationAgency,ATTRIBUTE_ERROR,travelAgencyForm.toTravelAgency()," або ЕГРПОУ або РНУКПН ")){
+            HandlerRegistrationTravelAgencyController.setInformationInPage(model,travelAgencyForm,countries,ATTRIBUTE_TRAVEL_AGENCY_FORM);
             return PAGE_SIGN_UP;
         }
 
@@ -77,7 +79,7 @@ public class RegistrationTravelAgencyController {
             daoRegistrationAgency.saveForRegistration(travelAgency,CODE);
         } catch (SQLException e) {
             e.printStackTrace();
-            Handler.setInformationInPage(model,travelAgencyForm,countries,ATTRIBUTE_TRAVEL_AGENCY_FORM);
+            HandlerRegistrationTravelAgencyController.setInformationInPage(model,travelAgencyForm,countries,ATTRIBUTE_TRAVEL_AGENCY_FORM);
             model.addAttribute(ATTRIBUTE_ERROR,"Номер телефону або логін або пошта або ЕГРПОУ або РНУКПН зайнято");
             return PAGE_SIGN_UP;
         }
@@ -106,25 +108,9 @@ public class RegistrationTravelAgencyController {
 
 }
 
-class Handler{
+class HandlerRegistrationTravelAgencyController{
 
-    protected static boolean hasError(Model model, TravelAgencyForm travelAgencyForm,BindingResult bindingResult,
-                                      WorkWithCountries countries,IDAOUserRegistrationConfirm<TravelAgency> daoRegistration,final String ATTRIBUTE_ERROR){
-        if(bindingResult.hasErrors()){
-            model.addAttribute(ATTRIBUTE_ERROR,bindingResult.getAllErrors().get(0).getDefaultMessage());
-            return true;
-        }
-        if (countries.getIdByCountry(travelAgencyForm.getCountry()) == WorkWithCountries.NAME_NOT_FOUND) {
-            model.addAttribute(ATTRIBUTE_ERROR,"Країна не знайдена");
-            return true;
-        }
 
-        if(daoRegistration.userIsBooked(travelAgencyForm.toTravelAgency())){
-            model.addAttribute(ATTRIBUTE_ERROR,"Номер телефону або логін або пошта або ЕГРПОУ або РНУКПН зайнято");
-            return true;
-        }
-        return false;
-    }
 
     protected static void setInformationInPage(Model model, TravelAgencyForm travelAgencyForm,WorkWithCountries countries,String nameAttribute){
         model.addAttribute("countries",countries.getCountry());
