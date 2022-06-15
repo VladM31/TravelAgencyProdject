@@ -7,8 +7,6 @@ public class HandlerRegistration {
     public static final String NAME_ATTRIBUTE = "name";
 
     public static void setAttributeCheck(Model model, String name, String email, String url, boolean error) {
-        model.addAttribute("helloUser","Hello " + name + "!!!");
-        model.addAttribute("yourEmail","Your email is " + email + ".");
         model.addAttribute("errorCode", error);
         model.addAttribute("userURL",url);
 

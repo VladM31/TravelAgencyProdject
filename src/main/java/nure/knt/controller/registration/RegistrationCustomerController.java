@@ -7,6 +7,7 @@ import nure.knt.gmail.CodeSendler;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,7 +30,12 @@ public class RegistrationCustomerController {
     private static final String DIRECTORY = "registration/";
     private static final String SIGN_UP_FORM = DIRECTORY + "sign_up_customer_page";
     private static final String CUSTOMER_FORM_ATTRIBUTE = "customerForm";
-    private static final String CHECK_CODE_PAGE = "checkOutEmailCodePage";
+    private final String PAGE_CHECK_CODE;
+
+
+    public RegistrationCustomerController(@Value("${registration.check.code.page}") String PAGE_CHECK_CODE) {
+        this.PAGE_CHECK_CODE = PAGE_CHECK_CODE;
+    }
 
     @RequestMapping(value = "${customer.registration}",method = {RequestMethod.GET})
     public String showInputForm(Model model){
@@ -61,7 +67,7 @@ public class RegistrationCustomerController {
 
         HandlerRegistration.setAttributeCheck(model,customer.getFormatName(),customer.getEmail(),URL_CODE,false);
 
-        return CHECK_CODE_PAGE;
+        return PAGE_CHECK_CODE;
     }
 
     private boolean checkCustomerForm(Model model,CustomerForm customerForm,BindingResult bindingResult){
@@ -89,7 +95,7 @@ public class RegistrationCustomerController {
 
         if(id == IDAOUserRegistration.userIdNotFound){
             HandlerRegistration.setAttributeCheck(model,name,email,URL_CODE,true);
-            return CHECK_CODE_PAGE;
+            return PAGE_CHECK_CODE;
         }
 
         daoRegistration.saveAsRegistered(id);
