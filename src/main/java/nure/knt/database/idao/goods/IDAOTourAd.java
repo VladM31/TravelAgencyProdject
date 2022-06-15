@@ -43,8 +43,6 @@ public interface IDAOTourAd<T extends TourAd>  extends IDAOCoreSave<T>, IDAOCore
     public List<T> findByCountryContaining(String country, Supplier<String> script);
     public List<T> findByNameAgencyContaining(String nameAgency, Supplier<String> script);
 
-    public List<T> findByTypeState(Long agencyId, Set<TypeState> typeStates, Supplier<String> script);
-    public List<T> findByConditionCommodity(Long agencyId, Set<ConditionCommodity> conditionCommodities, Supplier<String> script);
     public List<T> findAll(Supplier<String> script);
 
     public List<T> setOrderQuantity(List<T> tourAds);

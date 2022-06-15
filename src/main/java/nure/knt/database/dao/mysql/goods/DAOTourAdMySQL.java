@@ -1,6 +1,5 @@
 package nure.knt.database.dao.mysql.goods;
 
-
 import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.dao.mysql.entity.HandlerUser;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
@@ -23,8 +22,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-import static nure.knt.database.dao.HandlerSqlDAO.ERROR_BOOLEAN_ANSWER;
-import static nure.knt.database.dao.HandlerSqlDAO.HAVE_NO_ERROR;
+import static nure.knt.database.dao.HandlerSqlDAO.*;
 
 @Repository
 public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
@@ -248,33 +246,44 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
 
 
 
-
-    private static final String WHERE_TYPE_STATE_IS = " WHERE type_state.name = ? ";
-
-    @Override
-    public List<TourAd> findByTypeState(Long agencyId, Set<TypeState> typeStates, Supplier<String> script) {
-        return this.wrapperForUseSelectList(WHERE_TYPE_STATE_IS, script.get(), agencyId, typeStates);
-    }
-
-
-    private static final String WHERE_CONDITION_COMMODITY_IS = " WHERE type_state.name = ? ";
-
-    @Override
-    public List<TourAd> findByConditionCommodity(Long agencyId, Set<ConditionCommodity> conditionCommodities, Supplier<String> script) {
-        return null;
-    }
-
-
-
-
     @Override
     public List<TourAd> findAll(Supplier<String> script) {
-        return HandlerSqlDAO.useSelectScript(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD), HandlerDAOtoMYSQL::resultSetToTourAd);
+        return HandlerSqlDAO.useSelectScript(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,( script.get().isEmpty())?"":" WHERE "+ script.get(), " ORDER BY tour_ad.date_registration;"), HandlerDAOtoMYSQL::resultSetToTourAd);
     }
+
+
+    private static final String SELECT_COUNT_ORDER_TOUR= "SELECT COUNT(order_tour.tour_ad_id) AS count_orders,  tour_ad.id FROM order_tour" +
+            " right join tour_ad ON order_tour.tour_ad_id = tour_ad.id " +
+            " GROUP BY tour_ad.id " +
+            " HAVING tour_ad.id in("+REPLACE_SYMBOL+")" +
+            " ORDER BY tour_ad.date_registration;";
 
     @Override
     public List<TourAd> setOrderQuantity(List<TourAd> tourAds) {
-        return null;
+
+        String script = HandlerSqlDAO.setInInsideScript(SELECT_COUNT_ORDER_TOUR,tourAds );
+        try(PreparedStatement preparedStatement = super.conn.getSqlPreparedStatement(script)){
+
+            int position = 0;
+            for (TourAd tourAd: tourAds) {
+                preparedStatement.setLong(++position, tourAd.getId());
+            }
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                for (TourAd tourAd : tourAds) {
+                    if (resultSet.next()) {
+                        tourAd.setOrderQuantity(resultSet.getInt("count_orders"));
+
+                    }
+                }
+            }
+
+        }catch(Exception exc){
+            exc.printStackTrace();
+        }
+
+        return tourAds;
+
     }
 
 
