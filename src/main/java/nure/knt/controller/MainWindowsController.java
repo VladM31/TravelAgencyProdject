@@ -1,13 +1,8 @@
 package nure.knt.controller;
 
 import nure.knt.database.idao.entity.IDAOTravelAgencySQL;
-import nure.knt.database.idao.goods.IDAOTourAd;
-import nure.knt.entity.enums.TypeState;
-import nure.knt.entity.goods.TourAd;
 import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
-import nure.knt.forms.filter.FilterTourAdMainPage;
-import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -18,16 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @PropertySource("classpath:MainPages.properties")
-@PropertySource("classpath:WorkerWithCustomer.properties")
+@PropertySource("classpath:customer.properties")
 public class MainWindowsController {
 
     private final String PAGE_TOUR_ADS;
     private final String REDIRECT_ON_CHECKOUT_CUSTOMER;
-    private static final String MAIN_PAGE =  "main_pages/Main Page";
 
     @Autowired
     public MainWindowsController(@Value("${main.pages.find.all.name.page}") String PAGE_TOUR_ADS,
@@ -37,14 +30,12 @@ public class MainWindowsController {
     }
 
     // ************* Головна сторінка *****************
+    private static final String DIRECTORY = "main_pages/";
 
     @Autowired
     private IDAOTravelAgencySQL<TravelAgency> dapTravelAgency;
-    @Autowired
-    private IDAOTourAd<TourAd> daoTourAd;
-    @Autowired
-    WorkWithCountries countries;
 
+    private static final String MAIN_PAGE = DIRECTORY + "Main Page";
 
     private static final String ATTRIBUTE_TRAVEL_AGENCIES = "travelAgencies";
     @RequestMapping(value = { "/", "/mainWindow"}, method = { RequestMethod.GET, RequestMethod.POST })
@@ -58,7 +49,7 @@ public class MainWindowsController {
         return MAIN_PAGE;
     }
 
-    private static final String PAGE_HELLO = "main_pages/Hello Page";
+    private static final String PAGE_HELLO = DIRECTORY + "Hello Page";
 
     @RequestMapping(value = { "/hello" }, method = { RequestMethod.GET, RequestMethod.POST })
     public String showHelloWindow(@AuthenticationPrincipal User user, Model model) {
@@ -71,11 +62,7 @@ public class MainWindowsController {
     }
 
     @RequestMapping(value = "${main.pages.find.all.url}", method = {RequestMethod.GET})
-    public String showPageForFindAllTourAd(Model model, FilterTourAdMainPage filter){
-
-        model.addAttribute("tourAds",filter.filtering(daoTourAd.where().typeStateIn(Set.of(TypeState.REGISTERED)),daoTourAd));
-        model.addAttribute("filter",filter);
-        model.addAttribute("countries",countries.getCountry());
+    public String showPageForFindAllTourAd(){
         return PAGE_TOUR_ADS;
     }
 
