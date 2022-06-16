@@ -1,6 +1,8 @@
 package nure.knt.controller;
 
 import nure.knt.database.idao.entity.IDAOTravelAgencySQL;
+import nure.knt.database.idao.goods.IDAOTourAd;
+import nure.knt.entity.goods.TourAd;
 import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ public class MainWindowsController {
 
     private final String PAGE_TOUR_ADS;
     private final String REDIRECT_ON_CHECKOUT_CUSTOMER;
+    private static final String MAIN_PAGE =  "main_pages/Main Page";
 
     @Autowired
     public MainWindowsController(@Value("${main.pages.find.all.name.page}") String PAGE_TOUR_ADS,
@@ -30,12 +33,12 @@ public class MainWindowsController {
     }
 
     // ************* Головна сторінка *****************
-    private static final String DIRECTORY = "main_pages/";
 
     @Autowired
     private IDAOTravelAgencySQL<TravelAgency> dapTravelAgency;
+    @Autowired
+    private IDAOTourAd<TourAd> daoTourAd;
 
-    private static final String MAIN_PAGE = DIRECTORY + "Main Page";
 
     private static final String ATTRIBUTE_TRAVEL_AGENCIES = "travelAgencies";
     @RequestMapping(value = { "/", "/mainWindow"}, method = { RequestMethod.GET, RequestMethod.POST })
@@ -49,7 +52,7 @@ public class MainWindowsController {
         return MAIN_PAGE;
     }
 
-    private static final String PAGE_HELLO = DIRECTORY + "Hello Page";
+    private static final String PAGE_HELLO = "main_pages/Hello Page";
 
     @RequestMapping(value = { "/hello" }, method = { RequestMethod.GET, RequestMethod.POST })
     public String showHelloWindow(@AuthenticationPrincipal User user, Model model) {
@@ -62,7 +65,9 @@ public class MainWindowsController {
     }
 
     @RequestMapping(value = "${main.pages.find.all.url}", method = {RequestMethod.GET})
-    public String showPageForFindAllTourAd(){
+    public String showPageForFindAllTourAd(Model model){
+
+        model.addAttribute("tourAds",daoTourAd.findAll(daoTourAd.where()));
         return PAGE_TOUR_ADS;
     }
 
