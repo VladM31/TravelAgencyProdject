@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="../../node_modules/normalize.css/normalize.css"
+      rel="stylesheet"
+    />
+    <link  rel="stylesheet" type="text/css" th:href="@{../css/main_pages_css/Mane_Find_All_Tour_Ads_CSS.css}" />
+    <script src="./script.js" defer></script>
+    <title>Пошук</title>
+  </head>
+  <body>
+      <th:block th:include="/Top Menu"></th:block>
+    <main>
+      <div class="container">
+        <form class="search">
+          <h2>ШУКАТИ ЗА</h2>
+          <div class="search-forms">
+            <div>
+              <select name="select">
+                <option disabled selected value="s1">Назва турагенції</option>
+                <option value="s2">Крокодил Гена</option>
+                <option value="s3">Шапокляк</option>
+                <option value="s4">Крыса Лариса</option>
+              </select>
+            </div>
+            <div>
+              <select name="select">
+                <option disabled selected value="s1">Назвою країни</option>
+                <option value="s2">Крокодил Гена</option>
+                <option value="s3">Шапокляк</option>
+                <option value="s4">Крыса Лариса</option>
+              </select>
+            </div>
+            <div>
+              <select name="select">
+                <option disabled selected value="s1">Назвою міста</option>
+                <option value="s2">Крокодил Гена</option>
+                <option value="s3">Шапокляк</option>
+                <option value="s4">Крыса Лариса</option>
+              </select>
+            </div>
+            <div>
+              <select name="select">
+                <option disabled selected value="s1">
+                  Назвою місця перебування
+                </option>
+                <option value="s2">Крокодил Гена</option>
+                <option value="s3">Шапокляк</option>
+                <option value="s4">Крыса Лариса</option>
+              </select>
+            </div>
+          </div>
+          <div class="search-filter">
+            <div class="item">
+              <label>Ціною</label>
+              <div class="item-input">
+                <input
+                  placeholder="Початкова"
+                  type="number"
+                  id="tentacles"
+                  name="tentacles"
+                  min="0"
+                  max="99999"
+                />
+                <input
+                  placeholder="Кінцева"
+                  type="number"
+                  id="tentacles"
+                  name="tentacles"
+                  min="0"
+                  max="99999"
+                />
+              </div>
+            </div>
+            <div class="item">
+              <label>Датою</label>
+              <div class="item-input">
+                <input
+                  placeholder="Початкова"
+                  type="number"
+                  id="tentacles"
+                  name="tentacles"
+                  min="0"
+                  max="99999"
+                />
+                <input
+                  placeholder="Кінцева"
+                  type="number"
+                  id="tentacles"
+                  name="tentacles"
+                  min="0"
+                  max="99999"
+                />
+              </div>
+            </div>
+            <div class="item">
+              <label>Відсотком знижки</label>
+              <div class="item-input">
+                <input
+                  placeholder="Початкова"
+                  type="number"
+                  id="tentacles"
+                  name="tentacles"
+                  min="0"
+                  max="99999"
+                />
+                <input
+                  placeholder="Кінцева"
+                  type="number"
+                  id="tentacles"
+                  name="tentacles"
+                  min="0"
+                  max="99999"
+                />
+              </div>
+            </div>
+            <input type="button" class="search-filter-button" value="Шукати">
+          </div>
+        </form>
+        <div class="main-windows">
+          <div>
+            
+          </div>
+          <div class="filter-window">
+            <div class="window-name">
+              <div class="window-name-div">
+                <h2>Назва</h2>
+                <div class="rating-mini">
+                  <span class="active"></span>
+                  <span class="active"></span>
+                  <span class="active"></span>
+                  <span class=""></span>
+                  <span class=""></span>
+                </div>
+                <p class="window-paragraph">Дата початку - Дата закінчення</p>
+              </div>
+            </div>
+
+            <div class="window-info">
+              <div>
+                <table>
+                  <tr class="first">
+                    <td class="top-left">Ціна (за одну особу)</td>
+                    <td>Відсоткова знижка</td>
+                    <td class="top-right">
+                      Кількість осіб для максимальної знижки
+                    </td>
+                  </tr>
+                  <tr class="second">
+                    <td class="bottom-left">100 грн</td>
+                    <td>0.0 %</td>
+                    <td class="bottom-right">3</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="paragraphs">
+                <p class="window-paragraph">Країна</p>
+                <p class="window-paragraph">Місто</p>
+              </div>
+            </div>
+
+            <div class="window-button">
+              <div class="window-button-submit">
+                <input type="submit" value="Підтвердити" />
+              </div>
+              <p class="window-paragraph">Місце перебування</p>
+            </div>
+          </div>
+          <div class="filter-window">
+            <div class="window-name">
+              <div class="window-name-div">
+                <h2>Назва</h2>
+                <div class="rating-mini">
+                  <span class="active"></span>
+                  <span class="active"></span>
+                  <span class="active"></span>
+                  <span class=""></span>
+                  <span class=""></span>
+                </div>
+                <p class="window-paragraph">Дата початку - Дата закінчення</p>
+              </div>
+            </div>
+
+            <div class="window-info">
+              <div>
+                <table>
+                  <tr class="first">
+                    <td class="top-left">Ціна (за одну особу)</td>
+                    <td>Відсоткова знижка</td>
+                    <td class="top-right">
+                      Кількість осіб для максимальної знижки
+                    </td>
+                  </tr>
+                  <tr class="second">
+                    <td class="bottom-left">100 грн</td>
+                    <td>0.0 %</td>
+                    <td class="bottom-right">3</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="paragraphs">
+                <p class="window-paragraph">Країна</p>
+                <p class="window-paragraph">Місто</p>
+              </div>
+            </div>
+
+            <div class="window-button">
+              <div class="window-button-submit">
+                <input type="submit" value="Підтвердити" />
+              </div>
+              <p class="window-paragraph">Місце перебування</p>
+            </div>
+          </div>
+          <div class="filter-window">
+            <div class="window-name">
+              <div class="window-name-div">
+                <h2>Назва</h2>
+                <div class="rating-mini">
+                  <span class="active"></span>
+                  <span class="active"></span>
+                  <span class="active"></span>
+                  <span class=""></span>
+                  <span class=""></span>
+                </div>
+                <p class="window-paragraph">Дата початку - Дата закінчення</p>
+              </div>
+            </div>
+
+            <div class="window-info">
+              <div>
+                <table>
+                  <tr class="first">
+                    <td class="top-left">Ціна (за одну особу)</td>
+                    <td>Відсоткова знижка</td>
+                    <td class="top-right">
+                      Кількість осіб для максимальної знижки
+                    </td>
+                  </tr>
+                  <tr class="second">
+                    <td class="bottom-left">100 грн</td>
+                    <td>0.0 %</td>
+                    <td class="bottom-right">3</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="paragraphs">
+                <p class="window-paragraph">Країна</p>
+                <p class="window-paragraph">Місто</p>
+              </div>
+            </div>
+
+            <div class="window-button">
+              <div class="window-button-submit">
+                <input type="submit" value="Підтвердити" />
+              </div>
+              <p class="window-paragraph">Місце перебування</p>
+            </div>
+          </div>
+          <div class="filter-window">
+            <div class="window-name">
+              <div class="window-name-div">
+                <h2>Назва</h2>
+                <div class="rating-mini">
+                  <span class="active"></span>
+                  <span class="active"></span>
+                  <span class="active"></span>
+                  <span class=""></span>
+                  <span class=""></span>
+                </div>
+                <p class="window-paragraph">Дата початку - Дата закінчення</p>
+              </div>
+            </div>
+
+            <div class="window-info">
+              <div>
+                <table>
+                  <tr class="first">
+                    <td class="top-left">Ціна (за одну особу)</td>
+                    <td>Відсоткова знижка</td>
+                    <td class="top-right">
+                      Кількість осіб для максимальної знижки
+                    </td>
+                  </tr>
+                  <tr class="second">
+                    <td class="bottom-left">100 грн</td>
+                    <td>0.0 %</td>
+                    <td class="bottom-right">3</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="paragraphs">
+                <p class="window-paragraph">Країна</p>
+                <p class="window-paragraph">Місто</p>
+              </div>
+            </div>
+
+            <div class="window-button">
+              <div class="window-button-submit">
+                <input type="submit" value="Підтвердити" />
+              </div>
+              <p class="window-paragraph">Місце перебування</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
