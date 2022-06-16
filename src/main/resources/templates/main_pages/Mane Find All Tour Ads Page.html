@@ -14,7 +14,9 @@
       href="../../node_modules/normalize.css/normalize.css"
       rel="stylesheet"
     />
+    <link  rel="stylesheet" type="text/css" th:href="@{../css/sort_button/sortBlock.css}" />
     <link  rel="stylesheet" type="text/css" th:href="@{../css/main_pages_css/Mane_Find_All_Tour_Ads_CSS.css}" />
+
     <script src="./script.js" defer></script>
     <title>Пошук</title>
   </head>
@@ -26,12 +28,8 @@
           <h2>ШУКАТИ ЗА</h2>
           <div class="search-forms">
             <div>
-              <select name="select">
-                <option disabled selected value="s1">Назва турагенції</option>
-                <option value="s2">Крокодил Гена</option>
-                <option value="s3">Шапокляк</option>
-                <option value="s4">Крыса Лариса</option>
-              </select>
+              <input type="text"  class="box-filter box-filter-dop" placeholder="Назва турагенції">
+
             </div>
             <div>
               <select name="select">
@@ -42,22 +40,10 @@
               </select>
             </div>
             <div>
-              <select name="select">
-                <option disabled selected value="s1">Назвою міста</option>
-                <option value="s2">Крокодил Гена</option>
-                <option value="s3">Шапокляк</option>
-                <option value="s4">Крыса Лариса</option>
-              </select>
+              <input type="text"  class="box-filter box-filter-dop" placeholder="Назвою міста">
             </div>
             <div>
-              <select name="select">
-                <option disabled selected value="s1">
-                  Назвою місця перебування
-                </option>
-                <option value="s2">Крокодил Гена</option>
-                <option value="s3">Шапокляк</option>
-                <option value="s4">Крыса Лариса</option>
-              </select>
+              <input type="text"  class="box-filter box-filter-dop" placeholder=" Назвою місця перебування" row="2">
             </div>
           </div>
           <div class="search-filter">
@@ -67,18 +53,18 @@
                 <input
                   placeholder="Початкова"
                   type="number"
-                  id="tentacles"
+
                   name="tentacles"
                   min="0"
-                  max="99999"
+                  max="9999999"
                 />
                 <input
                   placeholder="Кінцева"
                   type="number"
-                  id="tentacles"
+
                   name="tentacles"
                   min="0"
-                  max="99999"
+                  max="9999999"
                 />
               </div>
             </div>
@@ -87,19 +73,11 @@
               <div class="item-input">
                 <input
                   placeholder="Початкова"
-                  type="number"
-                  id="tentacles"
-                  name="tentacles"
-                  min="0"
-                  max="99999"
+                  type="date"
                 />
                 <input
                   placeholder="Кінцева"
-                  type="number"
-                  id="tentacles"
-                  name="tentacles"
-                  min="0"
-                  max="99999"
+                  type="date"
                 />
               </div>
             </div>
@@ -109,40 +87,77 @@
                 <input
                   placeholder="Початкова"
                   type="number"
-                  id="tentacles"
-                  name="tentacles"
+
                   min="0"
                   max="99999"
                 />
                 <input
                   placeholder="Кінцева"
                   type="number"
-                  id="tentacles"
-                  name="tentacles"
+
                   min="0"
                   max="99999"
                 />
               </div>
             </div>
-            <input type="button" class="search-filter-button" value="Шукати">
+            <div class="item">
+              <label>Кількість осіб...</label>
+              <div class="item-input">
+                <input placeholder="Початкова" type="number"
+
+                        min="0"
+                        max="9999"
+                />
+                <input
+                        placeholder="Кінцева"
+                        type="number"
+
+                        min="0"
+                        max="9999"
+                />
+              </div>
+            </div>
+            <input type="submit" class="search-filter-button" value="Шукати">
           </div>
         </form>
         <div class="main-windows">
           <div>
-            
+            <div id="SortByBlock" class="box-sort">
+              <div >
+                <h2 style=" font-size: 25px;">Сортувати по:</h2>
+              </div>
+              <div class="sort-flex">
+
+
+
+                  <button id="sortDescending" class="button-sort  " style=" width: 250px; height: 70px; margin-right: 100px;">\/</button>
+                  <select id="selectSort" name="SortBy" class="box-filter">
+                    <option id="sortByNameMessage">Навзі повідомлення</option>
+                    <option id="sortByNameSendler">Імені відправника</option>
+                    <option id="sortByRole">Ролі</option>
+                    <option id="sortByDateSend">Даті відправлення</option>
+                    <option id="sortByStateMessage">Стану</option>
+
+                  </select>
+                  <button id="sortAscending" class="button-sort  button-sort-used" style=" width: 250px; height: 70px; margin-left: 100px;">/\</button>
+
+              </div>
+
+            </div>
           </div>
-          <div class="filter-window">
+          <form class="filter-window" th:each="tourAd : ${tourAds}">
             <div class="window-name">
               <div class="window-name-div">
-                <h2>Назва</h2>
+                <h2 th:text="${tourAd.nameAgency}">Назва</h2>
                 <div class="rating-mini">
-                  <span class="active"></span>
-                  <span class="active"></span>
-                  <span class="active"></span>
-                  <span class=""></span>
-                  <span class=""></span>
+                  <span th:each="star : ${tourAd.getStars()}" class="starts-style" th:utext="${star}"></span>
+
                 </div>
-                <p class="window-paragraph">Дата початку - Дата закінчення</p>
+                <div class="window-paragraph my-mardin-up" >
+                  <h5 class="text-up-inside-box" s>Дата початку - Дата закінчення</h5>
+                  <p class="text-down-inside-box" th:text="${tourAd.dateStart.toString()} + ' - ' + ${tourAd.dateEnd.toString()}"></p>
+                </div>
+
               </div>
             </div>
 
@@ -157,105 +172,22 @@
                     </td>
                   </tr>
                   <tr class="second">
-                    <td class="bottom-left">100 грн</td>
-                    <td>0.0 %</td>
-                    <td class="bottom-right">3</td>
+                    <td class="bottom-left" th:text="${tourAd.costOneCustomer} + ' грн'">100 </td>
+                    <td th:text="${tourAd.discountPercentage} + ' %'">0.0 %</td>
+                    <td class="bottom-right" th:text="${tourAd.discountSizePeople}">3</td>
                   </tr>
                 </table>
               </div>
               <div class="paragraphs">
-                <p class="window-paragraph">Країна</p>
-                <p class="window-paragraph">Місто</p>
-              </div>
-            </div>
 
-            <div class="window-button">
-              <div class="window-button-submit">
-                <input type="submit" value="Підтвердити" />
-              </div>
-              <p class="window-paragraph">Місце перебування</p>
-            </div>
-          </div>
-          <div class="filter-window">
-            <div class="window-name">
-              <div class="window-name-div">
-                <h2>Назва</h2>
-                <div class="rating-mini">
-                  <span class="active"></span>
-                  <span class="active"></span>
-                  <span class="active"></span>
-                  <span class=""></span>
-                  <span class=""></span>
+                <div class="window-paragraph my-mardin-up" >
+                  <h5 class="text-up-inside-box">Країна</h5>
+                  <p class="text-down-inside-box" th:text="${tourAd.country}"></p>
                 </div>
-                <p class="window-paragraph">Дата початку - Дата закінчення</p>
-              </div>
-            </div>
-
-            <div class="window-info">
-              <div>
-                <table>
-                  <tr class="first">
-                    <td class="top-left">Ціна (за одну особу)</td>
-                    <td>Відсоткова знижка</td>
-                    <td class="top-right">
-                      Кількість осіб для максимальної знижки
-                    </td>
-                  </tr>
-                  <tr class="second">
-                    <td class="bottom-left">100 грн</td>
-                    <td>0.0 %</td>
-                    <td class="bottom-right">3</td>
-                  </tr>
-                </table>
-              </div>
-              <div class="paragraphs">
-                <p class="window-paragraph">Країна</p>
-                <p class="window-paragraph">Місто</p>
-              </div>
-            </div>
-
-            <div class="window-button">
-              <div class="window-button-submit">
-                <input type="submit" value="Підтвердити" />
-              </div>
-              <p class="window-paragraph">Місце перебування</p>
-            </div>
-          </div>
-          <div class="filter-window">
-            <div class="window-name">
-              <div class="window-name-div">
-                <h2>Назва</h2>
-                <div class="rating-mini">
-                  <span class="active"></span>
-                  <span class="active"></span>
-                  <span class="active"></span>
-                  <span class=""></span>
-                  <span class=""></span>
+                <div class="window-paragraph my-mardin-up" >
+                  <h5 class="text-up-inside-box ">Місто</h5>
+                  <p class="text-down-inside-box" th:text="${tourAd.city}"></p>
                 </div>
-                <p class="window-paragraph">Дата початку - Дата закінчення</p>
-              </div>
-            </div>
-
-            <div class="window-info">
-              <div>
-                <table>
-                  <tr class="first">
-                    <td class="top-left">Ціна (за одну особу)</td>
-                    <td>Відсоткова знижка</td>
-                    <td class="top-right">
-                      Кількість осіб для максимальної знижки
-                    </td>
-                  </tr>
-                  <tr class="second">
-                    <td class="bottom-left">100 грн</td>
-                    <td>0.0 %</td>
-                    <td class="bottom-right">3</td>
-                  </tr>
-                </table>
-              </div>
-              <div class="paragraphs">
-                <p class="window-paragraph">Країна</p>
-                <p class="window-paragraph">Місто</p>
               </div>
             </div>
 
@@ -263,54 +195,13 @@
               <div class="window-button-submit">
                 <input type="submit" value="Підтвердити" />
               </div>
-              <p class="window-paragraph">Місце перебування</p>
-            </div>
-          </div>
-          <div class="filter-window">
-            <div class="window-name">
-              <div class="window-name-div">
-                <h2>Назва</h2>
-                <div class="rating-mini">
-                  <span class="active"></span>
-                  <span class="active"></span>
-                  <span class="active"></span>
-                  <span class=""></span>
-                  <span class=""></span>
-                </div>
-                <p class="window-paragraph">Дата початку - Дата закінчення</p>
+              <div class="window-paragraph my-mardin-down" >
+                <h5 class="text-up-inside-box" s>Місце перебування</h5>
+                <p class="text-down-inside-box" th:text="${tourAd.place}"></p>
               </div>
             </div>
+          </form>
 
-            <div class="window-info">
-              <div>
-                <table>
-                  <tr class="first">
-                    <td class="top-left">Ціна (за одну особу)</td>
-                    <td>Відсоткова знижка</td>
-                    <td class="top-right">
-                      Кількість осіб для максимальної знижки
-                    </td>
-                  </tr>
-                  <tr class="second">
-                    <td class="bottom-left">100 грн</td>
-                    <td>0.0 %</td>
-                    <td class="bottom-right">3</td>
-                  </tr>
-                </table>
-              </div>
-              <div class="paragraphs">
-                <p class="window-paragraph">Країна</p>
-                <p class="window-paragraph">Місто</p>
-              </div>
-            </div>
-
-            <div class="window-button">
-              <div class="window-button-submit">
-                <input type="submit" value="Підтвердити" />
-              </div>
-              <p class="window-paragraph">Місце перебування</p>
-            </div>
-          </div>
         </div>
       </div>
     </main>
