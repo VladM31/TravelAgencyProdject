@@ -19,8 +19,6 @@ public class TourAd {
     private float discountPercentage;
     private float ratingAgency;
 
-
-
     private Long travelAgencyId;
 
 

@@ -92,7 +92,7 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
 
 
     private List<TourAd> wrapperForUseSelectList(String part, String dopScript, Object ...arrayField){
-        return HandlerSqlDAO.useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,part, (dopScript.isEmpty())?"":" AND "+dopScript, " ORDER BY tour_ad.date_registration;"),
+        return HandlerSqlDAO.useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,part, (dopScript.isEmpty())?"":" AND "+dopScript, " ORDER BY tour_ad.date_registration DESC;"),
                 HandlerDAOtoMYSQL::resultSetToTourAd,arrayField);
     }
 
@@ -167,7 +167,7 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
 
 
 
-    String FIND_BY_START_DATE_AFTER = " WHERE date_start > ?";
+    String FIND_BY_START_DATE_AFTER = " WHERE date_start < ?";
 
     @Override
     public List<TourAd> findByStartDateTourAdAfter(LocalDate startDateTourAd, Supplier<String> script) {
@@ -175,7 +175,7 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
     }
 
 
-    String FIND_BY_END_DATE_BEFORE = " WHERE  date_end < ?";
+    String FIND_BY_END_DATE_BEFORE = " WHERE  date_end > ?";
 
 
     @Override
@@ -184,7 +184,7 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
     }
 
 
-    String FIND_BY_START_DATE_AFTER_AND_END_DATE_BEFORE = " WHERE date_start > ? AND date_end < ?";
+    String FIND_BY_START_DATE_AFTER_AND_END_DATE_BEFORE = " WHERE date_start < ? AND date_end > ?";
 
     @Override
     public List<TourAd> findByStartDateTourAdAfterAndEndDateOrderBefore(LocalDate startDateTourAd, LocalDate endDateTourAd, Supplier<String> script) {
