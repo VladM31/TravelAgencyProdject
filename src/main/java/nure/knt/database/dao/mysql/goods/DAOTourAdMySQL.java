@@ -191,19 +191,15 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return this.wrapperForUseSelectList(FIND_BY_START_DATE_AFTER_AND_END_DATE_BEFORE, script.get(), startDateTourAd, endDateTourAd);
     }
 
-
-
     private static final String WHERE_PLACE_CONTAINING = " WHERE place LIKE ? ";
 
     @Override
     public List<TourAd> findByPlaceContaining(String place, Supplier<String> script) {
-
         return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,
                         WHERE_PLACE_CONTAINING),
                 HandlerDAOtoMYSQL::resultSetToTourAd,
                 HandlerSqlDAO.containingString(place));
     }
-
 
     private static final String WHERE_CITY_CONTAINING = " WHERE city LIKE ? ";
 
@@ -216,41 +212,30 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
                 HandlerSqlDAO.containingString(city));
     }
 
-
-
-
     private static final String WHERE_COUNTRY_CONTAINING = " WHERE country.name LIKE ? ";
 
     @Override
     public List<TourAd> findByCountryContaining(String country, Supplier<String> script) {
-
         return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,
                         WHERE_COUNTRY_CONTAINING),
                 HandlerDAOtoMYSQL::resultSetToTourAd,
                 HandlerSqlDAO.containingString(country));
     }
 
-
-
-
     private static final String WHERE_NAME_AGENCY_CONTAINING = " WHERE user.name LIKE ? ";
 
     @Override
     public List<TourAd> findByNameAgencyContaining(String nameAgency, Supplier<String> script) {
-
         return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,
                         WHERE_NAME_AGENCY_CONTAINING),
                 HandlerDAOtoMYSQL::resultSetToTourAd,
                 HandlerSqlDAO.containingString(nameAgency));
     }
 
-
-
     @Override
     public List<TourAd> findAll(Supplier<String> script) {
         return HandlerSqlDAO.useSelectScript(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,( script.get().isEmpty())?"":" WHERE "+ script.get(), " ORDER BY tour_ad.date_registration;"), HandlerDAOtoMYSQL::resultSetToTourAd);
     }
-
 
     private static final String SELECT_COUNT_ORDER_TOUR= "SELECT COUNT(order_tour.tour_ad_id) AS count_orders,  tour_ad.id FROM order_tour" +
             " right join tour_ad ON order_tour.tour_ad_id = tour_ad.id " +
@@ -286,6 +271,12 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
 
     }
 
+    private static final String WHERE_TOUR_AD_ID_IS = " WHERE tour_ad.id = ? ";
+    @Override
+    public TourAd findByTourAdId(Long id, Supplier<String> script) {
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,WHERE_TOUR_AD_ID_IS, (script.get().isEmpty())?"":" AND "+script.get(), " ORDER BY tour_ad.date_registration DESC;"),
+                HandlerDAOtoMYSQL::resultSetToTourAd,id);
+    }
 
 
     private static final String SELECT_TOUR_AD= "SELECT " +
