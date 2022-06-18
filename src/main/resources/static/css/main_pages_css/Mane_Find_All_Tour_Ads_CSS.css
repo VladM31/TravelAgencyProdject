@@ -593,4 +593,11 @@ input:active {
   height: 75px;
   font-size: 20px;
   text-align: center;
+
+}
+
+.hidden-for-p{
+  height: 0px;
+  width: 0px;
+  font-size: 0px;
 }

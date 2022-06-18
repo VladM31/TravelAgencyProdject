@@ -5,6 +5,8 @@ import nure.knt.database.idao.goods.IDAOTourAd;
 import nure.knt.entity.goods.TourAd;
 import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
+import nure.knt.forms.filter.FilterTourAdMainPage;
+import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -38,6 +40,8 @@ public class MainWindowsController {
     private IDAOTravelAgencySQL<TravelAgency> dapTravelAgency;
     @Autowired
     private IDAOTourAd<TourAd> daoTourAd;
+    @Autowired
+    WorkWithCountries countries;
 
 
     private static final String ATTRIBUTE_TRAVEL_AGENCIES = "travelAgencies";
@@ -65,9 +69,11 @@ public class MainWindowsController {
     }
 
     @RequestMapping(value = "${main.pages.find.all.url}", method = {RequestMethod.GET})
-    public String showPageForFindAllTourAd(Model model){
+    public String showPageForFindAllTourAd(Model model, FilterTourAdMainPage filter){
 
-        model.addAttribute("tourAds",daoTourAd.findAll(daoTourAd.where()));
+        model.addAttribute("tourAds",filter.filtering(daoTourAd.where(),daoTourAd));
+        model.addAttribute("filter",filter);
+        model.addAttribute("countries",countries.getCountry());
         return PAGE_TOUR_ADS;
     }
 
