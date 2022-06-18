@@ -5,11 +5,14 @@ import nure.knt.controller.handlers.HandlerCustomerControllerInformation;
 import nure.knt.controller.registration.HandlerRegistration;
 import nure.knt.database.idao.entity.IDAOCustomerSQL;
 import nure.knt.database.idao.goods.IDAOOrderFromTourAdCustomer;
+import nure.knt.database.idao.goods.IDAOTourAd;
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.goods.OrderFromTourAdForCustomer;
+import nure.knt.entity.goods.TourAd;
 import nure.knt.entity.important.Customer;
 import nure.knt.forms.entities.CustomerForm;
 import nure.knt.forms.filter.FilterOrdersForCustomer;
+import nure.knt.forms.goods.OrderForm;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +27,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.function.Function;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Controller
 public class ControllerCustomer {
@@ -35,6 +41,8 @@ public class ControllerCustomer {
     private IDAOCustomerSQL<Customer> daoCustomer;
     @Autowired
     private WorkWithCountries countries;
+    @Autowired
+    private IDAOTourAd<TourAd> daoTourAd;
 
     private final String PAGE_CREATE_ORDER;
 
@@ -86,7 +94,22 @@ public class ControllerCustomer {
     }
 
     @RequestMapping(value = "${customer.create.order.from.travel.agency.url}",method = {RequestMethod.GET})
-    public String showFormForCreateOrder(Model model,@ModelAttribute("tourAdId") long tourAdId){
+    public String showFormForCreateOrder(Model model,@ModelAttribute("tourAdId") Long tourAdId){
+
+        TourAd chosenTourAd = this.daoTourAd.findByTourAdId(tourAdId,daoTourAd.where());
+
+        OrderForm form = new OrderForm(chosenTourAd);
+
+        HandlerCustomerProfile.setOrderForm(model,form);
+
+        return PAGE_CREATE_ORDER;
+    }
+
+    @RequestMapping(value = "${customer.create.order.from.travel.agency.url}",method = {RequestMethod.POST})
+    public String checkOrderForm(Model model, @Valid OrderForm form,@NotNull BindingResult bindingResult){
+
+        System.out.println(form.calculate());
+        HandlerCustomerProfile.setOrderForm(model,form);
         return PAGE_CREATE_ORDER;
     }
 
@@ -159,5 +182,36 @@ class HandlerCustomerProfile{
 
     protected static void setButtonType(Model model){
         model.addAttribute(TYPE_BUTTON_DEPENDING_STATE_ORDER,HandlerCustomerProfile.FunctionSetTypeButton);
+    }
+
+    // -----------------------------------------------------------------------------------------
+    private static final String ATTRIBUTE_ORDER_FORM = "form";
+    protected static void setOrderForm(Model model, OrderForm form){
+        model.addAttribute(ATTRIBUTE_ORDER_FORM,form);
+    }
+    // -----------------------------------------------------------------------------------------
+    private static final String ATTRIBUTE_ERROR_ORDER_FORM = "error_message";
+    protected static void setErrorOrderForm(Model model, OrderForm form,BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            model.addAttribute(ATTRIBUTE_ERROR_ORDER_FORM,bindingResult.getAllErrors().get(0).getDefaultMessage());
+            return;
+        }
+
+        if(form.getStartDateOrder().isAfter(form.getEndDateOrder())){
+            model.addAttribute(ATTRIBUTE_ERROR_ORDER_FORM,"Дату вибрано в неправильному порядку");
+            return;
+        }
+
+        if(LocalDate.now().isBefore(form.getStartDateOrder()) || LocalDate.now().isBefore(form.getEndDateOrder())){
+            model.addAttribute(ATTRIBUTE_ERROR_ORDER_FORM,"Дата вибрано поза теперішньою датою");
+            return;
+        }
+
+        LocalDate theEnd = form.getConstEndDateOrder().plusDays(1);
+        if(form.getStartDateOrder().isBefore(theEnd) || form.getEndDateOrder().isBefore(theEnd)){
+            model.addAttribute(ATTRIBUTE_ERROR_ORDER_FORM,"Дата вибрано поза датою закінчення туру");
+            return;
+        }
+
     }
 }

@@ -115,6 +115,7 @@ body {
 }
 
 .form .inputs input[type="text"],
+.form .inputs input[type="number"],
 .form .inputs input[type="date"] {
   width: 355px;
   height: 44px;

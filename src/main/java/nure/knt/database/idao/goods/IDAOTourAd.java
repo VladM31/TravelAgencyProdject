@@ -47,4 +47,6 @@ public interface IDAOTourAd<T extends TourAd>  extends IDAOCoreSave<T>, IDAOCore
 
     public List<T> setOrderQuantity(List<T> tourAds);
 
+    public T findByTourAdId(Long id,Supplier<String> script);
+
 }
