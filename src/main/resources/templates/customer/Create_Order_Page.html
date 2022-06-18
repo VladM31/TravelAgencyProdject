@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Оформити замовлення</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" th:href="@{/css/customer_css/Create_Order_CSS.css}" />
+</head>
+
+<body>
+
+  <main>
+    <div class="container">
+      <form action="" class="form">
+        <input id="prosent" type="hidden" value="1.5" />
+        <input id="cost" type="hidden" value="300" />
+        <input id="numberOfPeoplMax" type="hidden" value="6" />
+        <h2>Формування заяви</h2>
+        <div class="inputs">
+          <label for="">Місто відправлення</label>
+          <input type="text" required />
+          <label for="">Дата початку</label>
+          <input type="date" id="startDate" onchange="getResult(numberOfPeopl.value)" required />
+          <label for="">Дата кінця</label>
+          <input type="date" id="endDate" onchange="getResult(numberOfPeopl.value)" required />
+          <label for="">Кількість людей</label>
+          <input type="text" id="numberOfPeopl" onchange="getResult(this.value)" min="1" max="1000" required />
+          <label class="special-input" for="">Поточна ціна: <span class="rezult" id="rezult"></span> грн.</label>
+        </div>
+        <input type="submit" value="ПІДТВЕРДИТИ" />
+      </form>
+    </div>
+  </main>
+
+  <script th:src="@{/js/create_order_code.js}"></script>
+</body>
+
+</html>

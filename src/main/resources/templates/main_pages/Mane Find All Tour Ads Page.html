@@ -117,7 +117,7 @@
         </form>
         <div class="main-windows">
           <div>
-            <div id="SortByBlock" class="box-sort" style="width: 1540px; heiht">
+            <div id="SortByBlock" class="box-sort" style="width: 1540px; height:180px;">
               <div >
                 <h2 style=" font-size: 25px;">Сортувати по:</h2>
               </div>
@@ -143,7 +143,7 @@
 
             </div>
           </div>
-          <form class="filter-window" th:each="tourAd : ${tourAds}">
+          <form class="filter-window" th:each="tourAd : ${tourAds}" th:action="${@environment.getProperty('customer.create.order.from.travel.agency.url')}">
             <div class="window-name">
               <div class="window-name-div">
                 <h2 th:text="${tourAd.nameAgency}">Назва</h2>
@@ -159,7 +159,7 @@
                   <p class="hidden-for-p item_rating-travel-agency" th:text="${tourAd.ratingAgency}"></p>
                   <p class="hidden-for-p item_date-start" th:text="${tourAd.dateStart.toString()}"></p>
                   <p class="hidden-for-p item_date-end" th:text="${tourAd.dateEnd.toString()}"></p>
-
+                  <input type="hidden" name="tourAdId" th:value="${tourAd.id}">
 
                 </div>
 

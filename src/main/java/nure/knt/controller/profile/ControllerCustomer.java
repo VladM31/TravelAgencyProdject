@@ -2,6 +2,7 @@ package nure.knt.controller.profile;
 
 import nure.knt.controller.HandlerController;
 import nure.knt.controller.handlers.HandlerCustomerControllerInformation;
+import nure.knt.controller.registration.HandlerRegistration;
 import nure.knt.database.idao.entity.IDAOCustomerSQL;
 import nure.knt.database.idao.goods.IDAOOrderFromTourAdCustomer;
 import nure.knt.entity.enums.ConditionCommodity;
@@ -11,6 +12,7 @@ import nure.knt.forms.entities.CustomerForm;
 import nure.knt.forms.filter.FilterOrdersForCustomer;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -26,14 +29,18 @@ import java.util.function.Function;
 @Controller
 public class ControllerCustomer {
 
-
-
     @Autowired
     private IDAOOrderFromTourAdCustomer<OrderFromTourAdForCustomer> daoOrder;
     @Autowired
     private IDAOCustomerSQL<Customer> daoCustomer;
     @Autowired
     private WorkWithCountries countries;
+
+    private final String PAGE_CREATE_ORDER;
+
+    public ControllerCustomer(@Value("${customer.create.order.page}") String PAGE_CREATE_ORDER) {
+        this.PAGE_CREATE_ORDER = PAGE_CREATE_ORDER;
+    }
 
     @RequestMapping(value = "${customer.profile.order.url}",method = {RequestMethod.GET})
     public String showOrderGet(@AuthenticationPrincipal Customer user, Model model, FilterOrdersForCustomer filter){
@@ -54,17 +61,7 @@ public class ControllerCustomer {
         return "redirect:"+ HandlerCustomerControllerInformation.getProfileCustomerOrderUrl();
     }
 
-    public void start(Customer user, Model model){
-        HandlerCustomerProfile.setNameInPage(model,user.getName().replace('/',' '));
-        HandlerCustomerProfile.setColorButton(model);
-        HandlerCustomerProfile.setUkraineName(model);
-        HandlerController.setMenuModel(user,model);
-        HandlerCustomerProfile.setButtonType(model);
-        model.addAttribute("countries",countries.getCountry());
-    }
 
-    private static final String CUSTOMER_FORM_ATTRIBUTE = "customerForm";
-    private static final String PAGE_PROFILE_EDIT ="customer/Customer Edit Page";
     @RequestMapping(value = "${customer.profile.edit}",method = {RequestMethod.GET})
     public String showEditPage(@AuthenticationPrincipal Customer user, Model model){
         model.addAttribute("countries",countries.getCountry());
@@ -87,6 +84,23 @@ public class ControllerCustomer {
 
         return "redirect:/profile-message";
     }
+
+    @RequestMapping(value = "${customer.create.order.from.travel.agency.url}",method = {RequestMethod.GET})
+    public String showFormForCreateOrder(Model model,@ModelAttribute("tourAdId") long tourAdId){
+        return PAGE_CREATE_ORDER;
+    }
+
+    private void start(Customer user, Model model){
+        HandlerCustomerProfile.setNameInPage(model,user.getName().replace('/',' '));
+        HandlerCustomerProfile.setColorButton(model);
+        HandlerCustomerProfile.setUkraineName(model);
+        HandlerController.setMenuModel(user,model);
+        HandlerCustomerProfile.setButtonType(model);
+        model.addAttribute("countries",countries.getCountry());
+    }
+
+    private static final String CUSTOMER_FORM_ATTRIBUTE = "customerForm";
+    private static final String PAGE_PROFILE_EDIT ="customer/Customer Edit Page";
 
     private boolean setErrors(Customer user, Model model, CustomerForm customerForm, BindingResult bindingResult){
 

@@ -2,6 +2,7 @@ package nure.knt.controller;
 
 import nure.knt.database.idao.entity.IDAOTravelAgencySQL;
 import nure.knt.database.idao.goods.IDAOTourAd;
+import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.goods.TourAd;
 import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
@@ -17,10 +18,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @PropertySource("classpath:MainPages.properties")
-@PropertySource("classpath:customer.properties")
+@PropertySource("classpath:WorkerWithCustomer.properties")
 public class MainWindowsController {
 
     private final String PAGE_TOUR_ADS;
@@ -71,7 +73,7 @@ public class MainWindowsController {
     @RequestMapping(value = "${main.pages.find.all.url}", method = {RequestMethod.GET})
     public String showPageForFindAllTourAd(Model model, FilterTourAdMainPage filter){
 
-        model.addAttribute("tourAds",filter.filtering(daoTourAd.where(),daoTourAd));
+        model.addAttribute("tourAds",filter.filtering(daoTourAd.where().typeStateIs(Set.of(TypeState.REGISTERED)),daoTourAd));
         model.addAttribute("filter",filter);
         model.addAttribute("countries",countries.getCountry());
         return PAGE_TOUR_ADS;
