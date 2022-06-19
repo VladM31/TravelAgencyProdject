@@ -20,6 +20,8 @@
         <input id="prosent" type="hidden" th:field="*{prosent}"/>
         <input id="cost" type="hidden" th:field="*{cost}"/>
         <input id="numberOfPeoplMax" type="hidden" th:field="*{numberOfPeopleMax}"/>
+        <input id="constEndDate" type="hidden" th:field="*{constEndDateOrder}"/>
+        <input id="tourAdId" type="hidden" th:field="*{tourAdId}"/>
         <h2>Формування заяви</h2>
         <div class="inputs">
           <label >Місто відправлення</label>
@@ -32,8 +34,9 @@
                  required th:max="*{constEndDateOrder}" th:field="*{endDateOrder}"/>
           <label for="numberOfPeopl">Кількість людей</label>
           <input type="number" id="numberOfPeopl" onchange="getResult(this.value)" min="1" max="1000" required th:field="*{countPeople}"/>
-          <label class="special-input" >Поточна ціна: <span class="rezult" id="rezult" th:value="${form.calculate()}"></span> грн.</label>
+          <label class="special-input" >Поточна ціна: <span class="rezult" id="rezult" th:text="${form.calculate()}"></span> грн.</label>
         </div>
+        <p style="color:red; display: flex; justify-content: center;" th:if="${error_message}" th:text="${error_message}"></p>
         <input type="submit" value="ПІДТВЕРДИТИ" />
       </form>
     </div>

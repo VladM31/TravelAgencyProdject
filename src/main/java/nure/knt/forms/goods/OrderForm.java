@@ -1,11 +1,13 @@
 package nure.knt.forms.goods;
 
+import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.goods.OrderFromTourAdForCustomer;
 import nure.knt.entity.goods.TourAd;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -55,8 +57,21 @@ public class OrderForm {
     public OrderForm() {
     }
 
-    public OrderFromTourAdForCustomer toOrder(){
+    public OrderFromTourAdForCustomer toOrder(Long customerId){
         OrderFromTourAdForCustomer order = new OrderFromTourAdForCustomer();
+
+        order.setNumberOfPeople(this.countPeople);
+        order.setCost(this.calculate());
+
+        order.setDateEnd(this.endDateOrder);
+        order.setDateStart(this.startDateOrder);
+        order.setDateRegistration(LocalDateTime.now());
+
+        order.setCity(this.city);
+        order.setConditionCommodity(ConditionCommodity.NOT_CONFIRMED);
+
+        order.setIdCustomer(customerId);
+        order.setIdTourAd(this.tourAdId);
 
         return order;
     }

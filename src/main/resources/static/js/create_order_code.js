@@ -28,9 +28,9 @@ function getResult(inputNumberOfPeople) {
         return;
     }
 
-    console.log('Date diff ' + DAY_DIFFERENT);
+    //console.log('Date diff ' + DAY_DIFFERENT);
 
-    console.log('Cost without ' +calculate(inputNumberOfPeople));
+    //console.log('Cost without ' +calculate(inputNumberOfPeople));
 
     const cost =  parseInt(calculate(inputNumberOfPeople) * DAY_DIFFERENT);
 

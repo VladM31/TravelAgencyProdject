@@ -2,7 +2,6 @@ package nure.knt.controller.profile;
 
 import nure.knt.controller.HandlerController;
 import nure.knt.controller.handlers.HandlerCustomerControllerInformation;
-import nure.knt.controller.registration.HandlerRegistration;
 import nure.knt.database.idao.entity.IDAOCustomerSQL;
 import nure.knt.database.idao.goods.IDAOOrderFromTourAdCustomer;
 import nure.knt.database.idao.goods.IDAOTourAd;
@@ -16,6 +15,7 @@ import nure.knt.forms.goods.OrderForm;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,16 +23,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.function.Function;
 
-import static java.time.temporal.ChronoUnit.DAYS;
-
 @Controller
+@PropertySource("classpath:WorkerWithCustomer.properties")
 public class ControllerCustomer {
 
     @Autowired
@@ -45,9 +43,12 @@ public class ControllerCustomer {
     private IDAOTourAd<TourAd> daoTourAd;
 
     private final String PAGE_CREATE_ORDER;
+    private final String ORDER_PROFILE_URL;
 
-    public ControllerCustomer(@Value("${customer.create.order.page}") String PAGE_CREATE_ORDER) {
+    public ControllerCustomer(@Value("${customer.create.order.page}") String PAGE_CREATE_ORDER,
+                              @Value("${customer.profile.order.url}")String ORDER_PROFILE_URL) {
         this.PAGE_CREATE_ORDER = PAGE_CREATE_ORDER;
+        this.ORDER_PROFILE_URL = ORDER_PROFILE_URL;
     }
 
     @RequestMapping(value = "${customer.profile.order.url}",method = {RequestMethod.GET})
@@ -106,11 +107,14 @@ public class ControllerCustomer {
     }
 
     @RequestMapping(value = "${customer.create.order.from.travel.agency.url}",method = {RequestMethod.POST})
-    public String checkOrderForm(Model model, @Valid OrderForm form,@NotNull BindingResult bindingResult){
+    public String checkOrderForm(@AuthenticationPrincipal Customer customer,Model model, @Valid OrderForm form,@NotNull BindingResult bindingResult){
 
-        System.out.println(form.calculate());
-        HandlerCustomerProfile.setOrderForm(model,form);
-        return PAGE_CREATE_ORDER;
+        if(HandlerCustomerProfile.hasErrorOrderForm(model,form,bindingResult)){
+            HandlerCustomerProfile.setOrderForm(model,form);
+            return PAGE_CREATE_ORDER;
+        }
+        this.daoOrder.save(form.toOrder(customer.getCustomerId()));
+        return "redirect:" + ORDER_PROFILE_URL;
     }
 
     private void start(Customer user, Model model){
@@ -191,27 +195,29 @@ class HandlerCustomerProfile{
     }
     // -----------------------------------------------------------------------------------------
     private static final String ATTRIBUTE_ERROR_ORDER_FORM = "error_message";
-    protected static void setErrorOrderForm(Model model, OrderForm form,BindingResult bindingResult){
+    protected static boolean hasErrorOrderForm(Model model, OrderForm form, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             model.addAttribute(ATTRIBUTE_ERROR_ORDER_FORM,bindingResult.getAllErrors().get(0).getDefaultMessage());
-            return;
+            return true;
         }
 
         if(form.getStartDateOrder().isAfter(form.getEndDateOrder())){
             model.addAttribute(ATTRIBUTE_ERROR_ORDER_FORM,"Дату вибрано в неправильному порядку");
-            return;
+            return true;
         }
-
-        if(LocalDate.now().isBefore(form.getStartDateOrder()) || LocalDate.now().isBefore(form.getEndDateOrder())){
+        LocalDate now = LocalDate.now();
+        if(now.isAfter(form.getStartDateOrder()) || now.isAfter(form.getEndDateOrder())){
             model.addAttribute(ATTRIBUTE_ERROR_ORDER_FORM,"Дата вибрано поза теперішньою датою");
-            return;
+            return true;
         }
 
         LocalDate theEnd = form.getConstEndDateOrder().plusDays(1);
-        if(form.getStartDateOrder().isBefore(theEnd) || form.getEndDateOrder().isBefore(theEnd)){
+        if(form.getStartDateOrder().isAfter(theEnd) || form.getEndDateOrder().isAfter(theEnd)){
             model.addAttribute(ATTRIBUTE_ERROR_ORDER_FORM,"Дата вибрано поза датою закінчення туру");
-            return;
+            return true;
         }
 
+
+        return false;
     }
 }
