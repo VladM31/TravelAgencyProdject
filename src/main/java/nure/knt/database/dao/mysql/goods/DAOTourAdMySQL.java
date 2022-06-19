@@ -31,11 +31,9 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return false;
     }
 
-
     private static final String INSERT_TOUR_AD =
             " INSERT INTO tour_ad (place,city,date_start,date_end,date_registration,cost_one_customer,cost_service,discount_size_people,discount_percentage,hidden,travel_agency_id,condition_commodity_id,type_state_id,country_id)" +
                     " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-
 
     @Override
     public boolean saveAll(Iterable<TourAd> entities) {
@@ -57,11 +55,8 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return this.saveAll(List.of(entity));
     }
 
-
-
     private static final String UPDATE_TYPE_STATE_BY_ID = "UPDATE tour_ad left join travel_agency on travel_agency_id = travel_agency.id  " +
             "SET type_state_id = ? WHERE user.id = ?;";
-
 
     @Override
     public boolean updateTypeStateById(Long id, TypeState typeState) {
@@ -81,7 +76,6 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return new ScriptTourAdWhereMySQL();
     }
 
-
     String FIND_BY_COST_ONE_CUSTOMER_BETWEEN = " WHERE cost_one_customer BETWEEN ? AND ? ";
 
     @Override
@@ -89,16 +83,12 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return this.wrapperForUseSelectList(FIND_BY_COST_ONE_CUSTOMER_BETWEEN, script.get(), startCostOneCustomer,  endCostOneCustomer);
     }
 
-
-
     private List<TourAd> wrapperForUseSelectList(String part, String dopScript, Object ...arrayField){
         return HandlerSqlDAO.useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,part, (dopScript.isEmpty())?"":" AND "+dopScript, " ORDER BY tour_ad.date_registration DESC;"),
                 HandlerDAOtoMYSQL::resultSetToTourAd,arrayField);
     }
 
-
-
-    String FIND_BY_COST_SERVICE_BETWEEN = " WHERE cost_service BETWEEN ? AND ? ";
+    private static final String FIND_BY_COST_SERVICE_BETWEEN = " WHERE cost_service BETWEEN ? AND ? ";
 
     @Override
     public List<TourAd> findByCostServiceBetween(int startCostService, int endCostService, Supplier<String> script) {
