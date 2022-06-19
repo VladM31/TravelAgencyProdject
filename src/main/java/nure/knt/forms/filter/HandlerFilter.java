@@ -26,6 +26,10 @@ public class HandlerFilter {
     public static List<?> LIST_IS_NOT_CREATED_FROM_DATABASE = null;
     public static boolean NOT_EMPTY = false;
 
+    public static boolean containsToLowerCase(String where, String what){
+        return where.toLowerCase().contains(what.toLowerCase());
+    }
+
     public static <T> boolean predicateList(List<Predicate<T>> filters, T obj) {
         for (Predicate<T> filter : filters) {
             if (!filter.test(obj)) {
@@ -64,7 +68,11 @@ public class HandlerFilter {
         return false;
     }
 
-    public static <T> List<T> checkTwoBooleanForOneState(boolean isState, boolean isNotState, List<T> list, Function<Boolean, List<T>> workWithDatabase, Consumer<Boolean> elseDidNotWorkWithDatabase) {
+    public static <T> List<T> checkTwoBooleanForOneState(Boolean isState, Boolean isNotState, List<T> list, Function<Boolean, List<T>> workWithDatabase, Consumer<Boolean> elseDidNotWorkWithDatabase) {
+
+        if(isAllNull(isState,isNotState)){
+            return list;
+        }
 
         if (isState == isNotState) {
             return list;
@@ -75,6 +83,20 @@ public class HandlerFilter {
         }
 
         elseDidNotWorkWithDatabase.accept(isState);
+        return list;
+    }
+
+    public static <T> List<T> checkBoolean(Boolean state,List<T> list, Function<Boolean, List<T>> workWithDatabase, Consumer<Boolean> elseDidNotWorkWithDatabase) {
+
+        if (state == null) {
+            return list;
+        }
+
+        if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
+            return workWithDatabase.apply(state);
+        }
+
+        elseDidNotWorkWithDatabase.accept(state);
         return list;
     }
 

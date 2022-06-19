@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class FilterTourAdMainPage extends FilterTourAdCode {
+public class FilterTourAdMainPage extends FilterTourAdCore {
     private String nameTravelAgency;
 
     public List<TourAd> filtering(Supplier<String> script, IDAOTourAd<TourAd> dao){

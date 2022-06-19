@@ -1,7 +1,6 @@
 package nure.knt.forms.filter;
 
 import nure.knt.database.idao.goods.IDAOTourAd;
-import nure.knt.entity.goods.OrderFromTourAdForCustomer;
 import nure.knt.entity.goods.TourAd;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,7 +10,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-public class FilterTourAdCode {
+public class FilterTourAdCore {
     private String nameCountry;
     private String nameCity;
     private String namePlace;
@@ -57,6 +56,19 @@ public class FilterTourAdCode {
                 (date) -> filterList.add((order -> order.getDateEnd().isBefore(date))));
 
         return list;
+    }
+
+    public List<TourAd> filtering(Supplier<String> script, IDAOTourAd<TourAd> dao){
+
+        List<Predicate<TourAd>> filterList = new ArrayList<>();
+
+        List<TourAd> list = this.filteringCore(script,dao,filterList);
+
+        if(list == HandlerFilter.LIST_IS_NOT_CREATED_FROM_DATABASE){
+            return dao.findAll(script);
+        }
+
+        return HandlerFilter.endFiltering(list,filterList);
     }
 
     public String getNameCountry() {
@@ -147,7 +159,7 @@ public class FilterTourAdCode {
         this.endDate = endDate;
     }
 
-    public FilterTourAdCode(String nameCountry, String nameCity, String namePlace, Float discountPercentageStart,
+    public FilterTourAdCore(String nameCountry, String nameCity, String namePlace, Float discountPercentageStart,
                             Float discountPercentageEnd, Integer discountSizePeopleStart, Integer discountSizePeopleEnd, Integer costOneCustomerStart, Integer costOneCustomerEnd, LocalDate startDate, LocalDate endDate) {
         this.nameCountry = nameCountry;
         this.nameCity = nameCity;
@@ -162,7 +174,7 @@ public class FilterTourAdCode {
         this.endDate = endDate;
     }
 
-    public FilterTourAdCode() {
+    public FilterTourAdCore() {
     }
 
     @Override

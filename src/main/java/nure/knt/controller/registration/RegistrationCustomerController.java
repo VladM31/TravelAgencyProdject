@@ -125,7 +125,6 @@ public class RegistrationCustomerController {
         model.addAttribute("userIsBooked","Вибачте але почта або номер, або логін вже зайняті");
     }
 
-
     @Autowired
     @Qualifier("DAO_Customer_Registration_MySQL")
     public void setDaoRegistration(IDAOUserRegistration daoRegistration) {

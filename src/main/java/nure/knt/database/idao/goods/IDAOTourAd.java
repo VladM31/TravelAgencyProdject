@@ -8,6 +8,7 @@ import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.goods.TourAd;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -32,7 +33,7 @@ public interface IDAOTourAd<T extends TourAd>  extends IDAOCoreSave<T>, IDAOCore
 
     public List<T> findByHidden(boolean hidden, Supplier<String> script);
 
-    public List<T> findByDateRegistrationBetween(LocalDate startDateRegistration,LocalDate endDateRegistration, Supplier<String> script);
+    public List<T> findByDateRegistrationBetween(LocalDateTime startDateRegistration, LocalDateTime endDateRegistration, Supplier<String> script);
 
     public List<T> findByStartDateTourAdAfter(LocalDate startDateTourAd, Supplier<String> script);
     public List<T> findByEndDateTourAdBefore(LocalDate endDateTourAd, Supplier<String> script);
