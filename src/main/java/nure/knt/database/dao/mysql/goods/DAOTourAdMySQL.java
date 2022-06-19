@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import java.lang.reflect.Type;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -151,7 +152,7 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
     String FIND_BY_DATE_REGISTRATION_BETWEEN = " WHERE tour_ad.date_registration BETWEEN ? AND ? ";
 
     @Override
-    public List<TourAd> findByDateRegistrationBetween(LocalDate startDateRegistration, LocalDate endDateRegistration, Supplier<String> script) {
+    public List<TourAd> findByDateRegistrationBetween(LocalDateTime startDateRegistration, LocalDateTime endDateRegistration, Supplier<String> script) {
         return this.wrapperForUseSelectList(FIND_BY_DATE_REGISTRATION_BETWEEN, script.get(), startDateRegistration,  endDateRegistration);
     }
 
