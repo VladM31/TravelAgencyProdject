@@ -11,6 +11,7 @@
     <link th:href="@{/css/administrator_css/Show_all_users_css.css}" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Neucha" />
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link  rel="stylesheet" type="text/css" th:href="@{../css/sort_button/sortBlock.css}" />
 </head>
 
 <body class="main-body">
@@ -26,7 +27,8 @@
 
     <div class="main-body-buttom">
 
-        <form id="filter-right" class="filter-mail-block-for-all-info">
+        <form id="filter-right" th:action="${@environment.getProperty('admin.show.all.users.url')}"
+              class="filter-mail-block-for-all-info" th:object="${filter}" th:method="GET">
             <div>
                 <h2 style="font-family: 'Neucha';font-style: normal;font-size: 45px;">
                     <b>
@@ -36,7 +38,7 @@
             </div>
 
             <div id="nameUser">
-                <input type="text" class="box-filter" placeholder="Ім'ям">
+                <input type="text" class="box-filter" placeholder="Ім'ям" th:field="*{name}">
             </div>
 
             <div id="username">
@@ -76,12 +78,12 @@
                 <h5>За активністю</h5>
 
                 <div class="box-filter-check">
-                    <input id="Not_ban" type="checkbox" name="html5" />
+                    <input id="Not_ban" type="checkbox" th:field="*{active}" th:checked="*{active}"/>
                     <label for="Not_ban">Активні&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
 
                 </div>
                 <div class="box-filter-check">
-                    <input id="Is_ban" type="checkbox" name="html5" />
+                    <input id="Is_ban" type="checkbox" th:field="*{theBan}" th:checked="*{theBan}"/>
                     <label for="Is_ban">Заблоковані&nbsp; &nbsp;</label>
 
                 </div>
@@ -92,23 +94,27 @@
                 <h5>За роллю</h5>
 
                 <div class="box-filter-check">
-                    <input id="Moderator" type="checkbox" name="html5" />
+                    <input id="Moderator" type="checkbox" name="roles" th:value="${T(nure.knt.entity.enums.Role).MODERATOR}"
+                           th:checked="${filter.getSetRoles().contains(T(nure.knt.entity.enums.Role).MODERATOR)}"/>
                     <label for="Moderator">Модерато&nbsp;&nbsp;</label>
 
                 </div>
                 <div class="box-filter-check">
-                    <input id="Customer" type="checkbox" name="html5" />
+                    <input id="Customer" type="checkbox" name="roles" th:value="${T(nure.knt.entity.enums.Role).CUSTOMER}"
+                           th:checked="${filter.getSetRoles().contains(T(nure.knt.entity.enums.Role).CUSTOMER)}" />
                     <label for="Customer">Клієнт&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 
                 </div>
                 <div class="box-filter-check">
-                    <input id="Travel_Agency" type="checkbox" name="html5" />
+                    <input id="Travel_Agency" type="checkbox" name="roles"  th:value="${T(nure.knt.entity.enums.Role).TRAVEL_AGENCY}"
+                           th:checked="${filter.getSetRoles().contains(T(nure.knt.entity.enums.Role).TRAVEL_AGENCY)}"/>
                     <label for="Travel_Agency">Тур
                         агенція </label>
 
                 </div>
                 <div class="box-filter-check">
-                    <input id="Courier" type="checkbox" name="html5" />
+                    <input id="Courier" type="checkbox" name="roles" th:value="${T(nure.knt.entity.enums.Role).COURIER}"
+                           th:checked="${filter.getSetRoles().contains(T(nure.knt.entity.enums.Role).COURIER)}" />
                     <label for="Courier"> Кур'єр &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
 
                 </div>
@@ -123,66 +129,73 @@
         </form>
 
         <div class="block-order-info">
-            <form class="order_block">
+            <div class="order_block" th:each="user : ${users}">
                 <div class="order_block-all-info-column">
 
-                    <div class="order_block-all-info-row">
+                    <form th:action="${@environment.getProperty('inside.message.send.url')}" class="order_block-all-info-row">
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Ім'я</small>
-                            <p class="order-info-text-name-bottom item_name-user"> Одесса</p>
+                            <p class="order-info-text-name-bottom item_name-user" th:text="${user.name}"> Одесса</p>
                         </div>
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Логін</small>
-                            <p class="order-info-text-name-bottom item_username"> Одесса</p>
+                            <p class="order-info-text-name-bottom item_username" th:text="${user.username}"> Одесса</p>
                         </div>
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> id</small>
-                            <p class="order-info-text-name-bottom item_id-user"> Одесса</p>
+                            <p class="order-info-text-name-bottom item_id-user" th:text="${user.id}"> Одесса</p>
                         </div>
 
+                        <input type="hidden" name="sendlerEmail" th:value="${user.email}">
                         <input type="submit" class="order-button order-button-grean" value="Написати повідомлення">
 
-                    </div>
+                    </form>
 
-                    <div class="order_block-all-info-row">
-                        <div class="order-info-text">
+                    <form class="order_block-all-info-row">
+                        <div class="order-info-text " th:classappend="${isAdmin} ? toDoOnFuture : order-button-gray ">
                             <small class="order-info-text-name-top"> Пароль</small>
-                            <p class="order-info-text-name-bottom item_password-user"> 1</p>
+                            <p class="order-info-text-name-bottom item_password-user" th:if="${isAdmin}" th:text="${user.password}"> 1</p>
+                            <p class="order-info-text-name-bottom item_password-user "
+                               th:unless="${isAdmin}" >Тільки для адміністратора</p>
                         </div>
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Електрона пошта</small>
-                            <p class="order-info-text-name-bottom item_email-user"> 1</p>
+                            <p class="order-info-text-name-bottom item_email-user" th:text="${user.email}"> 1</p>
                         </div>
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Роль</small>
-                            <p class="order-info-text-name-bottom item_role-user"> 1</p>
+                            <p class="order-info-text-name-bottom item_role-user " th:text="${user.role}"> 1</p>
                         </div>
                         <p class="hidden-text item_active-user">true</p>
-                        <input type="submit" class="order-button order-button-grean" value="Заблокувати">
 
-                    </div>
+                        <input type="hidden" name="active" th:value="${user.active}">
+                        <input type="hidden" name="id" th:value="${user.id}">
+                        <input type="submit" class="order-button order-button-grean" th:if="${user.active}" value="Заблокувати">
+                        <input type="submit" class="order-button order-button-red" th:unless="${user.active}" value="Разблокувати">
 
-                    <div class="order_block-all-info-row">
+                    </form>
+
+                    <form class="order_block-all-info-row">
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Країна</small>
-                            <p class="order-info-text-name-bottom item_country-name"> 1</p>
+                            <p class="order-info-text-name-bottom item_country-name"  th:text="${user.country}"> 1</p>
                         </div>
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Номер телефону</small>
-                            <p class="order-info-text-name-bottom item_number-phone-user"> 1</p>
+                            <p class="order-info-text-name-bottom item_number-phone-user" th:text="${user.number}"> 1</p>
                         </div>
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Дата реєстрації</small>
-                            <p class="order-info-text-name-bottom item_date-registration"> 1</p>
+                            <p class="order-info-text-name-bottom item_date-registration" th:text="${user.dateRegistration.toString().replace('T',' ')}"> 1</p>
                         </div>
 
 
                         <input type="submit" class="order-button order-button-gray" value="Видалити">
 
-                    </div>
+                    </form>
 
                 </div>
-            </form>
+            </div>
         </div>
 
 
@@ -260,11 +273,12 @@
                 </div>
 
             </form>
-            <script src="sort_all_regustread_users.js"></script>
+
         </div>
 
     </div>
 
+    <script th:src="@{/js/sort_user.js}"></script>
 
 
 </body>
