@@ -12,4 +12,5 @@ public interface ScriptTourAdWhere extends Supplier<String> {
     public ScriptTourAdWhere idIs(Long id);
     public ScriptTourAdWhere typeStateIs(Set<TypeState> types);
     public ScriptTourAdWhere conditionCommodityIs(Set<ConditionCommodity> conditions);
+    public ScriptTourAdWhere isHidden(boolean hidden);
 }

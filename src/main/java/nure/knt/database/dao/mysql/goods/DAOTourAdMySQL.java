@@ -455,6 +455,15 @@ class HandlerDAOtoMYSQL {
             return this;
         }
 
+        private static final String WHERE_HIDDEN_ID = " tour_ad.hidden = ? ";
+        @Override
+        public ScriptTourAdWhere isHidden(boolean hidden) {
+
+            String script = WHERE_HIDDEN_ID.replace("?",""+hidden);
+            this.addScript(script);
+            return this;
+        }
+
 
         private String enumToScript(Set<?> objects){
             String script="";
