@@ -1,5 +1,6 @@
 package nure.knt.controller.profile;
 
+import nure.knt.database.idao.entity.IDAOUserOnly;
 import nure.knt.database.idao.entity.IDAOUserSQL;
 import nure.knt.entity.important.User;
 import nure.knt.tools.WorkWithCountries;
@@ -20,7 +21,7 @@ public class ControllerAdministrator {
     private WorkWithCountries countries;
     @Autowired
     @Qualifier("DAO_MySQL_User")
-    private IDAOUserSQL<User> daoUsers;
+    private IDAOUserOnly daoUsers;
 
     private final String PAGE_FOR_SHOW_ALL_USERS;
     private final String URL_FOR_SHOW_ALL_USERS;

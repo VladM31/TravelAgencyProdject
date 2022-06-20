@@ -2,6 +2,7 @@ package nure.knt.database.dao.mysql.entity;
 
 import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
+import nure.knt.database.idao.entity.IDAOUserOnly;
 import nure.knt.database.idao.entity.IDAOUserSQL;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
@@ -14,12 +15,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 import static nure.knt.database.dao.HandlerSqlDAO.SORT_TO_DATE_REGISTRATION;
 
 @Component("DAO_MySQL_User")
-public class DAOUserMySQL extends MySQLCore implements IDAOUserSQL<User> {
+public class DAOUserMySQL extends MySQLCore implements IDAOUserOnly {
 
     private static final String WHERE = " WHERE ";
 
@@ -215,6 +217,14 @@ public class DAOUserMySQL extends MySQLCore implements IDAOUserSQL<User> {
     private User wrapperForUseSelectOneObject(String part,@NonNull Object ...arrayField){
         return HandlerSqlDAO.useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_USERS,WHERE + part,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
                 HandlerDAOUserMySQL::resultSetToUser,arrayField);
+    }
+
+    private static final String WHERE_ROLE_NAME_IN = " role.name in( "+ HandlerSqlDAO.REPLACE_SYMBOL + " ) ";
+    @Override
+    public List<User> findByRoles(Set<Role> roles) {
+        String script = HandlerSqlDAO.setInInsideScript(WHERE_ROLE_NAME_IN,roles);
+
+        return this.wrapperForUseSelectList(script,roles);
     }
 }
 
