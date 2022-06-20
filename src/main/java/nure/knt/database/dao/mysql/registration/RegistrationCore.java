@@ -78,6 +78,24 @@ public abstract class RegistrationCore<U extends User> extends MySQLCore impleme
 
         return IDAOUserRegistration.userIdNotFound;
     }
+
+    protected long saveForRegistrationUser(User user,String code) throws SQLException{
+        if( HandlerRegistrationUser.tryStatement(super.conn,
+                (p) -> HandlerRegistrationUser.saveUserAsRegistration(p,user,countries.getIdByCountry(user.getCountry())),
+                HandlerRegistrationUser.INSERT_USER) == NOT_SAVE){
+            throw new SQLException("User is NOT SAVE");
+        }
+
+        long userId = HandlerRegistrationUser.getUserIdByNumberAndEmailAndUsernameAndTypeStateIsRegistrationAdnDateRegistrationIsNew(super.conn,user);
+
+        user.setId(userId);
+
+        if(HandlerRegistrationUser.tryStatement(super.conn, (p) -> HandlerRegistrationUser.saveCode(p,userId,code),HandlerRegistrationUser.INSERT_CODE_VALUE)== NOT_SAVE){
+            throw new SQLException("Code is NOT SAVE");
+        }
+
+        return  userId;
+    }
 }
 
 

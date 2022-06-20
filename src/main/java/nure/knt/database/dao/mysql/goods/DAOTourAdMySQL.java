@@ -18,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import java.lang.reflect.Type;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -31,11 +32,9 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return false;
     }
 
-
     private static final String INSERT_TOUR_AD =
             " INSERT INTO tour_ad (place,city,date_start,date_end,date_registration,cost_one_customer,cost_service,discount_size_people,discount_percentage,hidden,travel_agency_id,condition_commodity_id,type_state_id,country_id)" +
                     " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
-
 
     @Override
     public boolean saveAll(Iterable<TourAd> entities) {
@@ -57,11 +56,8 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return this.saveAll(List.of(entity));
     }
 
-
-
     private static final String UPDATE_TYPE_STATE_BY_ID = "UPDATE tour_ad left join travel_agency on travel_agency_id = travel_agency.id  " +
             "SET type_state_id = ? WHERE user.id = ?;";
-
 
     @Override
     public boolean updateTypeStateById(Long id, TypeState typeState) {
@@ -81,7 +77,6 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return new ScriptTourAdWhereMySQL();
     }
 
-
     String FIND_BY_COST_ONE_CUSTOMER_BETWEEN = " WHERE cost_one_customer BETWEEN ? AND ? ";
 
     @Override
@@ -89,16 +84,12 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return this.wrapperForUseSelectList(FIND_BY_COST_ONE_CUSTOMER_BETWEEN, script.get(), startCostOneCustomer,  endCostOneCustomer);
     }
 
-
-
     private List<TourAd> wrapperForUseSelectList(String part, String dopScript, Object ...arrayField){
-        return HandlerSqlDAO.useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,part, (dopScript.isEmpty())?"":" AND "+dopScript, " ORDER BY tour_ad.date_registration;"),
+        return HandlerSqlDAO.useSelectScript(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,part, (dopScript.isEmpty())?"":" AND "+dopScript, " ORDER BY tour_ad.date_registration DESC;"),
                 HandlerDAOtoMYSQL::resultSetToTourAd,arrayField);
     }
 
-
-
-    String FIND_BY_COST_SERVICE_BETWEEN = " WHERE cost_service BETWEEN ? AND ? ";
+    private static final String FIND_BY_COST_SERVICE_BETWEEN = " WHERE cost_service BETWEEN ? AND ? ";
 
     @Override
     public List<TourAd> findByCostServiceBetween(int startCostService, int endCostService, Supplier<String> script) {
@@ -161,13 +152,13 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
     String FIND_BY_DATE_REGISTRATION_BETWEEN = " WHERE tour_ad.date_registration BETWEEN ? AND ? ";
 
     @Override
-    public List<TourAd> findByDateRegistrationBetween(LocalDate startDateRegistration, LocalDate endDateRegistration, Supplier<String> script) {
+    public List<TourAd> findByDateRegistrationBetween(LocalDateTime startDateRegistration, LocalDateTime endDateRegistration, Supplier<String> script) {
         return this.wrapperForUseSelectList(FIND_BY_DATE_REGISTRATION_BETWEEN, script.get(), startDateRegistration,  endDateRegistration);
     }
 
 
 
-    String FIND_BY_START_DATE_AFTER = " WHERE date_start > ?";
+    String FIND_BY_START_DATE_AFTER = " WHERE date_start < ?";
 
     @Override
     public List<TourAd> findByStartDateTourAdAfter(LocalDate startDateTourAd, Supplier<String> script) {
@@ -175,7 +166,7 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
     }
 
 
-    String FIND_BY_END_DATE_BEFORE = " WHERE  date_end < ?";
+    String FIND_BY_END_DATE_BEFORE = " WHERE  date_end > ?";
 
 
     @Override
@@ -184,26 +175,22 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
     }
 
 
-    String FIND_BY_START_DATE_AFTER_AND_END_DATE_BEFORE = " WHERE date_start > ? AND date_end < ?";
+    String FIND_BY_START_DATE_AFTER_AND_END_DATE_BEFORE = " WHERE date_start < ? AND date_end > ?";
 
     @Override
     public List<TourAd> findByStartDateTourAdAfterAndEndDateOrderBefore(LocalDate startDateTourAd, LocalDate endDateTourAd, Supplier<String> script) {
         return this.wrapperForUseSelectList(FIND_BY_START_DATE_AFTER_AND_END_DATE_BEFORE, script.get(), startDateTourAd, endDateTourAd);
     }
 
-
-
     private static final String WHERE_PLACE_CONTAINING = " WHERE place LIKE ? ";
 
     @Override
     public List<TourAd> findByPlaceContaining(String place, Supplier<String> script) {
-
         return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,
                         WHERE_PLACE_CONTAINING),
                 HandlerDAOtoMYSQL::resultSetToTourAd,
                 HandlerSqlDAO.containingString(place));
     }
-
 
     private static final String WHERE_CITY_CONTAINING = " WHERE city LIKE ? ";
 
@@ -216,41 +203,30 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
                 HandlerSqlDAO.containingString(city));
     }
 
-
-
-
     private static final String WHERE_COUNTRY_CONTAINING = " WHERE country.name LIKE ? ";
 
     @Override
     public List<TourAd> findByCountryContaining(String country, Supplier<String> script) {
-
         return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,
                         WHERE_COUNTRY_CONTAINING),
                 HandlerDAOtoMYSQL::resultSetToTourAd,
                 HandlerSqlDAO.containingString(country));
     }
 
-
-
-
     private static final String WHERE_NAME_AGENCY_CONTAINING = " WHERE user.name LIKE ? ";
 
     @Override
     public List<TourAd> findByNameAgencyContaining(String nameAgency, Supplier<String> script) {
-
         return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,
                         WHERE_NAME_AGENCY_CONTAINING),
                 HandlerDAOtoMYSQL::resultSetToTourAd,
                 HandlerSqlDAO.containingString(nameAgency));
     }
 
-
-
     @Override
     public List<TourAd> findAll(Supplier<String> script) {
         return HandlerSqlDAO.useSelectScript(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,( script.get().isEmpty())?"":" WHERE "+ script.get(), " ORDER BY tour_ad.date_registration;"), HandlerDAOtoMYSQL::resultSetToTourAd);
     }
-
 
     private static final String SELECT_COUNT_ORDER_TOUR= "SELECT COUNT(order_tour.tour_ad_id) AS count_orders,  tour_ad.id FROM order_tour" +
             " right join tour_ad ON order_tour.tour_ad_id = tour_ad.id " +
@@ -286,6 +262,12 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
 
     }
 
+    private static final String WHERE_TOUR_AD_ID_IS = " WHERE tour_ad.id = ? ";
+    @Override
+    public TourAd findByTourAdId(Long id, Supplier<String> script) {
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,WHERE_TOUR_AD_ID_IS, (script.get().isEmpty())?"":" AND "+script.get(), " ORDER BY tour_ad.date_registration DESC;"),
+                HandlerDAOtoMYSQL::resultSetToTourAd,id);
+    }
 
 
     private static final String SELECT_TOUR_AD= "SELECT " +
@@ -469,6 +451,15 @@ class HandlerDAOtoMYSQL {
         public ScriptTourAdWhere conditionCommodityIs(Set<ConditionCommodity> conditions) {
             String script =" condition_commodity.name IN (";
             script+=this.enumToScript(conditions);
+            this.addScript(script);
+            return this;
+        }
+
+        private static final String WHERE_HIDDEN_ID = " tour_ad.hidden = ? ";
+        @Override
+        public ScriptTourAdWhere isHidden(boolean hidden) {
+
+            String script = WHERE_HIDDEN_ID.replace("?",""+hidden);
             this.addScript(script);
             return this;
         }

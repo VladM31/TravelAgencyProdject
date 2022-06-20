@@ -7,7 +7,7 @@
                     <span>Головна сторінка</span>
                 </li>
             </a>
-            <a href="#">
+            <a th:href="${@environment.getProperty('main.pages.find.all.url')}">
                 <li><span>Пошук</span></li>
             </a>
             <a href="/profile-message" th:if="${sign_in}">

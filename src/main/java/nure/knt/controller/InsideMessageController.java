@@ -9,6 +9,7 @@ import nure.knt.entity.subordinate.MessageShortData;
 import nure.knt.forms.filter.FilterMessageShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -225,9 +226,11 @@ class HendlerIMCForCourier {
     }
 }
 
+@Component
+@PropertySource("classpath:WorkerWithAdministrator.properties")
 class HendlerIMCForAdministrations {
     private static final String ADMINISTRATIONS_NAME_CHOOSE = "Керування";
-    private static final String ADMINISTRATIONS_URL_CHOOSE = "/";
+    private static String ADMINISTRATIONS_URL_CHOOSE;
     private static final String ATTRIBUTE_ARE_YOU_ADMINS = "IamAdmin";
     private static final String ATTRIBUTE_NAME_ROLE = "nameRole";
 
@@ -240,6 +243,10 @@ class HendlerIMCForAdministrations {
                 HendlerIMCForAll.EMPTY_NAME);
         model.addAttribute(ATTRIBUTE_ARE_YOU_ADMINS,true);
         model.addAttribute(ATTRIBUTE_NAME_ROLE,user.getRole());
+    }
+    @Autowired
+    public void setAdministrationsUrlChoose(@Value("${admin.show.all.users.url}") String ADMINISTRATIONS_URL_CHOOSE){
+        HendlerIMCForAdministrations.ADMINISTRATIONS_URL_CHOOSE = ADMINISTRATIONS_URL_CHOOSE;
     }
 }
 

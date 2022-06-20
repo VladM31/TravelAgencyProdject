@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="../../node_modules/normalize.css/normalize.css"
+      rel="stylesheet"
+    />
+    <link  rel="stylesheet" type="text/css" th:href="@{../css/sort_button/sortBlock.css}" />
+    <link  rel="stylesheet" type="text/css" th:href="@{../css/main_pages_css/Mane_Find_All_Tour_Ads_CSS.css}" />
+
+
+    <title>Пошук</title>
+  </head>
+  <body>
+      <th:block th:include="/Top Menu"></th:block>
+    <main>
+      <div class="container">
+        <form class="search" th:object="${filter}" method="get" th:action="${@environment.getProperty('main.pages.find.all.url')}">
+          <h2>ШУКАТИ ЗА</h2>
+          <div class="search-forms">
+            <div>
+              <input type="text"  class="box-filter box-filter-dop" placeholder="Назва турагенції" th:field="*{nameTravelAgency}">
+
+            </div>
+            <div>
+              <input list="countries-name" type="text" maxlength="60" pattern="^((?![/;-=*+?!]).)*$"
+                     class="box-filter box-filter-dop"  placeholder="Назва країни" th:field="*{nameCountry}">
+              <datalist name="country" id="countries-name">
+                <option th:each="country : ${countries}" th:value="${country}" th:text="${country}">...</option>
+              </datalist>
+            </div>
+            <div>
+              <input type="text"  class="box-filter box-filter-dop" placeholder="Назвою міста" th:field="*{nameCity}">
+            </div>
+            <div>
+              <input type="text"  class="box-filter box-filter-dop" placeholder=" Назвою місця перебування" row="2" th:field="*{namePlace}">
+            </div>
+          </div>
+          <div class="search-filter">
+            <div class="item">
+              <label>Ціною</label>
+              <div class="item-input">
+                <input
+                  placeholder="Початкова"
+                  type="number"
+
+                  name="tentacles"
+                  min="0"
+                  max="9999999"
+                  th:field="*{costOneCustomerStart}"
+                />
+                <input
+                  placeholder="Кінцева"
+                  type="number"
+
+                  name="tentacles"
+                  min="0"
+                  max="9999999"
+                  th:field="*{costOneCustomerEnd}"
+                />
+              </div>
+            </div>
+            <div class="item">
+              <label>Датою</label>
+              <div class="item-input">
+                <input
+                  placeholder="Початкова"
+                  type="date"
+                  th:field="*{startDate}"
+                />
+                <input
+                  placeholder="Кінцева"
+                  type="date"
+                  th:field="*{endDate}"
+                />
+              </div>
+            </div>
+            <div class="item">
+              <label>Відсотком знижки</label>
+              <div class="item-input">
+                <input
+                  placeholder="Початкова"
+                  type="number"
+                  min="0"
+                  max="99999"
+                  th:field="*{discountPercentageStart}"
+                />
+                <input
+                  placeholder="Кінцева"
+                  type="number"
+                  min="0"
+                  max="99999"
+                  th:field="*{discountPercentageEnd}"
+                />
+              </div>
+            </div>
+            <div class="item">
+              <label>Кількість осіб для максимальної знижки</label>
+              <div class="item-input">
+                <input placeholder="Початкова" type="number" min="0" max="9999" th:field="*{discountSizePeopleStart}"
+                />
+                <input placeholder="Кінцева" type="number" min="0" max="9999" th:field="*{discountSizePeopleEnd}"
+                />
+              </div>
+            </div>
+            <input type="submit" class="search-filter-button" value="Шукати">
+          </div>
+        </form>
+        <div class="main-windows">
+          <div>
+            <div id="SortByBlock" class="box-sort" style="width: 1540px; height:180px;">
+              <div >
+                <h2 style=" font-size: 25px;">Сортувати по:</h2>
+              </div>
+              <div class="sort-flex">
+
+                  <button id="sortDescending" class="button-sort  " style=" width: 250px; height: 70px; margin-right: 100px; font-size: 28px;">За зменшенням</button>
+                  <select id="selectSort" name="SortBy" class="box-filter">
+                    <option id="sortByDateNew">Новим</option>
+                    <option id="sortByNameTravelAgency">Навзі турагенції</option>
+                    <option id="sortByRating0fTravelAgency">Рейтингу</option>
+                    <option id="sortByDateStart">Даті початку</option>
+                    <option id="sortByDateEnd">Даті закінчення</option>
+                    <option id="sortByTourAdForCustomerCost">Ціні</option>
+                    <option id="sortByDiscountPercentage">Відсотку знижки</option>
+                    <option id="sortByDiscountSizePeople">Кількість осіб для максимальної знижки</option>
+                    <option id="sortByCountry">Країні</option>
+                    <option id="sortByCity">Назві міста</option>
+                    <option id="sortByPlace">Місцю перебування</option>
+                  </select>
+                  <button id="sortAscending" class="button-sort  button-sort-used" style=" width: 250px; height: 70px; margin-left: 100px; font-size: 28px;">За зростання</button>
+
+              </div>
+
+            </div>
+          </div>
+          <form class="filter-window" th:each="tourAd : ${tourAds}" th:action="${@environment.getProperty('customer.create.order.from.travel.agency.url')}">
+            <div class="window-name">
+              <div class="window-name-div">
+                <h2 th:text="${tourAd.nameAgency}">Назва</h2>
+                <div class="rating-mini">
+                  <span th:each="star : ${tourAd.getStars()}" class="starts-style" th:utext="${star}"></span>
+
+                </div>
+                <div class="window-paragraph my-mardin-up" >
+                  <h5 class="text-up-inside-box" s>Дата початку - Дата закінчення</h5>
+                  <p class="text-down-inside-box" th:text="${tourAd.dateStart.toString()} + ' - ' + ${tourAd.dateEnd.toString()}"></p>
+                  <p class="hidden-for-p item_date-new" th:text="${tourAd.dateRegistration}"></p>
+                  <p class="hidden-for-p item_name-travel-agency" th:text="${tourAd.nameAgency}"></p>
+                  <p class="hidden-for-p item_rating-travel-agency" th:text="${tourAd.ratingAgency}"></p>
+                  <p class="hidden-for-p item_date-start" th:text="${tourAd.dateStart.toString()}"></p>
+                  <p class="hidden-for-p item_date-end" th:text="${tourAd.dateEnd.toString()}"></p>
+                  <input type="hidden" name="tourAdId" th:value="${tourAd.id}">
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="window-info">
+              <div>
+                <table>
+                  <tr class="first">
+                    <td class="top-left">Ціна (за одну особу)</td>
+                    <td>Відсоткова знижка</td>
+                    <td class="top-right">
+                      Кількість осіб для максимальної знижки
+                    </td>
+                  </tr>
+                  <tr class="second">
+                    <td class="bottom-left item_cost-for-customer" th:text="${tourAd.costOneCustomer} + ' грн'">100 </td>
+                    <td class="item_discount-percentage" th:text="${tourAd.discountPercentage} + ' %'">0.0 %</td>
+                    <td class="bottom-right text-discount-size-people" th:text="${tourAd.discountSizePeople}">3</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="paragraphs">
+
+                <div class="window-paragraph my-mardin-up" >
+                  <h5 class="text-up-inside-box">Країна</h5>
+                  <p class="text-down-inside-box item_name-country" th:text="${tourAd.country}"></p>
+                </div>
+                <div class="window-paragraph my-mardin-up" >
+                  <h5 class="text-up-inside-box ">Місто</h5>
+                  <p class="text-down-inside-box item_name-city" th:text="${tourAd.city}"></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="window-button">
+              <div class="window-button-submit">
+                <input type="submit" value="Оформити" />
+              </div>
+              <div class="window-paragraph my-mardin-down" >
+                <h5 class="text-up-inside-box" s>Місце перебування</h5>
+                <p class="text-down-inside-box item_name-place" th:text="${tourAd.place}"></p>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+      <script th:src="@{/js/sort_tour_ads.js}"></script>
+    </main>
+  </body>
+</html>

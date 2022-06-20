@@ -2,6 +2,7 @@ package nure.knt.database.dao.mysql.entity;
 
 import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
+import nure.knt.database.idao.entity.IDAOUserOnly;
 import nure.knt.database.idao.entity.IDAOUserSQL;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
@@ -14,12 +15,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 import static nure.knt.database.dao.HandlerSqlDAO.SORT_TO_DATE_REGISTRATION;
 
 @Component("DAO_MySQL_User")
-public class DAOUserMySQL extends MySQLCore implements IDAOUserSQL<User> {
+public class DAOUserMySQL extends MySQLCore implements IDAOUserOnly {
 
     private static final String WHERE = " WHERE ";
 
@@ -146,10 +148,6 @@ public class DAOUserMySQL extends MySQLCore implements IDAOUserSQL<User> {
         return this.wrapperForUseSelectList(HandlerUserPartScript.WHERE_ACTIVE_IS,active);
     }
 
-    @Override
-    public List<User> findByRole(Role role) {
-        return this.wrapperForUseSelectList(HandlerUserPartScript.WHERE_ROLE_ID_IS,role.getId());
-    }
 
     private static final String WHERE_TYPE_STATE_ID = " user.type_state_id = ? ";
     @Override
@@ -160,6 +158,11 @@ public class DAOUserMySQL extends MySQLCore implements IDAOUserSQL<User> {
     @Override
     public List<User> findByCountry(String country) {
         return this.wrapperForUseSelectList(HandlerUserPartScript.WHERE_NAME_COUNTRY_IS,country);
+    }
+
+    @Override
+    public List<User> findByCountryNameContaining(String country) {
+        return this.wrapperForUseSelectList(HandlerUserPartScript.WHERE_COUNTRY_NAME_CONTAINING,HandlerSqlDAO.containingString(country));
     }
 
     @Override
@@ -214,6 +217,29 @@ public class DAOUserMySQL extends MySQLCore implements IDAOUserSQL<User> {
     private User wrapperForUseSelectOneObject(String part,@NonNull Object ...arrayField){
         return HandlerSqlDAO.useSelectScriptAndGetOneObject(conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_USERS,WHERE + part,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
                 HandlerDAOUserMySQL::resultSetToUser,arrayField);
+    }
+
+    private static final String WHERE_ROLE_NAME_IN = " role.name in( "+ HandlerSqlDAO.REPLACE_SYMBOL + " ) ";
+    @Override
+    public List<User> findByRoles(Set<Role> roles) {
+        String script = HandlerSqlDAO.setInInsideScript(WHERE_ROLE_NAME_IN,roles);
+
+        return this.wrapperForUseSelectList(script,roles);
+    }
+
+    private static final String UPDATE_ACTIVE_USER_BY_ID = "UPDATE user SET active = ? WHERE id = ? ;";
+    @Override
+    public boolean updateStateUser(Long id, Boolean active) {
+        try(PreparedStatement statement = super.conn.getSqlPreparedStatement(UPDATE_ACTIVE_USER_BY_ID)) {
+            statement.setBoolean(1,active);
+            statement.setLong(2,id);
+
+            return statement.executeUpdate() != 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
 

@@ -2,9 +2,11 @@ package nure.knt.entity.goods;
 
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.enums.TypeState;
+import nure.knt.entity.important.TravelAgency;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class TourAd {
     private Long id;
@@ -16,8 +18,6 @@ public class TourAd {
 
     private float discountPercentage;
     private float ratingAgency;
-
-
 
     private Long travelAgencyId;
 
@@ -35,6 +35,10 @@ public class TourAd {
 
     private TypeState typeState;
     private ConditionCommodity conditionCommodity;
+
+    public List<String> getStars(){
+        return TravelAgency.getRetingStars(this.ratingAgency);
+    }
 
     public long getTravelAgencyId() {
         return travelAgencyId;

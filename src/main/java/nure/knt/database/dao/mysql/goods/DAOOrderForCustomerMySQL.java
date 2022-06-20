@@ -44,7 +44,7 @@ public class DAOOrderForCustomerMySQL extends MySQLCore implements IDAOOrderFrom
 
     private static final String insert_order = "insert into order_tour(number_of_people,cost,date_start,date_end," +
             "date_registration,city,customer_id,condition_commodity_id,tour_ad_id)\n" +
-            " VALUE(?,?,?,?,?,?,?,(SELECT id FROM condition_commodity WHERE name = ?),?);";
+            " VALUE(?,?,?,?,?,?,?,?,?);";
 
     @Override
     public boolean saveAll(Iterable<OrderFromTourAdForCustomer> entities) {
@@ -260,7 +260,7 @@ class HandlerOrderCustomer{
 
         preStat.setString(CITY_POSITION_FOR_INSERT, order.getCity());
         preStat.setLong(CUSTOMER_ID_POSITION_FOR_INSERT, order.getIdCustomer());
-        preStat.setString(CONDITION_COMMODITY_ID_POSITION_FOR_INSERT, order.getConditionCommodity().toString());
+        preStat.setInt(CONDITION_COMMODITY_ID_POSITION_FOR_INSERT, order.getConditionCommodity().getId());
         preStat.setLong(TOUR_AD_ID_POSITION_FOR_INSERT, order.getIdTourAd());
 
     }

@@ -25,10 +25,10 @@ public interface IDAOUserSQL<T extends User> extends IDAOCore<T> {
    public List<T> findByDateRegistrationBetween(LocalDateTime start,LocalDateTime end);
 
    public List<T> findByActive(boolean active);
-   public List<T> findByRole(Role role);
    public List<T> findByTypeState(TypeState conditionCommodity);
 
    public List<T> findByCountry(String country);
+   public List<T> findByCountryNameContaining(String country);
    public List<T> findByNameContaining(String name);
 
    default public boolean canUpdate(T origin,T update){

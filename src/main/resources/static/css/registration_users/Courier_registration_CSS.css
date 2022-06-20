@@ -142,3 +142,9 @@ form .buttons {
   align-items: center;
   width: 1200px;
 }
+
+input:focus {
+  border:  3px solid  rgb(86, 207, 255);
+  outline: none;
+
+}

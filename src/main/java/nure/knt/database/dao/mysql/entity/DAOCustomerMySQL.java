@@ -246,11 +246,6 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
         return this.wrapperForUseSelectList(AND + HandlerUserPartScript.WHERE_ACTIVE_IS,active);
     }
 
-    @Override
-    public List<Customer> findByRole(Role role) {
-        return this.wrapperForUseSelectList(AND + HandlerUserPartScript.WHERE_ROLE_ID_IS,role.getId());
-    }
-
     private static final String SELECT_WHERE_TYPE_STATE_IS = SELECT_ALL.replace("20","?");
 
     @Override
@@ -262,6 +257,11 @@ public class DAOCustomerMySQL extends MySQLCore implements IDAOCustomerSQL<Custo
     @Override
     public List<Customer> findByCountry(String country) {
         return this.wrapperForUseSelectList(AND + HandlerUserPartScript.WHERE_NAME_COUNTRY_IS,country);
+    }
+
+    @Override
+    public List<Customer> findByCountryNameContaining(String country) {
+        return this.wrapperForUseSelectList(AND + HandlerUserPartScript.WHERE_COUNTRY_NAME_CONTAINING,HandlerSqlDAO.containingString(country));
     }
 
     @Override
