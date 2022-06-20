@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Please sign in</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <link th:href="@{/css/administrator_css/Show_all_users_css.css}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Neucha" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+</head>
+
+<body class="main-body">
+
+    <div class="main-body-top">
+        <h1 class="main-travel-agency-naming" th:text="${user.name}">
+            Назва турагенції
+        </h1>
+        <h3  th:text="${user.role}">
+
+        </h3>
+    </div>
+
+    <div class="main-body-buttom">
+
+        <form id="filter-right" class="filter-mail-block-for-all-info">
+            <div>
+                <h2 style="font-family: 'Neucha';font-style: normal;font-size: 45px;">
+                    <b>
+                        ШУКАТИ ЗА
+                    </b>
+                </h2>
+            </div>
+
+            <div id="nameUser">
+                <input type="text" class="box-filter" placeholder="Ім'ям">
+            </div>
+
+            <div id="username">
+                <input type="text" class="box-filter" placeholder="Логіном">
+            </div>
+
+            <div id="email">
+                <input type="text" class="box-filter" placeholder="Поштою">
+            </div>
+
+            <div id="countries-name-div">
+                <input list="countries-name" type="text" maxlength="60" pattern="^((?![/;-=*+?!]).)*$"
+                    class="box-filter" placeholder="Країною">
+                <datalist name="country" id="countries-name">
+                    <option value="country">Франція</option>
+                    <option value="country">Україна</option>
+                    <option value="country">Італія</option>
+                    <option value="country">Чехія</option>
+                    <option th:each="country : ${countries}" th:value="${country}" th:text="${country}">...</option>
+                </datalist>
+            </div>
+
+            <div id="number-phone">
+                <input type="text" class="box-filter" placeholder="Номером телефону">
+            </div>
+
+            <div id="Chose_date">
+                <h6>Датою реєстрації</h6>
+                <div style=" display:flex; justify-content: space-around;">
+                    <input type="datetime-local" name="start" class="box-filter-date">
+                    <p class="line-between-date">-</p>
+                    <input type="datetime-local" name="ends" class="box-filter-date">
+                </div>
+            </div>
+
+            <div id="StateActive" class="filter-order-state">
+                <h5>За активністю</h5>
+
+                <div class="box-filter-check">
+                    <input id="Not_ban" type="checkbox" name="html5" />
+                    <label for="Not_ban">Активні&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</label>
+
+                </div>
+                <div class="box-filter-check">
+                    <input id="Is_ban" type="checkbox" name="html5" />
+                    <label for="Is_ban">Заблоковані&nbsp; &nbsp;</label>
+
+                </div>
+
+            </div>
+
+            <div id="Role" class="filter-order-state">
+                <h5>За роллю</h5>
+
+                <div class="box-filter-check">
+                    <input id="Moderator" type="checkbox" name="html5" />
+                    <label for="Moderator">Модерато&nbsp;&nbsp;</label>
+
+                </div>
+                <div class="box-filter-check">
+                    <input id="Customer" type="checkbox" name="html5" />
+                    <label for="Customer">Клієнт&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+
+                </div>
+                <div class="box-filter-check">
+                    <input id="Travel_Agency" type="checkbox" name="html5" />
+                    <label for="Travel_Agency">Тур
+                        агенція </label>
+
+                </div>
+                <div class="box-filter-check">
+                    <input id="Courier" type="checkbox" name="html5" />
+                    <label for="Courier"> Кур'єр &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </label>
+
+                </div>
+            </div>
+
+
+
+            <div>
+                <input type="submit" value="ШУКАТИ" class="filter-find-button">
+            </div>
+
+        </form>
+
+        <div class="block-order-info">
+            <form class="order_block">
+                <div class="order_block-all-info-column">
+
+                    <div class="order_block-all-info-row">
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Ім'я</small>
+                            <p class="order-info-text-name-bottom item_name-user"> Одесса</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Логін</small>
+                            <p class="order-info-text-name-bottom item_username"> Одесса</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> id</small>
+                            <p class="order-info-text-name-bottom item_id-user"> Одесса</p>
+                        </div>
+
+                        <input type="submit" class="order-button order-button-grean" value="Написати повідомлення">
+
+                    </div>
+
+                    <div class="order_block-all-info-row">
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Пароль</small>
+                            <p class="order-info-text-name-bottom item_password-user"> 1</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Електрона пошта</small>
+                            <p class="order-info-text-name-bottom item_email-user"> 1</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Роль</small>
+                            <p class="order-info-text-name-bottom item_role-user"> 1</p>
+                        </div>
+                        <p class="hidden-text item_active-user">true</p>
+                        <input type="submit" class="order-button order-button-grean" value="Заблокувати">
+
+                    </div>
+
+                    <div class="order_block-all-info-row">
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Країна</small>
+                            <p class="order-info-text-name-bottom item_country-name"> 1</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Номер телефону</small>
+                            <p class="order-info-text-name-bottom item_number-phone-user"> 1</p>
+                        </div>
+                        <div class="order-info-text">
+                            <small class="order-info-text-name-top"> Дата реєстрації</small>
+                            <p class="order-info-text-name-bottom item_date-registration"> 1</p>
+                        </div>
+
+
+                        <input type="submit" class="order-button order-button-gray" value="Видалити">
+
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+
+        <div>
+            <div id="SortBy" class="box-sort box-rigth">
+                <div style="  display: flex;">
+                    <h6>Сортувати по:</h6>
+                </div>
+
+                <select id="selectSort" name="SortBy" class="box-filter">
+                    <option id="sortByDateRegistration">Даті реєстрації</option>
+                    <option id="sortByNameUser">Імені юзера</option>
+                    <option id="sortByUsername">Логіну</option>
+                    <option id="sortByIdUser">Індетифікатору</option>
+
+                    <option id="sortByPasswordUser">Паролю</option>
+                    <option id="sortByEmailUser">Пошті</option>
+                    <option id="sortByRoleUser">Ролі</option>
+                    <option id="sortByCountryName">Назві країни</option>
+
+                    <option id="sortByNumberPhoneUser">Номеру телефону</option>
+                    <option id="sortByActiveUser">Активності</option>
+
+
+                </select>
+
+                <div>
+                    <button id="sortDescending" class="button-sort">\/</button>
+                    <button id="sortAscending" class="button-sort button-sort-used">/\</button>
+                </div>
+            </div>
+            <br>
+            <form action="" class="watch-travel-agency">
+                <div>
+                    <h2 class="watch-travel-agency-choose-see"><b>Перегляд</b></h2>
+
+                    <div style="display: flex;align-items: flex-start;margin-left: 4%">
+                        <input type="submit"
+                            class="watch-travel-agency-choose-servise-submit wtacss-right wtacss-not-work"
+                            value="Керування">
+                        <input type="button" class="watch-travel-agency-choose-servise-submit wtacss-left " value="СМС">
+                    </div>
+
+
+                </div>
+
+                <div>
+                    <input id="ChangeProfile" type="submit" class="watch-travel-agency-other-submit" rows="2"
+                        value="Редагувати профіль">
+                </div>
+
+                <div>
+                    <input id="Writeorder" type="submit" class="watch-travel-agency-other-submit" rows="2"
+                        value="Написати повідомлення">
+                </div>
+
+                <div>
+                    <input id="MakeTheService" type="submit" class="watch-travel-agency-other-submit" rows="2"
+                        value="Додати модератора">
+                </div>
+
+                <div>
+                    <input id="MakeTheService" type="submit" class="watch-travel-agency-other-submit" rows="2"
+                        value="Перегляд завдань">
+                </div>
+
+                <div>
+                    <input id="MakeTheService" type="submit" class="watch-travel-agency-other-submit" rows="2"
+                        value="Перевірка тур агенцій">
+                </div>
+
+                <div>
+                    <input id="MakeTheService" type="submit" class="watch-travel-agency-other-submit" rows="2"
+                        value="Перевірка тур оголошень">
+                </div>
+
+            </form>
+            <script src="sort_all_regustread_users.js"></script>
+        </div>
+
+    </div>
+
+
+
+</body>
+
+</html>

@@ -146,10 +146,6 @@ public class DAOUserMySQL extends MySQLCore implements IDAOUserSQL<User> {
         return this.wrapperForUseSelectList(HandlerUserPartScript.WHERE_ACTIVE_IS,active);
     }
 
-    @Override
-    public List<User> findByRole(Role role) {
-        return this.wrapperForUseSelectList(HandlerUserPartScript.WHERE_ROLE_ID_IS,role.getId());
-    }
 
     private static final String WHERE_TYPE_STATE_ID = " user.type_state_id = ? ";
     @Override
@@ -160,6 +156,11 @@ public class DAOUserMySQL extends MySQLCore implements IDAOUserSQL<User> {
     @Override
     public List<User> findByCountry(String country) {
         return this.wrapperForUseSelectList(HandlerUserPartScript.WHERE_NAME_COUNTRY_IS,country);
+    }
+
+    @Override
+    public List<User> findByCountryNameContaining(String country) {
+        return this.wrapperForUseSelectList(HandlerUserPartScript.WHERE_COUNTRY_NAME_CONTAINING,HandlerSqlDAO.containingString(country));
     }
 
     @Override
