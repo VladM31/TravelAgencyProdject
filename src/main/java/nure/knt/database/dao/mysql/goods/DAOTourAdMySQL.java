@@ -27,8 +27,85 @@ import static nure.knt.database.dao.HandlerSqlDAO.*;
 
 @Repository
 public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
+
+    private static final String INSERT_INSIDE_EDIT_TOUR_AD = "INSERT INTO edit_tour_ad(confirmed,need_delete,whom_need_change_id,what_to_change) VALUE(?,?,?,?);";
+    private static final String FIND_ID = "SELECT id FROM tour_ad " +
+            "WHERE place = ? AND city = ? AND date_start = ? " +
+            "AND date_end = ? AND date_registration = ? " +
+            "AND cost_one_customer = ? AND travel_agency_id = ? AND type_state_id = ?";
     @Override
     public boolean editing(Long id, TourAd entity) {
+
+        if( !this.save(entity)){
+            return false;
+        }
+
+        try{
+            long editId = 0;
+            try(PreparedStatement statement = super.conn.getSqlPreparedStatement(FIND_ID)){
+                HandlerDAOtoMYSQL.tourAdToMySqlScriptForFindId(statement,entity);
+                try(ResultSet result = statement.executeQuery()){
+                    if (!result.next()){
+                        return false;
+                    }
+                    editId = result.getLong("id");
+                }
+            }
+
+            try(PreparedStatement statement = super.conn.getSqlPreparedStatement(INSERT_INSIDE_EDIT_TOUR_AD)){
+                int position = 0;
+                statement.setBoolean(++position,false);
+                statement.setBoolean(++position,false);
+                statement.setLong(++position,id);
+                statement.setLong(++position,editId);
+
+                return statement.executeUpdate() != 0;
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    private static final String UPDATE_EDIT = "UPDATE tour_ad\n" +
+            "left join edit_tour_ad on edit_tour_ad.whom_need_change_id = tour_ad.id\n" +
+            "left join tour_ad as changes on edit_tour_ad.what_to_change = changes.id\n" +
+            "SET \n" +
+            "tour_ad.place =changes.place,\n" +
+            "tour_ad.city = changes.city ,\n" +
+            "tour_ad.date_start =changes.date_start, \n" +
+            "tour_ad.date_end = changes.date_end ,\n" +
+            "tour_ad.cost_one_customer = changes.cost_one_customer, \n" +
+            "tour_ad.discount_size_people = changes.discount_size_people ,\n" +
+            "tour_ad.discount_percentage =changes.discount_percentage, \n" +
+            "tour_ad.country_id = changes.country_id \n" +
+            " WHERE changes.id = ?;";
+    private static final String UPDATE_EDITE_TOUR_AD_AFTER_SAVE = "UPDATE edit_tour_ad SET confirmed = true,need_delete = true WHERE what_to_change = %d;";
+    private static final String UPDATE_EDITE_TOUR_AD_FOR_REMOVE = "UPDATE edit_tour_ad SET need_delete = true WHERE what_to_change = ?;";
+    @Override
+    public boolean saveEdit(Long id){
+        try(PreparedStatement statement = super.conn.getSqlPreparedStatement(UPDATE_EDIT)){
+            statement.setLong(1,id);
+            if(statement.executeUpdate() == 0){
+                return false;
+            }
+
+            return statement.executeUpdate(String.format(UPDATE_EDITE_TOUR_AD_AFTER_SAVE,id)) != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean removeEdit(Long id) {
+        try(PreparedStatement statement = super.conn.getSqlPreparedStatement(UPDATE_EDITE_TOUR_AD_FOR_REMOVE)){
+            statement.setLong(1,id);
+            return statement.executeUpdate() != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -106,12 +183,8 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return this.wrapperForUseSelectList(FIND_BY_DISCOUNT_SIZE_PEOPLE_BETWEEN, script.get(), startDiscountSizePeople,  endDiscountSizePeople);
     }
 
-
-
     String FIND_BY_ORDER_QUANTITY_BETWEEN = " WHERE (select count(*) from order_tour " +
             " where tour_ad_id = tour_ad.id ) BETWEEN ? AND ? ";
-
-
 
     @Override
     public List<TourAd> findByOrderQuantityBetween(int startOrderQuantity, int endOrderQuantity, Supplier<String> script) {
@@ -120,17 +193,12 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
                 HandlerDAOtoMYSQL::resultSetToTourAdWithCountingOrders, startOrderQuantity, endOrderQuantity);
     }
 
-
-
-
     String FIND_BY_DISCOUNT_PERCENTAGE_BETWEEN = " WHERE discount_percentage BETWEEN ? AND ? ";
 
     @Override
     public List<TourAd> findByDiscountPercentageBetween(float startDiscountPercentage, float endDiscountPercentage, Supplier<String> script) {
         return this.wrapperForUseSelectList(FIND_BY_DISCOUNT_PERCENTAGE_BETWEEN, script.get(), startDiscountPercentage,  endDiscountPercentage);
     }
-
-
 
     String FIND_BY_RATING_AGENCY_BETWEEN = " WHERE travel_agency.rating BETWEEN ? AND ? ";
 
@@ -139,15 +207,12 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return this.wrapperForUseSelectList(FIND_BY_RATING_AGENCY_BETWEEN, script.get(), startRatingAgency,  endRatingAgency);
     }
 
-
     String FIND_BY_HIDDEN = " WHERE hidden = ? ";
 
     @Override
     public List<TourAd> findByHidden(boolean hidden, Supplier<String> script) {
         return this.wrapperForUseSelectList(FIND_BY_HIDDEN, script.get(), hidden);
     }
-
-
 
     String FIND_BY_DATE_REGISTRATION_BETWEEN = " WHERE tour_ad.date_registration BETWEEN ? AND ? ";
 
@@ -156,8 +221,6 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return this.wrapperForUseSelectList(FIND_BY_DATE_REGISTRATION_BETWEEN, script.get(), startDateRegistration,  endDateRegistration);
     }
 
-
-
     String FIND_BY_START_DATE_AFTER = " WHERE date_start < ?";
 
     @Override
@@ -165,15 +228,12 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return this.wrapperForUseSelectList(FIND_BY_START_DATE_AFTER, script.get(), startDateTourAd);
     }
 
-
     String FIND_BY_END_DATE_BEFORE = " WHERE  date_end > ?";
-
 
     @Override
     public List<TourAd> findByEndDateTourAdBefore(LocalDate endDateTourAd, Supplier<String> script) {
         return this.wrapperForUseSelectList(FIND_BY_END_DATE_BEFORE, script.get(), endDateTourAd);
     }
-
 
     String FIND_BY_START_DATE_AFTER_AND_END_DATE_BEFORE = " WHERE date_start < ? AND date_end > ?";
 
@@ -322,27 +382,25 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
             " left join condition_commodity on tour_ad.condition_commodity_id = condition_commodity.id" +
             " left join country on tour_ad.country_id = country.id;";
 
+    @Component
+    class HandlerDAOtoMYSQL {
 
+        private static final int PLACE_TOUR_AD_FOR_INSERT = 1;
+        private static final int CITY_TOUR_AD_FOR_INSERT = 2;
+        private static final int DATE_START_TOUR_AD_FOR_INSERT = 3;
+        private static final int DATE_END_TOUR_AD_FOR_INSERT = 4;
+        private static final int DATE_REGISTRATION_TOUR_AD_FOR_INSERT = 5;
+        private static final int COST_ONE_CUSTOMER_TOUR_AD_FOR_INSERT = 6;
+        private static final int COST_SERVICE_TOUR_AD_FOR_INSERT = 7;
+        private static final int DISCOUNT_SIZE_PEOPLE_TOUR_AD_FOR_INSERT = 8;
+        private static final int DISCOUNT_PERCENTAGE_TOUR_AD_FOR_INSERT = 9;
+        private static final int HIDDEN_TOUR_AD_FOR_INSERT = 10;
+        private static final int TRAVEL_AGENCY_ID_TOUR_AD_FOR_INSERT = 11;
+        private static final int CONDITION_COMMODITY_ID_TOUR_AD_FOR_INSERT = 12;
+        private static final int TYPE_STATE_ID_TOUR_AD_FOR_INSERT = 13;
+        private static final int COUNTRY_ID_TOUR_AD_FOR_INSERT = 14;
 
-@Component
-class HandlerDAOtoMYSQL {
-
-    private static final int PLACE_TOUR_AD_FOR_INSERT = 1;
-    private static final int CITY_TOUR_AD_FOR_INSERT = 2;
-    private static final int DATE_START_TOUR_AD_FOR_INSERT = 3;
-    private static final int DATE_END_TOUR_AD_FOR_INSERT = 4;
-    private static final int DATE_REGISTRATION_TOUR_AD_FOR_INSERT = 5;
-    private static final int COST_ONE_CUSTOMER_TOUR_AD_FOR_INSERT = 6;
-    private static final int COST_SERVICE_TOUR_AD_FOR_INSERT = 7;
-    private static final int DISCOUNT_SIZE_PEOPLE_TOUR_AD_FOR_INSERT = 8;
-    private static final int DISCOUNT_PERCENTAGE_TOUR_AD_FOR_INSERT = 9;
-    private static final int HIDDEN_TOUR_AD_FOR_INSERT = 10;
-    private static final int TRAVEL_AGENCY_ID_TOUR_AD_FOR_INSERT = 11;
-    private static final int CONDITION_COMMODITY_ID_TOUR_AD_FOR_INSERT = 12;
-    private static final int TYPE_STATE_ID_TOUR_AD_FOR_INSERT = 13;
-    private static final int COUNTRY_ID_TOUR_AD_FOR_INSERT = 14;
-
-    private static WorkWithCountries countries;
+        private static WorkWithCountries countries;
 
     @Autowired
     public void setCountries(WorkWithCountries countries){
@@ -371,6 +429,25 @@ class HandlerDAOtoMYSQL {
         }
 
     }
+
+        static void tourAdToMySqlScriptForFindId(PreparedStatement preStat, TourAd tourAd) {
+            try {
+                int position = 0;
+                preStat.setString(++position, tourAd.getPlace());
+                preStat.setString(++position, tourAd.getCity());
+                preStat.setDate(++position, Date.valueOf(tourAd.getDateStart()));
+                preStat.setDate(++position, Date.valueOf(tourAd.getDateEnd()));
+                preStat.setTimestamp(++position, Timestamp.valueOf(tourAd.getDateRegistration()));
+                preStat.setInt(++position, tourAd.getCostOneCustomer());
+                preStat.setLong(++position, tourAd.getTravelAgencyId());
+                preStat.setLong(++position, tourAd.getTypeState().getId());
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
 
 
         static TourAd resultSetToTourAd(ResultSet resultSet){
@@ -417,8 +494,6 @@ class HandlerDAOtoMYSQL {
             return tourAd;
         }
     }
-
-
 
     static class ScriptTourAdWhereMySQL implements ScriptTourAdWhere{
     private String script = "";
@@ -497,8 +572,6 @@ class HandlerDAOtoMYSQL {
             System.out.println(str);
         }
     }
-
-
 
 }
 

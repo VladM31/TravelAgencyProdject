@@ -13,7 +13,7 @@ import static java.time.temporal.ChronoUnit.DAYS;
 
 public class OrderForm {
     @Pattern(regexp = "^((?![/=;*+?!]).)*$",message = "Не повино в імені бути знаків \"/;-=*+?!\"")
-    @Size(min=2,max=60, message = "Назва міста повина бути більше 2 і не менше 101 символів")
+    @Size(min=2,max=60, message = "Назва міста повина бути більше 2 і не менше 60 символів")
     @NotBlank(message = "Назва міста не повина бути з пробілами")
     private String city;
     @Min(value =1,message = "Кількість людей не повинно бути менше 1")
