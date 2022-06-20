@@ -1,6 +1,7 @@
 package nure.knt.controller.courier;
 
 
+import nure.knt.controller.HandlerController;
 import nure.knt.database.idao.entity.IDAOCourierSQL;
 import nure.knt.database.idao.goods.IDAOCourierTask;
 import nure.knt.entity.enums.ConditionCommodity;
@@ -8,6 +9,7 @@ import nure.knt.entity.goods.CourierTask;
 import nure.knt.entity.important.Courier;
 import nure.knt.entity.important.User;
 import nure.knt.forms.filter.FilterCourierTaskAdmin;
+import nure.knt.forms.goods.CourierTaskForm;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Locale;
 import java.util.function.Function;
 
 @PropertySource("classpath:WorkerWithAdministrator.properties")
@@ -52,11 +55,12 @@ public class ControllerCourierTaskAdmin {
 
     @RequestMapping(value = "${admin.profile.show.courier.task}", method = {RequestMethod.GET})
     public String showTaskGet(@AuthenticationPrincipal User user, Model model, FilterCourierTaskAdmin filter) {
-        System.out.println(filter);
 
         model.addAttribute("filter", (filter == null) ? new FilterCourierTaskAdmin() : filter);
         model.addAttribute(ATTRIBUTE_TASKS, filter.filtering(user.getId(), daoTask));
         this.setInfoForTasks(user, model);
+        HandlerController.setMenuModel(user, model);
+        model.addAttribute("user", user);
         return HandlerControllerCourierTaskAdmin.PAGE_PROFILE_ORDER;
     }
 
@@ -73,17 +77,30 @@ public class ControllerCourierTaskAdmin {
         return "redirect:" + URL_ADMINPROFILE_SHOW_COURIERTASK;
     }
 
-    @RequestMapping(value="${admin.profile.show.courier.task}", method = {RequestMethod.GET})
+    @RequestMapping(value="${admin.profile.create.courier.task.url}", method = {RequestMethod.GET})
     public String findCourierByCountryAndCity(Model model,String country, String city) {
-        var list = daoCourier.findByCityContaining(city).stream().filter(courier -> courier.getCountry().equals(country)).toList();
+        var list = daoCourier.findByDoesHeWant(true).stream().filter(courier ->
+                courier.getCountry().equals(country) && courier.getCity().toLowerCase().contains(city.toLowerCase())).toList();
         if(list.isEmpty()) {
             return "redirect:" + URL_ADMINPROFILE_SHOW_COURIERTASK;
         }
+        model.addAttribute("form", new CourierTaskForm());
+        model.addAttribute("information", CourierTaskForm.listToArray(list));
         return PAGE_CREATE_TASK;
     }
 
-    public String showFormForCreateTask () {
-        return PAGE_CREATE_TASK;
+    @RequestMapping(value="${admin.profile.create.courier.task.url}", method = {RequestMethod.POST})
+    public String showFormForCreateTask (@AuthenticationPrincipal User user, Model model, CourierTaskForm form) {
+        Courier courier = daoCourier.findByIdCourier(
+                CourierTaskForm.getCourierId(
+                        form.getInfoCourier()));
+        daoTask.save(
+                form.toCourierTask(courier, user.getId()));
+
+        courier.setDoesHeWant(false);
+
+        daoCourier.updateOneById(courier);
+        return "redirect:" + URL_ADMINPROFILE_SHOW_COURIERTASK;
     }
 }
 

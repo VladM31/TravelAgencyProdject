@@ -1,5 +1,9 @@
 .main-body{
-    background-color: black;
+    background: url(http://localhost:8080/images/courier_picture/show_task_background.png) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: 100%;
 }
 
 .box-main{

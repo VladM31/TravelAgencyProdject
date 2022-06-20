@@ -16,50 +16,25 @@
     <link rel="stylesheet" th:href="@{/css/administrator_css/Create_Task_For_Courier_CSS.css}" />
   </head>
   <body>
-    <header>
-      <nav>
-        <ul class="site-nav">
-          <div class="main-nav">
-            <a href="../Популярні тур фірми/index.html"
-              ><li>
-                <span>Головна сторінка</span>
-              </li></a
-            >
-            <a href="./index.html"
-              ><li><span>Пошук</span></li></a
-            >
-          </div>
-          <a href="../Реєстрація/index.html"
-            ><li>
-              <span>Зареєструватися</span>
-            </li></a
-          >
-        </ul>
-      </nav>
-    </header>
     <main>
       <div class="container">
         <h2>Оформлення завдання</h2>
-        <form action="" class="form">
+        <form class="form" th:action="${@environment.getProperty('admin.profile.create.courier.task.url')}" th:method="POST" th:object="${form}">
           <div class="first-part">
             <div class="first-part-input">
               <label>Кількість листівок</label>
-              <input />
+              <input th:field="*{numberOfFlyers}" />
             </div>
             <div class="first-part-select">
               <label>Виберіть кур’єра</label>
-              <select name="courier" class="courier">
-                <option disabled selected></option>
-                <option value="Olexander">Olexander</option>
-                <option value="Oleg">Oleg</option>
-                <option value="Yuriy">Yuriy</option>
-                <option value="Pavel">Pavel</option>
+              <select th:field="*{infoCourier}">
+                <option th:each="info:${information}" th:text="${info}" th:value="${info}"></option>
               </select>
             </div>
           </div>
           <div class="second-part">
             <label>Опис</label>
-            <textarea cols="150" rows="20"></textarea>
+            <textarea cols="150" rows="20" th:field="*{describe}"></textarea>
           </div>
           <div class="third-part">
             <input type="button" value="НАЗАД" />
