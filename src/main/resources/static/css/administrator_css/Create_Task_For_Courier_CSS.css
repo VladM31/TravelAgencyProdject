@@ -1,0 +1,223 @@
+body {
+  background: url(http://localhost:8080/images/administrator_picture/Create_Task_For_Courier_Background.png) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: 100%;
+  font-family: Neucha, Roboto, Raleway;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+}
+
+.site-nav a {
+  text-decoration: none;
+}
+
+.site-nav a li span {
+  color: #fff;
+  font-family: Roboto;
+  font-size: 27px;
+  font-weight: 700;
+  line-height: 32px;
+  letter-spacing: 0em;
+  text-align: center;
+  list-style-type: none;
+  text-decoration: none;
+}
+
+.site-nav li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 232px;
+  height: 56px;
+  background: rgba(102, 255, 218, 0.8);
+  border-radius: 20px;
+  margin-top: -15px;
+  margin-right: 30px;
+}
+
+.site-nav li:focus,
+.site-nav li:active {
+  background: #309ea1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 232px;
+  height: 56px;
+  border-radius: 20px;
+  margin-top: -15px;
+}
+
+.main-nav {
+  display: flex;
+  flex-wrap: nowrap;
+  margin-left: 30px;
+}
+
+.main-nav li {
+  margin-right: 10px;
+}
+
+.main-nav a:last-child {
+  margin-left: 20px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Neucha;
+  font-size: 65px;
+  font-weight: 400;
+  line-height: 72px;
+  letter-spacing: 0em;
+  color: rgba(255, 255, 255, 1);
+  margin: 99px 0 0 0;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  width: 1213px;
+  height: 100px;
+  background: #08d359;
+}
+
+.form {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.91);
+  border: 6px solid #01fd66;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  width: 1200px;
+  height: 600px;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.first-part {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  height: 100px;
+}
+
+.first-part label {
+  font-family: Roboto;
+  font-size: 25px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 29px;
+  letter-spacing: 0.05em;
+}
+
+.first-part-input input {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  height: 40px;
+  margin-right: 53px;
+  background: rgba(1, 253, 102, 0.16);
+  border: 3px solid #01fd66;
+  border-radius: 10px;
+}
+
+.first-part-select select {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 750px;
+  height: 48px;
+  background: rgba(1, 253, 102, 0.16);
+  border: 3px solid #01fd66;
+  border-radius: 10px;
+}
+
+.second-part {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.second-part label {
+  font-family: Roboto;
+  font-size: 30px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 35px;
+  letter-spacing: 0.05em;
+  margin-right: auto;
+  padding-bottom: 10px;
+}
+
+.second-part textarea {
+  border: 3px solid #01fd66;
+  border-radius: 10px;
+  font-family: Neucha;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 33px;
+  letter-spacing: 0.1em;
+  background: rgba(1, 253, 102, 0.29);
+  height: 275px;
+  width: 1125px;
+}
+
+.second-part textarea:focus {
+  outline: none;
+}
+
+.third-part {
+  display: flex;
+  flex-direction: row;
+  width: 375px;
+  margin-bottom: 31px;
+  justify-content: space-between;
+}
+
+.third-part input[type="submit"] {
+  font-family: Neucha;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 39px;
+  letter-spacing: 0.1em;
+  background: #ffffff;
+  border: 5px solid #01fd66;
+  border-radius: 8px;
+  width: 200px;
+  height: 75px;
+}
+
+.third-part input[type="button"] {
+  font-family: Neucha;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 39px;
+  letter-spacing: 0.1em;
+  background: #ffffff;
+  border: 5px solid #01fd66;
+  border-radius: 8px;
+  width: 150px;
+  height: 75px;
+}

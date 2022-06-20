@@ -133,7 +133,7 @@
                 <div class="box-info-text">
 
                     <div class="box-text-and-buttons ">
-                        <form class="box-buttons">
+                        <form class="box-buttons" th:action="${@environment.getProperty('admin.profile.show.courier.task')}" th:method="PATCH">
                             <input type="hidden" name="circle" value="123">
                             <input type="hidden" class="small-button color-gray" value="Виконати">
                             <input type="hidden" class="small-button color-green" value="Підтвердити">
@@ -143,6 +143,7 @@
                             <input type="button" class="small-button color-gray" value="Скасувати" th:if="${RoleAdmin
                             && (task.conditionCommodity.equals(T(nure.knt.entity.enums.ConditionCommodity).CANCELED)
                             || task.conditionCommodity.equals(T(nure.knt.entity.enums.ConditionCommodity).GONE))}">
+                            <input type="hidden" name="id" th:value="${task.id}">
                         </form>
                         <div class=" box-text box-state" th:classappend="${ChooseColor.apply(task.conditionCommodity)}">
                             <small class="info-text-top"> Стан</small>
@@ -210,11 +211,6 @@
                 <div>
                     <input id="WriteMessage" type="submit" class="watch-travel-agency-other-submit" rows="2"
                         value="Написати повідомлення">
-                </div>
-
-                <div>
-                    <input id="MakeTheService" type="submit" class="watch-travel-agency-other-submit" rows="2"
-                        value="Створити послугу">
                 </div>
 
             </form>

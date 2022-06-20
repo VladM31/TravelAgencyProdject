@@ -1,13 +1,17 @@
 package nure.knt.controller.courier;
 
 
+import nure.knt.database.idao.entity.IDAOCourierSQL;
 import nure.knt.database.idao.goods.IDAOCourierTask;
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.goods.CourierTask;
+import nure.knt.entity.important.Courier;
 import nure.knt.entity.important.User;
 import nure.knt.forms.filter.FilterCourierTaskAdmin;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +20,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.function.Function;
 
+@PropertySource("classpath:WorkerWithAdministrator.properties")
+
 @Controller
-public class ControllerCourier {
+public class ControllerCourierTaskAdmin {
     private final String PAGE_NAME_COURIER_TASKS = "courier_directory/show_task";
+
+    @Autowired
+    private IDAOCourierSQL <Courier> daoCourier;
 
     @Autowired
     private WorkWithCountries countries;
@@ -29,32 +38,56 @@ public class ControllerCourier {
     private final String ATTRIBUTE_TASKS = "tasks";
     private final String ATTRIBUTE_COLOR = "ChooseColor";
     private final String ATTRIBUTE_ROLE_ADMIN = "RoleAdmin";
+    private final String URL_ADMINPROFILE_SHOW_COURIERTASK;
+    private final String URL_CREATE_TASK;
+    private final String PAGE_CREATE_TASK;
 
-    @RequestMapping(value = "/show_task")
-    String showTasks(@AuthenticationPrincipal User user, Model model) {
-        this.setInfoForTasks(user, model);
-        return PAGE_NAME_COURIER_TASKS;
+    public ControllerCourierTaskAdmin(@Value("${admin.profile.show.courier.task}") String url_adminprofile_show_couriertask,
+                                      @Value("${admin.profile.create.courier.task.url}")String url_create_task,
+                                      @Value("${admin.profile.create.courier.task.page}") String page_create_task) {
+        URL_ADMINPROFILE_SHOW_COURIERTASK = url_adminprofile_show_couriertask;
+        URL_CREATE_TASK = url_create_task;
+        PAGE_CREATE_TASK = page_create_task;
     }
 
     @RequestMapping(value = "${admin.profile.show.courier.task}", method = {RequestMethod.GET})
-    public String showOrderGet(@AuthenticationPrincipal User user, Model model, FilterCourierTaskAdmin filter) {
+    public String showTaskGet(@AuthenticationPrincipal User user, Model model, FilterCourierTaskAdmin filter) {
         System.out.println(filter);
 
         model.addAttribute("filter", (filter == null) ? new FilterCourierTaskAdmin() : filter);
         model.addAttribute(ATTRIBUTE_TASKS, filter.filtering(user.getId(), daoTask));
         this.setInfoForTasks(user, model);
-        return HandlerControllerCourier.PAGE_PROFILE_ORDER;
+        return HandlerControllerCourierTaskAdmin.PAGE_PROFILE_ORDER;
     }
 
     private void setInfoForTasks(User user, Model model) {
 
-        model.addAttribute(ATTRIBUTE_COLOR, HandlerControllerCourier.ChooseColor);
+        model.addAttribute(ATTRIBUTE_COLOR, HandlerControllerCourierTaskAdmin.ChooseColor);
         model.addAttribute(ATTRIBUTE_ROLE_ADMIN, true);
         model.addAttribute("countries", countries.getCountry());
     }
+
+    @RequestMapping(value="${admin.profile.show.courier.task}", method = {RequestMethod.PATCH})
+    public String setStateCanceled(Long id) {
+        daoTask.updateConditionCommodity(id, ConditionCommodity.CANCELED);
+        return "redirect:" + URL_ADMINPROFILE_SHOW_COURIERTASK;
+    }
+
+    @RequestMapping(value="${admin.profile.show.courier.task}", method = {RequestMethod.GET})
+    public String findCourierByCountryAndCity(Model model,String country, String city) {
+        var list = daoCourier.findByCityContaining(city).stream().filter(courier -> courier.getCountry().equals(country)).toList();
+        if(list.isEmpty()) {
+            return "redirect:" + URL_ADMINPROFILE_SHOW_COURIERTASK;
+        }
+        return PAGE_CREATE_TASK;
+    }
+
+    public String showFormForCreateTask () {
+        return PAGE_CREATE_TASK;
+    }
 }
 
-class HandlerControllerCourier {
+class HandlerControllerCourierTaskAdmin {
     private static final String DIRECTORY = "courier_directory/";
     protected static final String PAGE_PROFILE_ORDER = DIRECTORY + "show_task";
 
@@ -79,6 +112,5 @@ class HandlerControllerCourier {
     };
 
     ////////////////////////////////////////////////////////////////////
-
 
 }

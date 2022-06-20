@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="../../node_modules/normalize.css/normalize.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/administrator_css/Create_Task_For_Courier_CSS.css}" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul class="site-nav">
+          <div class="main-nav">
+            <a href="../Популярні тур фірми/index.html"
+              ><li>
+                <span>Головна сторінка</span>
+              </li></a
+            >
+            <a href="./index.html"
+              ><li><span>Пошук</span></li></a
+            >
+          </div>
+          <a href="../Реєстрація/index.html"
+            ><li>
+              <span>Зареєструватися</span>
+            </li></a
+          >
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <div class="container">
+        <h2>Оформлення завдання</h2>
+        <form action="" class="form">
+          <div class="first-part">
+            <div class="first-part-input">
+              <label>Кількість листівок</label>
+              <input />
+            </div>
+            <div class="first-part-select">
+              <label>Виберіть кур’єра</label>
+              <select name="courier" class="courier">
+                <option disabled selected></option>
+                <option value="Olexander">Olexander</option>
+                <option value="Oleg">Oleg</option>
+                <option value="Yuriy">Yuriy</option>
+                <option value="Pavel">Pavel</option>
+              </select>
+            </div>
+          </div>
+          <div class="second-part">
+            <label>Опис</label>
+            <textarea cols="150" rows="20"></textarea>
+          </div>
+          <div class="third-part">
+            <input type="button" value="НАЗАД" />
+            <input type="submit" value="ОФОРМИТИ"/>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>
