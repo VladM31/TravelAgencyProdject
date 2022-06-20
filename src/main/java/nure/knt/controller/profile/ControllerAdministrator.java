@@ -1,11 +1,8 @@
 package nure.knt.controller.profile;
 
-import nure.knt.controller.HandlerController;
 import nure.knt.database.idao.entity.IDAOUserOnly;
 import nure.knt.database.idao.entity.IDAOUserSQL;
-import nure.knt.entity.enums.Role;
 import nure.knt.entity.important.User;
-import nure.knt.forms.filter.FilterAllUsers;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @PropertySource("classpath:WorkerWithAdministrator.properties")
-@PropertySource("classpath:WorkerWithMessage.properties")
 public class ControllerAdministrator {
     @Autowired
     private WorkWithCountries countries;
@@ -37,36 +33,10 @@ public class ControllerAdministrator {
     }
 
     @RequestMapping(value="${admin.show.all.users.url}",method = RequestMethod.GET)
-    public String showAllUsers(@AuthenticationPrincipal User user, Model model, FilterAllUsers filter){
+    public String showAllUsers(@AuthenticationPrincipal User user, Model model){
 
-       this.setInfoForShowAllUsers(user,model,filter);
-
-        System.out.println(filter);
+        model.addAttribute("user",user);
         return PAGE_FOR_SHOW_ALL_USERS;
     }
 
-    @RequestMapping(value="${admin.show.all.users.url}",method = RequestMethod.PATCH)
-    public String changeActiveUser(Long id,Boolean active){
-
-        this.daoUsers.updateStateUser(id,!active);
-
-        return "redirect:"+URL_FOR_SHOW_ALL_USERS;
-    }
-
-    private void setInfoForShowAllUsers(User user, Model model, FilterAllUsers filter){
-        HandlerControllerAdministrator.setInfoForShowAllUsersLogic(user,model,filter,countries,daoUsers);
-        HandlerController.setMenuModel(user,model);
-    }
-}
-
-
-class HandlerControllerAdministrator{
-
-    static void setInfoForShowAllUsersLogic(User user, Model model, FilterAllUsers filter,WorkWithCountries countries,IDAOUserOnly daoUsers){
-        model.addAttribute("user",user);
-        model.addAttribute("filter", filter);
-        model.addAttribute("users",filter.filtering(daoUsers).stream().limit(10).toList());
-        model.addAttribute("countries",countries.getCountry());
-        model.addAttribute("isAdmin", user.getRole().equals(Role.ADMINISTRATOR));
-    }
 }

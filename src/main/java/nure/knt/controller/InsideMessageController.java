@@ -267,6 +267,10 @@ class HendlerIMCForAdministrations {
     public void setAttributeForUrlCreateTourAd(@Value("${profile.attribute.for.button.on.show.all.message}") String attributeForUrlCreateTourAd) {
         ATTRIBUTE_FOR_URL_CREATE_TOUR_AD = attributeForUrlCreateTourAd;
     }
+    @Autowired
+    public void setAdministrationsUrlChoose(@Value("${admin.show.all.users.url}") String ADMINISTRATIONS_URL_CHOOSE){
+        HendlerIMCForAdministrations.ADMINISTRATIONS_URL_CHOOSE = ADMINISTRATIONS_URL_CHOOSE;
+    }
 }
 
 class HendlerSendMessage{
