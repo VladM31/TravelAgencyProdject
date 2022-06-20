@@ -1,6 +1,7 @@
 package nure.knt.controller.profile;
 
 import nure.knt.database.idao.goods.IDAOTourAd;
+<<<<<<< HEAD
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.goods.TourAd;
@@ -133,4 +134,14 @@ public class ControllerTravelAgencyTourAd {
         model.addAttribute("max_date",maxDate);
         model.addAttribute("itIsCreate",upLabel.equals(UP_LABEL_CREATE));
     }
+=======
+import nure.knt.entity.goods.TourAd;
+
+public class ControllerTravelAgencyTourAd {
+
+    private IDAOTourAd<TourAd> daoTourAd;
+
+
+
+>>>>>>> 5f9353d (work tour ad for update)
 }
