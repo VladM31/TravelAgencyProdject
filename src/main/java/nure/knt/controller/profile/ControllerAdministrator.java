@@ -1,5 +1,6 @@
 package nure.knt.controller.profile;
 
+import nure.knt.controller.HandlerController;
 import nure.knt.database.idao.entity.IDAOUserOnly;
 import nure.knt.database.idao.entity.IDAOUserSQL;
 import nure.knt.entity.enums.Role;
@@ -44,8 +45,17 @@ public class ControllerAdministrator {
         return PAGE_FOR_SHOW_ALL_USERS;
     }
 
+    @RequestMapping(value="${admin.show.all.users.url}",method = RequestMethod.PATCH)
+    public String changeActiveUser(Long id,Boolean active){
+
+        this.daoUsers.updateStateUser(id,!active);
+
+        return "redirect:"+URL_FOR_SHOW_ALL_USERS;
+    }
+
     private void setInfoForShowAllUsers(User user, Model model, FilterAllUsers filter){
         HandlerControllerAdministrator.setInfoForShowAllUsersLogic(user,model,filter,countries,daoUsers);
+        HandlerController.setMenuModel(user,model);
     }
 }
 

@@ -226,6 +226,21 @@ public class DAOUserMySQL extends MySQLCore implements IDAOUserOnly {
 
         return this.wrapperForUseSelectList(script,roles);
     }
+
+    private static final String UPDATE_ACTIVE_USER_BY_ID = "UPDATE user SET active = ? WHERE id = ? ;";
+    @Override
+    public boolean updateStateUser(Long id, Boolean active) {
+        try(PreparedStatement statement = super.conn.getSqlPreparedStatement(UPDATE_ACTIVE_USER_BY_ID)) {
+            statement.setBoolean(1,active);
+            statement.setLong(2,id);
+
+            return statement.executeUpdate() != 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 
 class HandlerDAOUserMySQL{

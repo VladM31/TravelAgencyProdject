@@ -12,10 +12,12 @@
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Neucha" />
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
     <link  rel="stylesheet" type="text/css" th:href="@{../css/sort_button/sortBlock.css}" />
+    <link rel="stylesheet" th:href="@{/css/Main Page CSS.css}" />
+
 </head>
 
 <body class="main-body">
-
+    <th:block th:include="/Top Menu"></th:block>
     <div class="main-body-top">
         <h1 class="main-travel-agency-naming" th:text="${user.name}">
             Назва турагенції
@@ -42,35 +44,31 @@
             </div>
 
             <div id="username">
-                <input type="text" class="box-filter" placeholder="Логіном">
+                <input type="text" class="box-filter" placeholder="Логіном" th:field="*{username}">
             </div>
 
             <div id="email">
-                <input type="text" class="box-filter" placeholder="Поштою">
+                <input type="text" class="box-filter" placeholder="Поштою"  th:field="*{email}">
             </div>
 
             <div id="countries-name-div">
                 <input list="countries-name" type="text" maxlength="60" pattern="^((?![/;-=*+?!]).)*$"
-                    class="box-filter" placeholder="Країною">
+                    class="box-filter" placeholder="Країною"  th:field="*{country}">
                 <datalist name="country" id="countries-name">
-                    <option value="country">Франція</option>
-                    <option value="country">Україна</option>
-                    <option value="country">Італія</option>
-                    <option value="country">Чехія</option>
                     <option th:each="country : ${countries}" th:value="${country}" th:text="${country}">...</option>
                 </datalist>
             </div>
 
             <div id="number-phone">
-                <input type="text" class="box-filter" placeholder="Номером телефону">
+                <input type="text" class="box-filter" placeholder="Номером телефону" th:field="*{number}">
             </div>
 
             <div id="Chose_date">
                 <h6>Датою реєстрації</h6>
                 <div style=" display:flex; justify-content: space-around;">
-                    <input type="datetime-local" name="start" class="box-filter-date">
+                    <input type="datetime-local" class="box-filter-date" th:field="*{startDateRegistration}">
                     <p class="line-between-date">-</p>
-                    <input type="datetime-local" name="ends" class="box-filter-date">
+                    <input type="datetime-local"  class="box-filter-date" th:field="*{endDateRegistration}">
                 </div>
             </div>
 
@@ -102,7 +100,7 @@
                 <div class="box-filter-check">
                     <input id="Customer" type="checkbox" name="roles" th:value="${T(nure.knt.entity.enums.Role).CUSTOMER}"
                            th:checked="${filter.getSetRoles().contains(T(nure.knt.entity.enums.Role).CUSTOMER)}" />
-                    <label for="Customer">Клієнт&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <label for="Customer">Клієнт&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
 
                 </div>
                 <div class="box-filter-check">
@@ -151,7 +149,7 @@
 
                     </form>
 
-                    <form class="order_block-all-info-row">
+                    <form th:action="${@environment.getProperty('admin.show.all.users.url')}" class="order_block-all-info-row" th:method="PATCH">
                         <div class="order-info-text " th:classappend="${isAdmin} ? toDoOnFuture : order-button-gray ">
                             <small class="order-info-text-name-top"> Пароль</small>
                             <p class="order-info-text-name-bottom item_password-user" th:if="${isAdmin}" th:text="${user.password}"> 1</p>
@@ -228,15 +226,15 @@
                 </div>
             </div>
             <br>
-            <form action="" class="watch-travel-agency">
+            <form th:action="${@environment.getProperty('inside.message.show.all.url')}" class="watch-travel-agency">
                 <div>
                     <h2 class="watch-travel-agency-choose-see"><b>Перегляд</b></h2>
 
                     <div style="display: flex;align-items: flex-start;margin-left: 4%">
-                        <input type="submit"
+                        <input type="button"
                             class="watch-travel-agency-choose-servise-submit wtacss-right wtacss-not-work"
                             value="Керування">
-                        <input type="button" class="watch-travel-agency-choose-servise-submit wtacss-left " value="СМС">
+                        <input type="submit" class="watch-travel-agency-choose-servise-submit wtacss-left " value="СМС">
                     </div>
 
 

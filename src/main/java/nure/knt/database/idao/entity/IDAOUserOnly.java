@@ -9,4 +9,5 @@ import java.util.Set;
 public interface IDAOUserOnly extends IDAOUserSQL<User> {
 
     public List<User> findByRoles(Set<Role> roles);
+    public boolean updateStateUser(Long id, Boolean active);
 }
