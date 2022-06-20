@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="../../node_modules/normalize.css/normalize.css"
+      rel="stylesheet"
+    />
+
+
+    <link rel="stylesheet" th:href = "@{../css/registration_users/Courier_registration_CSS.css}" />
+    <script src="./script.js" defer></script>
+    <title>РЕЄСТРАЦІЯ</title>
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <h1>РЕЄСТРАЦІЯ</h1>
+        <form method = "POST" th:action="${@environment.getProperty('registration.courier.url')}" th:object = "${courierForm}">
+          <div class="wrapper">
+            <div class="inputs">
+              <div>
+                <label for="">Ім’я</label>
+                <input type="text" th:field = "*{name}" />
+                <label for="">Номер телефону</label>
+                <input type="number" th:field = "*{number}" />
+                <label for="">Логін</label>
+                <input type="text"  th:field = "*{username}"/>
+                <label for="">Місто</label>
+                <input
+                  type="text"
+                  id="citys-choice"
+                  th:field = "*{city}"
+                />
+                <label for="">Дата народження</label>
+                <input type="date"  th:field = "*{birthDate}"/>
+              </div>
+              <div>
+                <label for="">Пароль</label>
+                <input type="text" th:field = "*{password}"/>
+                <label for="">Поштова адреса</label>
+                <input type="text" th:field = "*{email}"/>
+                <label for="">Адреса перебування</label>
+                <input type="text" th:field = "*{address}"/>
+                <label for="">Країна</label>
+                <input
+                  type="text"
+                  list="countries-name"
+                  id="country-choice"
+                  th:field = "*{country}"
+                />
+                <datalist name="country" id="countries-name">
+                  <option th:each="country : ${countries}" th:value="${country}" th:text="${country}">...</option>
+                </datalist>
+              </div>
+            </div>
+
+            <ul style="color:red; display:flex; justify-content:center;" th:if="${error}">
+              <li th:text="${error}" />
+            </ul>
+
+            <div class="buttons">
+              <input type="submit" value="Підтвердити" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
