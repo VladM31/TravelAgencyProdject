@@ -31,7 +31,7 @@ public class HandlerSqlDAO {
         HandlerSqlDAO.countries = countries;
     }
 
-    public static final String SORT_TO_DATE_REGISTRATION = " ORDER BY date_registration ASC;";
+    public static final String SORT_TO_DATE_REGISTRATION = " ORDER BY date_registration DESC;";
     public static final int EMPTY_CAPACITY = 0;
     public static final String REPLACE_SYMBOL = "!?#!@#@_REPLACE_ME_@#@!#?!";
 

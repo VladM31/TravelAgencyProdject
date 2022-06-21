@@ -15,23 +15,39 @@ public class FilterCourierTaskCourier extends FilterCourierTaskCore {
     private String emailAdmin;
     private String nameAdmin;
 
+    public String getEmailAdmin() {
+        return emailAdmin;
+    }
+
+    public void setEmailAdmin(String emailAdmin) {
+        this.emailAdmin = emailAdmin;
+    }
+
+    public String getNameAdmin() {
+        return nameAdmin;
+    }
+
+    public void setNameAdmin(String nameAdmin) {
+        this.nameAdmin = nameAdmin;
+    }
+
     public List<CourierTask> filtering(Long courierId, IDAOCourierTask<CourierTask> dao) {
         List<Predicate<CourierTask>> filterList = new ArrayList<>();
 
         List<CourierTask> list = super.filteringCore(courierId,dao,filterList);
 
         list = HandlerFilter.checkString(emailAdmin, list,
-                (email) -> dao.findByRoleAndIdUserAndEmailContaining(Role.ADMINISTRATOR, courierId, email),
+                (email) -> dao.findByRoleAndIdUserAndEmailContaining(Role.COURIER, courierId, email),
                 (email) -> filterList.add((task -> task.getEmailCourier().toLowerCase().contains((email.toUpperCase())))));
 
         list = HandlerFilter.checkString(nameAdmin, list,
-                (name) -> dao.findByRoleAndIdUserAndNameCourierContaining(Role.ADMINISTRATOR, courierId, name),
+                (name) -> dao.findByRoleAndIdUserAndNameCourierContaining(Role.COURIER, courierId, name),
                 (name) -> filterList.add((task -> task.getNameCourier().toLowerCase().contains((name.toLowerCase())))));
 
 
 
         if (list == HandlerFilter.LIST_IS_NOT_CREATED_FROM_DATABASE) {
-            return dao.findByRoleAndIdUser(Role.ADMINISTRATOR, courierId);
+            return dao.findByRoleAndIdUser(Role.COURIER, courierId);
         }
 
         return HandlerFilter.endFiltering(list, filterList);
