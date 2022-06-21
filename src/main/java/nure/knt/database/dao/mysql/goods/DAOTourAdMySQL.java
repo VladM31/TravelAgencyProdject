@@ -1,21 +1,17 @@
 package nure.knt.database.dao.mysql.goods;
 
 import nure.knt.database.dao.HandlerSqlDAO;
-import nure.knt.database.dao.mysql.entity.HandlerUser;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
 import nure.knt.database.idao.goods.IDAOTourAd;
 import nure.knt.database.idao.goods.ScriptTourAdWhere;
 import nure.knt.entity.enums.ConditionCommodity;
-import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.goods.TourAd;
-import nure.knt.entity.important.TravelAgency;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-import java.lang.reflect.Type;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -31,8 +27,9 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
     private static final String INSERT_INSIDE_EDIT_TOUR_AD = "INSERT INTO edit_tour_ad(confirmed,need_delete,whom_need_change_id,what_to_change) VALUE(?,?,?,?);";
     private static final String FIND_ID = "SELECT id FROM tour_ad " +
             "WHERE place = ? AND city = ? AND date_start = ? " +
-            "AND date_end = ? AND date_registration = ? " +
-            "AND cost_one_customer = ? AND travel_agency_id = ? AND type_state_id = ?";
+            "AND date_end = ? " +
+            "AND cost_one_customer = ? AND travel_agency_id = ? AND type_state_id = ? " +
+            "AND date_registration >= ? and date_registration <= ?";
     @Override
     public boolean editing(Long id, TourAd entity) {
 
@@ -437,18 +434,17 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
                 preStat.setString(++position, tourAd.getCity());
                 preStat.setDate(++position, Date.valueOf(tourAd.getDateStart()));
                 preStat.setDate(++position, Date.valueOf(tourAd.getDateEnd()));
-                preStat.setTimestamp(++position, Timestamp.valueOf(tourAd.getDateRegistration()));
+
                 preStat.setInt(++position, tourAd.getCostOneCustomer());
                 preStat.setLong(++position, tourAd.getTravelAgencyId());
                 preStat.setLong(++position, tourAd.getTypeState().getId());
+                preStat.setTimestamp(++position, Timestamp.valueOf(LocalDateTime.now().minusMinutes(1)));
+                preStat.setTimestamp(++position, Timestamp.valueOf(LocalDateTime.now().plusMinutes(1)));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
         }
-
-
-
 
         static TourAd resultSetToTourAd(ResultSet resultSet){
             TourAd tourAd = new TourAd();
@@ -499,14 +495,14 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
     private String script = "";
 
         @Override
-        public ScriptTourAdWhere idIs(Long id) {
+        public ScriptTourAdWhere idTravelAgencyIs(Long id) {
 
             script+=" travel_agency_id = "+id+" ";
             return this;
         }
 
         @Override
-        public ScriptTourAdWhere typeStateIs(Set<TypeState> types) {
+        public ScriptTourAdWhere typeStateIn(Set<TypeState> types) {
             String script =" type_state.name IN (";
             script+=this.enumToScript(types);
             this.addScript(script);
@@ -523,7 +519,7 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         }
 
         @Override
-        public ScriptTourAdWhere conditionCommodityIs(Set<ConditionCommodity> conditions) {
+        public ScriptTourAdWhere conditionCommodityIn(Set<ConditionCommodity> conditions) {
             String script =" condition_commodity.name IN (";
             script+=this.enumToScript(conditions);
             this.addScript(script);
@@ -532,7 +528,7 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
 
         private static final String WHERE_HIDDEN_ID = " tour_ad.hidden = ? ";
         @Override
-        public ScriptTourAdWhere isHidden(boolean hidden) {
+        public ScriptTourAdWhere hiddenIs(boolean hidden) {
 
             String script = WHERE_HIDDEN_ID.replace("?",""+hidden);
             this.addScript(script);
@@ -568,7 +564,7 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
 
             ScriptTourAdWhereMySQL scr = new ScriptTourAdWhereMySQL();
 
-            String str = scr.idIs(1l).conditionCommodityIs(Set.of(ConditionCommodity.CANCELED)).typeStateIs(Set.of(TypeState.REGISTERED, TypeState.EDITING)).get();
+            String str = scr.idTravelAgencyIs(1l).conditionCommodityIn(Set.of(ConditionCommodity.CANCELED)).typeStateIn(Set.of(TypeState.REGISTERED, TypeState.EDITING)).get();
             System.out.println(str);
         }
     }

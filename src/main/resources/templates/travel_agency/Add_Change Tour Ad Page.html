@@ -19,7 +19,8 @@
 <body class="main-body">
 
 
-    <form TH:action="${@environment.getProperty('travel.agency.create.tour.ad.url')}" class="box-main" th:object="${form}" method="POST">
+    <form th:action="${(itIsCreate) ? @environment.getProperty('travel.agency.create.tour.ad.url') :
+    @environment.getProperty('travel.agency.change.tour.ad.url')}" class="box-main" th:object="${form}" method="POST">
 
 
         <div style=" display: flex;justify-content: center;" >
@@ -73,6 +74,7 @@
         </div>
 
         <div style=" display: flex;justify-content: center; flex-direction: column;align-items: center; text-align: center;">
+            <input type="hidden" th:if="${form.idTourAd != null}" th:field="*{idTourAd}">
             <span th:if="${error_message}" th:text="${error_message}" style="color:red;"></span>
             <input type="submit" value="ПІДТВЕРДИТИ" class="submit-input">
         </div>

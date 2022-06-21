@@ -188,7 +188,8 @@
                 </div>
 
                 <div th:if="${haveButton}">
-                    <input id="MakeTheService" type="submit"  class="watch-travel-agency-other-submit" rows="2" th:value="${nameButton}" >
+
+                    <input id="MakeTheService" type="submit" th:formaction="@{${url_button}}" class="watch-travel-agency-other-submit" rows="2" th:value="${nameButton}" >
                 </div>
 
             </form>

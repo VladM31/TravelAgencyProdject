@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/","/sign_up","/sign_up_error_travel","/free/**","/customer-check-code","/menu","/confirm.mail.travel.agency")
+                .antMatchers("/","/sign_up","/free/**","/menu")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .failureUrl("/login?error=true")
                 .permitAll()
-                .defaultSuccessUrl("/hello",true);
+                .defaultSuccessUrl("/",true);
 
     }
 

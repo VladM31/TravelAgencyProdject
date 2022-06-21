@@ -135,7 +135,7 @@ class HendlerIMCForAll {
                 HendlerIMCForCustomer.setCustomer(model);
                 break;
             case TRAVEL_AGENCY:
-                HendlerIMCForTravelAgency.setTravelAgency(model,(TravelAgency)user );
+                HandlerIMCForTravelAgency.setTravelAgency(model,(TravelAgency)user );
                 break;
             case COURIER:
                 HendlerIMCForCourier.setCourier(model);
@@ -192,12 +192,16 @@ class HendlerIMCForCustomer{
     }
 }
 
-class HendlerIMCForTravelAgency{
+@Component
+@PropertySource("classpath:WorkerWithTravelAgency.properties")
+class HandlerIMCForTravelAgency {
     private static final String TRAVEL_AGENCY_NAME_CHOOSE = "Послуг";
     private static final String TRAVEL_AGENCY_URL_CHOOSE = "/";
     private static final String TRAVEL_AGENCY_NAME_THIRD_BUTTON = "Створити послугу";
     private static final String ATTRIBUTE_HAVE_RATING = "haveReting";
     private static final String ATTRIBUTE_RATING_STARS = "stars";
+    private static String ATTRIBUTE_FOR_URL_CREATE_TOUR_AD;
+    private static String URL_CREATE_TOUR_AD;
 
     static void setTravelAgency(Model model, TravelAgency travelAgency){
         HendlerIMCForAll.setAllInfo(model,
@@ -208,8 +212,16 @@ class HendlerIMCForTravelAgency{
                 HendlerIMCForAll.EMPTY_NAME);
         model.addAttribute(ATTRIBUTE_HAVE_RATING,true);
         model.addAttribute(ATTRIBUTE_RATING_STARS,TravelAgency.getRetingStars(travelAgency.getRating()));
+        model.addAttribute(ATTRIBUTE_FOR_URL_CREATE_TOUR_AD,URL_CREATE_TOUR_AD);
     }
 
+    @Autowired
+    public void setInformation(@Value("${profile.attribute.for.button.on.show.all.message}") String ATTRIBUTE_FOR_URL_CREATE_TOUR_AD,
+                               @Value("${travel.agency.create.tour.ad.url}") String URL_CREATE_TOUR_AD){
+
+        HandlerIMCForTravelAgency.ATTRIBUTE_FOR_URL_CREATE_TOUR_AD = ATTRIBUTE_FOR_URL_CREATE_TOUR_AD;
+        HandlerIMCForTravelAgency.URL_CREATE_TOUR_AD = URL_CREATE_TOUR_AD;
+    }
 }
 
 class HendlerIMCForCourier {
@@ -243,10 +255,17 @@ class HendlerIMCForAdministrations {
                 HendlerIMCForAll.EMPTY_NAME);
         model.addAttribute(ATTRIBUTE_ARE_YOU_ADMINS,true);
         model.addAttribute(ATTRIBUTE_NAME_ROLE,user.getRole());
+        model.addAttribute(ATTRIBUTE_FOR_URL_CREATE_TOUR_AD,"/");
     }
+
+    private static String ATTRIBUTE_FOR_URL_CREATE_TOUR_AD;
     @Autowired
     public void setAdministrationsUrlChoose(@Value("${admin.show.all.users.url}") String ADMINISTRATIONS_URL_CHOOSE){
         HendlerIMCForAdministrations.ADMINISTRATIONS_URL_CHOOSE = ADMINISTRATIONS_URL_CHOOSE;
+    }
+    @Autowired
+    public void setAttributeForUrlCreateTourAd(@Value("${profile.attribute.for.button.on.show.all.message}") String attributeForUrlCreateTourAd) {
+        ATTRIBUTE_FOR_URL_CREATE_TOUR_AD = attributeForUrlCreateTourAd;
     }
 }
 

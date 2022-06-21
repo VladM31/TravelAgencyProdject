@@ -35,6 +35,8 @@ public class TourAdForm {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDateTourAd, endDateTourAd;
 
+    private Long idTourAd;
+
     public TourAd toTourAd(Long travelAgencyId){
         TourAd tourAd = new TourAd();
 
@@ -73,6 +75,7 @@ public class TourAdForm {
 
         tourAd.setDateStart(form.startDateTourAd);
         tourAd.setDateEnd(form.endDateTourAd);
+
     }
 
     public TourAdForm(Integer cost, Float prosent, Integer numberOfPeople, String place,
@@ -90,6 +93,7 @@ public class TourAdForm {
     public TourAdForm(TourAd tourAd) {
         this(tourAd.getCostOneCustomer(),tourAd.getDiscountPercentage(),tourAd.getDiscountSizePeople(),tourAd.getPlace(),
                 tourAd.getCountry(),tourAd.getCity(),tourAd.getDateStart(),tourAd.getDateStart());
+        this.idTourAd = tourAd.getId();
     }
 
     public TourAdForm() {
@@ -157,6 +161,14 @@ public class TourAdForm {
 
     public void setEndDateTourAd(LocalDate endDateTourAd) {
         this.endDateTourAd = endDateTourAd;
+    }
+
+    public Long getIdTourAd() {
+        return idTourAd;
+    }
+
+    public void setIdTourAd(Long idTourAd) {
+        this.idTourAd = idTourAd;
     }
 
     @Override
