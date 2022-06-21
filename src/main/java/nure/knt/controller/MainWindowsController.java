@@ -73,7 +73,7 @@ public class MainWindowsController {
     @RequestMapping(value = "${main.pages.find.all.url}", method = {RequestMethod.GET})
     public String showPageForFindAllTourAd(Model model, FilterTourAdMainPage filter){
 
-        model.addAttribute("tourAds",filter.filtering(daoTourAd.where().typeStateIs(Set.of(TypeState.REGISTERED)),daoTourAd));
+        model.addAttribute("tourAds",filter.filtering(daoTourAd.where().typeStateIn(Set.of(TypeState.REGISTERED)),daoTourAd));
         model.addAttribute("filter",filter);
         model.addAttribute("countries",countries.getCountry());
         return PAGE_TOUR_ADS;

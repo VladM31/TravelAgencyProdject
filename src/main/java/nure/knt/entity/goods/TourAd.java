@@ -184,7 +184,11 @@ public class TourAd {
         this.conditionCommodity = conditionCommodity;
     }
 
-    public TourAd(Long id, int costOneCustomer, int costService, int discountSizePeople, int orderQuantity, float discountPercentage, float ratingAgency, Long travelAgencyId, boolean hidden, LocalDate dateStart, LocalDate dateEnd, LocalDateTime dateRegistration, String place, String city, String country, String nameAgency, TypeState typeState, ConditionCommodity conditionCommodity) {
+    public TourAd(Long id, int costOneCustomer, int costService, int discountSizePeople, int orderQuantity,
+                  float discountPercentage, float ratingAgency, Long travelAgencyId,
+                  boolean hidden, LocalDate dateStart, LocalDate dateEnd, LocalDateTime dateRegistration,
+                  String place, String city, String country, String nameAgency, TypeState typeState,
+                  ConditionCommodity conditionCommodity) {
         this.id = id;
         this.costOneCustomer = costOneCustomer;
         this.costService = costService;
