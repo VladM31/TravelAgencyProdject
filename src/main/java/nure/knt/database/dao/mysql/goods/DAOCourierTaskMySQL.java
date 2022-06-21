@@ -55,19 +55,6 @@ public class DAOCourierTaskMySQL extends MySQLCore implements IDAOCourierTask<Co
         }
     }
 
-    private static final String ADMIN_ROLE_AND_TASK_ID = " WHERE admin.id = ? AND courier_task.id = ? ";
-    private static final String COURIER_ROLE_AND_TASK_ID = " WHERE courier.id = ? AND courier_task.id = ? ";
-    @Override
-    public CourierTask findByRoleAndIdUserAndTaskId(Role role, Long id, Long taskId) {
-        if(role.equals(Role.COURIER)) {
-            return HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,
-                    HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_TASK,COURIER_ROLE_AND_TASK_ID,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
-                    HandlerCourierTask::resultSetToCourierTask, id, taskId);
-        }
-        return HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,
-                HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_TASK,ADMIN_ROLE_AND_TASK_ID,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
-                HandlerCourierTask::resultSetToCourierTask, id, taskId);
-    }
 
     @Override
     public boolean save(CourierTask entity) {

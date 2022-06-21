@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface IDAOCourierTask<Task extends CourierTask> extends IDAOCoreSave<Task>, IDAOUpdateConditionCommodity {
-    public CourierTask findByRoleAndIdUserAndTaskId(Role role, Long id, Long taskId);
+
     public List<Task> findByRoleAndIdUser(Role role, Long id);
     public Task findByRoleAndIdUserAndTaskId(Role role, Long id, Long taskId);
     public List<Task> findByRoleAndIdUserAndCityContaining(Role role,Long id,String city );
