@@ -65,4 +65,15 @@ public class OrderFromTourAdForTravelAgency extends OrderFromTourAdCore {
 
     public OrderFromTourAdForTravelAgency() {
     }
+
+    @Override
+    public String toString() {
+        return "OrderFromTourAdForTravelAgency{" +
+                "firstnameCustomer='" + firstnameCustomer + '\'' +
+                ", lastnameCustomer='" + lastnameCustomer + '\'' +
+                ", emailCustomer='" + emailCustomer + '\'' +
+                ", numberCustomer='" + numberCustomer + '\'' +
+                ", male=" + male +
+                "} \n" + super.toString() + "\n";
+    }
 }
