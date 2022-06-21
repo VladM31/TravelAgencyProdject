@@ -40,7 +40,7 @@ const btn = document.querySelector('#selectSort');
 const sb = document.querySelector('#selectSort');
 const styleSelectSort = "user-selected-button";
 btn.onclick = (event) => {
-
+    event.preventDefault();
     if(btn.classList.contains(styleSelectSort)){
       event.preventDefault();
       getMethodBySelectedName(sb.options[sb.selectedIndex].id);
@@ -96,7 +96,7 @@ function getMethodBySelectedName(selectedName){
       return;
     }
     if(selectedName == 'sortByDateMade'){
-      sortDivs(classDateMade,how_sort_number);
+      sortDivs(classDateMade,how_sort_string);
       return;
     }
     if(selectedName == 'sortByState'){

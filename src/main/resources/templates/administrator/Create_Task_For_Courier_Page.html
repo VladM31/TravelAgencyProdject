@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="../../node_modules/normalize.css/normalize.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/administrator_css/Create_Task_For_Courier_CSS.css}" />
+  </head>
+  <body>
+    <main>
+      <div class="container">
+        <h2>Оформлення завдання</h2>
+        <form class="form" th:action="${@environment.getProperty('admin.profile.create.courier.task.url')}" th:method="POST" th:object="${form}">
+          <div class="first-part">
+            <div class="first-part-input">
+              <label>Кількість листівок</label>
+              <input th:field="*{numberOfFlyers}" />
+            </div>
+            <div class="first-part-select">
+              <label>Виберіть кур’єра</label>
+              <select th:field="*{infoCourier}">
+                <option th:each="info:${information}" th:text="${info}" th:value="${info}"></option>
+              </select>
+            </div>
+          </div>
+          <div class="second-part">
+            <label>Опис</label>
+            <textarea cols="150" rows="20" th:field="*{describe}"></textarea>
+          </div>
+          <div class="third-part">
+            <input type="button" value="НАЗАД" />
+            <input type="submit" value="ОФОРМИТИ"/>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

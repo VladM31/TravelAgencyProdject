@@ -1,5 +1,6 @@
 package nure.knt.controller.profile;
 
+
 import nure.knt.controller.HandlerController;
 import nure.knt.database.idao.entity.IDAOUserOnly;
 import nure.knt.database.idao.entity.IDAOUserSQL;
@@ -44,6 +45,7 @@ public class ControllerAdministrator {
         System.out.println(filter);
         return PAGE_FOR_SHOW_ALL_USERS;
     }
+
 
     @RequestMapping(value="${admin.show.all.users.url}",method = RequestMethod.PATCH)
     public String changeActiveUser(Long id,Boolean active){

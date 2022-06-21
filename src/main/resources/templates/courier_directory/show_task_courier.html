@@ -23,15 +23,12 @@
 
 <div class="main-body-top" style="display: flex; justify-content: center; align-items: center; flex-direction: column">
     <h1 class="main-travel-agency-naming" th:text="${user.name}">
-        Назва турагенції
+        Ім'я кур'єра
     </h1>
-    <h3  th:text="${user.role}">
-
-    </h3>
 </div>
 
     <div id="bottom" class="box-main">
-        <form id="filter-right" class="filter-mail-block-for-all-info" th:action="${@environment.getProperty('admin.profile.show.courier.task')}" th:object="${filter}" th:method="GET">
+        <form id="filter-right" class="filter-mail-block-for-all-info" th:action="${@environment.getProperty('courier.profile.show.task.url')}" th:object="${filter}" th:method="GET">
             <div>
                 <h2 style="font-family: 'Neucha';font-style: normal;font-size: 45px;">
                     <b>
@@ -42,7 +39,7 @@
 
             <div id="emailCourier">
 
-                <input type="text" placeholder="Поштою кур'єра" class="box-filter" th:field="*{emailCourier}">
+                <input type="text" placeholder="Поштою адміна" class="box-filter" th:field="*{emailAdmin}">
             </div>
 
             <div id="city">
@@ -50,11 +47,7 @@
                 <input type="text" placeholder="Назвою міста" class="box-filter" th:field="*{city}">
             </div>
 
-            <div id="nameCourier" th:if="${RoleAdmin}">
-                <input type="text" placeholder="Іменем кур'єра" class="box-filter" th:field="*{nameCourier}">
-            </div>
-
-            <div id="nameGiveTask" th:unless="${RoleAdmin}">
+            <div id="nameGiveTask">
 
                 <input type="text" placeholder="Іменем відправника" class="box-filter" th:field="*{nameAdmin}">
             </div>
@@ -120,8 +113,8 @@
                         <p class="info-text-bottom item_city" th:text="${task.city}"> Одесса</p>
                     </div>
                     <div class="box-text">
-                        <small class="info-text-top"> Пошта кур'єра</small>
-                        <p class="info-text-bottom item_email-courier" th:text="${task.emailCourier}"> laft2@email.com</p>
+                        <small class="info-text-top"> Пошта відправника</small>
+                        <p class="info-text-bottom item_email-courier" th:text="${task.emailAdmin}"> laft2@email.com</p>
                     </div>
                 </div>
                 <div class="box-info-text">
@@ -144,21 +137,21 @@
                 <div class="box-info-text">
 
                     <div class="box-text-and-buttons ">
-                        <form class="box-buttons" th:action="${@environment.getProperty('admin.profile.show.courier.task')}" th:method="PATCH">
-                            <input type="hidden" name="circle" value="123">
-                            <input type="hidden" class="small-button color-gray" value="Виконати">
-                            <input type="hidden" class="small-button color-green" value="Підтвердити">
-                            <input type="submit" class="small-button color-red" value="Скасувати" th:if="${RoleAdmin
-                            && (task.conditionCommodity.equals(T(nure.knt.entity.enums.ConditionCommodity).CONFIRMED)
-                            || task.conditionCommodity.equals(T(nure.knt.entity.enums.ConditionCommodity).NOT_CONFIRMED))}">
-                            <input type="button" class="small-button color-gray" value="Скасувати" th:if="${RoleAdmin
-                            && (task.conditionCommodity.equals(T(nure.knt.entity.enums.ConditionCommodity).CANCELED)
-                            || task.conditionCommodity.equals(T(nure.knt.entity.enums.ConditionCommodity).GONE))}">
-                            <input type="hidden" name="id" th:value="${task.id}">
+                        <form class="box-buttons">
+                            <input type="submit" class="small-button color-green" value="Виконати" th:if="${buttonGone.apply(task.conditionCommodity)}"
+                                   th:formaction="${@environment.getProperty('courier.profile.change.state.gone.url')}"
+                                   th:formmethod="POST">
+                            <input type="submit" class="small-button color-green" value="Підтвердити" th:if="${buttonConfirmed.apply(task.conditionCommodity)}"
+                                   th:formaction="${@environment.getProperty('courier.profile.change.state.confirmed.url')}"
+                                   th:formmethod="POST">
+                            <input type="submit" class="small-button color-red" value="Скасувати" th:if="${buttonCanceled.apply(task.conditionCommodity)}"
+                                   th:formaction="${@environment.getProperty('courier.profile.change.state.canceled.url')}"
+                                   th:formmethod="POST">
+                            <input type="hidden" name="idTask" th:value="${task.id}">
                         </form>
-                        <div class=" box-text box-state" th:classappend="${ChooseColor.apply(task.conditionCommodity)}">
+                        <div class=" box-text box-state" th:classappend="${chooseColor.apply(task.conditionCommodity)}">
                             <small class="info-text-top"> Стан</small>
-                            <p class="info-text-bottom item_state" th:text="${T(nure.knt.entity.enums.ConditionCommodity).getUkraineName(task.conditionCommodity)}"> Скасовано</p>
+                            <p class="info-text-bottom item_state" th:text="${ukrNameState.apply(task.conditionCommodity)}"> Скасовано</p>
                         </div>
                     </div>
 
@@ -196,27 +189,20 @@
                 </div>
             </div>
             <br>
-            <form class="width-right box-rigth" th:action="${@environment.getProperty('admin.profile.create.courier.task.url')}" th:method="GET">
-                <h4 class="make-task-lable margin-make-task">Оформити завдання</h4>
-
-                <input type=" text" list="countries" placeholder="Введіть країну" name="country" required
-                    class="box-filter text-over-input margin-make-task">
-
-                    <datalist name="country" id="countries">
-                        <option th:each="country : ${countries}" th:value="${country}" th:text="${country}">...</option>
-                    </datalist>
-
-                    <input type="text" placeholder="Введіть місто" class="box-filter text-over-input margin-make-task" name="city">
-
-                    <input type="submit" class="box-filter submit-make-task margin-make-task" value="Вибрати кур'єра">
-
-            </form>
-            <br>
             <form action="" class="watch-travel-agency">
 
                 <div>
                     <input id="ChangeProfile" type="submit" class="watch-travel-agency-other-submit " rows="2"
                         value="Редагувати профіль">
+                </div>
+<!--                <p th:text="${user.doesHeWant ? false : showButton}"></p>-->
+<!--                <p th:text="${user.doesHeWant}"></p>-->
+<!--                <p th:text="${showButton}"></p>-->
+                <div th:if="${user.doesHeWant ? false : showButton}">
+                    <input id="RequestTask" type="submit" class="watch-travel-agency-other-submit " rows="2"
+                           value="Запросити завдання"
+                           th:formaction="${@environment.getProperty('courier.profile.request.task.url')}"
+                           th:formmethod="POST">
                 </div>
 
                 <div>
