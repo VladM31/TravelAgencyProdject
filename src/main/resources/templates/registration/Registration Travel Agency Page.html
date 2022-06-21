@@ -77,7 +77,7 @@
             </div>
             <div class="flex-column">
                 <h5 class="text-up">ЕГРПОУ або РНУКПН</h5>
-                <input type="text" class="box-input" minlength="8" maxlength="15" pattern="^((?[0-9]).)*$"  name="EGRPOYorRNYKPN" th:field="*{EGRPOYorRNYKPN}">
+                <input type="text" class="box-input" minlength="8" maxlength="15" pattern="^((?[0-9]).)*$"   th:field="*{EGRPOYorRNYKPN}">
             </div>
         </div>
         <div style=" display: flex;justify-content: end; padding-right: 8%;">
@@ -92,7 +92,9 @@
                 </main>
             </main>
         </div>
-
+        <ul style="color: red;display:flex; justify-content: center;" th:if="${error_message}">
+            <li  th:text="${error_message}" />
+        </ul>
         <div style=" display: flex;justify-content: center;">
             <input type="submit" value="ПІДТВЕРДИТИ" class="submit-input">
         </div>
