@@ -38,9 +38,9 @@ public class DAOTravelAgencyRegistration extends RegistrationCore<TravelAgency> 
 
     private static final String UPDATE_CODE_CONFIRMED = "UPDATE travel_agency SET code_confirmed = true WHERE user_id = ?;";
     @Override
-    public boolean saveForConfirmation(TravelAgency user) {
+    public boolean saveForConfirmation(Long userId) {
         try(java.sql.PreparedStatement statement = super.conn.getSqlPreparedStatement(UPDATE_CODE_CONFIRMED)){
-            statement.setLong(1,user.getId());
+            statement.setLong(1,userId);
             return statement.executeUpdate() != 0;
         } catch (SQLException e) {
             e.printStackTrace();

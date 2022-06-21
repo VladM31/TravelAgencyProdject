@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Оформити замовлення</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" th:href="@{/css/customer_css/Create_Order_CSS.css}" />
+</head>
+
+<body>
+
+  <main>
+    <div class="container">
+      <form th:action="${@environment.getProperty('customer.create.order.from.travel.agency.url')}" class="form" th:object="${form}" th:method="POST">
+        <input id="prosent" type="hidden" th:field="*{prosent}"/>
+        <input id="cost" type="hidden" th:field="*{cost}"/>
+        <input id="numberOfPeoplMax" type="hidden" th:field="*{numberOfPeopleMax}"/>
+        <input id="constEndDate" type="hidden" th:field="*{constEndDateOrder}"/>
+        <input id="tourAdId" type="hidden" th:field="*{tourAdId}"/>
+        <h2>Формування заяви</h2>
+        <div class="inputs">
+          <label >Місто відправлення</label>
+          <input type="text" required min="2" max="60" th:field="*{city}"/>
+          <label for="startDate">Дата початку</label>
+          <input type="date" id="startDate" onchange="getResult(numberOfPeopl.value)"  th:min="${T(java.time.LocalDate).now().plusDays(1)}"
+                 required th:max="*{constEndDateOrder}" th:field="*{startDateOrder}"/>
+          <label for="endDate">Дата кінця</label>
+          <input type="date" id="endDate" onchange="getResult(numberOfPeopl.value)"  th:min="${T(java.time.LocalDate).now().plusDays(1)}"
+                 required th:max="*{constEndDateOrder}" th:field="*{endDateOrder}"/>
+          <label for="numberOfPeopl">Кількість людей</label>
+          <input type="number" id="numberOfPeopl" onchange="getResult(this.value)" min="1" max="1000" required th:field="*{countPeople}"/>
+          <label class="special-input" >Поточна ціна: <span class="rezult" id="rezult" th:text="${form.calculate()}"></span> грн.</label>
+        </div>
+        <p style="color:red; display: flex; justify-content: center;" th:if="${error_message}" th:text="${error_message}"></p>
+        <input type="submit" value="ПІДТВЕРДИТИ" />
+      </form>
+    </div>
+  </main>
+
+  <script th:src="@{/js/create_order_code.js}"></script>
+</body>
+
+</html>

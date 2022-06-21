@@ -37,46 +37,15 @@ public class FilterOrdersForCustomer  extends  FilterOrdersCore{
     public List<OrderFromTourAdForCustomer> filtering(Long customerId, IDAOOrderFromTourAdCustomer<OrderFromTourAdForCustomer> dao){
         List<Predicate<OrderFromTourAdForCustomer>> filterList = new ArrayList<>();
 
-        List<OrderFromTourAdForCustomer> list =  HandlerFilter.checkString(nameTravelAgency,null,
+        List<OrderFromTourAdForCustomer> list = FilterOrdersCore.filteringCore(this,customerId,dao,filterList);
+
+        list =  HandlerFilter.checkString(nameTravelAgency,list,
                 (nameTA) -> dao.findByNameTravelAgencyContaining(customerId,nameTA),
                 (nameTA) -> filterList.add((order -> order.getNameTravelAgency().toLowerCase().contains(nameTA.toLowerCase()))));
-
-        list =  HandlerFilter.checkString(super.getCountry(),list,
-                (nameOrderCountry) -> dao.findByCountryContaining(customerId,nameOrderCountry),
-                (nameOrderCountry) -> filterList.add((order -> order.getCountry().toLowerCase().contains(nameOrderCountry.toLowerCase()))));
-
-        list =  HandlerFilter.checkString(super.getCity(),list,
-                (nameOrderCity) -> dao.findByCityContaining(customerId,nameOrderCity),
-                (nameOrderCity) -> filterList.add((order -> order.getCity().toLowerCase().contains(nameOrderCity.toLowerCase()))));
 
         list =  HandlerFilter.checkString(restingPlace,list,
                 (namePlace) -> dao.findByRestingPlaceContaining(customerId,namePlace),
                 (namePlace) -> filterList.add((order -> order.getRestingPlace().toLowerCase().contains(namePlace.toLowerCase()))));
-
-        list = HandlerFilter.checkNumberBetween(super.getStartCost(),super.getEndCost(),Integer.MIN_VALUE,Integer.MAX_VALUE,list,
-                (start,end) -> dao.findByCostBetween(customerId,start,end),
-                (start,end) -> filterList.add((order -> order.getCost() >= start && order.getCost() <= end)));
-
-        list = HandlerFilter.checkNumberBetween(super.getStartNumberOfPeople(),super.getEndNumberOfPeople(),Integer.MIN_VALUE,Integer.MAX_VALUE,list,
-                (start,end) -> dao.findByNumberOfPeopleBetween(customerId,start,end),
-                (start,end) -> filterList.add((order -> order.getNumberOfPeople() >= start && order.getNumberOfPeople() <= end)));
-
-        list = HandlerFilter.checkDateTime(super.getStartDateRegistration(),super.getEndDateRegistration(),
-                HandlerFilter.MIN_LOCAL_DATE_TIME, HandlerFilter.MAX_LOCAL_DATE_TIME,list,
-                (start,end) -> dao.findByDateRegistrationBetween(customerId,start,end),
-                (start,end) -> filterList.add((order -> order.getDateRegistration().isAfter(start) && order.getDateRegistration().isBefore(end))));
-
-        list = HandlerFilter.checkDate(super.getStartDateOrder(),super.getEndDateOrder(),list,
-                (startDate,endDate) -> dao.findByStartDateOrderAfterAndEndDateOrderBefore(customerId,startDate,endDate),
-                (startDate,endDate) ->filterList.add((order -> order.getDateStart().isAfter(startDate) && order.getDateEnd().isBefore(endDate))),
-                (date) -> dao.findByStartDateOrderAfter(customerId,date),
-                (date) -> filterList.add((order -> order.getDateStart().isAfter(date))),
-                (date) -> dao.findByEndDateOrderBefore(customerId,date),
-                (date) -> filterList.add((order -> order.getDateEnd().isBefore(date))));
-
-        list = HandlerFilter.checkEnums(super.getConditionCommodities(),list,
-                (setEnum) -> dao.findByConditionCommodities(customerId,setEnum),
-                (setEnum) -> filterList.add((order -> HandlerFilter.isEnumFromCollection(super.getConditionCommodities(),order.getConditionCommodity()))));
 
         if(list == HandlerFilter.LIST_IS_NOT_CREATED_FROM_DATABASE){
             return dao.findAllById(customerId);

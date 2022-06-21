@@ -10,7 +10,7 @@ public class OrderFromTourAdForTravelAgency extends OrderFromTourAdCore {
     private String lastnameCustomer;
     private String emailCustomer;
     private String numberCustomer;
-    private boolean male;
+    private Boolean male;
 
     public String getFirstnameCustomer() {
         return firstnameCustomer;
@@ -44,11 +44,11 @@ public class OrderFromTourAdForTravelAgency extends OrderFromTourAdCore {
         this.numberCustomer = numberCustomer;
     }
 
-    public boolean isMale() {
+    public Boolean isMale() {
         return male;
     }
 
-    public void setMale(boolean male) {
+    public void setMale(Boolean male) {
         this.male = male;
     }
 

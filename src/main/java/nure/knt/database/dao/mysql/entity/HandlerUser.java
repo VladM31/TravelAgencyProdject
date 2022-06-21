@@ -175,11 +175,13 @@ class HandlerUserPartScript{
     public static final String WHERE_EMAIL_IS = " user.email = ? ";
     public static final String WHERE_NUMBER_IS = " user.number = ? ";
 
+    public static final String WHERE_COUNTRY_NAME_CONTAINING = " country.name LIKE ? ";
     public static final String WHERE_USERNAME_CONTAINING = " user.username LIKE ? ";
     public static final String WHERE_NUMBER_CONTAINING = " user.number LIKE ? ";
     public static final String WHERE_EMAIL_CONTAINING = " user.email LIKE ? ";
     public static final String WHERE_NAME_CONTAINING = " user.name LIKE ? ";
 
     public static final String WHERE_USER_ID_IN = " user.id IN(" + HandlerSqlDAO.REPLACE_SYMBOL + ") ";
+
 
 }

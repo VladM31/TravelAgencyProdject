@@ -2,7 +2,6 @@
 
 .main-body{
     background: url(../images/place_for_messages/show_all_messages_background.png);
-    position: absolute;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: 100% 100%;

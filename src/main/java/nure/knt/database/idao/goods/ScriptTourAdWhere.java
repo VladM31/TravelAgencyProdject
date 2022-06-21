@@ -9,7 +9,8 @@ import java.util.function.Supplier;
 public interface ScriptTourAdWhere extends Supplier<String> {
 
 
-    public ScriptTourAdWhere idIs(Long id);
-    public ScriptTourAdWhere typeStateIs(Set<TypeState> types);
-    public ScriptTourAdWhere conditionCommodityIs(Set<ConditionCommodity> conditions);
+    public ScriptTourAdWhere idTravelAgencyIs(Long id);
+    public ScriptTourAdWhere typeStateIn(Set<TypeState> types);
+    public ScriptTourAdWhere conditionCommodityIn(Set<ConditionCommodity> conditions);
+    public ScriptTourAdWhere hiddenIs(boolean hidden);
 }
