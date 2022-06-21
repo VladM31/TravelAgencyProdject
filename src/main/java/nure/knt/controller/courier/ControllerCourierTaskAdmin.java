@@ -23,10 +23,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import java.util.Locale;
 import java.util.function.Function;
 
-
+@PropertySource("classpath:WorkerWithAdministrator.properties")
 
 @Controller
-@PropertySource("classpath:WorkerWithAdministrator.properties")
 public class ControllerCourierTaskAdmin {
     private final String PAGE_NAME_COURIER_TASKS = "courier_directory/show_task";
 

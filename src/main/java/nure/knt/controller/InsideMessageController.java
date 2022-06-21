@@ -224,9 +224,17 @@ class HandlerIMCForTravelAgency {
     }
 }
 
+@Component
+@PropertySource("classpath:WorkerWithCourier.properties")
 class HendlerIMCForCourier {
     private static final String COURIER_NAME_CHOOSE = "Завдання";
-    private static final String COURIER_URL_CHOOSE = "/";
+
+    @Autowired
+    public void setCourierUrlChoose(@Value("${courier.profile.show.task.url}") String courierUrlChoose) {
+        COURIER_URL_CHOOSE = courierUrlChoose;
+    }
+
+    private static String COURIER_URL_CHOOSE = "/";
 
     static void setCourier(Model model){
         HendlerIMCForAll.setAllInfo(model,

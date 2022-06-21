@@ -207,7 +207,9 @@
 
                 <div>
                     <input id="WriteMessage" type="submit" class="watch-travel-agency-other-submit" rows="2"
-                        value="Написати повідомлення">
+                        value="Написати повідомлення"
+                           th:formaction="@{/send-message}"
+                           th:formmethod="GET">
                 </div>
 
             </form>
