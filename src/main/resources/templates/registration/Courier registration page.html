@@ -29,33 +29,42 @@
           <div class="wrapper">
             <div class="inputs">
               <div>
-                <label >Ім’я</label>
-                <input type="text" minlength="2" maxlength="101" pattern="^((?![/-=;*+?!]).)*$" th:field = "*{name}" />
-                <label >Номер телефону</label>
-                <input type="text" minlength="10" maxlength="10" pattern="\d{10}" th:field = "*{number}" />
-                <label >Логін</label>
-                <input type="text" minlength="2" maxlength="60" pattern="^((?![/;/-/=*+?!]).)*$" th:field = "*{username}"/>
-                <label >Місто</label>
-                <input type="text" id="citys-choice" minlength="2" maxlength="60" pattern="^((?![/;-=*+?!]).)*$"th:field = "*{city}"/>
-                <label >Дата народження</label>
+                <label for="">Ім’я</label>
+                <input type="text" th:field = "*{name}" />
+                <label for="">Номер телефону</label>
+                <input type="number" th:field = "*{number}" />
+                <label for="">Логін</label>
+                <input type="text"  th:field = "*{username}"/>
+                <label for="">Місто</label>
+                <input
+                  type="text"
+                  id="citys-choice"
+                  th:field = "*{city}"
+                />
+                <label for="">Дата народження</label>
                 <input type="date"  th:field = "*{birthDate}"/>
               </div>
               <div>
-                <label >Пароль</label>
-                <input type="text" minlength="8" maxlength="60"  th:field = "*{password}"/>
-                <label >Поштова адреса</label>
-                <input type="email" minlength="5" maxlength="60" th:field = "*{email}"/>
-                <label >Адреса перебування</label>
-                <input type="text" minlength="2" maxlength="60" pattern="^((?![/;/-/=*+?!]).)*$" th:field = "*{address}"/>
-                <label >Країна</label>
-                <input type="text" list="countries-name" id="country-choice" minlength="2"  pattern="^((?![/;/=*+?!]).)*$" th:field = "*{country}"/>
+                <label for="">Пароль</label>
+                <input type="text" th:field = "*{password}"/>
+                <label for="">Поштова адреса</label>
+                <input type="text" th:field = "*{email}"/>
+                <label for="">Адреса перебування</label>
+                <input type="text" th:field = "*{address}"/>
+                <label for="">Країна</label>
+                <input
+                  type="text"
+                  list="countries-name"
+                  id="country-choice"
+                  th:field = "*{country}"
+                />
                 <datalist name="country" id="countries-name">
                   <option th:each="country : ${countries}" th:value="${country}" th:text="${country}">...</option>
                 </datalist>
               </div>
             </div>
 
-            <ul style="color:red; display:flex; justify-content:center; margin-right: 9%;" th:if="${error}">
+            <ul style="color:red; display:flex; justify-content:center;" th:if="${error}">
               <li th:text="${error}" />
             </ul>
 

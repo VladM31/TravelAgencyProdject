@@ -1,16 +1,10 @@
 package nure.knt.forms.entities;
 
-import nure.knt.entity.enums.Role;
-import nure.knt.entity.enums.TypeState;
-import nure.knt.entity.important.Courier;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class CourierForm extends UserForm {
 
@@ -19,7 +13,7 @@ public class CourierForm extends UserForm {
     @NotBlank(message = "Ім'я не повинен бути з пробілами")
     private String name;
 
-    @Pattern(regexp = "^((?![/-/=*+?!]).)*$",message = "Не повино в адресі бути знаків \"/-=*+?!\"")
+    @Pattern(regexp = "^((?![/-=*+?!]).)*$",message = "Не повино в адресі бути знаків \"/-=*+?!\"")
     @Size(min=2,max=100, message = "В адресі повинно бути більше 2 і не менше 100 символів")
     @NotBlank(message = "Адреса не повинна бути з пробілами")
     private String address;
@@ -30,7 +24,6 @@ public class CourierForm extends UserForm {
     private String city;
 
     @NotNull(message =" Введіть дату")
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
 
@@ -76,37 +69,6 @@ public class CourierForm extends UserForm {
         this.address = address;
         this.city = city;
         this.birthDate = birthDate;
-    }
-
-    public Courier toCourier(){
-        Courier courier = new Courier();
-
-        CourierForm.formToCourier(this,courier);
-
-        courier.setUsername(super.getUsername());
-        courier.setPassword(super.getPassword());
-        courier.setActive(true);
-        courier.setDateRegistration(LocalDateTime.now());
-        courier.setRole(Role.COURIER);
-        courier.setTypeState(TypeState.REGISTRATION);
-
-        return courier;
-    }
-
-    public Courier toCourier(Courier courier){
-
-        return courier;
-    }
-
-    private static void formToCourier(CourierForm courierForm,Courier courier){
-        courier.setNumber(courierForm.getNumber());
-        courier.setEmail(courierForm.getEmail());
-        courier.setCountry(courierForm.getCountry());
-
-        courier.setName(courierForm.name);
-        courier.setCity(courierForm.city);
-        courier.setAddress(courierForm.address);
-        courier.setDateBirth(courierForm.birthDate);
     }
 
     @Override
