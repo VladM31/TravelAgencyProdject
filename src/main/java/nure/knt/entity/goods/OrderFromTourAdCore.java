@@ -1,6 +1,8 @@
 package nure.knt.entity.goods;
 
 import nure.knt.entity.enums.ConditionCommodity;
+import nure.knt.forms.filter.HandlerFilter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -12,8 +14,10 @@ public class OrderFromTourAdCore {
     private String city;
     private int cost;
     private int numberOfPeople;
+
     private LocalDate dateStart;
     private LocalDate dateEnd;
+
     private LocalDateTime dateRegistration;
     private ConditionCommodity conditionCommodity;
 

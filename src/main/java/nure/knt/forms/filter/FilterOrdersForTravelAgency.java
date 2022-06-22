@@ -16,33 +16,33 @@ public class FilterOrdersForTravelAgency extends FilterOrdersCore {
     private Boolean male;
     private Boolean female;
 
-    public List<OrderFromTourAdForTravelAgency> filtering(Long travelAgencyId, IDAOOrderFromTourAdTravelAgency<OrderFromTourAdForTravelAgency> dao){
+    public List<OrderFromTourAdForTravelAgency> filtering(Long tourAdId, IDAOOrderFromTourAdTravelAgency<OrderFromTourAdForTravelAgency> dao){
         List<Predicate<OrderFromTourAdForTravelAgency>> filterList = new ArrayList<>();
 
-        List<OrderFromTourAdForTravelAgency> list = FilterOrdersCore.filteringCore(this,travelAgencyId,dao,filterList);
+        List<OrderFromTourAdForTravelAgency> list = FilterOrdersCore.filteringCore(this,tourAdId,dao,filterList);
 
         list = HandlerFilter.checkString(this.firstnameCustomer,list,
-                (nameFirst) -> dao.findByFirstnameContaining(travelAgencyId,nameFirst),
+                (nameFirst) -> dao.findByFirstnameContaining(tourAdId,nameFirst),
                 (nameFirst) -> filterList.add(order -> HandlerFilter.containsToLowerCase(order.getFirstnameCustomer(),nameFirst)));
 
         list = HandlerFilter.checkString(this.lastnameCustomer,list,
-                (nameLast) -> dao.findByLastnameContaining(travelAgencyId,nameLast),
+                (nameLast) -> dao.findByLastnameContaining(tourAdId,nameLast),
                 (nameLast) -> filterList.add(order -> HandlerFilter.containsToLowerCase(order.getLastnameCustomer(),nameLast)));
 
         list = HandlerFilter.checkString(this.emailCustomer,list,
-                (nameEmail) -> dao.findByEmailContaining(travelAgencyId,nameEmail),
+                (nameEmail) -> dao.findByEmailContaining(tourAdId,nameEmail),
                 (nameEmail) -> filterList.add(order -> HandlerFilter.containsToLowerCase(order.getEmailCustomer(),nameEmail)));
 
         list = HandlerFilter.checkString(this.numberCustomer,list,
-                (number) -> dao.findByNumberContaining(travelAgencyId,number),
+                (number) -> dao.findByNumberContaining(tourAdId,number),
                 (number) -> filterList.add(order -> HandlerFilter.containsToLowerCase(order.getNumberCustomer(),number)));
 
         list = HandlerFilter.checkTwoBooleanForOneState(this.male,this.female,list,
-                (isMale) -> dao.findByMaleIs(travelAgencyId,isMale),
+                (isMale) -> dao.findByMaleIs(tourAdId,isMale),
                 (isMale) -> filterList.add(order -> order.isMale().equals(isMale)));
 
         if(list == HandlerFilter.LIST_IS_NOT_CREATED_FROM_DATABASE){
-            return dao.findAllById(travelAgencyId);
+            return dao.findAllById(tourAdId);
         }
 
         return HandlerFilter.endFiltering(list,filterList);
