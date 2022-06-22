@@ -196,7 +196,7 @@ class HendlerIMCForCustomer{
 @PropertySource("classpath:WorkerWithTravelAgency.properties")
 class HandlerIMCForTravelAgency {
     private static final String TRAVEL_AGENCY_NAME_CHOOSE = "Послуг";
-    private static final String TRAVEL_AGENCY_URL_CHOOSE = "/";
+    private static String TRAVEL_AGENCY_URL_CHOOSE ;
     private static final String TRAVEL_AGENCY_NAME_THIRD_BUTTON = "Створити послугу";
     private static final String ATTRIBUTE_HAVE_RATING = "haveReting";
     private static final String ATTRIBUTE_RATING_STARS = "stars";
@@ -217,8 +217,11 @@ class HandlerIMCForTravelAgency {
 
     @Autowired
     public void setInformation(@Value("${profile.attribute.for.button.on.show.all.message}") String ATTRIBUTE_FOR_URL_CREATE_TOUR_AD,
-                               @Value("${travel.agency.create.tour.ad.url}") String URL_CREATE_TOUR_AD){
+                               @Value("${travel.agency.create.tour.ad.url}") String URL_CREATE_TOUR_AD,
+                               @Value("${travel.agency.profile.show.tour.ads.url}") String TRAVEL_AGENCY_URL_CHOOSE){
 
+
+        HandlerIMCForTravelAgency.TRAVEL_AGENCY_URL_CHOOSE = TRAVEL_AGENCY_URL_CHOOSE;
         HandlerIMCForTravelAgency.ATTRIBUTE_FOR_URL_CREATE_TOUR_AD = ATTRIBUTE_FOR_URL_CREATE_TOUR_AD;
         HandlerIMCForTravelAgency.URL_CREATE_TOUR_AD = URL_CREATE_TOUR_AD;
     }
