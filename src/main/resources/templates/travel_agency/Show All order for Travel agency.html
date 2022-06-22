@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8" />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
+    rel="stylesheet" />
+  <link href="../../node_modules/normalize.css/normalize.css" rel="stylesheet" />
+  <link rel="stylesheet" th:href="@{/css/travel_agency_style/show_all_order_fot_travel_agency_style.css}" />
+  <link rel="stylesheet" th:href="@{/css/sort_button/sortBlock.css}" />
+
+  <title>Перегляд всіх білетів</title>
+</head>
+
+<body>
+
+  <main>
+    <section class="title">
+      <h1 class="main-title">Назва турагенції</h1>
+      <div class="rating-mini">
+        <span class="actived"></span>
+      </div>
+    </section>
+    <div class="flex-row">
+      <div class="left-section">
+        <div class="search-filter">
+          <h2>ШУКАТИ ЗА</h2>
+
+          <div class="item">
+
+
+            <div class="">
+              <input type="text" class="input-text-information" placeholder="Іменем">
+              <label></label>
+              <input type="text" class="input-text-information" placeholder="Прізвищем">
+              <label></label>
+              <input type="text" class="input-text-information" placeholder="Номером телефону">
+              <label></label>
+              <input type="text" class="input-text-information" placeholder="Поштою">
+              <label></label>
+              <input type="text" class="input-text-information" placeholder="Країною">
+              <label></label>
+              <input type="text" class="input-text-information" placeholder="Країною">
+            </div>
+
+          </div>
+          <div class="item">
+            <label>Ціною туру</label>
+
+            <div class="item-input">
+              <input placeholder="Початкова" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
+              <input placeholder="Кінцева" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
+            </div>
+          </div>
+          <div class="item">
+            <label>Датою туру</label>
+            <div class="item-input">
+              <input placeholder="Початкова" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
+              <input placeholder="Кінцева" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
+            </div>
+          </div>
+          <div class="item">
+            <label>Відсотком знижки</label>
+            <div class="item-input">
+              <input placeholder="Початкова" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
+              <input placeholder="Кінцева" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
+            </div>
+          </div>
+          <div class="item">
+            <label>Датою утворення</label>
+
+            <div class="item-input">
+              <input placeholder="Початкова" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
+              <input placeholder="Кінцева" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
+            </div>
+          </div>
+          <div class="item-checkbox">
+            <label>За станом білета</label>
+
+            <div class="item-input">
+              <div class="item">
+                <input type="checkbox" id="1" />
+                <label for="1">Підтверджений</label>
+              </div>
+              <div class="item">
+                <input type="checkbox" id="2" />
+                <label for="2">Не підтверджений</label>
+              </div>
+              <div class="item">
+                <input type="checkbox" id="3" />
+                <label for="3">Скасований</label>
+              </div>
+              <div class="item">
+                <input type="checkbox" id="4" />
+                <label for="4">Використаний</label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="filter-button">
+          <input type="submit" value="Пошук" />
+        </div>
+      </div>
+      <div class="info-section">
+        <div class="main-info" th:object="${tourAd}">
+          <h2>Дані послуги</h2>
+          <div class="info">
+            <div class="item">
+              <h5>Ціна</h5>
+              <p th:text="*{costOneCustomer}">25500</p>
+            </div>
+            <div class="item">
+              <h5>Відсоткова знижка %</h5>
+              <p th:text="*{discountPercentage}">5</p>
+            </div>
+            <div class="item">
+              <h5>Кількість людей для найбільшої знижки</h5>
+              <p th:text="*{discountSizePeople}">10</p>
+            </div>
+            <div class="item">
+              <h5>Початкова дата</h5>
+              <p th:text="*{dateStart}">20-07-2022</p>
+            </div>
+            <div class="item">
+              <h5>Країна туру</h5>
+              <p th:text="*{country}">Турция</p>
+            </div>
+            <div class="item">
+              <h5>Місто туру</h5>
+              <p th:text="*{city}">Анталия</p>
+            </div>
+            <div class="item">
+              <h5>Місце перебування користувача туру</h5>
+              <p th:text="*{place}">Харьков</p>
+            </div>
+            <div class="item">
+              <h5>Кінцева дата(включно)</h5>
+              <p th:text="*{dateEnd}">01-08-2022</p>
+            </div>
+          </div>
+        </div>
+        <div class="user" th:each="order : ${orders}">
+          <div class="user-info">
+            <div class="item">
+              <h5>Ім'я</h5>
+              <p class="item_first-name-customer" th:text="${order.firstnameCustomer}">Тимур</p>
+            </div>
+            <div class="item">
+              <h5>Прізвище</h5>
+              <p class="item_last-name-customer" th:text="${order.lastnameCustomer}">Хамзін</p>
+            </div>
+            <div class="item">
+              <h5>Стать</h5>
+              <p class="item_name-male" th:text="${getterNameMale.apply(order.male)}">Чоловік</p>
+            </div>
+            <div class="item">
+              <h5>Дата початку</h5>
+              <p class="item_start-date" th:text="${order.dateStart}">20-07-2022</p>
+            </div>
+            <div class="item">
+              <h5>Номер телефону</h5>
+              <p class="item_number-customer" th:text="${order.numberCustomer}">38011111111</p>
+            </div>
+            <div class="item">
+              <h5>Поштова скринька</h5>
+              <p class="item_email-customer" th:text="${order.emailCustomer}">user@gmail.com</p>
+            </div>
+            <div class="item">
+              <h5>Країна замовника</h5>
+              <p class="item_name-country" th:text="${order.country}">Україна</p>
+            </div>
+            <div class="item">
+              <h5>Дата закінчення</h5>
+              <p class="item_end-date" th:text="${order.dateEnd}">01-08-2022</p>
+            </div>
+            <div class="item">
+              <h5>Ціна</h5>
+              <p class="item_cost-order" th:text="${order.cost}">20000</p>
+            </div>
+            <div class="item">
+              <h5>Кількість людей</h5>
+              <p class="item_number-of-people" th:text="${order.numberOfPeople}">2</p>
+            </div>
+            <div class="item">
+              <h5>Місце відправлення</h5>
+              <p class="item_place-start" th:text="${order.city}">Харьков</p>
+            </div>
+            <div class="item">
+              <h5>Дата утворення</h5>
+              <p class="item_date-create" th:text="${order.dateRegistration.toString().replace('T',' ')}">10-04-2022</p>
+            </div>
+          </div>
+          <div  class="user-buttons">
+            <form th:action="${@environment.getProperty('inside.message.send.url')}">
+              <input type="hidden" name="sendlerEmail" th:value="${order.emailCustomer}">
+              <input type="submit" name="message" value="Написати повідомлення" />
+            </form>
+
+            <div class="status " th:classappend="${getColor.apply(order.conditionCommodity)}">
+              <h5>Стан</h5>
+              <p class="item_state-order" th:text="${T(nure.knt.entity.enums.ConditionCommodity).getUkraineName(order.conditionCommodity)}">Підтверджений</p>
+            </div>
+            <div class="buttons">
+              <input type="submit" name="cancel" value="Скасувати" />
+              <input type="submit" name="accept" value="Підтвердити" />
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div>
+        <div id="SortBy" class="box-sort"
+          style="width: 210px; height: 200px;  display: flex; justify-content: center; flex-direction: column;">
+          <div>
+            <h2>Сортувати по:</h2>
+          </div>
+
+          <select id="selectSort" name="SortBy" class="box-filter back-select">
+            <option id="sortByDateCreate">Даті утворення</option>
+            <option id="sortByFirstNameCustomer">Імені</option>
+            <option id="sortByLastNameCustomer">Прізвищу</option>
+            <option id="sortByNameMale">Статі</option>
+
+            <option id="sortByDateStart">Даті початку</option>
+            <option id="sortByNumberCustomer">Номеру телефона</option>
+            <option id="sortByEmailCustomer">Пошті</option>
+            <option id="sortByNameCountry">Назві країни</option>
+
+            <option id="sortByEndDate">Даті закінчення</option>
+            <option id="sortByCost">Ціні</option>
+            <option id="sortByNumberOfPeople">Кількістю людей</option>
+            <option id="sortByPlaceStart">Місцю відправлення</option>
+            <option id="sortByStateOrder">Стану</option>
+
+          </select>
+          <br>
+          <div style="display: flex; justify-content: center; flex-direction: row;">
+            <button id="sortDescending" class="button-sort">\/</button>
+            <button id="sortAscending" class="button-sort button-sort-used">/\</button>
+          </div>
+        </div>
+        <br>
+        <form class="div-buttons">
+          <p>Знайдено <span th:text="${orders.size()}"></span> замовлень</p>
+          <input type="submit" value="Повернутися" class="big-no-bigger-button">
+        </form>
+
+      </div>
+
+    </div>
+    </div>
+
+  </main>
+</body>
+
+</html>
