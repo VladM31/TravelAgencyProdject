@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Please sign in</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <link th:href="@{/css/travel_agency_style/Add_Change_Tour_Ad_Style.css}" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Neucha" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+
+
+</head>
+
+<body class="main-body">
+
+
+    <form th:action="${(itIsCreate) ? @environment.getProperty('travel.agency.create.tour.ad.url') :
+    @environment.getProperty('travel.agency.change.tour.ad.url')}" class="box-main" th:object="${form}" method="POST">
+
+
+        <div style=" display: flex;justify-content: center;" >
+            <h1 th:text="${label_text}">ДОДАВАННЯ ПОСЛУГИ</h1>
+        </div>
+
+        <div class="flex-row">
+            <div class="flex-column">
+                <h5 class="text-up">Ціна за одну особу, грн</h5>
+                <input type="number" class="box-input" min="1" max="1000000" required th:field="*{cost}">
+            </div>
+
+            <div class="flex-column">
+                <h5 class="text-up">Країна</h5>
+                <input type="text" list="countries-name" class="box-input" min="2" max="60"
+                    pattern="^((?![/=;*+?!]).)*$" required th:field="*{country}">
+                <datalist name="country" id="countries-name">
+                    <option th:each="country : ${countries}" th:value="${country}" th:text="${country}">...</option>
+                </datalist>
+            </div>
+        </div>
+        <div class="flex-row">
+            <div class="flex-column">
+                <h5 class="text-up">Відсоткова знижка, %</h5>
+                <input type="number" class="box-input" min="0" max="100" step="0.0001" required th:field="*{prosent}">
+            </div>
+            <div class="flex-column">
+                <h5 class="text-up">Місто</h5>
+                <input type="text" class="box-input" min="2" max="60" pattern="^((?![/=;*+?!]).)*$" required th:field="*{city}">
+            </div>
+        </div>
+        <div class="flex-row">
+            <div class="flex-column">
+                <h5 class="text-up">Кількість для максимальної знижки</h5>
+                <input type="number" class="box-input" min="0" max="10000" required th:field="*{numberOfPeople}">
+            </div>
+            <div class="flex-column">
+                <h5 class="text-up">Початкова дата</h5>
+                <input type="date" class="box-input" required th:field="*{startDateTourAd}" th:min="${min_date}" th:max="${max_date}">
+            </div>
+        </div>
+        <div class="flex-row">
+            <div class="flex-column">
+                <h5 class="text-up">Місце перебування користувача</h5>
+                <input type="text" class="box-input" min="2" max="60" pattern="^((?![/=;*+?!]).)*$" required th:field="*{place}">
+            </div>
+            <div class="flex-column">
+                <h5 class="text-up">Кінцева дата (включно)</h5>
+                <input type="date" class="box-input" required th:field="*{endDateTourAd}" th:min="${min_date}" th:max="${max_date}">
+            </div>
+        </div>
+
+        <div style=" display: flex;justify-content: center; flex-direction: column;align-items: center; text-align: center;">
+            <input type="hidden" th:if="${form.idTourAd != null}" th:field="*{idTourAd}">
+            <span th:if="${error_message}" th:text="${error_message}" style="color:red;"></span>
+            <input type="submit" value="ПІДТВЕРДИТИ" class="submit-input">
+        </div>
+
+    </form>
+
+
+</body>
+
+</html>

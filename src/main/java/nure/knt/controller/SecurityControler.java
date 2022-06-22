@@ -1,14 +1,7 @@
 package nure.knt.controller;
 
-import nure.knt.database.idao.entity.IDAOCustomerSQL;
-import nure.knt.database.idao.entity.IDAOTravelAgencySQL;
 import nure.knt.database.idao.entity.IDAOUserSQL;
-import nure.knt.database.idao.temporary.IDAOTravelAgencyTemporaryCode;
-import nure.knt.entity.important.Customer;
-import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
-import nure.knt.forms.entities.ChooseSignUpForm;
-import nure.knt.forms.entities.TravelAgencyForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -16,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 

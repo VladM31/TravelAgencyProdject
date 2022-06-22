@@ -203,14 +203,6 @@ public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier
                 active);
     }
 
-    private static final String ROLE_IS = " AND user.role_id = ? ";
-    @Override
-    public List<Courier> findByRole(Role role) {
-        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, ROLE_IS, SORT_TO_DATE_REGISTRATION),
-                HandlerDAOCourier::resultSetToCourier,
-                role.getId());
-    }
-
     private static final String TYPE_STATE_IS = " AND user.type_state_id = ? ";
     @Override
     public List<Courier> findByTypeState(TypeState typeState) {
@@ -225,6 +217,13 @@ public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier
         return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, COUNTRY_IS, SORT_TO_DATE_REGISTRATION),
                 HandlerDAOCourier::resultSetToCourier,
                 country);
+    }
+
+    @Override
+    public List<Courier> findByCountryNameContaining(String country) {
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER,
+                        " AND ",HandlerUserPartScript.WHERE_COUNTRY_NAME_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOCourier::resultSetToCourier,HandlerSqlDAO.containingString(country));
     }
 
     private static final String NAME_CONTAINING = " AND user.name LIKE ? ";

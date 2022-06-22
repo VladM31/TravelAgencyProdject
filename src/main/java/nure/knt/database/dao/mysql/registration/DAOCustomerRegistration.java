@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-@Component("DAO_MySQL_Customer_Registration")
+@Component("DAO_Customer_Registration_MySQL")
 public class DAOCustomerRegistration extends RegistrationCore<Customer> {
 
     private static final String INSERT_CUSTOMER =
@@ -29,21 +29,9 @@ public class DAOCustomerRegistration extends RegistrationCore<Customer> {
     @Override
     public boolean saveForRegistration(Customer user,String code) throws SQLException {
 
-        if( HandlerRegistrationUser.tryStatement(super.conn,
-                (p) -> HandlerRegistrationUser.saveUserAsRegistration(p,user,countries.getIdByCountry(user.getCountry())),
-                HandlerRegistrationUser.INSERT_USER) == NOT_SAVE){
-            return NOT_SAVE;
-        }
-
-        long userId = HandlerRegistrationUser.getUserIdByNumberAndEmailAndUsernameAndTypeStateIsRegistrationAdnDateRegistrationIsNew(super.conn,user);
-
-        user.setId(userId);
+        long userId = super.saveForRegistrationUser(user,code);
 
         if(HandlerRegistrationUser.tryStatement(super.conn, (p) -> HandlerCustomerRegistration.saveCustomer(p,user),INSERT_CUSTOMER)== NOT_SAVE){
-            return NOT_SAVE;
-        }
-
-        if(HandlerRegistrationUser.tryStatement(super.conn, (p) -> HandlerRegistrationUser.saveCode(p,userId,code),HandlerRegistrationUser.INSERT_CODE_VALUE)== NOT_SAVE){
             return NOT_SAVE;
         }
 

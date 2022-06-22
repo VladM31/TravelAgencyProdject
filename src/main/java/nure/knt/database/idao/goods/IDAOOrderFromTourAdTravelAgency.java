@@ -9,5 +9,5 @@ public interface IDAOOrderFromTourAdTravelAgency<O extends OrderFromTourAdForTra
     public List<O> findByLastnameContaining(Long userOrTuodAdId, String lastname);
     public List<O> findByEmailContaining(Long userOrTuodAdId, String email);
     public List<O> findByNumberContaining(Long userOrTuodAdId, String number);
-    public List<O> findByMaleContaining(Long userOrTuodAdId, boolean male);
+    public List<O> findByMaleIs(Long userOrTuodAdId, Boolean male);
 }

@@ -1,10 +1,13 @@
 package nure.knt.forms.entities;
 
+import nure.knt.entity.enums.Role;
+import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.important.TravelAgency;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 public class TravelAgencyForm extends UserForm {
     @Pattern(regexp = "^((?![/;-=*+?!]).)*$",message = "Не повино в назві тур агенції бути знаків \"/;-=*+?!\"")
@@ -12,17 +15,17 @@ public class TravelAgencyForm extends UserForm {
     @NotBlank(message = "Логін не повинен бути з пробілів")
     private String nameTravelAgency;// Назва турагенції
 
-    @Pattern(regexp = "^((?![/-=*+?!]).)*$",message = "Не повино в КВЕДі бути знаків \"/-=*+?!\"")
-    @Size(min=2,max=100, message = "КВЕД повинен бути більше 2 і не менше 10 символів")
+    @Pattern(regexp = "^((?![/=*+?!]).)*$",message = "Не повино в КВЕДі бути знаків \"/-=*+?!\"")
+    @Size(min=2,max=10, message = "КВЕД повинен бути більше 2 і не менше 10 символів")
     @NotBlank(message = "КВЕД не повинен бути з пробілів")
-    private String addressTravelAgency;// Адреса офісу турагенції
-
-    @Pattern(regexp = "^((?![/-=*+?!]).)*$",message = "Не повино в адресі турагенції бути знаків \"/-=*+?!\"")
-    @Size(min=2,max=10, message = "Адрес турагенції повинен бути більше 2 і не менше 10 символів")
-    @NotBlank(message = "Адрес турагенції не повинен бути з пробілів")
     private String KVED;//КВЕД
 
-    @Pattern(regexp = "\\d.",message = "ЕГРПОУ або РНУКПН повинен складатися з чисел")
+    @Pattern(regexp = "^((?![/-=*+?!]).)*$",message = "Не повино в адресі турагенції бути знаків \"/-=*+?!\"")
+    @Size(min=2,max=100, message = "Адрес турагенції повинен бути більше 2 і не менше 100 символів")
+    @NotBlank(message = "Адрес турагенції не повинен бути з пробілів")
+    private String addressTravelAgency;// Адреса офісу турагенції
+
+    @Pattern(regexp = "^[0-9]+$",message = "ЕГРПОУ або РНУКПН повинен складатися з чисел")
     @Size(min=8,max=15, message = "ЕГРПОУ або РНУКПН повинен бути більше 8 і не менше 15 символів")
     @NotBlank(message = "ЕГРПОУ або РНУКПН не повинен бути з пробілів")
     private String EGRPOYorRNYKPN;// ЕГРПОУ або РНУКПН
@@ -123,23 +126,27 @@ public class TravelAgencyForm extends UserForm {
     public TravelAgencyForm() {
     }
 
-    TravelAgency toTravelAgency(){
+    public TravelAgency toTravelAgency(){
         TravelAgency travelAgency = new TravelAgency();
 
         setFormInsideTravelAgency(travelAgency,this);
 
         travelAgency.setUsername(super.getUsername());
         travelAgency.setPassword(super.getPassword());
+        travelAgency.setActive(true);
+        travelAgency.setRole(Role.TRAVEL_AGENCY);
+        travelAgency.setDateRegistration(LocalDateTime.now());
+        travelAgency.setTypeState(TypeState.REGISTRATION);
 
         return travelAgency;
     }
 
-    TravelAgency toTravelAgency(TravelAgency travelAgency){
+    public TravelAgency toTravelAgency(TravelAgency travelAgency){
         setFormInsideTravelAgency(travelAgency,this);
         return travelAgency;
     }
 
-    public static void setFormInsideTravelAgency(TravelAgency travelAgency,TravelAgencyForm form){
+    private static void setFormInsideTravelAgency(TravelAgency travelAgency,TravelAgencyForm form){
 
         travelAgency.setEmail(form.getEmail());//2
         travelAgency.setNumber(form.getNumber());//1

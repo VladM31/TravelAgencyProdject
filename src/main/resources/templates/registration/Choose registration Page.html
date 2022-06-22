@@ -33,7 +33,7 @@
             <input class="box-input"  th:formaction="${@environment.getProperty('registration.travel.agency.url')}" formmethod="get" type="submit" value="Турагенцію">
         </div>
         <div style=" display: flex;justify-content: center;">
-            <input class="box-input" formaction="/send-message" formmethod="get" type="submit" value="Кур'єра">
+            <input class="box-input" th:formaction="${@environment.getProperty('registration.courier.url')}" formmethod="get" type="submit" value="Кур'єра">
         </div>
         <div style=" display: flex;justify-content: center;">
             <input class="box-input to-return" formaction="/login" formmethod="get" type="submit" value="Повернутися">

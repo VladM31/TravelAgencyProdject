@@ -2,9 +2,11 @@ package nure.knt.entity.goods;
 
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.enums.TypeState;
+import nure.knt.entity.important.TravelAgency;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class TourAd {
     private Long id;
@@ -16,8 +18,6 @@ public class TourAd {
 
     private float discountPercentage;
     private float ratingAgency;
-
-
 
     private Long travelAgencyId;
 
@@ -35,6 +35,10 @@ public class TourAd {
 
     private TypeState typeState;
     private ConditionCommodity conditionCommodity;
+
+    public List<String> getStars(){
+        return TravelAgency.getRetingStars(this.ratingAgency);
+    }
 
     public long getTravelAgencyId() {
         return travelAgencyId;
@@ -180,7 +184,11 @@ public class TourAd {
         this.conditionCommodity = conditionCommodity;
     }
 
-    public TourAd(Long id, int costOneCustomer, int costService, int discountSizePeople, int orderQuantity, float discountPercentage, float ratingAgency, Long travelAgencyId, boolean hidden, LocalDate dateStart, LocalDate dateEnd, LocalDateTime dateRegistration, String place, String city, String country, String nameAgency, TypeState typeState, ConditionCommodity conditionCommodity) {
+    public TourAd(Long id, int costOneCustomer, int costService, int discountSizePeople, int orderQuantity,
+                  float discountPercentage, float ratingAgency, Long travelAgencyId,
+                  boolean hidden, LocalDate dateStart, LocalDate dateEnd, LocalDateTime dateRegistration,
+                  String place, String city, String country, String nameAgency, TypeState typeState,
+                  ConditionCommodity conditionCommodity) {
         this.id = id;
         this.costOneCustomer = costOneCustomer;
         this.costService = costService;
