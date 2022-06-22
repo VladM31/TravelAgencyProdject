@@ -8,6 +8,7 @@ import nure.knt.entity.goods.OrderFromTourAdForTravelAgency;
 import nure.knt.entity.goods.TourAd;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,8 +17,20 @@ import java.util.Set;
 
 @Repository
 public class DAOOrderForTravelAgencySQL extends MySQLCore implements IDAOOrderFromTourAdTravelAgency<OrderFromTourAdForTravelAgency> {
+
+    private static final String UPDATE_CONDITION_BY_ORDER_ID = "UPDATE order_tour SET condition_commodity_id = ?  WHERE id = ? ;";
+
     @Override
     public boolean updateConditionCommodity(Long id, ConditionCommodity conditionCommodity) {
+
+        try(PreparedStatement statement = super.conn.getSqlPreparedStatement(UPDATE_CONDITION_BY_ORDER_ID)){
+            int position = 0;
+            statement.setLong(++position,conditionCommodity.getId());
+            statement.setLong(++position,id);
+            return statement.executeUpdate() != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -39,6 +52,7 @@ public class DAOOrderForTravelAgencySQL extends MySQLCore implements IDAOOrderFr
             "left join customer on order_tour.customer_id = customer.id\n" +
             "left join user on customer.user_id =user.id\n" +
             "left join country on user.country_id =country.id\n" +
+            "left join tour_ad on order_tour.tour_ad_id =tour_ad.id\n" +
             "left join condition_commodity on order_tour.condition_commodity_id = condition_commodity.id ;";
 
     private List<OrderFromTourAdForTravelAgency> wrapperForUseSelectList(String part,Object ...array){
@@ -152,6 +166,18 @@ public class DAOOrderForTravelAgencySQL extends MySQLCore implements IDAOOrderFr
     public List<OrderFromTourAdForTravelAgency> findByMaleIs(Long userOrTuodAdId, Boolean male) {
         return this.wrapperForUseSelectList(WHERE_TOUR_AD_ID_IS_AND_MALE_IS,userOrTuodAdId,male);
     }
+
+    private static final String WHERE_TRAVEL_AGENCY_ID_AND_TOUR_AD_ID_AND_ORDER_ID = " WHERE tour_ad.travel_agency_id = ? AND order_tour.tour_ad_id = ? AND order_tour.id = ? ";
+
+    @Override
+    public OrderFromTourAdForTravelAgency findByTravelAgencyIdAndTourAdIdAndOrderId(Long travelAgencyId, Long tourAdId, Long orderId) {
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT,WHERE_TRAVEL_AGENCY_ID_AND_TOUR_AD_ID_AND_ORDER_ID,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerDAOOrderForTravelAgencySQL::resultSetToOrderFromTourAdForTravelAgency,
+                travelAgencyId,tourAdId,orderId);
+    }
+
+
 }
 
 
