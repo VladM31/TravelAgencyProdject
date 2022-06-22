@@ -1,4 +1,4 @@
-let nameBox = ".order_block";
+let nameBox = ".content";
 const STYLE_SORT_BUTTON = "button-sort-used";
 
 // -+-+---+-+-+-+-+-+--+-++--+-+-+-+-+-+-+-+-+-+-++--+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-++--+-+-+-+-+-+-+
@@ -83,15 +83,15 @@ function getMethodBySelectedName(selectedName){
       return;
     }
     if(selectedName == 'sortByCostTourAd'){
-      sortDivs(classCostTourAd,how_sort_string);
+      sortDivs(classCostTourAd,how_sort_number);
       return;
     }
     if(selectedName == 'sortByProsent'){
-      sortDivs(classProsent,how_sort_string);
+      sortDivs(classProsent,how_sort_number);
       return;
     }
     if(selectedName == 'sortByNumberOfPeolpeMax'){
-      sortDivs(classNumberOfPeolpeMax,how_sort_string);
+      sortDivs(classNumberOfPeolpeMax,how_sort_number);
       return;
     }
     if(selectedName == 'sortByCountryName'){
@@ -99,15 +99,15 @@ function getMethodBySelectedName(selectedName){
       return;
     }
     if(selectedName == 'sortByCityName'){
-      sortDivs(classCityName,how_sort_number);
+      sortDivs(classCityName,how_sort_string);
       return;
     }
     if(selectedName == 'sortByStartDateTourAd'){
-      sortDivs(classStartDateTourAd,how_sort_number);
+      sortDivs(classStartDateTourAd,how_sort_string);
       return;
     }
     if(selectedName == 'sortByEndDateTourAd'){
-      sortDivs(classEndDateTourAd,how_sort_number);
+      sortDivs(classEndDateTourAd,how_sort_string);
       return;
     }
     if(selectedName == 'sortByPlaceName'){
@@ -118,6 +118,10 @@ function getMethodBySelectedName(selectedName){
       sortDivs(classStateTourAd,how_sort_string);
       return;
     }
+    if(selectedName == 'sortByDateRegistration'){
+          sortDivs(classDateRegistration,how_sort_string);
+          return;
+        }
    
 }
 

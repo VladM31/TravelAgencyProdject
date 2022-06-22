@@ -218,21 +218,21 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return this.wrapperForUseSelectList(FIND_BY_DATE_REGISTRATION_BETWEEN, script.get(), startDateRegistration,  endDateRegistration);
     }
 
-    String FIND_BY_START_DATE_AFTER = " WHERE date_start < ?";
+    String FIND_BY_START_DATE_AFTER = " WHERE date_start <= ? ";
 
     @Override
     public List<TourAd> findByStartDateTourAdAfter(LocalDate startDateTourAd, Supplier<String> script) {
         return this.wrapperForUseSelectList(FIND_BY_START_DATE_AFTER, script.get(), startDateTourAd);
     }
 
-    String FIND_BY_END_DATE_BEFORE = " WHERE  date_end > ?";
+    String FIND_BY_END_DATE_BEFORE = " WHERE  date_end >= ? ";
 
     @Override
     public List<TourAd> findByEndDateTourAdBefore(LocalDate endDateTourAd, Supplier<String> script) {
         return this.wrapperForUseSelectList(FIND_BY_END_DATE_BEFORE, script.get(), endDateTourAd);
     }
 
-    String FIND_BY_START_DATE_AFTER_AND_END_DATE_BEFORE = " WHERE date_start < ? AND date_end > ?";
+    String FIND_BY_START_DATE_AFTER_AND_END_DATE_BEFORE = " WHERE date_start <= ? AND date_end >= ? ";
 
     @Override
     public List<TourAd> findByStartDateTourAdAfterAndEndDateOrderBefore(LocalDate startDateTourAd, LocalDate endDateTourAd, Supplier<String> script) {
@@ -243,10 +243,8 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
 
     @Override
     public List<TourAd> findByPlaceContaining(String place, Supplier<String> script) {
-        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,
-                        WHERE_PLACE_CONTAINING),
-                HandlerDAOtoMYSQL::resultSetToTourAd,
-                HandlerSqlDAO.containingString(place));
+        return wrapperForUseSelectList(WHERE_PLACE_CONTAINING,script.get(), HandlerSqlDAO.containingString(place));
+
     }
 
     private static final String WHERE_CITY_CONTAINING = " WHERE city LIKE ? ";
@@ -254,30 +252,23 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
     @Override
     public List<TourAd> findByCityContaining(String city, Supplier<String> script) {
 
-        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,
-                        WHERE_CITY_CONTAINING),
-                HandlerDAOtoMYSQL::resultSetToTourAd,
-                HandlerSqlDAO.containingString(city));
+        return wrapperForUseSelectList(WHERE_CITY_CONTAINING,script.get(), HandlerSqlDAO.containingString(city));
+
     }
 
     private static final String WHERE_COUNTRY_CONTAINING = " WHERE country.name LIKE ? ";
 
     @Override
     public List<TourAd> findByCountryContaining(String country, Supplier<String> script) {
-        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,
-                        WHERE_COUNTRY_CONTAINING),
-                HandlerDAOtoMYSQL::resultSetToTourAd,
-                HandlerSqlDAO.containingString(country));
+     return wrapperForUseSelectList(WHERE_COUNTRY_CONTAINING,script.get(), HandlerSqlDAO.containingString(country));
     }
 
     private static final String WHERE_NAME_AGENCY_CONTAINING = " WHERE user.name LIKE ? ";
 
     @Override
     public List<TourAd> findByNameAgencyContaining(String nameAgency, Supplier<String> script) {
-        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TOUR_AD,
-                        WHERE_NAME_AGENCY_CONTAINING),
-                HandlerDAOtoMYSQL::resultSetToTourAd,
-                HandlerSqlDAO.containingString(nameAgency));
+        return wrapperForUseSelectList(WHERE_NAME_AGENCY_CONTAINING,script.get(), HandlerSqlDAO.containingString(nameAgency));
+
     }
 
     @Override

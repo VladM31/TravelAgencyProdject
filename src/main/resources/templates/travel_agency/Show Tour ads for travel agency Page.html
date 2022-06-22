@@ -10,6 +10,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
     rel="stylesheet" />
+  <link rel="stylesheet" th:href="@{css/Main Page CSS.css}" />
   <link rel="stylesheet" th:href="@{/css/sort_button/sortBlock.css}" />
   <link href="../../node_modules/normalize.css/normalize.css" rel="stylesheet" />
   <link rel="stylesheet" th:href="@{/css/travel_agency_style/show_tour_ads_for_agency.css}" />
@@ -18,69 +19,70 @@
 </head>
 
 <body>
-
+<th:block th:include="/Top Menu"></th:block>
   <main>
     <div class="container">
       <div class="name">
-        <h2>Назва турагенції</h2>
+        <h2 th:text = "${travelAgency.name}">Назва турагенції</h2>
         <div class="rating-mini">
-          <span class="active"></span>
-          <span class="active"></span>
-          <span class="active"></span>
-          <span class=""></span>
-          <span class=""></span>
+          <span th:each ="star:${T(nure.knt.entity.important.TravelAgency).getRetingStars(travelAgency.rating)}" th:utext = "${star}"></span>
         </div>
       </div>
       <div class="main-content">
-        <form class="search-filter">
+        <form class="search-filter" th:object="${filter}" method = "GET" th:action="${@environment.getProperty('travel.agency.profile.show.tour.ads.url')}">
           <div class="filter-header">
             <h2>ШУКАТИ ЗА</h2>
           </div>
           <div class="filter-inputs">
-            <input name="country" type="text" placeholder="Назвою країни" />
-            <input name="city" type="text" placeholder="Назвою міста" />
-            <input name="location_city" type="text" placeholder="Назвою місця перебування" />
+            <input name="country"  list="countries" type="text" placeholder="Назвою країни" th:field = "*{nameCountry}"/>
+
+            <datalist name="country" id="countries">
+              <option th:each="country : ${countries}" th:value="${country}" th:text="${country}">...</option>
+            </datalist>
+
+            <input name="city" type="text" placeholder="Назвою міста" th:field = "*{nameCity}"/>
+            <input name="location_city" type="text" placeholder="Назвою місця перебування"  th:field = "*{namePlace}"/>
 
             <div class="item">
               <label>Ціною</label>
               <div class="item-input">
-                <input placeholder="Початкова" type="number" name="tentacles" min="0" max="99999" />
-                <input placeholder="Кінцева" type="number" name="tentacles" min="0" max="99999" />
+                <input placeholder="Початкова" type="number"  min="0" max="99999" th:field = "*{costOneCustomerStart}"/>
+                <input placeholder="Кінцева" type="number"  min="0" max="99999"  th:field = "*{costOneCustomerEnd}"/>
               </div>
             </div>
             <div class="item">
               <label>Кількістю білетів</label>
               <div class="item-input">
-                <input placeholder="Початкова" type="number" name="tentacles" min="0" max="99999" />
-                <input placeholder="Кінцева" type="number" name="tentacles" min="0" max="99999" />
+                <input placeholder="Початкова" type="number"  min="0" max="99999"  th:field = "*{startCountOrders}"/>
+                <input placeholder="Кінцева" type="number"  min="0" max="99999"  th:field = "*{endCountOrders}"/>
               </div>
             </div>
             <div class="item">
               <label>Кількість осіб для максимальної знижки</label>
               <div class="item-input">
-                <input placeholder="Початкова" type="number"name="tentacles" min="0" max="99999" />
-                <input placeholder="Кінцева" type="number"  name="tentacles" min="0" max="99999" />
+                <input placeholder="Початкова" type="number" min="0" max="99999"  th:field = "*{discountSizePeopleStart}"/>
+                <input placeholder="Кінцева" type="number"  min="0" max="99999"  th:field = "*{discountSizePeopleEnd}"/>
               </div>
             </div>
             <div class="item">
               <label>Датою оформленя</label>
               <div class="item-input">
-                <input type="datetime-local"  name="tentacles" />
-                <input type="datetime-local"  name="tentacles" />
+                <input type="datetime-local"   th:field = "*{startDateRegistration}"/>
+                <input type="datetime-local"   th:field = "*{endDateRegistration}"/>
               </div>
             </div>
             <div class="item">
               <label>Датою роботи</label>
               <div class="item-input">
-                <input type="datetime-local"  name="tentacles" />
-                <input type="datetime-local" name="tentacles" />
+                <input type="date"   th:field = "*{startDate}"/>
+                <input type="date"  th:field = "*{endDate}"/>
               </div>
             </div>
             <div class="item">
               <label>Відсотком знижки</label>
               <div class="item-input">
-                <input placeholder="Початкова" type="number"  name="tentacles" min="0" max="99999" />
-                <input placeholder="Кінцева" type="number" name="tentacles" min="0" max="99999" />
+                <input placeholder="Початкова" type="number"  min="0" max="99999"  th:field = "*{discountPercentageStart}"/>
+                <input placeholder="Кінцева" type="number" min="0" max="99999"  th:field = "*{discountPercentageEnd}"/>
               </div>
             </div>
 
@@ -91,45 +93,45 @@
           </div>
         </form>
         <div class="searched-content">
-          <div class="content">
+          <div class="content" th:each = "tourAd:${tourAds}">
             <div class="bilets">
               <h2>Кількість білетів</h2>
-              <p class="item_count-order">1</p>
+              <p class="item_count-order" th:text = "${tourAd.orderQuantity}">1</p>
 
             </div>
-            <p class="hidden-text item_cost-tour-ad">Cost</p>
-            <p class="hidden-text item_prosent">item_prosent</p>
-            <p class="hidden-text item_number-of-people">item_number-of-people</p>
+            <p class="hidden-text item_cost-tour-ad" th:text = "${tourAd.costOneCustomer}">Cost</p>
+            <p class="hidden-text item_prosent"  th:text = "${tourAd.discountPercentage}">item_prosent</p>
+            <p class="hidden-text item_number-of-people" th:text = "${tourAd.discountSizePeople}">item_number-of-people</p>
             <div class="info">
               <div>
                 <table>
                   <tr class="first">
-                    <td class="top-left">Ціна (за одну особу)</td>
+                    <td class="top-left" >Ціна (за одну особу)</td>
                     <td>Відсоткова знижка</td>
                     <td class="top-right">
                       Кількість осіб для максимальної знижки
                     </td>
                   </tr>
                   <tr class="second">
-                    <td class="bottom-left">100 грн</td>
-                    <td>0.0 %</td>
-                    <td class="bottom-right">3</td>
+                    <td class="bottom-left" th:text = "${tourAd.costOneCustomer} +' грн'">100 </td>
+                    <td  th:text = "${tourAd.discountPercentage}+' %'">0.0 </td>
+                    <td class="bottom-right" th:text = "${tourAd.discountSizePeople}">3</td>
                   </tr>
                 </table>
               </div>
               <div class="paragraphs">
                 <div class="window-paragraph">
                   <h2>Країна</h2>
-                  <p class="item_country-name">Україна</p>
+                  <p class="item_country-name" th:text = "${tourAd.country}">Україна</p>
 
                 </div>
                 <div class="window-paragraph">
                   <h2>Дата замовлення</h2>
-                  <p class="item_date-registration">10.09.2022</p>
+                  <p class="item_date-registration" th:text = "${tourAd.dateRegistration.toString().replace('T',' ')}">10.09.2022</p>
                 </div>
                 <div class="window-paragraph">
                   <h2>Місто</h2>
-                  <p class="item_city-name">Харків</p>
+                  <p class="item_city-name" th:text = "${tourAd.city}">Харків</p>
 
                 </div>
               </div>
@@ -138,30 +140,40 @@
               <div class="paragraphs">
                 <div class="window-paragraph">
                   <h2>Дата початку</h2>
-                  <p class="item_start-date-tour-ad"> 11.11.2022</p>
+                  <p class="item_start-date-tour-ad" th:text = "${tourAd.dateStart}"> 11.11.2022</p>
 
                 </div>
                 <div class="window-paragraph">
                   <h2>Дата закінчення</h2>
-                  <p class="item_end-date-tour-ad"> 12.12.2022</p>
+                  <p class="item_end-date-tour-ad" th:text = "${tourAd.dateEnd}"> 12.12.2022</p>
 
                 </div>
                 <div class="window-paragraph">
                   <h2>Місце перебування</h2>
-                  <p class="item_place-name"> Готель “Варшава”</p>
+                  <p class="item_place-name" th:text = "${tourAd.place}"> Готель “Варшава”</p>
 
 
                 </div>
               </div>
             </div>
-            <div class="content-buttons">
-              <input type="button" value="Переглянути замовлення" />
-              <input type="button" value="Редагувати послугу" />
+            <form class="content-buttons">
+              <input type = "hidden" th:value = "${tourAd.id}" name = "idTourAd" >
+
+              <input type="submit" value="Переглянути замовлення"
+                     th:formaction="${@environment.getProperty('travel.agency.show.orders.by.tour.ad.id.url')}"
+                     th:formmethod="GET"/>
+
+              <input type = "hidden" th:value = "${tourAd.id}" name = "tourAdId" >
+
+              <input type="submit" value="Редагувати послугу"
+                     th:formaction="${@environment.getProperty('travel.agency.change.tour.ad.url')}"
+                     th:formmethod="GET"/>
+
               <div class="window-paragraph">
                 <h2>Стан</h2>
-                <p class="item_state-tour-ad"> 123</p>
+                <p class="item_state-tour-ad" th:text = "${T(nure.knt.entity.enums.ConditionCommodity).getUkraineName(tourAd.conditionCommodity)}"> 123</p>
               </div>
-            </div>
+            </form>
             <div><button class="close"></button></div>
           </div>
 
@@ -196,17 +208,20 @@
             </div>
           </div>
           <br>
-          <div class="user-buttons">
+          <form class="user-buttons" >
 
             <h2>Перегляд:</h2>
             <div>
-              <input type="button" class="first-user-button" value="Послуг" onclick="change(third,fourth)" /><input
-                type="button" class="second-user-button" value="Повідомлень" onclick="change(fourth,third)" />
+              <input type="button" style = "background-color:#01fd66" class="first-user-button"
+                     value="Послуг" onclick="change(third,fourth)" /><input type="submit" class="second-user-button"
+                                                                            th:formaction="@{/profile-message}" th:formmethod="GET" value="Повідомлень" onclick="change(fourth,third)" />
             </div>
-            <input type="button" class="editButton" value="Редагувати профіль" />
-            <input type="button" class="messageButton" value="Написати Повідомлення" />
-            <input type="button" class="createButton" value="Створити послугу" />
-          </div>
+            <input type="submit" class="editButton" value="Редагувати профіль" />
+            <input type="submit" class="messageButton" value="Написати Повідомлення" th:formaction="@{/send-message}" th:formmethod="GET"/>
+            <input type="submit" class="createButton" value="Створити послугу"
+                   th:formaction="${@environment.getProperty('travel.agency.create.tour.ad.url')}"
+                   th:formmethod="GET" />
+          </form>
         </div>
 
       </div>
