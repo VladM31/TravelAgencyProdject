@@ -26,7 +26,7 @@ public class RegistrationCustomerController {
     private CodeSendler codeSendler;
     private WorkWithCountries countries;
 
-    private static final String URL_CODE = "/customer-check-code";
+    private static final String URL_CODE = "/free/customer-check-code";
     private static final String DIRECTORY = "registration/";
     private static final String SIGN_UP_FORM = DIRECTORY + "sign_up_customer_page";
     private static final String CUSTOMER_FORM_ATTRIBUTE = "customerForm";
