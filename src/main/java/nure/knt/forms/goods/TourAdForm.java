@@ -92,7 +92,7 @@ public class TourAdForm {
 
     public TourAdForm(TourAd tourAd) {
         this(tourAd.getCostOneCustomer(),tourAd.getDiscountPercentage(),tourAd.getDiscountSizePeople(),tourAd.getPlace(),
-                tourAd.getCountry(),tourAd.getCity(),tourAd.getDateStart(),tourAd.getDateStart());
+                tourAd.getCountry(),tourAd.getCity(),tourAd.getDateStart(),tourAd.getDateEnd());
         this.idTourAd = tourAd.getId();
     }
 
