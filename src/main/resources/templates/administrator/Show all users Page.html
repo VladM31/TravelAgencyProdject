@@ -247,7 +247,7 @@
 
                 <div>
                     <input id="Writeorder" type="submit" class="watch-travel-agency-other-submit" rows="2"
-                        value="Написати повідомлення">
+                        value="Написати повідомлення" th:formaction="@{/send-message}">
                 </div>
 
                 <div>
@@ -256,14 +256,15 @@
                 </div>
 
                 <div>
-                    <input id="MakeTheService" type="submit" class="watch-travel-agency-other-submit" rows="2" th:formaction="${@environment.getProperty('admin.profile.show.courier.task')}"
+                    <input id="MakeTheService" type="submit" class="watch-travel-agency-other-submit" rows="2"
+                           th:formaction="${@environment.getProperty('admin.profile.show.courier.task')}"
                         value="Перегляд завдань">
 
                 </div>
 
                 <div>
                     <input id="MakeTheService" type="submit" class="watch-travel-agency-other-submit" rows="2"
-                        value="Перевірка тур агенцій">
+                        value="Перевірка тур агенцій"  th:formaction="${@environment.getProperty('admin.profile.check.registration.travel.agency.url')}">
                 </div>
 
                 <div>
