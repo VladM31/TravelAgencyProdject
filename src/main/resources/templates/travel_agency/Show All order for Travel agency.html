@@ -20,9 +20,9 @@
 <th:block th:include="/Top Menu"></th:block>
   <main>
     <section class="title">
-      <h1 class="main-title">Назва турагенції</h1>
+      <h1 class="main-title" th:text="${travelAgency}">Назва турагенції</h1>
       <div class="rating-mini">
-        <span  th:each="star : ${stars}" th:utext="${star}"></span>
+        <span  th:each="star : ${travelAgency.getStars()}" th:utext="${star}"></span>
       </div>
     </section>
     <div class="flex-row">
@@ -270,7 +270,7 @@
           </div>
         </div>
         <br>
-        <form class="div-buttons">
+        <form class="div-buttons" th:action="${@environment.getProperty('travel.agency.show.orders.by.tour.ad.id.url')}">
           <p>Знайдено <span th:text="${orders.size()}"></span> замовлень</p>
           <input type="submit" value="Повернутися" class="big-no-bigger-button">
         </form>

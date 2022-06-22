@@ -48,7 +48,7 @@ public class ControllerTravelAgencyOrders {
         if(tourAd==null){
             return "redirect:" + URL_SHOW_ALL_TOUR_AD;
         }
-        model.addAttribute("stars",agency.getStars());
+        model.addAttribute("travelAgency",agency);
         HandlerController.setMenuModel(agency,model);
         model.addAttribute("tourAd", tourAd);
         model.addAttribute("getterNameMale",HandlerControllerTravelAgencyOrders.getNameMale());

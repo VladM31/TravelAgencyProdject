@@ -72,8 +72,10 @@ public class MainWindowsController {
     }
 
     @RequestMapping(value = "${main.pages.find.all.url}", method = {RequestMethod.GET})
-    public String showPageForFindAllTourAd(Model model, FilterTourAdMainPage filter){
-
+    public String showPageForFindAllTourAd(@AuthenticationPrincipal User user,Model model, FilterTourAdMainPage filter){
+        if (user != null) {
+            HandlerController.setMenuModel(user,model);
+        }
         model.addAttribute("tourAds",filter.filtering(daoTourAd
                 .where()
                 .typeStateIn(Set.of(TypeState.REGISTERED))

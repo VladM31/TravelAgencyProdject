@@ -89,6 +89,8 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
     }
 
 
+
+
     private static final String UPDATE_ITERABLE_BY_ID = "UPDATE travel_agency left join user on travel_agency.user_id = user.id  " +
             "SET number = ?, email = ?,username = ?,password = ?,name = ?,active = ?,date_registration = ?,role_id = ?," +
             "country_id = ?,type_state_id = ?,rating = ?,kved = ?," +
@@ -260,6 +262,13 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
     }
 
 
+
+    private static final String WHERE_ROLE_IS = " AND user.role_id = ? ";
+
+
+
+
+
     @Override
     public List<TravelAgency> findByTypeState(TypeState typeState) {
         return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY.replace("20", "?"),SORT_TO_DATE_REGISTRATION),
@@ -279,9 +288,7 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
 
     @Override
     public List<TravelAgency> findByCountryNameContaining(String country) {
-        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
-                " AND ",HandlerUserPartScript.WHERE_COUNTRY_NAME_CONTAINING,SORT_TO_DATE_REGISTRATION),
-                HandlerDAOTAMYSQL::resultSetToTravelAgency,HandlerSqlDAO.containingString(country));
+        return null;
     }
 
 
