@@ -1,0 +1,144 @@
+body {
+  background-image: url("http://localhost:8080/images/courier_picture/courier_edit_backgroundd.png");
+  background-size: cover;
+  font-family: Roboto, Raleway, Neucha;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  background-color: #01fd66;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  background-color: #01fd66;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px;
+}
+
+.container > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 1200px;
+  height: 800px;
+  background: rgba(242, 245, 245, 0.93);
+  border: 6px solid #01fd66;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 39px;
+}
+
+.container h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Neucha;
+  font-size: 55px;
+  font-weight: bold;
+  margin-top: 80px;
+  line-height: 61px;
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+
+.container input[type="submit"] {
+  width: 160px;
+  height: 76px;
+  font-family: Neucha;
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 25px;
+  letter-spacing: 0.1em;
+  text-align: center;
+  margin-bottom: 20px;
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 8px;
+}
+
+.container input[type="submit"]:hover {
+  background: rgba(0, 255, 102, 0.24);
+}
+
+.container input[type="submit"]:active {
+  background: rgba(0, 255, 102, 0.5);
+}
+
+form {
+  display: flex;
+  width: 1200px;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  height: 600px;
+}
+
+form .wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+form .inputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-left: 100px;
+  width: 1200px;
+  height: 500px;
+}
+
+form div > label {
+  font-family: Roboto;
+  font-size: 23px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 27px;
+  letter-spacing: -0.07em;
+}
+
+form div > input {
+  font-family: Roboto;
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 27px;
+  display: flex;
+  flex-wrap: wrap;
+  background: rgba(0, 255, 102, 0.24);
+  border: 3px solid rgba(0, 113, 45, 1);
+  border-radius: 15px;
+  margin-bottom: 20px;
+  width: 380px;
+  height: 45px;
+}
+
+form input[type="number"] {
+  -moz-appearance: textfield;
+  -webkit-appearance: textfield;
+  appearance: textfield;
+}
+
+form input[type="number"]::-webkit-outer-spin-button,
+form input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+form .buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1200px;
+}
