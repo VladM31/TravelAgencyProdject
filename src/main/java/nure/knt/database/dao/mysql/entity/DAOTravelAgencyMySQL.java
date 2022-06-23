@@ -3,6 +3,7 @@ package nure.knt.database.dao.mysql.entity;
 import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
 import nure.knt.database.idao.entity.IDAOTravelAgencySQL;
+import nure.knt.database.idao.registration.IDAOFindAllTravelAgencyForRegistration;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.important.Customer;
@@ -26,8 +27,10 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
 
     @Override
     public List<TravelAgency> findAllById(Iterable<Long> ids) {
+
+        String script = HandlerSqlDAO.setInInsideScript(WHERE_ID_IN,ids);
         return HandlerSqlDAO.useSelectScript(super.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
-                WHERE_ID_IS,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION), HandlerDAOTAMYSQL::resultSetToTravelAgency,ids);
+                script,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION), HandlerDAOTAMYSQL::resultSetToTravelAgency,ids);
 
     }
 
@@ -361,20 +364,39 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
                 HandlerDAOTAMYSQL::resultSetToTravelAgency,username);
     }
 
-
-
-
-
-    private static final String UPDATE_TYPE_STATE_BY_ID = "UPDATE travel_agency left join user on travel_agency.user_id = user.id  " +
-            "SET type_state_id = ? WHERE user.id = ?;";
-
-
+    private static final String UPDATE_TYPE_STATE_BY_ID = "UPDATE travel_agency SET type_state_id = ? WHERE travel_agency.id = ?;";
 
     @Override
     public boolean updateTypeStateById(Long id, TypeState typeState) {
         try(PreparedStatement preStatement = super.conn.getSqlPreparedStatement(UPDATE_TYPE_STATE_BY_ID)){
             preStatement.setInt(1,typeState.getId());
             preStatement.setLong(2, id);
+            return preStatement.executeUpdate()!=0;
+
+        }catch(Exception exc){
+            exc.printStackTrace();
+        }
+        return ERROR_BOOLEAN_ANSWER;
+    }
+
+    private static final String WHERE_TYPE_STATE_AND_CODE_CONFIRMED = HandlerSqlDAO.concatScriptToEnd(
+            SELECT_TRAVEL_AGENCY.replace("20", "?"),
+            " AND travel_agency.code_confirmed = true ",
+            SORT_TO_DATE_REGISTRATION);
+
+    @Override
+    public List<TravelAgency> findByTypeStateRegistrationAndCodeConfirmedTrue() {
+        return HandlerSqlDAO.useSelectScript(super.conn,WHERE_TYPE_STATE_AND_CODE_CONFIRMED,
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,TypeState.REGISTRATION.getId());
+    }
+
+    private static final String UPDATE_CODE_CONFIRMED_BY_ID = "UPDATE travel_agency SET code_confirmed = ? WHERE travel_agency.id = ?;";
+
+    @Override
+    public boolean updateCodeConfirmed(boolean state, Long idTravelAgecny) {
+        try(PreparedStatement preStatement = super.conn.getSqlPreparedStatement(UPDATE_CODE_CONFIRMED_BY_ID)){
+            preStatement.setBoolean(1,state);
+            preStatement.setLong(2, idTravelAgecny);
             return preStatement.executeUpdate()!=0;
 
         }catch(Exception exc){

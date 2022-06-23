@@ -54,9 +54,8 @@ public class FilterAllUsers {
 
     }
 
-    protected static <U extends User> List<U> filteringCore(FilterAllUsers filter, IDAOUserSQL<U> dao, List<Predicate<U>> filterList){
-
-        List<U> list = HandlerFilter.checkString(filter.name,null,
+    protected static <U extends User> List<U> filteringCore(List<U> list,FilterAllUsers filter, IDAOUserSQL<U> dao, List<Predicate<U>> filterList){
+        list = HandlerFilter.checkString(filter.name,list,
                 (nam) -> dao.findByNameContaining(nam),
                 (nam) -> filterList.add(user -> HandlerFilter.containsToLowerCase(user.getName(),nam)));
 
@@ -85,7 +84,12 @@ public class FilterAllUsers {
                 (boolActive) -> dao.findByActive(boolActive),
                 (boolActive) -> filterList.add(user -> boolActive.booleanValue() == user.isActive()));
 
+        return list;
+    }
 
+    protected static <U extends User> List<U> filteringCore(FilterAllUsers filter, IDAOUserSQL<U> dao, List<Predicate<U>> filterList){
+
+        List<U> list = filteringCore(null, filter,  dao,  filterList);
 
         return list;
     }

@@ -61,14 +61,6 @@
                 <input type="text" class="box-filter" placeholder="Імені голови">
             </div>
 
-            <div id="EGRPOY">
-                <input type="text" class="box-filter" placeholder="ЕГРПОУ">
-            </div>
-
-            <div id="RNUKPN">
-                <input type="text" class="box-filter" placeholder="РНУКПН">
-            </div>
-
             <div id="countries-name-div">
                 <input list="countries-name" type="text" maxlength="60" pattern="^((?![/;-=*+?!]).)*$"
                     class="box-filter" placeholder="Країною">
@@ -115,21 +107,21 @@
         </form>
 
         <div class="block-order-info">
-            <form class="order_block">
+            <form class="order_block" th:each="agency : ${agencies}">
                 <div class="order_block-all-info-column">
 
                     <div class="order_block-all-info-row">
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Назва турагенції</small>
-                            <p class="order-info-text-name-bottom item_name-agency"> Україна</p>
+                            <p class="order-info-text-name-bottom item_name-agency" th:text="${agency.name}"> Україна</p>
                         </div>
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Логін</small>
-                            <p class="order-info-text-name-bottom item_username">Україна</p>
+                            <p class="order-info-text-name-bottom item_username" th:text="${agency.username}">Україна</p>
                         </div>
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Адреса офісу турагенції</small>
-                            <p class="order-info-text-name-bottom item_name-adress"> Україна</p>
+                            <p class="order-info-text-name-bottom item_name-adress" th:text="${agency.address}"> Україна</p>
                         </div>
 
                         <input type="submit" class="order-button order-button-grean" value="Написати повідомлення">
@@ -139,15 +131,15 @@
                     <div class="order_block-all-info-row">
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> КВЕД</small>
-                            <p class="order-info-text-name-bottom item_name-kved"> Україна</p>
+                            <p class="order-info-text-name-bottom item_name-kved" th:text="${agency.kved}"> Україна</p>
                         </div>
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Пошта</small>
-                            <p class="order-info-text-name-bottom item_email-agency"> 1</p>
+                            <p class="order-info-text-name-bottom item_email-agency" th:text="${agency.email}"> 1</p>
                         </div>
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Номер телефону</small>
-                            <p class="order-info-text-name-bottom item_number-agency"> 1</p>
+                            <p class="order-info-text-name-bottom item_number-agency" th:text="${agency.number}"> 1</p>
                         </div>
 
                         <input type="submit" class="order-button order-button-red" value="Заблокувати">
@@ -156,85 +148,22 @@
 
                     <div class="order_block-all-info-row">
                         <div class="order-info-text">
-                            <small class="order-info-text-name-top item_type_code"> РНУКПН</small>
-                            <p class="order-info-text-name-bottom item_code-value"> 1</p>
+                            <small class="order-info-text-name-top item_type_code" th:text="${agency.isEgrpoy ? 'ЕГРПОУ' : 'РНУКПН' }"> РНУКПН</small>
+                            <p class="order-info-text-name-bottom item_code-value" th:text="${agency.egrpoyOrRnekpn}"> 1</p>
                         </div>
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Ім’я голови турагенції</small>
-                            <p class="order-info-text-name-bottom item_name-director"> 1</p>
+                            <p class="order-info-text-name-bottom item_name-director" th:text="${agency.fullNameDirector}"> 1</p>
                         </div>
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Країна</small>
-                            <p class="order-info-text-name-bottom item_country-name"> 1</p>
+                            <p class="order-info-text-name-bottom item_country-name" th:text="${agency.country}"> 1</p>
                         </div>
 
 
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Дата реєстрації</small>
-                            <p class="order-info-text-name-bottom item_date-registration"> 1</p>
-                        </div>
-
-                    </div>
-
-                </div>
-            </form>
-            <form class="order_block">
-                <div class="order_block-all-info-column">
-
-                    <div class="order_block-all-info-row">
-                        <div class="order-info-text">
-                            <small class="order-info-text-name-top"> Назва турагенції</small>
-                            <p class="order-info-text-name-bottom item_name-agency"> А</p>
-                        </div>
-                        <div class="order-info-text">
-                            <small class="order-info-text-name-top"> Логін</small>
-                            <p class="order-info-text-name-bottom item_username">Фдесса</p>
-                        </div>
-                        <div class="order-info-text">
-                            <small class="order-info-text-name-top"> Адреса офісу турагенції</small>
-                            <p class="order-info-text-name-bottom item_name-adress"> бОдесса</p>
-                        </div>
-
-                        <input type="submit" class="order-button order-button-grean" value="Написати повідомлення">
-
-                    </div>
-
-                    <div class="order_block-all-info-row">
-                        <div class="order-info-text">
-                            <small class="order-info-text-name-top"> КВЕД</small>
-                            <p class="order-info-text-name-bottom item_name-kved"> 2</p>
-                        </div>
-                        <div class="order-info-text">
-                            <small class="order-info-text-name-top"> Пошта</small>
-                            <p class="order-info-text-name-bottom item_email-agency"> 2</p>
-                        </div>
-                        <div class="order-info-text">
-                            <small class="order-info-text-name-top"> Номер телефону</small>
-                            <p class="order-info-text-name-bottom item_number-agency"> 2</p>
-                        </div>
-
-                        <input type="submit" class="order-button order-button-grean" value="Заблокувати">
-
-                    </div>
-
-                    <div class="order_block-all-info-row">
-                        <div class="order-info-text">
-                            <small class="order-info-text-name-top item_type_code"> ЕГРПОУ</small>
-                            <p class="order-info-text-name-bottom item_code-value"> 2</p>
-                        </div>
-                        <div class="order-info-text">
-                            <small class="order-info-text-name-top"> Ім’я голови турагенції</small>
-                            <p class="order-info-text-name-bottom item_name-director"> 2</p>
-                        </div>
-                        <div class="order-info-text">
-                            <small class="order-info-text-name-top"> Країна</small>
-                            <p class="order-info-text-name-bottom item_country-name"> 2</p>
-                        </div>
-
-
-                        <div class="order-info-text">
-                            <small class="order-info-text-name-top"> Дата реєстрації</small>
-                            <p class="order-info-text-name-bottom item_date-registration"> 2</p>
+                            <p class="order-info-text-name-bottom item_date-registration" th:text="${agency.dateRegistration.toString().replace('T',' ')}"> 1</p>
                         </div>
 
                     </div>

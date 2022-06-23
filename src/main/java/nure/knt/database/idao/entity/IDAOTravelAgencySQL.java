@@ -2,13 +2,14 @@ package nure.knt.database.idao.entity;
 
 import nure.knt.database.idao.core.IDAOCoreEditing;
 import nure.knt.database.idao.core.IDAOUpdateTypeState;
+import nure.knt.database.idao.registration.IDAOFindAllTravelAgencyForRegistration;
 import nure.knt.entity.important.TravelAgency;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 import java.util.List;
 
-public interface IDAOTravelAgencySQL<TA extends TravelAgency> extends IDAOUserSQL<TA>, IDAOCoreEditing<TA>, IDAOUpdateTypeState {
+public interface IDAOTravelAgencySQL<TA extends TravelAgency> extends IDAOUserSQL<TA>, IDAOCoreEditing<TA>, IDAOUpdateTypeState , IDAOFindAllTravelAgencyForRegistration {
 
      public  List<TA> findByTravelAgencyIdIn(@NonNull Iterable<Long> ids);
      public  List<TA> findByTravelAgencyObjectIdIn(@NonNull Iterable<TA> ids);
