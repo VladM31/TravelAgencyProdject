@@ -151,6 +151,25 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
         return new ScriptTourAdWhereMySQL();
     }
 
+
+
+    private static final String CONFIRM_TOUR_AD = "UPDATE tour_ad " +
+            "SET condition_commodity_id = ? , cost_service = ? WHERE id = ?;";
+
+    @Override
+    public boolean updateConditionCommodityAndCostServiceById(TourAd tourAd) {
+        try(PreparedStatement preStatement = super.conn.getSqlPreparedStatement(CONFIRM_TOUR_AD)){
+            preStatement.setInt(1,tourAd.getConditionCommodity().getId());
+            preStatement.setInt(2, tourAd.getCostService());
+            preStatement.setLong(3, tourAd.getId());
+            return preStatement.executeUpdate()!=0;
+
+        }catch(Exception exc){
+            exc.printStackTrace();
+        }
+        return ERROR_BOOLEAN_ANSWER;
+    }
+
     String FIND_BY_COST_ONE_CUSTOMER_BETWEEN = " WHERE cost_one_customer BETWEEN ? AND ? ";
 
     @Override

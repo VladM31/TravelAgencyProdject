@@ -35,4 +35,27 @@ public class FilterTourAdAdminCheck extends FilterTourAdCore {
         return HandlerFilter.endFiltering(list,filterList);
     }
 
+    public String getNameTravelAgency() {
+        return nameTravelAgency;
+    }
+
+    public void setNameTravelAgency(String nameTravelAgency) {
+        this.nameTravelAgency = nameTravelAgency;
+    }
+
+    public LocalDateTime getStartDateRegistration() {
+        return startDateRegistration;
+    }
+
+    public void setStartDateRegistration(LocalDateTime startDateRegistration) {
+        this.startDateRegistration = startDateRegistration;
+    }
+
+    public LocalDateTime getEndDateRegistration() {
+        return endDateRegistration;
+    }
+
+    public void setEndDateRegistration(LocalDateTime endDateRegistration) {
+        this.endDateRegistration = endDateRegistration;
+    }
 }

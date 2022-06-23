@@ -18,7 +18,7 @@ public class WorkWithCountriesMySQL implements WorkWithCountries {
 
     private String[] countries;
     private static final String COUNT_COUNTIES = "SELECT COUNT(*) AS size FROM country;";
-    private static final String SELECT_COUNTIES = "SELECT name FROM country;";
+    private static final String SELECT_COUNTIES = "SELECT name FROM country ORDER BY id;";
 
     @Autowired
     public WorkWithCountriesMySQL(IConnectorGetter connector){

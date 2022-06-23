@@ -15,6 +15,4 @@ public class HandlerController {
         model.addAttribute("sign_in", true);
         model.addAttribute("name",user.getRole().equals(Role.CUSTOMER) ? user.getName().replace('/',' ') : user.getName());
     }
-
-
 }
