@@ -364,7 +364,7 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
                 HandlerDAOTAMYSQL::resultSetToTravelAgency,username);
     }
 
-    private static final String UPDATE_TYPE_STATE_BY_ID = "UPDATE travel_agency SET type_state_id = ? WHERE travel_agency.id = ?;";
+    private static final String UPDATE_TYPE_STATE_BY_ID = "UPDATE travel_agency join user on travel_agency.user_id = user.id SET user.type_state_id = ? WHERE travel_agency.id = ?;";
 
     @Override
     public boolean updateTypeStateById(Long id, TypeState typeState) {

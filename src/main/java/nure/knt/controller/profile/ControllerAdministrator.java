@@ -42,7 +42,7 @@ public class ControllerAdministrator {
 
        this.setInfoForShowAllUsers(user,model,filter);
 
-        System.out.println(filter);
+       // System.out.println(filter);
         return PAGE_FOR_SHOW_ALL_USERS;
     }
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Please sign in</title>
+    <title>Підтведження тур агенцій</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
@@ -12,19 +12,24 @@
     <link rel="stylesheet" th:href="@{/css/administrator_css/show_travel_agency_style _for_confirment.css}" />
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Neucha" />
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+    <link rel="stylesheet" th:href="@{/css/Main Page CSS.css}" />
 </head>
 
 <body class="main-body">
-
+<th:block th:include="/Top Menu"></th:block>
     <div class="main-body-top">
-        <h1 class="main-travel-agency-naming">
+        <h1 class="main-travel-agency-naming" th:text="${admin.name}">
             Назва турагенції
         </h1>
+        <h3  th:text="${admin.role}">
+
+        </h3>
     </div>
 
     <div class="main-body-buttom">
 
-        <form id="filter-right" class="filter-mail-block-for-all-info">
+        <form id="filter-right" class="filter-mail-block-for-all-info" th:object="${filter}" th:method="get"
+              th:action="${@environment.getProperty('admin.profile.check.registration.travel.agency.url')}" >
             <div>
                 <h2 style="font-family: 'Neucha';font-style: normal;font-size: 45px;">
                     <b>
@@ -34,41 +39,37 @@
             </div>
 
             <div id="nameUser">
-                <input type="text" class="box-filter" placeholder="Назві тур агенції">
+                <input type="text" class="box-filter" placeholder="Назві тур агенції" th:field="*{name}">
             </div>
 
             <div id="username">
-                <input type="text" class="box-filter" placeholder="Логіном">
+                <input type="text" class="box-filter" placeholder="Логіном" th:field="*{username}">
             </div>
 
             <div id="password">
-                <input type="text" class="box-filter" placeholder="Адресом">
+                <input type="text" class="box-filter" placeholder="Адресом" th:field="*{address}">
             </div>
 
             <div id="kved">
-                <input type="text" class="box-filter" placeholder="КВЕД">
+                <input type="text" class="box-filter" placeholder="КВЕД" th:field="*{kved}">
             </div>
 
             <div id="email">
-                <input type="text" class="box-filter" placeholder="Поштою">
+                <input type="text" class="box-filter" placeholder="Поштою" th:field="*{email}">
             </div>
 
             <div id="number-phone">
-                <input type="text" class="box-filter" placeholder="Номером телефону">
+                <input type="text" class="box-filter" placeholder="Номером телефону" th:field="*{number}">
             </div>
 
             <div id="name-director">
-                <input type="text" class="box-filter" placeholder="Імені голови">
+                <input type="text" class="box-filter" placeholder="Імені голови" th:field="*{nameDirector}">
             </div>
 
             <div id="countries-name-div">
                 <input list="countries-name" type="text" maxlength="60" pattern="^((?![/;-=*+?!]).)*$"
-                    class="box-filter" placeholder="Країною">
+                    class="box-filter" placeholder="Країною" th:field="*{country}">
                 <datalist name="country" id="countries-name">
-                    <option value="country">Франція</option>
-                    <option value="country">Україна</option>
-                    <option value="country">Італія</option>
-                    <option value="country">Чехія</option>
                     <option th:each="country : ${countries}" th:value="${country}" th:text="${country}">...</option>
                 </datalist>
             </div>
@@ -78,9 +79,9 @@
             <div id="Chose_date">
                 <h6>Датою реєстрації</h6>
                 <div style=" display:flex; justify-content: space-around;">
-                    <input type="date" name="start" class="box-filter-date">
+                    <input type="datetime-local" name="start" class="box-filter-date" th:field="*{startDateRegistration}">
                     <p class="line-between-date">-</p>
-                    <input type="date" name="ends" class="box-filter-date">
+                    <input type="datetime-local" name="ends" class="box-filter-date"  th:field="*{endDateRegistration}">
                 </div>
             </div>
 
@@ -88,12 +89,12 @@
                 <h5>За активністю</h5>
 
                 <div class="box-filter-check">
-                    <input id="Not_ban" type="checkbox" name="html5" />
+                    <input id="Not_ban" type="checkbox" th:field="*{hasEGRPOY}"/>
                     <label for="Not_ban">ЕГРПОУ</label>
 
                 </div>
                 <div class="box-filter-check">
-                    <input id="Is_ban" type="checkbox" name="html5" />
+                    <input id="Is_ban" type="checkbox" th:field="*{hasRNYKPN}"/>
                     <label for="Is_ban">РНУКПН</label>
 
                 </div>
@@ -101,16 +102,16 @@
             </div>
 
             <div>
-                <input type="submit" value="ШУКАТИ" class="filter-find-button">
+                <input type="submit" value="ШУКАТИ" class="filter-find-button" >
             </div>
 
         </form>
 
         <div class="block-order-info">
-            <form class="order_block" th:each="agency : ${agencies}">
+            <div class="order_block" th:each="agency : ${agencies}">
                 <div class="order_block-all-info-column">
 
-                    <div class="order_block-all-info-row">
+                    <form class="order_block-all-info-row" th:action="${@environment.getProperty('admin.profile.check.registration.travel.agency.confirm.url')}" method="POST">
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Назва турагенції</small>
                             <p class="order-info-text-name-bottom item_name-agency" th:text="${agency.name}"> Україна</p>
@@ -124,11 +125,12 @@
                             <p class="order-info-text-name-bottom item_name-adress" th:text="${agency.address}"> Україна</p>
                         </div>
 
-                        <input type="submit" class="order-button order-button-grean" value="Написати повідомлення">
+                        <input type="hidden" th:value="${agency.travelId}" name="idTravelAgency">
+                        <input type="submit" class="order-button order-button-grean" value="Підтвердити">
 
-                    </div>
+                    </form>
 
-                    <div class="order_block-all-info-row">
+                    <form class="order_block-all-info-row" th:action="${@environment.getProperty('admin.profile.check.registration.travel.agency.canceled.url')}" method="POST">
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> КВЕД</small>
                             <p class="order-info-text-name-bottom item_name-kved" th:text="${agency.kved}"> Україна</p>
@@ -141,10 +143,10 @@
                             <small class="order-info-text-name-top"> Номер телефону</small>
                             <p class="order-info-text-name-bottom item_number-agency" th:text="${agency.number}"> 1</p>
                         </div>
+                        <input type="hidden" th:value="${agency.travelId}" name="idTravelAgency">
+                        <input type="submit" class="order-button order-button-red" value="Скасувати">
 
-                        <input type="submit" class="order-button order-button-red" value="Заблокувати">
-
-                    </div>
+                    </form>
 
                     <div class="order_block-all-info-row">
                         <div class="order-info-text">
@@ -159,8 +161,6 @@
                             <small class="order-info-text-name-top"> Країна</small>
                             <p class="order-info-text-name-bottom item_country-name" th:text="${agency.country}"> 1</p>
                         </div>
-
-
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Дата реєстрації</small>
                             <p class="order-info-text-name-bottom item_date-registration" th:text="${agency.dateRegistration.toString().replace('T',' ')}"> 1</p>
@@ -169,7 +169,7 @@
                     </div>
 
                 </div>
-            </form>
+            </div>
 
         </div>
 
@@ -207,10 +207,10 @@
                     <h2 class="watch-travel-agency-choose-see"><b>Перегляд</b></h2>
 
                     <div style="display: flex;align-items: flex-start;margin-left: 4%">
-                        <input type="submit"
+                        <input type="button"
                             class="watch-travel-agency-choose-servise-submit wtacss-right wtacss-not-work"
                             value="Додавання">
-                        <input type="button" class="watch-travel-agency-choose-servise-submit wtacss-left "
+                        <input type="submit" class="watch-travel-agency-choose-servise-submit wtacss-left "
                             value="Зміна даних">
                     </div>
 
@@ -219,13 +219,13 @@
                 <br>
                 <div>
                     <input id="ChangeProfile" type="submit" class="watch-travel-agency-other-submit" rows="2"
-                        value="Повернутися">
+                        value="Повернутися"   th:formaction="${@environment.getProperty('admin.show.all.users.url')}">
                 </div>
 
 
 
             </form>
-            <script src="sort_all_registread_users.js"></script>
+            <script th:src="@{/js/sort_travel_agenciess.js}"></script>
         </div>
 
     </div>

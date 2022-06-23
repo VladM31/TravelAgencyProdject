@@ -19,7 +19,7 @@ public class FilterTravelAgency extends FilterAllUsers {
     public List<TravelAgency> filtering(IDAOTravelAgencySQL<TravelAgency> dao){
         List<TravelAgency> list = dao.findByTypeStateRegistrationAndCodeConfirmedTrue();
 
-        if(list == null || list.isEmpty()){
+        if(list == HandlerFilter.LIST_IS_NOT_CREATED_FROM_DATABASE || list.isEmpty()){
             return List.of();
         }
 
@@ -43,7 +43,7 @@ public class FilterTravelAgency extends FilterAllUsers {
                 (state) -> dao.findByEGRPOY(state),
                 (state) -> filterList.add(msd -> msd.isEgrpoy() == state.booleanValue() ));
 
-        return list;
+        return HandlerFilter.endFiltering(list,filterList);
     }
 
 
