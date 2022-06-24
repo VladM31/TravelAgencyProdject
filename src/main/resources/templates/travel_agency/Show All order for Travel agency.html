@@ -20,7 +20,7 @@
 <th:block th:include="/Top Menu"></th:block>
   <main>
     <section class="title">
-      <h1 class="main-title" th:text="${travelAgency}">Назва турагенції</h1>
+      <h1 class="main-title" th:text="${travelAgency.name}">Назва турагенції</h1>
       <div class="rating-mini">
         <span  th:each="star : ${travelAgency.getStars()}" th:utext="${star}"></span>
       </div>

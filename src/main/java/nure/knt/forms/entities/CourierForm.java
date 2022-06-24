@@ -78,6 +78,11 @@ public class CourierForm extends UserForm {
         this.birthDate = birthDate;
     }
 
+    public CourierForm(Courier courier) {
+        this(courier.getName(),courier.getName(),courier.getNumber(),courier.getEmail(),courier.getCountry(),
+                courier.getName(),courier.getAddress(),courier.getCity(),courier.getDateBirth());
+    }
+
     public Courier toCourier(){
         Courier courier = new Courier();
 

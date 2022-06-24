@@ -238,6 +238,12 @@ class HandlerIMCForTravelAgency {
 @PropertySource("classpath:WorkerWithCourier.properties")
 class HendlerIMCForCourier {
     private static final String COURIER_NAME_CHOOSE = "Завдання";
+    private static String COURIER_EDIT;
+
+
+    public HendlerIMCForCourier(@Value("${courier.profile.edit.url}")String COURIER_EDIT) {
+        HendlerIMCForCourier.COURIER_EDIT = COURIER_EDIT;
+    }
 
     @Autowired
     public void setCourierUrlChoose(@Value("${courier.profile.show.task.url}") String courierUrlChoose) {
@@ -252,7 +258,7 @@ class HendlerIMCForCourier {
                 COURIER_URL_CHOOSE,
                 HendlerIMCForAll.NO_THIRD_BUTTON,
                 HendlerIMCForAll.EMPTY_NAME,
-                HendlerIMCForAll.EMPTY_NAME);
+                HendlerIMCForCourier.COURIER_EDIT);
     }
 }
 
