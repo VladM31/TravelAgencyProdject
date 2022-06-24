@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
+    rel="stylesheet" />
+  <link href="../../node_modules/normalize.css/normalize.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="stylesheet" href="./sortBlock.css" />
+
+
+  <link rel="stylesheet" th:href="@{/css/sort_button/sortBlock.css}" />
+
+  <link rel="stylesheet" th:href="@{/css/Main Page CSS.css}" />
+  <link rel="stylesheet" th:href="@{/css/administrator_css/check_tour_ad_style.css}" />
+
+  <title>Document</title>
+</head>
+
+<body>
+<th:block th:include="/Top Menu"></th:block>
+
+  <main>
+    <div class="container">
+      <div class="main-header">
+        <h2 th:text = "${admin.name}">Ім'я прізвище</h2>
+        <p th:text = "${admin.role}">Роль</p>
+      </div>
+      <div class="main">
+        <form class="filter" th:object ="${filter}"  method = "GET">
+          <div class="filter-item">
+            <h2>Фільтрувати за:</h2>
+            <input type="text" placeholder="Назві тур агенції" th:field = "*{nameTravelAgency}">
+            <br>
+            <input type="text" placeholder="Назві міста"  th:field = "*{nameCity}">
+            <br>
+            <input type="text" placeholder="Назві місця"  th:field = "*{namePlace}">
+            <br>
+            <input type="text" placeholder="Країні"  th:field = "*{nameCountry}">
+            <br>
+            <label>Датою утворення</label>
+            <div class="item">
+              <input type="datetime-local"  th:field = "*{startDateRegistration}"/>
+              <input type="datetime-local"   th:field = "*{endDateRegistration}"/>
+            </div>
+            <label>Датою туру</label>
+            <div class="item">
+              <input type="date"  th:field = "*{startDate}"/>
+              <input type="date"  th:field = "*{endDate}"/>
+            </div>
+            <label>Відсотковою знижкою</label>
+            <div class="item">
+              <input type="number" placeholder="Початкова"  th:field = "*{discountPercentageStart}"/>
+              <input type="number" placeholder="Кінцева"  th:field = "*{discountPercentageEnd}"/>
+            </div>
+            <label>Ціною</label>
+            <div class="item">
+              <input type="number" placeholder="Початкова"  th:field = "*{costOneCustomerStart}"/>
+              <input type="number" placeholder="Кінцева"  th:field = "*{costOneCustomerEnd}"/>
+            </div>
+            <label>Максимальною кількістю</label>
+            <div class="item">
+              <input type="number" placeholder="Початкова"  th:field = "*{discountSizePeopleStart}"/>
+              <input type="number" placeholder="Кінцева"  th:field = "*{discountSizePeopleEnd}"/>
+            </div>
+            <br>
+            <input type="submit" class="submit" />
+          </div>
+
+        </form>
+        <div class="info">
+          <div class="user" th:each = "tourAd: ${tourAds}">
+            <div class="user-info">
+              <div class="item">
+                <h5>Назва турагенції</h5>
+                <p class="item_name-travel-agency" th:text = "${tourAd.nameAgency}"></p>
+              </div>
+              <div class="item">
+                <h5>Ціна</h5>
+                <p class="item_cost" th:text = "${tourAd.costOneCustomer}"></p>
+              </div>
+              <div class="item">
+                <h5>Дата початку</h5>
+                <p class="item_start-date" th:text = "${tourAd.dateStart}"></p>
+              </div>
+              <div class="item">
+                <h5>Місто</h5>
+                <p class="item_city-name" th:text = "${tourAd.city}"></p>
+              </div>
+              <div class="item">
+                <h5>Відсоткова знижка</h5>
+                <p class="item_discount-tour-ad" th:text = "${tourAd.discountPercentage}"></p>
+              </div>
+              <div class="item">
+                <h5>Дата закінчення</h5>
+                <p class="item_end-date" th:text = "${tourAd.dateEnd}"></p>
+              </div>
+              <div class="item">
+                <h5>Місце перебування користувача</h5>
+                <p class="item_place-name" th:text = "${tourAd.place}"></p>
+              </div>
+              <div class="item">
+                <h5>Кількість людей</h5>
+                <p class="item_number-of-people" th:text = "${tourAd.orderQuantity}"></p>
+              </div>
+              <div class="item">
+                <h5>Країна</h5>
+                <p class="item_country-name" th:text = "${tourAd.country}"></p>
+              </div>
+            </div>
+            <form class="user-buttons">
+
+              <input type="hidden" id = "value_cost" name="valueCost"  />
+              <input type="submit" id = "button_set_cost" class="button-accept" value="Підтвердити"
+              th:formaction="${@environment.getProperty('admin.profile.check.tour.ad.confirmed.url')}" th:formmethod = "POST"/>
+              <input type="hidden"  name="idTourAd" th:value = "${tourAd.id}"  />
+
+              <input type="submit" class="button-cancel" value="Скасувати"
+                     th:formaction="${@environment.getProperty('admin.profile.check.tour.ad.canceled.url')}" th:formmethod = "POST"/>
+
+              <div class="item">
+                <h5>Дата утворення</h5>
+                <p class="item_date-registration" th:text = "${tourAd.dateRegistration.toString().replace('T',' ')}"></p>
+              </div>
+            </form>
+          </div>
+
+        </div>
+        <div class="second-filter">
+          <div id="SortBy" class="box-sort"
+            style="width: 210px; height: 200px;  display: flex; justify-content: center; flex-direction: column;">
+            <div>
+              <h2>Сортувати по:</h2>
+            </div>
+
+            <select id="selectSort" name="SortBy" class="box-filter back-select">
+              <option id="sortByDateRegistration">Даті утворення</option>
+              <option id="sortByNameTravelAgency">Назві агенції</option>
+              <option id="sortByCost">Ціні</option>
+              <option id="sortByStartDate">Даті початку</option>
+
+              <option id="sortByCityName">Назві міста</option>
+              <option id="sortByDiscountTourAd">Знижці</option>
+              <option id="sortByEndDate">Даті закінчення</option>
+              <option id="sortByPlaceName">Місцю перебування</option>
+
+              <option id="sortByNumberOfPeople">Кількістю людей</option>
+              <option id="sortByCountryName">Країні</option>
+
+
+            </select>
+            <br>
+            <div style="display: flex; justify-content: center; flex-direction: row;">
+              <button id="sortDescending" class="button-sort">\/</button>
+              <button id="sortAscending" class="button-sort button-sort-used">/\</button>
+            </div>
+          </div>
+          <br>
+
+          <form class="div-buttons">
+            <div class="added-or-change-bottons-box">
+              <button class="added-or-change-bottons added-or-change-bottons-right">Підтвердження</button>
+              <button type="submit" class="added-or-change-bottons added-or-change-bottons-left">Зміну даних</button>
+            </div>
+            <br>
+            <input type="submit" value="Повернутися" class="big-no-bigger-button"
+                   th:formaction="${@environment.getProperty('admin.show.all.users.url')}" th:formmethod = "GET">
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script th:src="@{/js/check_tour_ad.js}"></script>
+</body>
+
+</html>
