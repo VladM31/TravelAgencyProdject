@@ -17,7 +17,7 @@
     <div class="container">
       <div>
         <h1>РЕДАГУВАННЯ</h1>
-        <form th:object="${courier_form}" th:action="${@environment.getProperty('courier.profile.edit.url')}" th:method="POST">
+        <form th:object="${courier_form}" th:action="${@environment.getProperty('courier.profile.edit.url')}" th:method="PATCH">
           <div class="wrapper">
             <div class="inputs">
               <div>
@@ -61,8 +61,9 @@
                 </datalist>
                 <input type="hidden" name="username" value="UserDefault1UserDefault2UserDefault3"/>
                 <input type="hidden" name="password" value="KDAKSKKKDSOKOAkoekf30dkOKADOK3DKkaskdOKA"/>
-                <label style="color: red;" for=""> Error</label>
-                <input readonly type="text"  value="Error here" style="color: red; background-color: #c48484; border: 0px; text-align: center"/>
+                <label style="color: red;" th:if="${error_message}"> Error</label>
+                <input readonly type="text"  style="color: red; background-color: #c48484; border: 0px; text-align: center"
+                       th:if="${error_message}"  th:value="${error_message}"/>
 
               </div>
             </div>

@@ -99,7 +99,7 @@ public class CourierForm extends UserForm {
     }
 
     public Courier toCourier(Courier courier){
-
+        formToCourier(this,courier);
         return courier;
     }
 
