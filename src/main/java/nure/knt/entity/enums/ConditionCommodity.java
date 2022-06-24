@@ -21,9 +21,9 @@ public enum ConditionCommodity implements IEnumId{
             case CANCELED:
                 return "Скасовано";
             case CONFIRMED:
-                return "Підтвердженно";
+                return "Підтверджено";
             case NOT_CONFIRMED:
-                return "Не підтвердженно";
+                return "Не підтверджено";
         }
         return "";
     }

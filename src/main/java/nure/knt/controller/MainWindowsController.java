@@ -2,6 +2,7 @@ package nure.knt.controller;
 
 import nure.knt.database.idao.entity.IDAOTravelAgencySQL;
 import nure.knt.database.idao.goods.IDAOTourAd;
+import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.goods.TourAd;
 import nure.knt.entity.important.TravelAgency;
@@ -71,9 +72,15 @@ public class MainWindowsController {
     }
 
     @RequestMapping(value = "${main.pages.find.all.url}", method = {RequestMethod.GET})
-    public String showPageForFindAllTourAd(Model model, FilterTourAdMainPage filter){
-
-        model.addAttribute("tourAds",filter.filtering(daoTourAd.where().typeStateIn(Set.of(TypeState.REGISTERED)),daoTourAd));
+    public String showPageForFindAllTourAd(@AuthenticationPrincipal User user,Model model, FilterTourAdMainPage filter){
+        if (user != null) {
+            HandlerController.setMenuModel(user,model);
+        }
+        model.addAttribute("tourAds",filter.filtering(daoTourAd
+                .where()
+                .typeStateIn(Set.of(TypeState.REGISTERED))
+                .conditionCommodityIn(Set.of(ConditionCommodity.CONFIRMED)
+                ),daoTourAd));
         model.addAttribute("filter",filter);
         model.addAttribute("countries",countries.getCountry());
         return PAGE_TOUR_ADS;

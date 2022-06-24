@@ -207,7 +207,7 @@ input[name="accept"]:active {
   padding: 0;
   font-size: 40px;
   line-height: 1;
-  color: gray;
+  color: gold;
 }
 
 
@@ -227,7 +227,7 @@ input[name="accept"]:active {
   justify-content: center;
   align-items: center;
   width: 300px;
-  height: 1100px;
+  height: 1200px;
   background: rgba(242, 245, 245, 0.93);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 20px;

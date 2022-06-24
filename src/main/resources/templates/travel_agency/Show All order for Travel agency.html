@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="uk">
-
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
 
@@ -8,6 +8,8 @@
     href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
     rel="stylesheet" />
   <link href="../../node_modules/normalize.css/normalize.css" rel="stylesheet" />
+
+  <link rel="stylesheet" th:href="@{../css/Main Page CSS.css}" />
   <link rel="stylesheet" th:href="@{/css/travel_agency_style/show_all_order_fot_travel_agency_style.css}" />
   <link rel="stylesheet" th:href="@{/css/sort_button/sortBlock.css}" />
 
@@ -15,34 +17,34 @@
 </head>
 
 <body>
-
+<th:block th:include="/Top Menu"></th:block>
   <main>
     <section class="title">
-      <h1 class="main-title">Назва турагенції</h1>
+      <h1 class="main-title" th:text="${travelAgency.name}">Назва турагенції</h1>
       <div class="rating-mini">
-        <span class="actived"></span>
+        <span  th:each="star : ${travelAgency.getStars()}" th:utext="${star}"></span>
       </div>
     </section>
     <div class="flex-row">
-      <div class="left-section">
+      <form class="left-section" th:object="${filter}" th:action="${@environment.getProperty('travel.agency.show.orders.by.tour.ad.id.url')}">
+        <input type="hidden" name="tourAdId" th:value="${tourAd.id}">
         <div class="search-filter">
           <h2>ШУКАТИ ЗА</h2>
 
           <div class="item">
 
-
             <div class="">
-              <input type="text" class="input-text-information" placeholder="Іменем">
+              <input type="text" class="input-text-information" placeholder="Іменем" th:field="*{firstnameCustomer}">
               <label></label>
-              <input type="text" class="input-text-information" placeholder="Прізвищем">
+              <input type="text" class="input-text-information" placeholder="Прізвищем" th:field="*{lastnameCustomer}">
               <label></label>
-              <input type="text" class="input-text-information" placeholder="Номером телефону">
+              <input type="text" class="input-text-information" placeholder="Номером телефону" th:field="*{emailCustomer}">
               <label></label>
-              <input type="text" class="input-text-information" placeholder="Поштою">
+              <input type="text" class="input-text-information" placeholder="Поштою" th:field="*{numberCustomer}">
               <label></label>
-              <input type="text" class="input-text-information" placeholder="Країною">
+              <input type="text" class="input-text-information" placeholder="Країною" th:field="*{country}">
               <label></label>
-              <input type="text" class="input-text-information" placeholder="Країною">
+              <input type="text" class="input-text-information" placeholder="Містом" th:field="*{city}">
             </div>
 
           </div>
@@ -50,30 +52,30 @@
             <label>Ціною туру</label>
 
             <div class="item-input">
-              <input placeholder="Початкова" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
-              <input placeholder="Кінцева" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
+              <input placeholder="Початкова" type="number" min="0" max="9999999" th:field="*{startCost}"/>
+              <input placeholder="Кінцева" type="number"min="0" max="99999" th:field="*{endCost}"/>
             </div>
           </div>
           <div class="item">
             <label>Датою туру</label>
             <div class="item-input">
-              <input placeholder="Початкова" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
-              <input placeholder="Кінцева" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
+              <input placeholder="Початкова" type="date" th:field="*{startDateOrder}" />
+              <input placeholder="Кінцева" type="date" th:field="*{endDateOrder}"/>
             </div>
           </div>
           <div class="item">
-            <label>Відсотком знижки</label>
+            <label>Кількістю людей</label>
             <div class="item-input">
-              <input placeholder="Початкова" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
-              <input placeholder="Кінцева" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
+              <input placeholder="Початкова" type="number" th:field="*{startNumberOfPeople}"/>
+              <input placeholder="Кінцева" type="number" th:field="*{endNumberOfPeople}"/>
             </div>
           </div>
           <div class="item">
             <label>Датою утворення</label>
 
             <div class="item-input">
-              <input placeholder="Початкова" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
-              <input placeholder="Кінцева" type="number" id="tentacles" name="tentacles" min="0" max="99999" />
+              <input placeholder="Початкова" type="datetime-local" th:field="*{startDateRegistration}" />
+              <input placeholder="Кінцева" type="datetime-local" th:field="*{endDateRegistration}" />
             </div>
           </div>
           <div class="item-checkbox">
@@ -81,29 +83,47 @@
 
             <div class="item-input">
               <div class="item">
-                <input type="checkbox" id="1" />
+                <input type="checkbox" id="1" name="conditionCommodities" th:value="${T(nure.knt.entity.enums.ConditionCommodity).CONFIRMED}"
+                       th:checked="*{conditionCommodities.contains(T(nure.knt.entity.enums.ConditionCommodity).CONFIRMED)}"/>
                 <label for="1">Підтверджений</label>
               </div>
               <div class="item">
-                <input type="checkbox" id="2" />
+                <input type="checkbox" id="2" name="conditionCommodities" th:value="${T(nure.knt.entity.enums.ConditionCommodity).NOT_CONFIRMED}"
+                       th:checked="*{conditionCommodities.contains(T(nure.knt.entity.enums.ConditionCommodity).NOT_CONFIRMED)}"/>
                 <label for="2">Не підтверджений</label>
               </div>
               <div class="item">
-                <input type="checkbox" id="3" />
+                <input type="checkbox" id="3"  name="conditionCommodities" th:value="${T(nure.knt.entity.enums.ConditionCommodity).CANCELED}"
+                       th:checked="*{conditionCommodities.contains(T(nure.knt.entity.enums.ConditionCommodity).CANCELED)}"/>
                 <label for="3">Скасований</label>
               </div>
               <div class="item">
-                <input type="checkbox" id="4" />
+                <input type="checkbox" id="4" name="conditionCommodities" th:value="${T(nure.knt.entity.enums.ConditionCommodity).GONE}"
+                       th:checked="*{conditionCommodities.contains(T(nure.knt.entity.enums.ConditionCommodity).GONE)}"/>
                 <label for="4">Використаний</label>
               </div>
             </div>
           </div>
 
+          <div class="item-checkbox">
+            <label>За статю </label>
+
+            <div class="item-input">
+              <div class="item">
+                <input type="checkbox" id="5" th:field="*{male}" th:checked="*{male}"/>
+                <label for="5">Чоловік</label>
+              </div>
+              <div class="item">
+                <input type="checkbox" id="6" th:field="*{female}" th:checked="*{female}" />
+                <label for="6" >Жінка</label>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="filter-button">
           <input type="submit" value="Пошук" />
         </div>
-      </div>
+      </form>
       <div class="info-section">
         <div class="main-info" th:object="${tourAd}">
           <h2>Дані послуги</h2>
@@ -203,10 +223,16 @@
               <h5>Стан</h5>
               <p class="item_state-order" th:text="${T(nure.knt.entity.enums.ConditionCommodity).getUkraineName(order.conditionCommodity)}">Підтверджений</p>
             </div>
-            <div class="buttons">
-              <input type="submit" name="cancel" value="Скасувати" />
-              <input type="submit" name="accept" value="Підтвердити" />
-            </div>
+            <form class="buttons">
+              <input type="hidden" th:name="tourAdId" th:value="${tourAd.id}">
+              <input type="hidden" th:name="orderId" th:value="${order.id}">
+              <input type="submit" th:if="${canCanceled.apply(order.conditionCommodity)}" name="cancel" value="Скасувати"
+                     th:formaction="${@environment.getProperty('travel.agency.set.condition.to.canceled.for.order.url')}"
+                     th:formmethod="POST" />
+              <input type="submit" th:if="${canConfirmed.apply(order.conditionCommodity)}" name="accept" value="Підтвердити"
+                     th:formaction="${@environment.getProperty('travel.agency.set.condition.to.confirmed.for.order.url')}"
+                     th:formmethod="POST" />
+            </form>
           </div>
         </div>
 
@@ -244,7 +270,7 @@
           </div>
         </div>
         <br>
-        <form class="div-buttons">
+        <form class="div-buttons" th:action="${@environment.getProperty('travel.agency.show.orders.by.tour.ad.id.url')}">
           <p>Знайдено <span th:text="${orders.size()}"></span> замовлень</p>
           <input type="submit" value="Повернутися" class="big-no-bigger-button">
         </form>
@@ -255,6 +281,7 @@
     </div>
 
   </main>
+    <script th:src="@{/js/sort_orders_travel_agency.js}"></script>
 </body>
 
 </html>
