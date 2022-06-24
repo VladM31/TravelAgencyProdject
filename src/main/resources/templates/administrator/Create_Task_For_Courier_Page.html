@@ -23,7 +23,7 @@
           <div class="first-part">
             <div class="first-part-input">
               <label>Кількість листівок</label>
-              <input th:field="*{numberOfFlyers}" />
+              <input th:field="*{numberOfFlyers}" id="numberOfFlyersInput" min="1" type="number" max="1000000" required/>
             </div>
             <div class="first-part-select">
               <label>Виберіть кур’єра</label>
@@ -37,9 +37,15 @@
             <textarea cols="150" rows="20" th:field="*{describe}"></textarea>
           </div>
           <div class="third-part">
-            <input type="button" value="НАЗАД" />
+            <input type="submit" value="НАЗАД" onmouseover="myFunction()"  th:formaction="${@environment.getProperty('admin.profile.show.courier.task')}" th:formmethod="GET"/>
             <input type="submit" value="ОФОРМИТИ"/>
           </div>
+
+          <script>
+            function myFunction() {
+              document.getElementById("numberOfFlyersInput").value=1;
+            }
+          </script>
         </form>
       </div>
     </main>

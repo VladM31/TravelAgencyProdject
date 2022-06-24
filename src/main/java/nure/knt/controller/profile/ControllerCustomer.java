@@ -130,13 +130,7 @@ public class ControllerCustomer {
 
     private boolean setErrors(Customer user, Model model, CustomerForm customerForm, BindingResult bindingResult){
 
-        if(bindingResult.hasErrors()){
-            model.addAttribute(ATTRIBUTE_ERROR_MESSAGE,bindingResult.getAllErrors().get(0).getDefaultMessage());
-            return true;
-        }
-
-        if(countries.getIdByCountry(customerForm.getCountry()) == WorkWithCountries.NAME_NOT_FOUND){
-            model.addAttribute(ATTRIBUTE_ERROR_MESSAGE,"Країна не знайдена або введена не правильно");
+        if(HandlerController.setErrors(user,model,customerForm,bindingResult,countries,ATTRIBUTE_ERROR_MESSAGE)){
             return true;
         }
 

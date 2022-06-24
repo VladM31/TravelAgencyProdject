@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link  rel="stylesheet" type="text/css" th:href="@{/css/courierCss/courier_edit_stylee.css}" />
+    <title>РЕЄСТРАЦІЯ</title>
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <h1>РЕДАГУВАННЯ</h1>
+        <form th:object="${courier_form}" th:action="${@environment.getProperty('courier.profile.edit.url')}" th:method="PATCH">
+          <div class="wrapper">
+            <div class="inputs">
+              <div>
+                <label for="name">Ім’я</label>
+                <input type="text" id="name"  minlength="2" maxlength="50" pattern="^((?![/;-=*+?!]).)*$" th:field="*{name}"/>
+                <label for="numberOfPhone">Номер телефону</label>
+                <input type="number" id="numberOfPhone" minlength="10" maxlength="10" pattern="^((?[0-9]).)*$" th:field="*{number}"/>
+
+                <label for="citys-choice">Місто</label>
+                <input
+                  type="text"
+                  list="citys"
+                  id="citys-choice"
+                  th:field="*{city}"
+                />
+                <datalist id="citys">
+                  <option value="Київ"></option>
+                  <option value="Вашингтон"></option>
+                  <option value="Буенос Айрос"></option>
+                  <option value="Париж"></option>
+                  <option value="Лондон"></option>
+                </datalist>
+                <label for="">Дата народження</label>
+                <input type="date" th:field="*{birthDate}" />
+              </div>
+              <div>
+
+                <label for="">Поштова адреса</label>
+                <input type="email" th:field="*{email}" />
+                <label for="">Адреса перебування</label>
+                <input type="text"  th:field="*{address}"/>
+                <label for="">Країна</label>
+                <input
+                  type="text"
+                  list="countries-name"
+                  id="country-choice"
+                  th:field="*{country}"
+                />
+                <datalist name="country" id="countries-name">
+                  <option th:each="country : ${countries}" th:value="${country}" th:text="${country}">...</option>
+                </datalist>
+                <input type="hidden" name="username" value="UserDefault1UserDefault2UserDefault3"/>
+                <input type="hidden" name="password" value="KDAKSKKKDSOKOAkoekf30dkOKADOK3DKkaskdOKA"/>
+                <label style="color: red;" th:if="${error_message}"> Error</label>
+                <input readonly type="text"  style="color: red; background-color: #c48484; border: 0px; text-align: center"
+                       th:if="${error_message}"  th:value="${error_message}"/>
+
+              </div>
+            </div>
+            <div class="buttons">
+              <input type="submit" value="Підтвердити" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,5 +1,6 @@
 package nure.knt.security;
 
+import nure.knt.entity.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -26,6 +27,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .antMatchers("/admin/**").hasAuthority(Role.ADMINISTRATOR.name())
+                .antMatchers("/customer/**").hasAuthority(Role.CUSTOMER.name())
+                .antMatchers("/travel-agency/**").hasAuthority(Role.TRAVEL_AGENCY.name())
+                .antMatchers("/courier/**").hasAuthority(Role.COURIER.name())
                 .antMatchers("/","/sign_up","/free/**","/menu")
                 .permitAll()
                 .anyRequest()
@@ -43,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
                 .ignoring()
-                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**");
+                .antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**")
+        ;
     }
 }

@@ -149,7 +149,7 @@
 
                     </form>
 
-                    <form th:action="${@environment.getProperty('admin.show.all.users.url')}" class="order_block-all-info-row" th:method="PATCH">
+                    <form class="order_block-all-info-row" th:method="PATCH"  th:action="${@environment.getProperty('admin.show.all.users.url')}" >
                         <div class="order-info-text " th:classappend="${isAdmin} ? toDoOnFuture : order-button-gray ">
                             <small class="order-info-text-name-top"> Пароль</small>
                             <p class="order-info-text-name-bottom item_password-user" th:if="${isAdmin}" th:text="${user.password}"> 1</p>
@@ -173,7 +173,7 @@
 
                     </form>
 
-                    <form class="order_block-all-info-row">
+                    <form class="order_block-all-info-row" th:method="DELETE"  th:action="${@environment.getProperty('administrator.want.delete.other.user')}">
                         <div class="order-info-text">
                             <small class="order-info-text-name-top"> Країна</small>
                             <p class="order-info-text-name-bottom item_country-name"  th:text="${user.country}"> 1</p>
@@ -187,7 +187,7 @@
                             <p class="order-info-text-name-bottom item_date-registration" th:text="${user.dateRegistration.toString().replace('T',' ')}"> 1</p>
                         </div>
 
-
+                        <input type="hidden" name="id" th:value="${user.id}">
                         <input type="submit" class="order-button order-button-gray" value="Видалити">
 
                     </form>
@@ -247,7 +247,7 @@
 
                 <div>
                     <input id="Writeorder" type="submit" class="watch-travel-agency-other-submit" rows="2"
-                        value="Написати повідомлення">
+                        value="Написати повідомлення" th:formaction="@{/send-message}">
                 </div>
 
                 <div>
@@ -256,14 +256,15 @@
                 </div>
 
                 <div>
-                    <input id="MakeTheService" type="submit" class="watch-travel-agency-other-submit" rows="2" th:formaction="${@environment.getProperty('admin.profile.show.courier.task')}"
+                    <input id="MakeTheService" type="submit" class="watch-travel-agency-other-submit" rows="2"
+                           th:formaction="${@environment.getProperty('admin.profile.show.courier.task')}"
                         value="Перегляд завдань">
 
                 </div>
 
                 <div>
                     <input id="MakeTheService" type="submit" class="watch-travel-agency-other-submit" rows="2"
-                        value="Перевірка тур агенцій">
+                        value="Перевірка тур агенцій"  th:formaction="${@environment.getProperty('admin.profile.check.registration.travel.agency.url')}">
                 </div>
 
                 <div>

@@ -3,6 +3,7 @@ package nure.knt.database.dao.mysql.entity;
 import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
 import nure.knt.database.idao.entity.IDAOTravelAgencySQL;
+import nure.knt.database.idao.registration.IDAOFindAllTravelAgencyForRegistration;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.important.Customer;
@@ -22,19 +23,16 @@ import static nure.knt.database.dao.HandlerSqlDAO.ERROR_BOOLEAN_ANSWER;
 @Component("DA0_MySQL_Travel_Agency")
 public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencySQL<TravelAgency> {
 
-
-
-
     private static final String WHERE_ID_IN = " AND user.id IN ( "+ REPLACE_SYMBOL+" )";
 
     @Override
     public List<TravelAgency> findAllById(Iterable<Long> ids) {
+
+        String script = HandlerSqlDAO.setInInsideScript(WHERE_ID_IN,ids);
         return HandlerSqlDAO.useSelectScript(super.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
-                WHERE_ID_IS,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION), HandlerDAOTAMYSQL::resultSetToTravelAgency,ids);
+                script,HandlerSqlDAO.SORT_TO_DATE_REGISTRATION), HandlerDAOTAMYSQL::resultSetToTravelAgency,ids);
 
     }
-
-
 
     private static final String WHERE_ID_IS = " AND user.id = ? ";
 
@@ -89,6 +87,8 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
     }
 
 
+
+
     private static final String UPDATE_ITERABLE_BY_ID = "UPDATE travel_agency left join user on travel_agency.user_id = user.id  " +
             "SET number = ?, email = ?,username = ?,password = ?,name = ?,active = ?,date_registration = ?,role_id = ?," +
             "country_id = ?,type_state_id = ?,rating = ?,kved = ?," +
@@ -124,6 +124,8 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
         return null;
     }
 
+
+
     @Override
     public TravelAgency findByTravelAgencyId(Long id) {
         return null;
@@ -134,9 +136,16 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
         return null;
     }
 
+    private static final String WHERE_KVED_CONTAINING = " AND travel_agency.kved LIKE ? ";
+
     @Override
     public List<TravelAgency> findByKVEDContaining(String kved) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,
+                HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_KVED_CONTAINING,
+                        HandlerSqlDAO.SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,
+                HandlerSqlDAO.containingString(kved));
     }
 
     @Override
@@ -144,9 +153,14 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
         return null;
     }
 
+    private static final String WHERE_TRAVEL_AGENCY_HAS_EGRPOY_CONTAINING = " AND travel_agency.is_egrpoy = ? ";
+
     @Override
     public List<TravelAgency> findByEGRPOY(boolean isEGRPOY) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_TRAVEL_AGENCY_HAS_EGRPOY_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,
+                isEGRPOY);
     }
 
     @Override
@@ -154,14 +168,25 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
         return null;
     }
 
+    private static final String WHERE_ADDRESS_CONTAINING = " AND travel_agency.address LIKE ? ";
+
     @Override
     public List<TravelAgency> findByAddressContaining(String address) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_ADDRESS_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,
+                HandlerSqlDAO.containingString(address));
     }
+
+    private static final String WHERE_NAME_DIRECTOR_CONTAINING = " AND travel_agency.full_name_director LIKE ? ";
+
 
     @Override
     public List<TravelAgency> findByAllNameDirectoContaining(String allNameDirector) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
+                        WHERE_NAME_DIRECTOR_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,
+                HandlerSqlDAO.containingString(allNameDirector));
     }
 
 
@@ -247,9 +272,6 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
                 HandlerDAOTAMYSQL::resultSetToTravelAgency,start,end);
     }
 
-
-
-
     private static final String WHERE_ACTIVE_IS = " AND user.active = ? ";
 
     @Override
@@ -259,14 +281,13 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
                 HandlerDAOTAMYSQL::resultSetToTravelAgency,active);
     }
 
+    private static final String WHERE_ROLE_IS = " AND user.role_id = ? ";
 
     @Override
     public List<TravelAgency> findByTypeState(TypeState typeState) {
         return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY.replace("20", "?"),SORT_TO_DATE_REGISTRATION),
                 HandlerDAOTAMYSQL::resultSetToTravelAgency,typeState.getId());
     }
-
-
 
     private static final String WHERE_COUNTRY_IS = " AND country.name = ? ";
 
@@ -277,11 +298,14 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
                 HandlerDAOTAMYSQL::resultSetToTravelAgency,country);
     }
 
+    private static final String WHERE_COUNTRY_CONTAINING = " AND country.name LIKE ? ";
+
     @Override
     public List<TravelAgency> findByCountryNameContaining(String country) {
         return HandlerSqlDAO.useSelectScript(super.conn,HandlerSqlDAO.concatScriptToEnd(SELECT_TRAVEL_AGENCY,
-                " AND ",HandlerUserPartScript.WHERE_COUNTRY_NAME_CONTAINING,SORT_TO_DATE_REGISTRATION),
-                HandlerDAOTAMYSQL::resultSetToTravelAgency,HandlerSqlDAO.containingString(country));
+                        WHERE_COUNTRY_CONTAINING,SORT_TO_DATE_REGISTRATION),
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,
+                HandlerSqlDAO.containingString(country));
     }
 
 
@@ -340,20 +364,39 @@ public class DAOTravelAgencyMySQL extends MySQLCore implements IDAOTravelAgencyS
                 HandlerDAOTAMYSQL::resultSetToTravelAgency,username);
     }
 
-
-
-
-
-    private static final String UPDATE_TYPE_STATE_BY_ID = "UPDATE travel_agency left join user on travel_agency.user_id = user.id  " +
-            "SET type_state_id = ? WHERE user.id = ?;";
-
-
+    private static final String UPDATE_TYPE_STATE_BY_ID = "UPDATE travel_agency join user on travel_agency.user_id = user.id SET user.type_state_id = ? WHERE travel_agency.id = ?;";
 
     @Override
     public boolean updateTypeStateById(Long id, TypeState typeState) {
         try(PreparedStatement preStatement = super.conn.getSqlPreparedStatement(UPDATE_TYPE_STATE_BY_ID)){
             preStatement.setInt(1,typeState.getId());
             preStatement.setLong(2, id);
+            return preStatement.executeUpdate()!=0;
+
+        }catch(Exception exc){
+            exc.printStackTrace();
+        }
+        return ERROR_BOOLEAN_ANSWER;
+    }
+
+    private static final String WHERE_TYPE_STATE_AND_CODE_CONFIRMED = HandlerSqlDAO.concatScriptToEnd(
+            SELECT_TRAVEL_AGENCY.replace("20", "?"),
+            " AND travel_agency.code_confirmed = true ",
+            SORT_TO_DATE_REGISTRATION);
+
+    @Override
+    public List<TravelAgency> findByTypeStateRegistrationAndCodeConfirmedTrue() {
+        return HandlerSqlDAO.useSelectScript(super.conn,WHERE_TYPE_STATE_AND_CODE_CONFIRMED,
+                HandlerDAOTAMYSQL::resultSetToTravelAgency,TypeState.REGISTRATION.getId());
+    }
+
+    private static final String UPDATE_CODE_CONFIRMED_BY_ID = "UPDATE travel_agency SET code_confirmed = ? WHERE travel_agency.id = ?;";
+
+    @Override
+    public boolean updateCodeConfirmed(boolean state, Long idTravelAgecny) {
+        try(PreparedStatement preStatement = super.conn.getSqlPreparedStatement(UPDATE_CODE_CONFIRMED_BY_ID)){
+            preStatement.setBoolean(1,state);
+            preStatement.setLong(2, idTravelAgecny);
             return preStatement.executeUpdate()!=0;
 
         }catch(Exception exc){

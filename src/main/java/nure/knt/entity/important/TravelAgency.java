@@ -147,6 +147,12 @@ public class TravelAgency extends User{
     private static final String EMPTY_STAR = "&star;";
     private static final float MIN_RATING = 0.76f;
     private static final int  NUMBER_OF_STARS = 5;
+
+    public List<String> getStars(){
+        return TravelAgency.getRetingStars(this.rating);
+    }
+
+
     public static List<String> getRetingStars(float rating){
         ArrayList<String> list = new ArrayList<>(NUMBER_OF_STARS);
         for (int i = 0; i < NUMBER_OF_STARS; i++) {

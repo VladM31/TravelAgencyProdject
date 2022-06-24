@@ -7,6 +7,7 @@ import nure.knt.entity.important.User;
 import nure.knt.entity.subordinate.Message;
 import nure.knt.entity.subordinate.MessageShortData;
 import nure.knt.forms.filter.FilterMessageShow;
+import nure.knt.gmail.ISendTextOnEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -29,6 +30,8 @@ public class InsideMessageController {
 
     @Autowired
     private IDAOMessage idaoMessage;
+    @Autowired
+    private ISendTextOnEmail sendTextOnEmail;
 
     private static final String ATTRIBUTE_FILTER = "filter";
     private static final String ATTRIBUTE_MESSAGES = "messages";
@@ -115,6 +118,10 @@ public class InsideMessageController {
             idaoMessage.save(writeMessage,user.getId(),HendlerSendMessage.getRoleFromString(strings));
         }
         idaoMessage.save(writeMessage,user.getId(),strings);
+
+        if(doSendMessage && strings.length != 0){
+            HendlerSendMessage.sendMessageToGmail(strings,user,sendTextOnEmail);
+        }
 
         return "redirect:/profile-message";
     }
@@ -231,6 +238,12 @@ class HandlerIMCForTravelAgency {
 @PropertySource("classpath:WorkerWithCourier.properties")
 class HendlerIMCForCourier {
     private static final String COURIER_NAME_CHOOSE = "Завдання";
+    private static String COURIER_EDIT;
+
+
+    public HendlerIMCForCourier(@Value("${courier.profile.edit.url}")String COURIER_EDIT) {
+        HendlerIMCForCourier.COURIER_EDIT = COURIER_EDIT;
+    }
 
     @Autowired
     public void setCourierUrlChoose(@Value("${courier.profile.show.task.url}") String courierUrlChoose) {
@@ -245,7 +258,7 @@ class HendlerIMCForCourier {
                 COURIER_URL_CHOOSE,
                 HendlerIMCForAll.NO_THIRD_BUTTON,
                 HendlerIMCForAll.EMPTY_NAME,
-                HendlerIMCForAll.EMPTY_NAME);
+                HendlerIMCForCourier.COURIER_EDIT);
     }
 }
 
@@ -291,12 +304,14 @@ class HendlerSendMessage{
         return emailLine.replace(" ","").split(",");
     }
 
-    static boolean sendMessageToGmail(boolean doSendMessage){
-        if (!doSendMessage){
-            return false;
+    private static final String MESSAGE_NOTIFY = "Вам на сайті написав повідомлення %s. Перейдіть на сайт, щоб прочитати повідомлення.";
+    private static final String MESSAGE_NAME = "Tangerine summer message";
+
+    static void sendMessageToGmail(String[] emails,User user,ISendTextOnEmail sendTextOnEmail){
+        String message = String.format(MESSAGE_NOTIFY,user.getName().replace('/',' '));
+        for(String email : emails){
+           sendTextOnEmail.sendMessageOnEmail(email,MESSAGE_NAME,message);
         }
-        // todo
-        return doSendMessage;
     }
 
     static Set<Role> getAllRoles(){
