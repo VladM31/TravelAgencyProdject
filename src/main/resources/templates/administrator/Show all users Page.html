@@ -269,7 +269,7 @@
 
                 <div>
                     <input id="MakeTheService" type="submit" class="watch-travel-agency-other-submit" rows="2"
-                        value="Перевірка тур оголошень">
+                        value="Перевірка тур оголошень" th:formaction="${@environment.getProperty('admin.profile.check.tour.ad.url')}" th:formmethod = "GET">
                 </div>
 
             </form>
