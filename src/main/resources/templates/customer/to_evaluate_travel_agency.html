@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Neucha&family=Piazzolla&family=Playfair+Display:wght@700&family=Roboto:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="../../node_modules/normalize.css/normalize.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" th:href="@{/css/customer_css/to_evaluate_travel_agency_style.css}">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <nav>
+          <ul class="site-nav">
+            <div class="main-nav">
+              <a href="../Популярні тур фірми/index.html"
+                ><li>
+                  <span>Головна сторінка</span>
+                </li></a
+              >
+              <a href="../Пошук/index.html"
+                ><li><span>Пошук</span></li></a
+              >
+            </div>
+            <a href="../Реєстрація/index.html"
+              ><li>
+                <span>Зареєструватися</span>
+              </li></a
+            >
+          </ul>
+        </nav>
+      </header>
+      <main>
+        <div class="container">
+            <form class="rating" method="POST" th:action="${@environment.getProperty('customer.to.evaluate.url')}">
+                <h2>Назва турагенції</h2>
+                <div class="rating-board">
+                    <input type="button" id="1" value="1" onclick="myFunction(this.id)"></input>
+                    <input type="button" id="2" value="2" onclick="myFunction(this.id)"></input>
+                    <input type="button" id="3" value="3" onclick="myFunction(this.id)"></input>
+                    <input type="button" id="4" value="4" onclick="myFunction(this.id)"></input>
+                    <input type="button" id="5" value="5" onclick="myFunction(this.id)"></input>
+                </div>
+                <input type="hidden" name="idTourAd" th:value="${valueTourAd}">
+                <input type="hidden" name="theEvaluate" id="theEvaluateValue" value="0">
+                <input type="submit" value="Оцінити">
+            </form>
+            <script>
+
+                function myFunction(numberValue) {
+                    document.getElementById("theEvaluateValue").value=numberValue;
+                }
+            </script>
+        </div>
+      </main>
+</body>
+</html>
