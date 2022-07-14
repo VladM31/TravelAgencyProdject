@@ -216,7 +216,10 @@ public class DAOOrderForCustomerMySQL extends MySQLCore implements IDAOOrderFrom
         try(PreparedStatement statement = conn.getSqlPreparedStatement(SELECT_ORDER_ID_WHERE_TOUR_AD_ID_IS_AND_CUSTOMER_ID_IS)){
             statement.setLong(1,idCustomer);
             statement.setLong(2,idTourAd);
-            return statement.execute();
+            try(java.sql.ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
