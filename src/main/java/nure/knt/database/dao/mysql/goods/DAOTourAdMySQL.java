@@ -470,7 +470,7 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
                 tourAd.setDateEnd(resultSet.getDate(("date_end")).toLocalDate());
                 tourAd.setDateRegistration(resultSet.getTimestamp(("date_registration")).toLocalDateTime());
                 tourAd.setCostOneCustomer(resultSet.getInt(("cost_one_customer")));
-                tourAd.setCostService(resultSet.getInt(("cost_service")));
+
                 tourAd.setDiscountPercentage(resultSet.getFloat(("discount_percentage")));
                 tourAd.setDiscountSizePeople(resultSet.getInt(("discount_size_people")));
                 tourAd.setHidden(resultSet.getBoolean(("hidden")));
@@ -479,6 +479,11 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
                 tourAd.setConditionCommodity(ConditionCommodity.valueOf(resultSet.getString(("condition_commodity"))));
                 tourAd.setTravelAgencyId(resultSet.getLong(("travel_agency_id")));
 
+                try{
+                    tourAd.setCostService(resultSet.getInt(("cost_service")));
+                }catch (SQLException e){
+
+                }
 
             } catch (SQLException e) {
                 e.printStackTrace();

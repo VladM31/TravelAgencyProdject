@@ -1,15 +1,13 @@
 package nure.knt.database.dao.mysql.registration;
 
 import nure.knt.database.dao.mysql.tools.MySQLCore;
-import nure.knt.database.idao.IConnectorGetter;
+import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.database.idao.registration.IDAOUserRegistration;
 import nure.knt.entity.enums.TypeState;
-import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.User;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

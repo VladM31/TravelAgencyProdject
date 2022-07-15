@@ -4,7 +4,9 @@ public interface ITermCore {
     public String getLimit();
     public String getWhere();
     public String getJoin();
-    public String getOrderBy();
+    public String getGroupBy();
+    public String getHaving();
     public String getSelectField();
-    public ITermCore concatTerm(ITermCore termCore);
+    public Object[] getParameters();
+
 }

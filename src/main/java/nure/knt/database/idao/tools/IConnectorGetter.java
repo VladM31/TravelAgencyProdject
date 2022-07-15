@@ -1,4 +1,4 @@
-package nure.knt.database.idao;
+package nure.knt.database.idao.tools;
 
 import java.sql.SQLException;
 

@@ -22,6 +22,7 @@ import java.sql.SQLException;
 
 @Controller
 public class RegistrationCustomerController {
+
     private IDAOUserRegistration daoRegistration;
     private CodeSendler codeSendler;
     private WorkWithCountries countries;

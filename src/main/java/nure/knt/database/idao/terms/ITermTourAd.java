@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.function.Supplier;
 
-public interface ITermTourAd extends ITermCore{
+public interface ITermTourAd{
 
     ITermTourAd idIn(Long ...ids);
     ITermTourAd travelAgencyIdIn(Long ...ids);
@@ -23,7 +23,9 @@ public interface ITermTourAd extends ITermCore{
 
     ITermTourAd dateRegistrationBetween(LocalDateTime startDateRegistration, LocalDateTime endDateRegistration);
     ITermTourAd startDateTourAdAfter(LocalDate startDateTourAd);
+    ITermTourAd startDateTourAdBetween(LocalDate startDateTourAdS,LocalDate startDateTourAdE);
     ITermTourAd endDateTourAdBefore(LocalDate endDateTourAd);
+    ITermTourAd endDateTourAdBetween(LocalDate endDateTourAdS,LocalDate endDateTourAdE);
     ITermTourAd startDateTourAdAfterAndEndDateOrderBefore(LocalDate startDateTourAd,LocalDate endDateTourAd);
 
     ITermTourAd placeContaining(String place);
@@ -31,10 +33,12 @@ public interface ITermTourAd extends ITermCore{
     ITermTourAd countryContaining(String country);
     ITermTourAd nameAgencyContaining(String nameAgency);
 
-    ITermTourAd takeOrderQuantity(boolean doTake);
+    ITermTourAd takeOrderQuantity();
+    ITermTourAd takeCostService();
+
     ITermTourAd typeStateIn(TypeState ...types);
     ITermTourAd conditionCommodityIn(ConditionCommodity...types);
 
-    ITermTourAd orderBy(String orderByScript);
     ITermTourAd limitIs(Integer ...limits);
+    ITermCore end();
 }

@@ -2,7 +2,7 @@ package nure.knt.database.dao.mysql.fiction;
 
 import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
-import nure.knt.database.idao.IConnectorGetter;
+import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.database.idao.temporary.IDAOMessage;
 import nure.knt.entity.subordinate.Message;
 import nure.knt.entity.enums.Role;
