@@ -267,7 +267,6 @@ public class RepositoryTourAdMySQL extends MySQLCore implements IDAOTourAdWithTe
                 "tour_ad.date_end,\n" +
                 "tour_ad.date_registration,\n" +
                 "tour_ad.cost_one_customer,\n" +
-                "tour_ad.cost_service,\n" +
                 "tour_ad.discount_size_people,\n" +
                 "tour_ad.discount_percentage,\n" +
                 "tour_ad.hidden,\n" +

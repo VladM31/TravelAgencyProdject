@@ -21,61 +21,58 @@ public class ServiceTourAd implements IServiceTourAd<TourAd> {
 
     private IDAOTourAdWithTerms<TourAd> dao;
 
-    @Value("${dao.tour.ad.for.service}")
-    private String daoBeanName;
-
     @Autowired
-    public void setDao(ApplicationContext context) {
+    public void setDao(ApplicationContext context,@Value("${dao.tour.ad.for.service}") String daoBeanName) {
         this.dao = context.getBean(daoBeanName,IDAOTourAdWithTerms.class);
     }
 
     @Override
     public boolean editing(Long id, TourAd entity) {
-        return false;
+        return dao.editing(id,entity);
     }
 
     @Override
     public boolean saveEdit(Long id) {
-        return IServiceTourAd.super.saveEdit(id);
+        return dao.saveEdit(id);
     }
 
     @Override
     public boolean removeEdit(Long id) {
-        return IServiceTourAd.super.removeEdit(id);
+        return dao.removeEdit(id);
     }
 
     @Override
     public boolean saveAll(Iterable<TourAd> entities) {
-        return false;
+        return dao.saveAll(entities);
     }
 
     @Override
     public boolean save(TourAd entity) {
-        return false;
+        return dao.save(entity);
     }
 
     @Override
     public boolean updateTypeStateById(Long id, TypeState typeState) {
-        return false;
+        return dao.updateTypeStateById(id,typeState);
     }
 
     @Override
     public boolean updateConditionCommodityAndCostServiceById(TourAd tourAd) {
-        return false;
+        return dao.updateConditionCommodityAndCostServiceById(tourAd);
     }
 
     @Override
     public ITermTourAd term() {
-        return null;
+        return dao.term();
     }
 
     @Override
     public List<TourAd> findByTerms(ITermCore iTermCore) {
-        return null;
+        return dao.findByTerms(iTermCore);
     }
 
     @Override
     public TourAd findOneByTerms(ITermCore iTermCore) {
-        return null;
+        return dao.findOneByTerms(iTermCore);
     }
 }
