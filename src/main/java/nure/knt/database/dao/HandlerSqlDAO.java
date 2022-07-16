@@ -220,7 +220,7 @@ public class HandlerSqlDAO {
         try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
             int position = START_POSITION;
             for(Object obj : array){
-                substituteVariable(stat,++position,obj);
+                position= checkType(position,obj,stat);
             }
             try(ResultSet resultSet = stat.executeQuery()){
                 if(resultSet.next()){

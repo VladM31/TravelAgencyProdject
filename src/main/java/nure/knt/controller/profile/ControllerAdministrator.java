@@ -2,9 +2,8 @@ package nure.knt.controller.profile;
 
 
 import nure.knt.controller.HandlerController;
-import nure.knt.database.idao.IConnectorGetter;
+import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.database.idao.entity.IDAOUserOnly;
-import nure.knt.database.idao.entity.IDAOUserSQL;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.important.User;
 import nure.knt.forms.filter.FilterAllUsers;

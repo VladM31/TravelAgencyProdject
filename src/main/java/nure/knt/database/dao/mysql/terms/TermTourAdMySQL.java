@@ -212,8 +212,8 @@ public class TermTourAdMySQL implements ITermTourAd {
         return this;
     }
 
-    private static final String LIMIT_BEFORE_THIS = " LIMIT ? ;";
-    private static final String LIMIT_BETWEEN_THIS = " LIMIT ?,? ;";
+    private static final String LIMIT_BEFORE_THIS = " LIMIT ? ";
+    private static final String LIMIT_BETWEEN_THIS = " LIMIT ?,? ";
     @Override
     public ITermTourAd limitIs(@NotNull Integer... limits) {
         if(limits.length == 1){

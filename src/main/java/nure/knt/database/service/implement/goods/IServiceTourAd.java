@@ -1,4 +1,4 @@
-package nure.knt.database.idao.goods;
+package nure.knt.database.service.implement.goods;
 
 import nure.knt.database.idao.core.IDAOCoreEditing;
 import nure.knt.database.idao.core.IDAOCoreSave;
@@ -9,7 +9,8 @@ import nure.knt.entity.goods.TourAd;
 
 import java.util.List;
 
-public interface IDAOTourAdWithTerms<T extends TourAd> extends IDAOCoreSave<T>, IDAOCoreEditing<T>, IDAOUpdateTypeState {
+public interface IServiceTourAd<T extends  TourAd> extends IDAOCoreSave<T>, IDAOCoreEditing<T>, IDAOUpdateTypeState {
+
     public boolean updateConditionCommodityAndCostServiceById(T tourAd);
 
     public ITermTourAd term();
