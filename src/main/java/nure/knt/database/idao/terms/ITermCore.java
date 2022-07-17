@@ -6,6 +6,7 @@ public interface ITermCore {
     public String getJoin();
     public String getGroupBy();
     public String getHaving();
+    public String getOrderBy();
     public String getSelectField();
     public Object[] getParameters();
 

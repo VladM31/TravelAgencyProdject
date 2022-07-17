@@ -4,15 +4,18 @@ import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.idao.terms.ITermCore;
 import nure.knt.database.idao.terms.ITermTourAd;
 import nure.knt.entity.enums.ConditionCommodity;
+import nure.knt.entity.enums.HowSortSQL;
 import nure.knt.entity.enums.IEnumId;
 import nure.knt.entity.enums.TypeState;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.validation.constraints.NotNull;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TermTourAdMySQL implements ITermTourAd {
@@ -24,15 +27,20 @@ public class TermTourAdMySQL implements ITermTourAd {
     private String privateWhere;
     private String privateField;
     private String privateGroupBy;
+    private String privateOrderBy;
 
     private String privateHaving;
-    private List<Object> privateParametersForWhere;
-    private List<Object> privateParametersForHaving;
+    private final List<Object> privateParametersForWhere;
+    private final List<Object> privateParametersForHaving;
+    private final Map<OrderByValue,String> orderByValueStringMap;
 
-    public TermTourAdMySQL(){
-        privateHaving = privateGroupBy = privateField = privateWhere = privateJoin = privateLimit = "";
+    public TermTourAdMySQL(Map<OrderByValue,String> orderByValueStringMap){
+        privateOrderBy = privateHaving = privateGroupBy = privateField = "";
+        privateWhere = privateJoin = privateLimit = "";
+
         privateParametersForWhere = new LinkedList<>();
         privateParametersForHaving = new LinkedList<>();
+        this.orderByValueStringMap = orderByValueStringMap;
     }
 
     private static final String TOUR_AD_ID_IN = " tour_ad.id in( " + HandlerSqlDAO.REPLACE_SYMBOL + " ) ";
@@ -155,7 +163,6 @@ public class TermTourAdMySQL implements ITermTourAd {
         return this;
     }
 
-
     private static final String COUNTRY_CONTAINING = " country.name LIKE ? ";
     @Override
     public ITermTourAd countryContaining(String country) {
@@ -225,6 +232,14 @@ public class TermTourAdMySQL implements ITermTourAd {
         return this;
     }
 
+    private static final String ORDER_BY = " ORDER BY %s %s ";
+
+    @Override
+    public ITermTourAd orderBy(@NotNull OrderByValue orderByValue,@NotNull HowSortSQL sort) {
+        this.privateOrderBy = String.format(ORDER_BY,this.orderByValueStringMap.getOrDefault(orderByValue,"tour_ad.id"),sort.name());
+        return this;
+    }
+
     @Override
     public ITermCore end() {
         String _privateLimit = this.privateLimit;
@@ -233,9 +248,18 @@ public class TermTourAdMySQL implements ITermTourAd {
         String _privateField = this.privateField;
         String _privateGroupBy = this.privateGroupBy;
         String _privateHaving = this.privateHaving;
-        this.privateGroupBy = this.privateLimit = this.privateHaving =
-                this.privateWhere = this.privateJoin =
-                        this.privateField = "";
+
+        if (HandlerTermTourAdMySQL.hasErrorInOrderBy(this.orderByValueStringMap,this.privateOrderBy, this.privateField,NAME_COUNT_ORDER_TOUR)){
+            this.privateOrderBy = "";
+        }
+
+        String _privateOrderBy = this.privateOrderBy;
+
+
+
+        this.privateGroupBy = this.privateLimit = this.privateHaving = "";
+        this.privateWhere = this.privateJoin = this.privateField = "";
+        this.privateOrderBy = "";
 
         this.privateParametersForWhere.addAll(this.privateParametersForHaving);
         this.privateParametersForHaving.clear();
@@ -243,8 +267,6 @@ public class TermTourAdMySQL implements ITermTourAd {
         if(!_privateLimit.isEmpty()){
             this.privateParametersForWhere.add(this.privateLimitValue);
         }
-
-
 
         Object[] _privateParameters = this.privateParametersForWhere.toArray();
         this.privateParametersForWhere.clear();
@@ -274,6 +296,11 @@ public class TermTourAdMySQL implements ITermTourAd {
             @Override
             public String getHaving() {
                 return _privateHaving;
+            }
+
+            @Override
+            public String getOrderBy() {
+                return _privateOrderBy;
             }
 
             @Override
@@ -308,6 +335,8 @@ public class TermTourAdMySQL implements ITermTourAd {
         this.privateJoin = HandlerTermTourAdMySQL.addJoin(this.privateJoin,LEFT_JOIN_ORDER_TOUR);
         this.privateGroupBy = HandlerTermTourAdMySQL.addGroupBy(this.privateGroupBy,GROUP_BY_TOUR_AD_ID);
     }
+
+
 }
 
 class HandlerTermTourAdMySQL{
@@ -358,4 +387,7 @@ class HandlerTermTourAdMySQL{
         return HandlerTermTourAdMySQL.checkScriptForAddedOtherScript(termsScript,scriptTemp);
     }
 
+    protected static boolean hasErrorInOrderBy(Map<ITermTourAd.OrderByValue,String> map,String sortScript,String privateField,String field){
+        return sortScript.contains(map.get(null)) && !privateField.contains(field);
+    }
 }
