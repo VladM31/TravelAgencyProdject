@@ -1,16 +1,13 @@
 package nure.knt.database.dao.mysql.tools;
 
-import nure.knt.database.idao.IConnectorGetter;
+import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Component("MySQL Countries")
 @Scope("singleton")

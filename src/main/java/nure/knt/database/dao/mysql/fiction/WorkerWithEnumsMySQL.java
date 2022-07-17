@@ -1,14 +1,23 @@
 package nure.knt.database.dao.mysql.fiction;
 
 import nure.knt.database.dao.mysql.tools.MySQLCore;
+import nure.knt.database.idao.terms.ITermTourAd;
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.enums.IEnumId;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
+import org.apache.catalina.core.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.function.Function;
 
 @Component

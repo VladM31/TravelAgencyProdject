@@ -1,8 +1,7 @@
 package nure.knt.database.dao.mysql.tools;
 
-import nure.knt.database.idao.IConnectorGetter;
+import nure.knt.database.idao.tools.IConnectorGetter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 public class MySQLCore {
     protected IConnectorGetter conn;

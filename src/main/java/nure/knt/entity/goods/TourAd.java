@@ -10,6 +10,7 @@ import java.util.List;
 
 public class TourAd {
     private Long id;
+    private Long travelAgencyId;
 
     private int costOneCustomer;
     private int costService;
@@ -18,11 +19,6 @@ public class TourAd {
 
     private float discountPercentage;
     private float ratingAgency;
-
-
-
-    private Long travelAgencyId;
-
 
     private boolean hidden;
 

@@ -146,7 +146,7 @@
           <form class="filter-window" th:each="tourAd : ${tourAds}" th:action="${@environment.getProperty('customer.create.order.from.travel.agency.url')}">
             <div class="window-name">
               <div class="window-name-div">
-                <h2 th:text="${tourAd.nameAgency}">Назва</h2>
+                <h2 ><a th:text="${tourAd.nameAgency}" th:href="@{/customer/set-reting(idTourAd = ${tourAd.id})}" style="text-decoration: none;">Team>Назва</a></h2>
                 <div class="rating-mini">
                   <span th:each="star : ${tourAd.getStars()}" class="starts-style" th:utext="${star}"></span>
 

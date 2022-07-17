@@ -1,6 +1,6 @@
 package nure.knt.database.dao;
 
-import nure.knt.database.idao.IConnectorGetter;
+import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.tools.WorkWithCountries;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,9 +54,24 @@ public class HandlerSqlDAO {
         return script.replace(HandlerSqlDAO.REPLACE_SYMBOL,HandlerSqlDAO.symbolsInDependsFromSize(ids));
     }
 
+    public static @NotNull String setInInsideScript(@NonNull String script, int lengthArray){
+        return script.replace(HandlerSqlDAO.REPLACE_SYMBOL,HandlerSqlDAO.symbolsInDependsFromSize(lengthArray));
+    }
+
     public static String symbolsInDependsFromSize(Iterable<?> ids){
         StringBuilder symbols = new StringBuilder();
         ids.forEach(i -> symbols.append("?,"));
+        if(symbols.isEmpty()){
+            return "";
+        }
+        return symbols.substring(0,symbols.length()-1).toString();
+    }
+
+    public static String symbolsInDependsFromSize(int lengthArray){
+        StringBuilder symbols = new StringBuilder();
+        for (int i = 0; i < lengthArray; i++) {
+            symbols.append("?,");
+        }
         if(symbols.isEmpty()){
             return "";
         }
@@ -81,7 +96,12 @@ public class HandlerSqlDAO {
         return startScript.replace(";",String.join(" ",ExtraScripts));
     }
 
-
+    public static String concatScript(@NonNull String startScript,@NonNull String ...ExtraScripts){
+        if(ExtraScripts.length == 0) {
+            return startScript;
+        }
+        return String.join(" ",ExtraScripts);
+    }
 
     public static <T> List<T> useSelectScript(IConnectorGetter connectorGetter, final String script,
                                               Consumer<java.sql.PreparedStatement> extraSet, Function<ResultSet,T> getObject){
@@ -109,14 +129,7 @@ public class HandlerSqlDAO {
         try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
             int position = START_POSITION;
             for(Object obj : array){
-                if(obj instanceof Iterable){
-                    Iterable<?> iter = (Iterable<?>) obj;
-                    for (Object it:iter) {
-                        substituteVariable(stat,++position,it);
-                    }
-                }else {
-                    substituteVariable(stat,++position,obj);
-                }
+                position= checkType(position,obj,stat);
             }
 
             try(ResultSet resultSet = stat.executeQuery()){
@@ -125,13 +138,31 @@ public class HandlerSqlDAO {
                     list.add(getObject.apply(resultSet));
                 }
                 return list;
-            }finally {
             }
 
         }catch (SQLException e){
             e.printStackTrace();
             return new ArrayList<>(HandlerSqlDAO.EMPTY_CAPACITY);
         }
+    }
+
+    public static int checkType(int position,Object obj,java.sql.PreparedStatement statement) throws SQLException {
+        if(obj instanceof Iterable){
+            Iterable<?> iter = (Iterable<?>) obj;
+            for (Object it:iter) {
+                position = checkType(position,it,statement);
+            }
+        }else if(obj instanceof Object[]){
+            Object[] array = (Object[]) obj;
+            for (Object i:array) {
+                position = checkType(position,i,statement);
+            }
+        }
+        else {
+            substituteVariable(statement,++position,obj);
+        }
+
+        return position;
     }
 
     private static void substituteVariable(PreparedStatement preparedStatement,int position,Object object) throws SQLException{
@@ -189,7 +220,7 @@ public class HandlerSqlDAO {
         try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
             int position = START_POSITION;
             for(Object obj : array){
-                substituteVariable(stat,++position,obj);
+                position= checkType(position,obj,stat);
             }
             try(ResultSet resultSet = stat.executeQuery()){
                 if(resultSet.next()){

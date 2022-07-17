@@ -1,13 +1,11 @@
 package nure.knt.database.dao.mysql.tools;
 
-import nure.knt.MyConstants;
-import nure.knt.database.idao.IConnectorGetter;
+import nure.knt.database.idao.tools.IConnectorGetter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.sql.*;

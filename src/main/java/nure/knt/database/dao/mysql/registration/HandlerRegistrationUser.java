@@ -1,8 +1,7 @@
 package nure.knt.database.dao.mysql.registration;
 
-import nure.knt.database.idao.IConnectorGetter;
+import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.entity.enums.TypeState;
-import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.User;
 
 import java.sql.PreparedStatement;
@@ -10,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Random;
 import java.util.function.Consumer;
 
 public class HandlerRegistrationUser {

@@ -1,21 +1,14 @@
 package nure.knt.database.dao.mysql.entity;
 
 import nure.knt.database.dao.HandlerSqlDAO;
-import nure.knt.database.idao.IConnectorGetter;
-import nure.knt.entity.enums.Role;
-import nure.knt.entity.enums.TypeState;
-import nure.knt.entity.important.Customer;
+import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.entity.important.User;
-import nure.knt.tools.WorkWithCountries;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiConsumer;
 

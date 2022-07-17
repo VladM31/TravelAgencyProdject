@@ -207,6 +207,24 @@ public class DAOOrderForCustomerMySQL extends MySQLCore implements IDAOOrderFrom
         }
         return false;
     }
+
+    private static final String SELECT_ORDER_ID_WHERE_TOUR_AD_ID_IS_AND_CUSTOMER_ID_IS =
+            "SELECT order_tour.id FROM order_tour WHERE order_tour.customer_id = ? AND order_tour.tour_ad_id = ? ;";
+
+    @Override
+    public boolean hasOrder(Long idCustomer, Long idTourAd) {
+        try(PreparedStatement statement = conn.getSqlPreparedStatement(SELECT_ORDER_ID_WHERE_TOUR_AD_ID_IS_AND_CUSTOMER_ID_IS)){
+            statement.setLong(1,idCustomer);
+            statement.setLong(2,idTourAd);
+            try(java.sql.ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 
 class HandlerOrderCustomer{

@@ -11,4 +11,6 @@ public interface IDAOOrderFromTourAdCustomer<O extends OrderFromTourAdForCustome
     public List<O> findByNameTravelAgencyContaining(Long customerId, String country);//Турфірма 1
     public List<O> findByRestingPlaceContaining(Long customerId, String restingPlace);//Місце відпочинку 4
     public boolean isThisCustomerOrder(Long customerId,Long orderId);
+
+    public boolean hasOrder(Long idCustomer,Long idTourAd);
 }

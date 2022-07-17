@@ -29,4 +29,6 @@ public interface IDAOOrderFromTourAdCore<O extends OrderFromTourAdCore> extends 
 
     public List<O> findByConditionCommodities(Long userOrTuodAdId,Set<ConditionCommodity> conditionCommodities);// 7
 
+
+
 }

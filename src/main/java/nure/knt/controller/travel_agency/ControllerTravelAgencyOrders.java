@@ -34,7 +34,7 @@ public class ControllerTravelAgencyOrders {
 
     public ControllerTravelAgencyOrders(@Value("${travel.agency.show.orders.by.tour.ad.id.page}") String page_show_all_orders,
                                         @Value("${travel.agency.show.orders.by.tour.ad.id.url}") String url_show_all_orders,
-                                        @Value("/") String url_show_all_tour_ad) {
+                                        @Value("${travel.agency.profile.show.tour.ads.url}") String url_show_all_tour_ad) {
         PAGE_SHOW_ALL_ORDERS = page_show_all_orders;
         URL_SHOW_ALL_ORDERS = url_show_all_orders;
         URL_SHOW_ALL_TOUR_AD = url_show_all_tour_ad;

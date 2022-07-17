@@ -115,11 +115,11 @@ public class HandlerFilter {
                                 , Collectors.toList()));
     }
 
-    private static <T> T setOtherValueIftThisIsNull(T canNull, T otherValue) {
+    public static <T> T setOtherValueIftThisIsNull(T canNull, T otherValue) {
         return (canNull == null) ? otherValue : canNull;
     }
 
-    private static boolean isAllNull(Object... array) {
+    public static boolean isAllNull(Object... array) {
         for (Object obj : array) {
             if (obj != null) {
                 return false;
@@ -128,7 +128,7 @@ public class HandlerFilter {
         return true;
     }
 
-    private static boolean isAllNonNull(Object... array) {
+    public static boolean isAllNonNull(Object... array) {
         for (Object obj : array) {
             if (obj == null) {
                 return false;
@@ -137,7 +137,7 @@ public class HandlerFilter {
         return true;
     }
 
-    private static <Entity, FilteringBy> List<Entity> lastWorkWith(FilteringBy startDate, FilteringBy endDate, List<Entity> list,
+    public static <Entity, FilteringBy> List<Entity> lastWorkWith(FilteringBy startDate, FilteringBy endDate, List<Entity> list,
                                                                    BiFunction<FilteringBy, FilteringBy, List<Entity>> workWithDatabase,
                                                                    BiConsumer<FilteringBy, FilteringBy> elseDidNotWorkWithDatabase) {
         if (list == LIST_IS_NOT_CREATED_FROM_DATABASE) {
@@ -148,7 +148,7 @@ public class HandlerFilter {
         return list;
     }
 
-    private static <Entity, FilteringBy extends Comparable<FilteringBy>> List<Entity> filtering(FilteringBy start, FilteringBy end, final FilteringBy MIN, final FilteringBy MAX,
+    public static <Entity, FilteringBy extends Comparable<FilteringBy>> List<Entity> filtering(FilteringBy start, FilteringBy end, final FilteringBy MIN, final FilteringBy MAX,
                                                                                                 List<Entity> list, BiFunction<FilteringBy, FilteringBy, List<Entity>> workWithDatabase,
                                                                                                 BiConsumer<FilteringBy, FilteringBy> elseDidNotWorkWithDatabase) {
         if (isAllNull(start, end)) {

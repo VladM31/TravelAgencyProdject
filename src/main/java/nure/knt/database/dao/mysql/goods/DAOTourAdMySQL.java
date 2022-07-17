@@ -21,7 +21,7 @@ import java.util.function.Supplier;
 
 import static nure.knt.database.dao.HandlerSqlDAO.*;
 
-@Repository
+@Repository("DAO_Tour_Ad_MySQL")
 public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
 
     private static final String INSERT_INSIDE_EDIT_TOUR_AD = "INSERT INTO edit_tour_ad(confirmed,need_delete,whom_need_change_id,what_to_change) VALUE(?,?,?,?);";
@@ -409,33 +409,33 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
 
         private static WorkWithCountries countries;
 
-    @Autowired
-    public void setCountries(WorkWithCountries countries){
-        HandlerDAOtoMYSQL.countries = countries;
-    }
-
-    static void tourAdToMySqlScript(PreparedStatement preStat, TourAd tourAd) {
-        try {
-            preStat.setString(PLACE_TOUR_AD_FOR_INSERT, tourAd.getPlace());
-            preStat.setString(CITY_TOUR_AD_FOR_INSERT, tourAd.getCity());
-            preStat.setDate(DATE_START_TOUR_AD_FOR_INSERT, Date.valueOf(tourAd.getDateStart()));
-            preStat.setDate(DATE_END_TOUR_AD_FOR_INSERT, Date.valueOf(tourAd.getDateEnd()));
-            preStat.setTimestamp(DATE_REGISTRATION_TOUR_AD_FOR_INSERT, Timestamp.valueOf(tourAd.getDateRegistration()));
-            preStat.setInt(COST_ONE_CUSTOMER_TOUR_AD_FOR_INSERT, tourAd.getCostOneCustomer());
-            preStat.setInt(COST_SERVICE_TOUR_AD_FOR_INSERT, tourAd.getCostService());
-            preStat.setInt(DISCOUNT_SIZE_PEOPLE_TOUR_AD_FOR_INSERT, tourAd.getDiscountSizePeople());
-            preStat.setFloat(DISCOUNT_PERCENTAGE_TOUR_AD_FOR_INSERT, tourAd.getDiscountPercentage());
-            preStat.setBoolean(HIDDEN_TOUR_AD_FOR_INSERT, tourAd.isHidden());
-            preStat.setLong(TRAVEL_AGENCY_ID_TOUR_AD_FOR_INSERT, tourAd.getTravelAgencyId());
-            preStat.setLong(CONDITION_COMMODITY_ID_TOUR_AD_FOR_INSERT, tourAd.getConditionCommodity().getId());
-            preStat.setLong(TYPE_STATE_ID_TOUR_AD_FOR_INSERT, tourAd.getTypeState().getId());
-            preStat.setLong(COUNTRY_ID_TOUR_AD_FOR_INSERT, countries.getIdByCountry(tourAd.getCountry()));
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+        @Autowired
+        public void setCountries(WorkWithCountries countries){
+            HandlerDAOtoMYSQL.countries = countries;
         }
 
-    }
+        static void tourAdToMySqlScript(PreparedStatement preStat, TourAd tourAd) {
+            try {
+                preStat.setString(PLACE_TOUR_AD_FOR_INSERT, tourAd.getPlace());
+                preStat.setString(CITY_TOUR_AD_FOR_INSERT, tourAd.getCity());
+                preStat.setDate(DATE_START_TOUR_AD_FOR_INSERT, Date.valueOf(tourAd.getDateStart()));
+                preStat.setDate(DATE_END_TOUR_AD_FOR_INSERT, Date.valueOf(tourAd.getDateEnd()));
+                preStat.setTimestamp(DATE_REGISTRATION_TOUR_AD_FOR_INSERT, Timestamp.valueOf(tourAd.getDateRegistration()));
+                preStat.setInt(COST_ONE_CUSTOMER_TOUR_AD_FOR_INSERT, tourAd.getCostOneCustomer());
+                preStat.setInt(COST_SERVICE_TOUR_AD_FOR_INSERT, tourAd.getCostService());
+                preStat.setInt(DISCOUNT_SIZE_PEOPLE_TOUR_AD_FOR_INSERT, tourAd.getDiscountSizePeople());
+                preStat.setFloat(DISCOUNT_PERCENTAGE_TOUR_AD_FOR_INSERT, tourAd.getDiscountPercentage());
+                preStat.setBoolean(HIDDEN_TOUR_AD_FOR_INSERT, tourAd.isHidden());
+                preStat.setLong(TRAVEL_AGENCY_ID_TOUR_AD_FOR_INSERT, tourAd.getTravelAgencyId());
+                preStat.setLong(CONDITION_COMMODITY_ID_TOUR_AD_FOR_INSERT, tourAd.getConditionCommodity().getId());
+                preStat.setLong(TYPE_STATE_ID_TOUR_AD_FOR_INSERT, tourAd.getTypeState().getId());
+                preStat.setLong(COUNTRY_ID_TOUR_AD_FOR_INSERT, countries.getIdByCountry(tourAd.getCountry()));
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        }
 
         static void tourAdToMySqlScriptForFindId(PreparedStatement preStat, TourAd tourAd) {
             try {
@@ -470,7 +470,7 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
                 tourAd.setDateEnd(resultSet.getDate(("date_end")).toLocalDate());
                 tourAd.setDateRegistration(resultSet.getTimestamp(("date_registration")).toLocalDateTime());
                 tourAd.setCostOneCustomer(resultSet.getInt(("cost_one_customer")));
-                tourAd.setCostService(resultSet.getInt(("cost_service")));
+
                 tourAd.setDiscountPercentage(resultSet.getFloat(("discount_percentage")));
                 tourAd.setDiscountSizePeople(resultSet.getInt(("discount_size_people")));
                 tourAd.setHidden(resultSet.getBoolean(("hidden")));
@@ -479,6 +479,11 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
                 tourAd.setConditionCommodity(ConditionCommodity.valueOf(resultSet.getString(("condition_commodity"))));
                 tourAd.setTravelAgencyId(resultSet.getLong(("travel_agency_id")));
 
+                try{
+                    tourAd.setCostService(resultSet.getInt(("cost_service")));
+                }catch (SQLException e){
+
+                }
 
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -486,7 +491,6 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
 
             return tourAd;
         }
-
 
         static TourAd resultSetToTourAdWithCountingOrders(ResultSet resultSet){
            TourAd tourAd = resultSetToTourAd(resultSet);
