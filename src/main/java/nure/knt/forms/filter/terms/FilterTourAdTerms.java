@@ -3,6 +3,7 @@ package nure.knt.forms.filter.terms;
 import nure.knt.database.idao.terms.ITermCore;
 import nure.knt.database.idao.terms.ITermTourAd;
 import nure.knt.entity.enums.ConditionCommodity;
+import nure.knt.entity.enums.HowSortSQL;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.forms.filter.HandlerFilter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -42,6 +43,8 @@ public class FilterTourAdTerms {
 
     private TypeState[] typeStates;
     private ConditionCommodity[] conditionCommodities;
+    private HowSortSQL howSort ;
+    private ITermTourAd.OrderByValue orderBy;
 
     private boolean takeCountOrders;
     private boolean takeCostTourAd;
@@ -123,6 +126,16 @@ public class FilterTourAdTerms {
             iTermTourAd.takeCostService();
         }
 
+        if(this.howSort == null){
+            this.howSort = HowSortSQL.DESC;
+        }
+
+        if(this.orderBy == null){
+            this.orderBy = ITermTourAd.OrderByValue.DATE_REGISTRATION;
+        }
+
+        iTermTourAd.orderBy(this.orderBy,this.howSort);
+
         return iTermTourAd.end();
     }
 
@@ -133,7 +146,7 @@ public class FilterTourAdTerms {
                              Float endRatingTravelAgency, LocalDate startDate, LocalDate endDate, LocalDate startDateTourAdS, LocalDate startDateTourAdE,
                              LocalDate endDateTourAdS, LocalDate endDateTourAdE, LocalDateTime startDateRegistration, LocalDateTime endDateRegistration,
                              Integer[] limit, TypeState[] typeStates, ConditionCommodity[] conditionCommodities, boolean takeCountOrders,
-                             boolean takeCostTourAd, Boolean hidden) {
+                             boolean takeCostTourAd, Boolean hidden, HowSortSQL howSort ,ITermTourAd.OrderByValue orderBy) {
         this.tourAdIds = tourAdIds;
         this.travelAgencyIds = travelAgencyIds;
         this.costOneCustomerStart = costOneCustomerStart;
@@ -166,6 +179,8 @@ public class FilterTourAdTerms {
         this.takeCountOrders = takeCountOrders;
         this.takeCostTourAd = takeCostTourAd;
         this.hidden = hidden;
+        this.orderBy = orderBy;
+        this.howSort = howSort;
     }
 
     public FilterTourAdTerms() {
@@ -425,6 +440,22 @@ public class FilterTourAdTerms {
 
     public void setHidden(Boolean hidden) {
         this.hidden = hidden;
+    }
+
+    public HowSortSQL getHowSort() {
+        return howSort;
+    }
+
+    public ITermTourAd.OrderByValue getOrderBy() {
+        return orderBy;
+    }
+
+    public void setHowSort(HowSortSQL howSort) {
+        this.howSort = howSort;
+    }
+
+    public void setOrderBy(ITermTourAd.OrderByValue orderBy) {
+        this.orderBy = orderBy;
     }
 }
 
