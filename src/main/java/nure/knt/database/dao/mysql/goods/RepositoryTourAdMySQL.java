@@ -5,7 +5,7 @@ import nure.knt.database.dao.mysql.terms.TermTourAdMySQL;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
 import nure.knt.database.idao.factory.IFactoryTourAd;
 import nure.knt.database.idao.goods.IDAOTourAdWithTerms;
-import nure.knt.database.idao.terms.ITermCore;
+import nure.knt.database.idao.terms.ITermInformation;
 import nure.knt.database.idao.terms.ITermTourAd;
 import nure.knt.database.idao.tools.IConcatScripts;
 import nure.knt.database.idao.tools.IConnectorGetter;
@@ -20,13 +20,11 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static nure.knt.database.dao.HandlerSqlDAO.ERROR_BOOLEAN_ANSWER;
 
@@ -51,8 +49,9 @@ public class RepositoryTourAdMySQL extends MySQLCore implements IDAOTourAdWithTe
 
     private final Map<ITermTourAd.OrderByValue,String> ORDER_BY_VALUE_STRING_MAP;
 
-    public RepositoryTourAdMySQL(@Value("${dao.tour.ad.order.by.enums.properties}") String fileName) {
-        this.ORDER_BY_VALUE_STRING_MAP = HandlerRepositoryTourAdMySQL.setNameScriptForEnumsTourAdOrderByValue(fileName);
+    public RepositoryTourAdMySQL(@Value("${dao.tour.ad.order.by.enums.properties}") String fileName,
+                                 @Value("${dao.terms.tour.ads.what.add}") String propertyStart) {
+        this.ORDER_BY_VALUE_STRING_MAP = HandlerSqlDAO.setNameScriptForEnumsTourAdOrderByValue(fileName,propertyStart,ITermTourAd.OrderByValue.values());
     }
 
     @PostConstruct
@@ -165,21 +164,21 @@ public class RepositoryTourAdMySQL extends MySQLCore implements IDAOTourAdWithTe
     }
 
     @Override
-    public List<TourAd> findByTerms(ITermCore iTermCore) {
+    public List<TourAd> findByTerms(ITermInformation iTermInformation) {
         return HandlerSqlDAO.useSelectScript(super.conn,
                 HandlerRepositoryTourAdMySQL
-                        .toScript(iTermCore,concator),
+                        .toScript(iTermInformation,concator),
                 factoryTourAd::getTourAd,
-                iTermCore.getParameters());
+                iTermInformation.getParameters());
     }
 
     @Override
-    public TourAd findOneByTerms(ITermCore iTermCore) {
+    public TourAd findOneByTerms(ITermInformation iTermInformation) {
         return HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,
                 HandlerRepositoryTourAdMySQL
-                        .toScript(iTermCore,concator),
+                        .toScript(iTermInformation,concator),
                 factoryTourAd::getTourAd,
-                iTermCore.getParameters());
+                iTermInformation.getParameters());
     }
 
     class IdWorker{
@@ -199,26 +198,7 @@ public class RepositoryTourAdMySQL extends MySQLCore implements IDAOTourAdWithTe
     class HandlerRepositoryTourAdMySQL {
 
 
-        protected static Map<ITermTourAd.OrderByValue,String> setNameScriptForEnumsTourAdOrderByValue(String fileName){
-            HashMap<ITermTourAd.OrderByValue,String> map = new HashMap<>();
-            Properties appProps = new Properties();
 
-            try(FileInputStream fileInputStream = new FileInputStream(fileName)) {
-                appProps.load(fileInputStream);
-                final String FIRST_PIECE = appProps.getProperty("dao.terms.tour.ads.what.add");
-
-                map.put(null,appProps.getProperty("dao.terms.tour.ads.error"));
-
-                for (ITermTourAd.OrderByValue enumObject: ITermTourAd.OrderByValue.values()) {
-                    map.put(enumObject,appProps.getProperty(FIRST_PIECE + enumObject,"Error."+enumObject));
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return Collections.unmodifiableMap(map);
-        }
 
         private static final String INSERT_TOUR_AD =
                 " INSERT INTO tour_ad (place,city,date_start,date_end,date_registration," +
@@ -302,7 +282,7 @@ public class RepositoryTourAdMySQL extends MySQLCore implements IDAOTourAdWithTe
                 " LEFT JOIN condition_commodity on tour_ad.condition_commodity_id = condition_commodity.id\n" +
                 " LEFT JOIN country on tour_ad.country_id = country.id";
 
-        public static String toScript(ITermCore iterm,IConcatScripts concator){
+        public static String toScript(ITermInformation iterm, IConcatScripts concator){
             return concator.concatScripts("",
                     SELECT_AND_FIELD,
                     iterm.getSelectField(),

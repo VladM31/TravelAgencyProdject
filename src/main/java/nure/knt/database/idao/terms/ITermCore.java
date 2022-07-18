@@ -1,13 +1,12 @@
 package nure.knt.database.idao.terms;
 
-public interface ITermCore {
-    public String getLimit();
-    public String getWhere();
-    public String getJoin();
-    public String getGroupBy();
-    public String getHaving();
-    public String getOrderBy();
-    public String getSelectField();
-    public Object[] getParameters();
+import nure.knt.entity.enums.HowSortSQL;
 
+import javax.validation.constraints.NotNull;
+
+public interface ITermCore<E extends Enum,IT extends ITermCore> {
+
+    IT limitIs(Long ...limits);
+    IT orderBy(@NotNull E orderByValue, @NotNull HowSortSQL sort);
+    ITermInformation end();
 }

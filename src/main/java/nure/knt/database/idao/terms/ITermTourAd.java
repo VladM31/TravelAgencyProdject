@@ -7,7 +7,6 @@ import nure.knt.entity.enums.TypeState;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.function.Supplier;
 
 public interface ITermTourAd{
 
@@ -43,7 +42,7 @@ public interface ITermTourAd{
 
     ITermTourAd limitIs(Integer ...limits);
     ITermTourAd orderBy(@NotNull OrderByValue orderByValue,@NotNull HowSortSQL sort);
-    ITermCore end();
+    ITermInformation end();
 
 
 

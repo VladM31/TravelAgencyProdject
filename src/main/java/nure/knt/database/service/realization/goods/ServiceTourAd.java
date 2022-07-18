@@ -1,13 +1,12 @@
 package nure.knt.database.service.realization.goods;
 
 import nure.knt.database.idao.goods.IDAOTourAdWithTerms;
-import nure.knt.database.idao.terms.ITermCore;
+import nure.knt.database.idao.terms.ITermInformation;
 import nure.knt.database.idao.terms.ITermTourAd;
 import nure.knt.database.service.implement.goods.IServiceTourAd;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.goods.TourAd;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.PropertySource;
@@ -67,12 +66,12 @@ public class ServiceTourAd implements IServiceTourAd<TourAd> {
     }
 
     @Override
-    public List<TourAd> findByTerms(ITermCore iTermCore) {
-        return dao.findByTerms(iTermCore);
+    public List<TourAd> findByTerms(ITermInformation iTermInformation) {
+        return dao.findByTerms(iTermInformation);
     }
 
     @Override
-    public TourAd findOneByTerms(ITermCore iTermCore) {
-        return dao.findOneByTerms(iTermCore);
+    public TourAd findOneByTerms(ITermInformation iTermInformation) {
+        return dao.findOneByTerms(iTermInformation);
     }
 }
