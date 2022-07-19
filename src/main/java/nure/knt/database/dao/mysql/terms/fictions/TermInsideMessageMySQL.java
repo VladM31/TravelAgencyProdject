@@ -27,8 +27,8 @@ public class TermInsideMessageMySQL extends TermCoreMySQL<ITermInsideMessage.Mes
     private final List<Object> privateParametersForWhere;
     private final List<Object> privateParametersForHaving;
 
-
-    public TermInsideMessageMySQL(Map<MessageField, String> orderByValueStringMap, List<Object> privateParametersForWhere, String where) {
+    private static final String ROLE_JOIN = "\nLEFT JOIN role ON role.id=user.role_id \n";
+    public TermInsideMessageMySQL(Map<MessageField, String> orderByValueStringMap, List<Object> privateParametersForWhere, String where,String join) {
         super(orderByValueStringMap);
 
         this.privateParametersForWhere = privateParametersForWhere;
@@ -36,8 +36,8 @@ public class TermInsideMessageMySQL extends TermCoreMySQL<ITermInsideMessage.Mes
 
         privateWhere = where;
 
-        privateJoin = privateField = "";
-        privateGroupBy = privateHaving = "";
+        privateJoin =  join + ROLE_JOIN;
+        privateGroupBy = privateField = privateHaving = "";
     }
 
     private static final String OTHER_USERS_EMAIL_CONTAINING = " user.email LIKE ? ";
@@ -89,14 +89,13 @@ public class TermInsideMessageMySQL extends TermCoreMySQL<ITermInsideMessage.Mes
         return this;
     }
 
-    private static final  String ROLE_ID_IN = " user.role_id IN(" + HandlerSqlDAO.REPLACE_SYMBOL + ") ";
+    private static final  String ROLE_IN = " role.name IN(" + HandlerSqlDAO.REPLACE_SYMBOL + ") ";
     @Override
     public ITermInsideMessage roleNameIn(Role... roles) {
         privateWhere = HandlerTerm
-                .setFieldsIn(privateWhere,ROLE_ID_IN,privateParametersForWhere, Arrays
+                .setFieldsIn(privateWhere,ROLE_IN,privateParametersForWhere, Arrays
                         .stream(roles)
                         .distinct()
-                        .map( t -> t.getId())
                         .toArray(Integer[]::new));
         return this;
     }

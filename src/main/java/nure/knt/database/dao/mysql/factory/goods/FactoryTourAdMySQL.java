@@ -1,6 +1,6 @@
-package nure.knt.database.dao.mysql.factory;
+package nure.knt.database.dao.mysql.factory.goods;
 
-import nure.knt.database.idao.factory.IFactoryTourAd;
+import nure.knt.database.idao.factory.goods.IFactoryTourAd;
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.goods.TourAd;

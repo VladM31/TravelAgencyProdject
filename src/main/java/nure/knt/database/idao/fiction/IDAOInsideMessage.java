@@ -8,6 +8,7 @@ import nure.knt.entity.subordinate.MessageShortData;
 import org.springframework.lang.NonNull;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface IDAOInsideMessage {
@@ -17,9 +18,9 @@ public interface IDAOInsideMessage {
 
     List<MessageShortData>  findMessagesShortData(ITermInformation information);
 
-    String findDescribeByMSD(MessageShortData messageShortData);
+    Optional<String> findDescribeByMSD(MessageShortData messageShortData);
 
     boolean save(Message message, long fromWhom, @NonNull String[] emails);
 
-    boolean save(Message message, long fromWhom,@NonNull Set<Role> roles);
+    boolean save(Message message, long fromWhom,@NonNull Role[] roles);
 }

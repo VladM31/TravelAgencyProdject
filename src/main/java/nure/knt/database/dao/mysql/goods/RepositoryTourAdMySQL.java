@@ -3,7 +3,7 @@ package nure.knt.database.dao.mysql.goods;
 import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.dao.mysql.terms.TermTourAdMySQL;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
-import nure.knt.database.idao.factory.IFactoryTourAd;
+import nure.knt.database.idao.factory.goods.IFactoryTourAd;
 import nure.knt.database.idao.goods.IDAOTourAdWithTerms;
 import nure.knt.database.idao.terms.ITermInformation;
 import nure.knt.database.idao.terms.ITermTourAd;
@@ -20,8 +20,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;

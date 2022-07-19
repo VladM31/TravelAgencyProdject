@@ -1,7 +1,9 @@
 package nure.knt.database.dao.mysql.fiction;
 
 import nure.knt.database.dao.HandlerSqlDAO;
+import nure.knt.database.dao.mysql.factory.fiction.FactoryInsideMessageShortDataMySQL;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
+import nure.knt.database.idao.factory.fiction.IFactoryInsideMessageShortData;
 import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.database.idao.temporary.IDAOMessage;
 import nure.knt.entity.subordinate.Message;
@@ -33,8 +35,6 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
             }else {
                // todo
             }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -48,10 +48,10 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
 
     private static final String SELECT_ALL_MSD_BY_TO_WHOM = "SELECT " +
             "message.id AS idMessage, user_message.id AS idUserMessage, " +
-            "role.name AS sendlerRole, " +
-            "user.name AS sendlerName,  " +
+            "role.name AS senderRole, " +
+            "user.name AS senderName,  " +
             "message.name AS messageName, " +
-            "user.email AS sendlerEmail, " +
+            "user.email AS senderEmail, " +
             "message.date_registration AS sendDate, " +
             "user_message.was_read AS itWasRead " +
             "FROM message  " +
@@ -64,7 +64,7 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
     public List<MessageShortData> findMessageShortDataAllByToWhom(long toWhom) {
         return HandlerSqlDAO.useSelectScript(this.conn,
                 HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,SORT_BY_DATE_SEND_DESC),
-                MessageHandler::getMessageShortDataFromResultSet,toWhom);
+                MessageHandler.factory::getMessageShortData,toWhom);
     }
 
     private static final String WHERE_SENDLER_NAME_CONTAINING = " AND user.name LIKE ? ";
@@ -73,7 +73,7 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
     public List<MessageShortData> findMSDByToWhomAndSendlerNameContaining(long toWhom, String sendlerName) {
         return HandlerSqlDAO.useSelectScript(this.conn,
                 HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SENDLER_NAME_CONTAINING,SORT_BY_DATE_SEND_DESC),
-                MessageHandler::getMessageShortDataFromResultSet,
+                MessageHandler.factory::getMessageShortData,
                 toWhom,sendlerName);
     }
 
@@ -83,7 +83,7 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
     public List<MessageShortData> findMSDByToWhomAndNameMessageContaining(long toWhom, String messageName) {
         return HandlerSqlDAO.useSelectScript(this.conn,
                 HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_NAME_MESSAGE_CONTAINING,SORT_BY_DATE_SEND_DESC),
-                MessageHandler::getMessageShortDataFromResultSet,toWhom, HandlerSqlDAO.containingString(messageName));
+                MessageHandler.factory::getMessageShortData,toWhom, HandlerSqlDAO.containingString(messageName));
     }
 
     private static final String WHERE_ROLE_IS = " AND role.name = ? ";
@@ -91,7 +91,7 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
     @Override
     public List<MessageShortData> findMSDByToWhomAndRole(long toWhom, Role role) {
         return  HandlerSqlDAO.useSelectScript(this.conn, HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_ROLE_IS,SORT_BY_DATE_SEND_DESC),
-                MessageHandler::getMessageShortDataFromResultSet,toWhom,role);
+                MessageHandler.factory::getMessageShortData,toWhom,role);
     }
 
     private static final String WHERE_SEND_DATE_BETWEEN = " AND message.date_registration BETWEEN ? AND ? ";
@@ -100,7 +100,7 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
     public List<MessageShortData> findMSDByToWhomAndSendDateBetween(long toWhom, LocalDateTime sendStartDate, LocalDateTime sendEndDate) {
         return HandlerSqlDAO.useSelectScript(this.conn,
                 HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SEND_DATE_BETWEEN,SORT_BY_DATE_SEND_DESC),
-                MessageHandler::getMessageShortDataFromResultSet,
+                MessageHandler.factory::getMessageShortData,
                 toWhom,sendStartDate,sendEndDate);
     }
 
@@ -110,7 +110,7 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
     public List<MessageShortData> findMSDByToWhomAndSendDateAfterAndEquals(long toWhom, LocalDateTime sendDateStart) {
         return HandlerSqlDAO.useSelectScript(this.conn,
                 HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SEND_DATE_AFTER,SORT_BY_DATE_SEND_DESC),
-                MessageHandler::getMessageShortDataFromResultSet,
+                MessageHandler.factory::getMessageShortData,
                 toWhom,sendDateStart);
     }
 
@@ -121,7 +121,7 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
     public List<MessageShortData> findMSDByToWhomAndSendDateBeforeAndEquals(long toWhom, LocalDateTime sendDateEnd) {
         return HandlerSqlDAO.useSelectScript(this.conn,
                 HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_SEND_DATE_BEFORE,SORT_BY_DATE_SEND_DESC),
-                MessageHandler::getMessageShortDataFromResultSet,
+                MessageHandler.factory::getMessageShortData,
                 toWhom,sendDateEnd);
     }
 
@@ -131,7 +131,7 @@ public class DAOMessageMySQL extends MySQLCore implements IDAOMessage {
     public List<MessageShortData> findMSDByToWhomAndItWasRead(long toWhom, boolean itWasRead) {
         return HandlerSqlDAO.useSelectScript(this.conn,
                 HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_MSD_BY_TO_WHOM,WHERE_IT_WAS_READ_IS,SORT_BY_DATE_SEND_DESC),
-                MessageHandler::getMessageShortDataFromResultSet,
+                MessageHandler.factory::getMessageShortData,
                 toWhom,itWasRead);
     }
 
@@ -291,24 +291,8 @@ class MessageHandler{
         return false;
     }
 
-    static MessageShortData getMessageShortDataFromResultSet(java.sql.ResultSet resultSet) {
-        MessageShortData messageShortData = new MessageShortData();
+    public static final IFactoryInsideMessageShortData factory = new FactoryInsideMessageShortDataMySQL();
 
-        try {
-            messageShortData.setIdMessage(resultSet.getLong("idMessage"));
-            messageShortData.setSendlerRole(Role.valueOf(resultSet.getString("sendlerRole")));
-            messageShortData.setSendlerName(resultSet.getString("sendlerName").replace('/',' '));
-            messageShortData.setMessageName(resultSet.getString("messageName"));
-            messageShortData.setSendlerEmail(resultSet.getString("sendlerEmail"));
-            messageShortData.setSendDate(resultSet.getTimestamp("sendDate").toLocalDateTime());
-            messageShortData.setItWasRead(resultSet.getBoolean("itWasRead"));
-            messageShortData.setIdUserMessage(resultSet.getLong("idUserMessage"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return messageShortData;
-    }
 
     private static final String SCRIPT_MAEK_AS_READ = "UPDATE user_message SET was_read = true WHERE id = ?;";
     private static final int POSITION_ID_FOR_MAEK_AS_READ = 1;

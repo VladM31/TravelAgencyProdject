@@ -1,6 +1,6 @@
 package nure.knt.forms.filter.terms;
 
-import nure.knt.database.idao.terms.ITermCore;
+import nure.knt.database.idao.terms.ITermInformation;
 import nure.knt.database.idao.terms.ITermTourAd;
 import nure.knt.entity.enums.ConditionCommodity;
 import nure.knt.entity.enums.HowSortSQL;
@@ -50,7 +50,7 @@ public class FilterTourAdTerms {
     private boolean takeCostTourAd;
     private Boolean hidden;
 
-    public ITermCore filtering(@NotNull ITermTourAd iTermTourAd) {
+    public ITermInformation filtering(@NotNull ITermTourAd iTermTourAd) {
 
         // =========================== Long ===========================
         HandlerFilterTerms.checkArray(tourAdIds, (ids) -> iTermTourAd.idIn(ids));

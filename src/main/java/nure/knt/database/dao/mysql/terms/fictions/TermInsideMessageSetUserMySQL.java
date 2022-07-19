@@ -15,15 +15,17 @@ public class TermInsideMessageSetUserMySQL implements ITermInsideMessageSetUser 
     }
 
     private static final String USER_TO_WHOM = " user_message.to_whom_id = ? \n";
+    private static final String JOIN_TO_WHOM = "\nLEFT JOIN user ON user.id=user_message.from_whom_id ";
     @Override
     public ITermInsideMessage idUserToWhom(Long toWhom) {
-        return new TermInsideMessageMySQL(messageFieldStringMap,TermInsideMessageSetUserMySQL.getListWithElement(toWhom),USER_TO_WHOM);
+        return new TermInsideMessageMySQL(messageFieldStringMap,TermInsideMessageSetUserMySQL.getListWithElement(toWhom),USER_TO_WHOM,JOIN_TO_WHOM);
     }
 
     private static final String USER_FROM_WHOM = " user_message.from_whom_id = ? \n";
+    private static final String JOIN_FROM_WHOM = "\nLEFT JOIN user ON user.id=user_message.to_whom_id ";
     @Override
     public ITermInsideMessage idUserFromWhom(Long fromWhom) {
-        return new TermInsideMessageMySQL(messageFieldStringMap,TermInsideMessageSetUserMySQL.getListWithElement(fromWhom),USER_FROM_WHOM);
+        return new TermInsideMessageMySQL(messageFieldStringMap,TermInsideMessageSetUserMySQL.getListWithElement(fromWhom),USER_FROM_WHOM,JOIN_FROM_WHOM);
     }
 
     private static final List<Object> getListWithElement(Long id){

@@ -60,8 +60,9 @@ public class ControllerRestForMainPage {
         filterTourAdTerms.setConditionCommodities(new ConditionCommodity[]{ConditionCommodity.CONFIRMED});
         filterTourAdTerms.setTypeStates(new TypeState[]{TypeState.REGISTERED});
 
-        if(filterTourAdTerms.getOrderBy().equals(ITermTourAd.OrderByValue.COUNT_ORDERS) ||
-                filterTourAdTerms.getOrderBy().equals(ITermTourAd.OrderByValue.COST_SERVICE)){
+        if(filterTourAdTerms.getOrderBy() != null &&
+                (filterTourAdTerms.getOrderBy().equals(ITermTourAd.OrderByValue.COUNT_ORDERS) ||
+                filterTourAdTerms.getOrderBy().equals(ITermTourAd.OrderByValue.COST_SERVICE))){
             filterTourAdTerms.setOrderBy(null);
         }
 

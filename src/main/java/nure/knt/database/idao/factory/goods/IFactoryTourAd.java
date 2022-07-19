@@ -1,4 +1,4 @@
-package nure.knt.database.idao.factory;
+package nure.knt.database.idao.factory.goods;
 
 import nure.knt.entity.goods.TourAd;
 

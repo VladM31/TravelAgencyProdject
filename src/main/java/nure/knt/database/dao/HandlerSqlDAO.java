@@ -1,5 +1,8 @@
 package nure.knt.database.dao;
 
+import nure.knt.database.idao.terms.ITermInformation;
+import nure.knt.database.idao.terms.ITermTourAd;
+import nure.knt.database.idao.tools.IConcatScripts;
 import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.tools.WorkWithCountries;
 import org.jetbrains.annotations.NotNull;
@@ -8,11 +11,13 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -284,6 +289,37 @@ public class HandlerSqlDAO {
         return HandlerSqlDAO.deleteByIdIn(connectorGetter,script,collection,LONG_TO_LONG);
     }
 
+    public static <E extends Enum<?>> Map<E,String> setNameScriptForEnumsTourAdOrderByValue(String fileName,String propertyStart,E[] enums){
+        HashMap<E,String> map = new HashMap<>();
+        Properties appProps = new Properties();
 
+        try(FileInputStream fileInputStream = new FileInputStream(fileName)) {
+            appProps.load(fileInputStream);
+
+            map.put(null,appProps.getProperty(propertyStart + "error"));
+
+            for (E enumObject: enums) {
+                map.put(enumObject,appProps.getProperty(propertyStart + enumObject,"Error."+enumObject));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Collections.unmodifiableMap(map);
+    }
+
+    public static String toScriptDefault(String SELECT_AND_FIELD,String FROM_AND_JOIN,ITermInformation iterm, IConcatScripts concator){
+        return concator.concatScripts("",
+                SELECT_AND_FIELD,
+                iterm.getSelectField(),
+                FROM_AND_JOIN,
+                iterm.getJoin(),
+                (iterm.getWhere().isEmpty()) ? "" : " WHERE " + iterm.getWhere(),
+                (iterm.getGroupBy().isEmpty()) ? "" : " GROUP BY " + iterm.getGroupBy(),
+                (iterm.getHaving().isEmpty()) ? "" : " HAVING " + iterm.getHaving(),
+                iterm.getOrderBy(),
+                iterm.getLimit());
+    }
 
 }

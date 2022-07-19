@@ -100,6 +100,37 @@ public class HandlerFilterTerms {
         filtering(startDate, endDate, MIN, MAX, setDateTimes);
     }
 
+    public static < D extends ChronoLocalDateTime> void checkDateTime(D startDate, D endDate,
+                                                                      BiConsumer<D, D> setDateTimeBetween,
+                                                                      Consumer<D> dateTimeAfter,Consumer<D> dateTimeBefore) {
+        checkBetweenOrAfterOrBefore(startDate,endDate,setDateTimeBetween,dateTimeAfter,dateTimeBefore);
+    }
+
+    private static <VALUE extends Comparable<VALUE>> void checkBetweenOrAfterOrBefore(VALUE start, VALUE end,
+                                                    BiConsumer<VALUE, VALUE> setBetween,
+                                                    Consumer<VALUE> setAfter,Consumer<VALUE> setBefore){
+        if (HandlerFilter.isAllNull(start, end)) {
+            return;
+        }
+
+        if (HandlerFilter.isAllNonNull(start, end)) {
+            if (start.compareTo(end) > -1) {
+                VALUE temp = start;
+                start = end;
+                end = temp;
+            }
+            setBetween.accept(start, end);
+            return;
+        }
+
+        if (start != null) {
+            setAfter.accept(start);
+            return;
+        }
+
+        setBefore.accept(end);
+    }
+
     public static < N extends Number & Comparable<N>> void checkNumberBetween(N start, N end, final N MIN, final N MAX, BiConsumer<N, N> setNumbers) {
          filtering(start, end, MIN, MAX, setNumbers);
     }
