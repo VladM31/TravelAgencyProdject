@@ -43,7 +43,7 @@
 
     <div class="main-body-buttom">
 
-        <form th:action="@{/profile-message}" th:object="${filter}" method="POST" class="filter-mail-block-for-all-info">
+        <form th:action="@{/profile-message}" th:object="${filter}" method="GET" class="filter-mail-block-for-all-info">
             <div>
                 <h2 style="font-family: 'Neucha';font-style: normal;font-size: 45px;">
                     <b>
@@ -54,8 +54,7 @@
     
             <div id="Role">
                 <h6>Ролями</h6>
-                <select  th:field="*{byRole}" class="box-filter">
-                    <option value="ALL">All roles</option>
+                <select  th:field="*{roles}" class="box-filter" multiple  style="height: 160px;font-size: 24px">
                     <option value="CUSTOMER">Customer</option>
                     <option value="TRAVEL_AGENCY">Travel agency</option>
                     <option value="ADMINISTRATOR">Administrator</option>
@@ -66,20 +65,20 @@
     
             <div id="NameMessage">
                 <h6>Назва повідомлення</h6>
-                <input type="text" class="box-filter" th:field="*{byNameMessage}">
+                <input type="text" class="box-filter" th:field="*{messageName}">
             </div>
     
             <div id="NameSendler">
                 <h6>Назва відправника</h6>
-                <input type="text" class="box-filter" th:field="*{byNameSendler}">
+                <input type="text" class="box-filter" th:field="*{otherUsersName}">
             </div>
     
             <div id="DateRegistrationBetween">
                 <h5 style="color: white;">Датою</h5>
                 <div style=" display:flex; justify-content: space-around;">
-                    <input type="datetime-local" class="box-filter-date" th:field="*{byStartSendDate}">
+                    <input type="datetime-local" class="box-filter-date" th:field="*{startSendDate}">
                     <p class="line-between-date">-</p>
-                    <input type="datetime-local" class="box-filter-date" th:field="*{byEndSendDate}">
+                    <input type="datetime-local" class="box-filter-date" th:field="*{endSendDate}">
                 </div>
             </div>
     
@@ -87,10 +86,10 @@
                 <h5 style="color: white;">За станом</h5>
                 <div style="display: flex;justify-content: space-around;">
                     <div class="box-filter-check">
-                        <input type="checkbox" th:field="*{byRead}" /> Прочитані
+                        <input type="checkbox" th:field="*{itWasRead}" /> Прочитані
                     </div>
                     <div class="box-filter-check">
-                        <input type="checkbox" th:field="*{byNotRead}"/> Не прочитані
+                        <input type="checkbox" th:field="*{itWasNotRead}"/> Не прочитані
                     </div>
                 </div>
     

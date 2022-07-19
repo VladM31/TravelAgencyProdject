@@ -7,8 +7,11 @@ import nure.knt.entity.enums.Role;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class FilterInsideMessage {
+    public static final boolean NOT_ALL_ROLES = false;
     private Role[] roles;//+
     private String messageName;//+
     private String otherUsersName;//+
@@ -31,7 +34,13 @@ public class FilterInsideMessage {
         HandlerFilterTerms.checkString(otherUsersEmail, byOtherUsersEmail -> term.emailOtherUsersContaining(byOtherUsersEmail));
 
         // =========================== Array ===========================
-        HandlerFilterTerms.checkArray(roles,byRoles -> term.roleNameIn(roles));
+
+
+        if(roles != null && Arrays.stream(roles).anyMatch( role -> Objects.equals(role,Role.ALL)) == NOT_ALL_ROLES){
+            HandlerFilterTerms.checkArray(roles,byRoles -> term.roleNameIn(roles));
+        }
+
+
 
         HandlerFilterTerms.checkArray(limits,byLimit-> term.limitIs(byLimit));
 

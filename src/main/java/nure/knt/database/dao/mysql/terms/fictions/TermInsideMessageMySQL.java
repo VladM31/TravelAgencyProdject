@@ -96,7 +96,7 @@ public class TermInsideMessageMySQL extends TermCoreMySQL<ITermInsideMessage.Mes
                 .setFieldsIn(privateWhere,ROLE_IN,privateParametersForWhere, Arrays
                         .stream(roles)
                         .distinct()
-                        .toArray(Integer[]::new));
+                        .toArray(Role[]::new));
         return this;
     }
 

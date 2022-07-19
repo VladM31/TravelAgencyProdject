@@ -43,12 +43,17 @@ public class ServiceInsideMessage implements IServiceInsideMessage {
     }
 
     @Override
-    public boolean save(Message message, long fromWhom, String[] emails) {
-        return dao.save(message,fromWhom,emails);
+    public boolean save(Message message, long fromWhom) {
+        return dao.save(message,fromWhom);
     }
 
     @Override
-    public boolean save(Message message, long fromWhom, Role[] roles) {
-        return dao.save(message,fromWhom,roles);
+    public boolean send(Message message, long fromWhom, String[] emails) {
+        return dao.send(message,fromWhom,emails);
+    }
+
+    @Override
+    public boolean send(Message message, long fromWhom, Role[] roles) {
+        return dao.send(message,fromWhom,roles);
     }
 }

@@ -18,7 +18,9 @@ public interface IServiceInsideMessage {
 
     Optional<String> findDescribeByMSD(MessageShortData messageShortData);
 
-    boolean save(Message message, long fromWhom, @NonNull String[] emails);
+    boolean save(Message message, long fromWhom);
 
-    boolean save(Message message, long fromWhom,@NonNull Role[] roles);
+    boolean send(Message message, long fromWhom, @NonNull String[] emails);
+
+    boolean send(Message message, long fromWhom,@NonNull Role[] roles);
 }

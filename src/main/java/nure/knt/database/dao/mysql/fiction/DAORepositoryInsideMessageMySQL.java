@@ -71,11 +71,13 @@ public class DAORepositoryInsideMessageMySQL extends MySQLCore implements IDAOIn
     }
 
     @Override
-    public boolean save(@NonNull Message message, long fromWhom,@NonNull String[] emails) {
+    public boolean save(Message message, long fromWhom) {
+        return HandlerDAOMessage.saveMessage(super.conn,this.generatorId,message);
+    }
+
+    @Override
+    public boolean send(@NonNull Message message, long fromWhom,@NonNull String[] emails) {
         try{
-            if(!HandlerDAOMessage.saveMessage(super.conn,this.generatorId,message)){
-                return false;
-            }
             return HandlerDAOMessage.saveMessageByEmails(super.conn,message,emails,fromWhom);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -84,11 +86,8 @@ public class DAORepositoryInsideMessageMySQL extends MySQLCore implements IDAOIn
     }
 
     @Override
-    public boolean save(@NonNull Message message, long fromWhom,@NonNull Role[] roles) {
+    public boolean send(@NonNull Message message, long fromWhom,@NonNull Role[] roles) {
         try{
-            if(!HandlerDAOMessage.saveMessage(super.conn,this.generatorId,message)){
-                return false;
-            }
             return HandlerDAOMessage.saveMessageByRoles(super.conn,message,roles,fromWhom);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -132,7 +131,7 @@ class HandlerDAOMessage {
                         Collectors.mapping(role -> role.getId(),Collectors.toSet())))
                 .toArray(Integer[]::new);
 
-        final String SCRIPT = HandlerSqlDAO.setInInsideScript(SAVE_MESSAGE_USER_CONNECTION,roleIds.length);
+        final String SCRIPT = HandlerSqlDAO.setInInsideScript(SAVE_MESSAGE_USER_CONNECTION_BY_ROLE_ID_IN,roleIds.length);
 
         try(PreparedStatement statement = connector.getSqlPreparedStatement(SCRIPT)){
 
@@ -169,7 +168,7 @@ class HandlerDAOMessage {
         }
     }
 
-    static boolean saveMessage(IConnectorGetter connector,Supplier<Long> generatorId,Message message) throws SQLException {
+    static boolean saveMessage(IConnectorGetter connector,Supplier<Long> generatorId,Message message){
         try(PreparedStatement statement = connector.getSqlPreparedStatement(HandlerDAOMessage.SAVE_MESSAGE)){
             if (message.getId() == HandlerDAOMessage.NEED_TO_GENERATE_ID){
                 message.setId(generatorId.get());
@@ -181,7 +180,10 @@ class HandlerDAOMessage {
             statement.setTimestamp(++position, Timestamp.valueOf(LocalDateTime.now()));
 
             return statement.executeUpdate() != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return false;
     }
 
     private static final String SELECT_MAX_ID_MESSAGE = "SELECT max(id) AS max_id FROM message;";

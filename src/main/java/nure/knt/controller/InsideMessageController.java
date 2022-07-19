@@ -1,12 +1,14 @@
 package nure.knt.controller;
 
 import nure.knt.database.idao.temporary.IDAOMessage;
+import nure.knt.database.service.implement.fiction.IServiceInsideMessage;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
 import nure.knt.entity.subordinate.Message;
 import nure.knt.entity.subordinate.MessageShortData;
 import nure.knt.forms.filter.FilterMessageShow;
+import nure.knt.forms.filter.terms.FilterInsideMessage;
 import nure.knt.gmail.ISendTextOnEmail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,13 +25,14 @@ import java.util.*;
 
 @Controller
 public class InsideMessageController {
+    @Autowired
+    private IServiceInsideMessage serviceIM;
+
     private static final String DIRECTORY = "place_for_messages\\";
     private static final String SHOW_ALL_MESSAGES_PAGE = DIRECTORY + "show_all_messages.html";
     private static final String SHOW_MESSAGE_PAGE = DIRECTORY + "showMessagePage.html";
     private static final String SEND_MESSAGE_PAGE = DIRECTORY + "sendMessagePage.html";
 
-    @Autowired
-    private IDAOMessage idaoMessage;
     @Autowired
     private ISendTextOnEmail sendTextOnEmail;
 
@@ -37,32 +40,29 @@ public class InsideMessageController {
     private static final String ATTRIBUTE_MESSAGES = "messages";
 
     @RequestMapping(value = "/profile-message",method = {RequestMethod.GET})
-    public String showProfileMessageGet(@AuthenticationPrincipal User user, Model model){
+    public String showProfileMessageGet(@AuthenticationPrincipal User user, Model model,FilterInsideMessage filter){
 
-        if (user != null) {
-            HandlerController.setMenuModel(user,model);
-        }
-
-
-        model.addAttribute(ATTRIBUTE_FILTER,new FilterMessageShow());
-        model.addAttribute(ATTRIBUTE_MESSAGES,idaoMessage.findMessageShortDataAllByToWhom(user.getId()));
-        HendlerIMCForAll.setInformationAboutUserForShowAll(model,user);
-
-        return SHOW_ALL_MESSAGES_PAGE;
-    }
-
-    @RequestMapping(value = "/profile-message",method = {RequestMethod.POST})
-    public String showProfileMessagePOST(@AuthenticationPrincipal User user, Model model, FilterMessageShow filter){
-
-        if (user != null) {
-            HandlerController.setMenuModel(user,model);
-        }
+        HandlerController.setMenuModel(user,model);
 
         model.addAttribute(ATTRIBUTE_FILTER,filter);
-        model.addAttribute(ATTRIBUTE_MESSAGES,filter.filtering(user.getId(),this.idaoMessage));
+
+        System.out.println(Arrays.toString(filter.getRoles()));
+
+        model.addAttribute(ATTRIBUTE_MESSAGES,serviceIM
+                .findMessagesShortData(HandlerSendMessage
+                        .removeFields(filter)
+                        .filtering(serviceIM
+                                .term()
+                                .idUserToWhom(user.getId())
+                        )
+                )
+        );
+
         HendlerIMCForAll.setInformationAboutUserForShowAll(model,user);
+
         return SHOW_ALL_MESSAGES_PAGE;
     }
+
 
     private static final String ATTRIBUTE_MESSAGE_SHORT_DATE = "messageShortData";
     private static final String ATTRIBUTE_DESCRIBE_MESSAGE = "describeMessage";
@@ -71,7 +71,8 @@ public class InsideMessageController {
     public String showMessage(Model model, MessageShortData messageShortData,String sendDateTxt){
         messageShortData.setSendDate(LocalDateTime.parse(sendDateTxt));
         model.addAttribute(ATTRIBUTE_MESSAGE_SHORT_DATE,messageShortData);
-        model.addAttribute(ATTRIBUTE_DESCRIBE_MESSAGE,this.idaoMessage.findDescribeByMSD(messageShortData));
+
+        model.addAttribute(ATTRIBUTE_DESCRIBE_MESSAGE,serviceIM.findDescribeByMSD(messageShortData).get());
 
         return SHOW_MESSAGE_PAGE;
     }
@@ -84,7 +85,7 @@ public class InsideMessageController {
     public String sendMessageGet(@AuthenticationPrincipal User user,Model model,String sendlerEmail){
 
         model.addAttribute(ATTRIBUTE_WRITE_EMAIL,(sendlerEmail != null) ? sendlerEmail : "");
-        model.addAttribute(ATTRIBUTE_ARE_YOU_ADMIN,HendlerSendMessage.roleIsAdmin(user.getRole()));
+        model.addAttribute(ATTRIBUTE_ARE_YOU_ADMIN, HandlerSendMessage.roleIsAdmin(user.getRole()));
 
         Message message = new Message();
         message.setId(1l);
@@ -105,22 +106,26 @@ public class InsideMessageController {
         }
 
         writeMessage.setId(IDAOMessage.NEED_TO_GENERATE_ID);
+        serviceIM.save(writeMessage,user.getId());
 
         if (writeEmail.contains(CHOSE_ALL_ROLE)){
-            idaoMessage.save(writeMessage,user.getId(),HendlerSendMessage.getAllRoles());
+            serviceIM.send(writeMessage,user.getId(),Role.values());
 
             return "redirect:/profile-message";
         }
 
         String [] strings =writeEmail.split(",");
         //todo
-        if (HendlerSendMessage.hasRole(writeEmail)){
-            idaoMessage.save(writeMessage,user.getId(),HendlerSendMessage.getRoleFromString(strings));
+        if (HandlerSendMessage.hasRole(writeEmail)){
+            serviceIM.send(writeMessage,user.getId(),HandlerSendMessage.getRoleFromString(strings));
         }
-        idaoMessage.save(writeMessage,user.getId(),strings);
+
+        if(strings.length != 0){
+            serviceIM.send(writeMessage,user.getId(),strings);
+        }
 
         if(doSendMessage && strings.length != 0){
-            HendlerSendMessage.sendMessageToGmail(strings,user,sendTextOnEmail);
+            HandlerSendMessage.sendMessageToGmail(strings,user,sendTextOnEmail);
         }
 
         return "redirect:/profile-message";
@@ -294,14 +299,17 @@ class HendlerIMCForAdministrations {
 
 }
 
-class HendlerSendMessage{
+class HandlerSendMessage {
+
+    static FilterInsideMessage removeFields(FilterInsideMessage filter){
+        filter.setHowSort(null);
+        filter.setOrderBy(null);
+        filter.setLimits(null);
+        return filter;
+    }
 
     static boolean roleIsAdmin(Role role){
         return role == Role.ADMINISTRATOR || role == Role.MODERATOR;
-    }
-
-    static String[] getEmail(String emailLine){
-        return emailLine.replace(" ","").split(",");
     }
 
     private static final String MESSAGE_NOTIFY = "Вам на сайті написав повідомлення %s. Перейдіть на сайт, щоб прочитати повідомлення.";
@@ -314,20 +322,13 @@ class HendlerSendMessage{
         }
     }
 
-    static Set<Role> getAllRoles(){
-        return Set.of(Role.MODERATOR,Role.TRAVEL_AGENCY,Role.CUSTOMER,Role.COURIER);
-    }
 
     static boolean hasRole(String writeEmail){
         return writeEmail.contains("Role:");
     }
 
-    static boolean hasComa(String writeEmail){
-        return writeEmail.contains(",");
-    }
-
     private static final boolean IT_IS_EMAIL = false;
-    static Set<Role> getRoleFromString(String[] rolesAndEmeils){
+    static Role[] getRoleFromString(String[] rolesAndEmeils){
         Set<Role> roles = new HashSet<>();
         try{
             for (String str:rolesAndEmeils) {
@@ -339,6 +340,6 @@ class HendlerSendMessage{
         }catch (RuntimeException e){
             e.printStackTrace();
         }
-        return roles;
+        return roles.toArray(Role[]::new);
     }
 }
