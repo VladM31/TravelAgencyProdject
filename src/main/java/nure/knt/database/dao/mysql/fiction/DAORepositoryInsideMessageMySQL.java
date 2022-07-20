@@ -5,7 +5,6 @@ import nure.knt.database.dao.mysql.terms.fictions.TermInsideMessageSetUserMySQL;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
 import nure.knt.database.idao.factory.fiction.IFactoryInsideMessageShortData;
 import nure.knt.database.idao.fiction.IDAOInsideMessage;
-import nure.knt.database.idao.temporary.IDAOMessage;
 import nure.knt.database.idao.terms.ITermInformation;
 import nure.knt.database.idao.terms.fictions.ITermInsideMessage;
 import nure.knt.database.idao.terms.fictions.ITermInsideMessageSetUser;
@@ -25,11 +24,13 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Repository("Repository_Inside_Message_MySQL")
 @PropertySource("classpath:property/fiction/WorkerWithInsideMessage.properties")

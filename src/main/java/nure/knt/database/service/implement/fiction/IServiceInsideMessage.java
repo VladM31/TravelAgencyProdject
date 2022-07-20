@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IServiceInsideMessage {
+    public static final Long NEED_TO_GENERATE_ID = null;
 
     ITermInsideMessageSetUser term();
 

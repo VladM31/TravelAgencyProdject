@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface IDAOInsideMessage {
-    public static final Long NEED_TO_GENERATE_ID = null;
+
 
     ITermInsideMessageSetUser term();
 

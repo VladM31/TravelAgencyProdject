@@ -1,13 +1,11 @@
 package nure.knt.controller;
 
-import nure.knt.database.idao.temporary.IDAOMessage;
 import nure.knt.database.service.implement.fiction.IServiceInsideMessage;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
 import nure.knt.entity.subordinate.Message;
 import nure.knt.entity.subordinate.MessageShortData;
-import nure.knt.forms.filter.FilterMessageShow;
 import nure.knt.forms.filter.terms.FilterInsideMessage;
 import nure.knt.gmail.ISendTextOnEmail;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 public class InsideMessageController {
@@ -105,7 +105,7 @@ public class InsideMessageController {
             return "redirect:/profile-message";
         }
 
-        writeMessage.setId(IDAOMessage.NEED_TO_GENERATE_ID);
+        writeMessage.setId(IServiceInsideMessage.NEED_TO_GENERATE_ID);
         serviceIM.save(writeMessage,user.getId());
 
         if (writeEmail.contains(CHOSE_ALL_ROLE)){
