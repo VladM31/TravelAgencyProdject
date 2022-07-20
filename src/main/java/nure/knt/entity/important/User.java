@@ -11,15 +11,19 @@ import java.util.Set;
 
 public class User implements UserDetails {
     private Long id;
+
     private String number;
     private String email;
     private String username;
     private String password;
-    private boolean active;
-    private LocalDateTime dateRegistration;
-    private Role role;
     private String country;
     private String name;
+
+    private boolean active;
+
+    private LocalDateTime dateRegistration;
+
+    private Role role;
     private TypeState typeState;
 
     public TypeState getTypeState() {

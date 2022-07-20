@@ -1,13 +1,13 @@
 package nure.knt.database.dao.mysql.terms;
 
-import nure.knt.database.idao.terms.ITermCore;
+import nure.knt.database.idao.terms.core.ITermCore;
 import nure.knt.database.idao.terms.ITermInformation;
 import nure.knt.entity.enums.HowSortSQL;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;
 
-public abstract class TermCoreMySQL<E extends Enum,IT extends ITermCore<E,IT>> implements ITermCore<E,IT> {
+public abstract class TermCoreMySQL<E extends Enum<?>,IT extends ITermCore<E,IT>> implements ITermCore<E,IT> {
 
     protected String privateOrderBy;
     protected String privateLimit;

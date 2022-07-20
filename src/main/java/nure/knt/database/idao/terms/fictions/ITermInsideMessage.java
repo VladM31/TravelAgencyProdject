@@ -1,11 +1,8 @@
 package nure.knt.database.idao.terms.fictions;
 
-import nure.knt.database.idao.terms.ITermCore;
-import nure.knt.database.idao.terms.ITermInformation;
-import nure.knt.entity.enums.HowSortSQL;
+import nure.knt.database.idao.terms.core.ITermCore;
 import nure.knt.entity.enums.Role;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public interface ITermInsideMessage extends ITermCore<ITermInsideMessage.MessageField,ITermInsideMessage> {

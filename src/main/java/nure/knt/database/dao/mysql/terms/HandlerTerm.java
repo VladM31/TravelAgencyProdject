@@ -70,8 +70,6 @@ public class HandlerTerm {
         return objects;
     }
 
-
-
     public static ITermInformation toEnd(String _privateLimit, String _privateWhere, String _privateJoin,
         String _privateField, String _privateGroupBy, String _privateHaving, String _privateOrderBy, Object[] _privateParameters){
 
@@ -118,4 +116,8 @@ public class HandlerTerm {
             }
         };
     }
+
+    public static final String LIMIT_BEFORE_THIS = " LIMIT ? ";
+    public static final String LIMIT_BETWEEN_THIS = " LIMIT ?,? ";
+    public static final String ORDER_BY = " ORDER BY %s %s ";
 }

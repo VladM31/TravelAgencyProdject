@@ -54,6 +54,7 @@ public class SecurityControler {
     @PreDestroy
     private void destroy(){
         System.out.println("end");
+        //todo
         resetAndCheck.stop();
     }
 
@@ -62,7 +63,7 @@ public class SecurityControler {
     private List<IDAOUserSQL<User>> daoes;
     // ************* Вхід і вихід *****************
     @RequestMapping(value = { "/login"}, method = { RequestMethod.GET })
-    public String signInGet(Model model) {
+    public String signInGet() {
         return "login";
     }
 
@@ -75,7 +76,7 @@ public class SecurityControler {
     // ************* Вибір реєстрації *****************
 
     @RequestMapping(value= {"${registration.choose.sign.up}"},method = { RequestMethod.GET,RequestMethod.POST })
-    public String showSignUpPage(Model model) {
+    public String showSignUpPage() {
         return "registration/Choose registration Page";
     }
     // ************* Реєстрація агенції *****************
