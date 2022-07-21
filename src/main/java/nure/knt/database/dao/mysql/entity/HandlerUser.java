@@ -9,7 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 
 public class HandlerUser {
@@ -114,6 +116,46 @@ public class HandlerUser {
         }
         return false;
     }
+
+    static void userSetToMySqlScript(PreparedStatement preStat, User user) throws SQLException {
+            int position = 0;
+            preStat.setLong(++position,user.getId());
+            preStat.setString(++position,user.getNumber());
+            preStat.setString(++position,user.getEmail());
+            preStat.setString(++position,user.getUsername());
+            preStat.setString(++position,user.getPassword());
+            preStat.setString(++position,user.getName());
+            preStat.setBoolean(++position,user.isActive());
+            preStat.setTimestamp(++position, Timestamp.valueOf(user.getDateRegistration()));
+            preStat.setInt(++position,user.getRole().getId());
+            preStat.setLong(++position,HandlerSqlDAO.getCountries().getIdByCountry(user.getCountry()));
+            preStat.setInt(++position,user.getTypeState().getId());
+
+    }
+
+    static List<Long> saveUsersAndReturnsNewIds(IConnectorGetter connector, String script, Iterable<? extends User> users, AtomicLong generateId){
+        List<Long> ids = new ArrayList<>();
+
+        try(PreparedStatement statement = connector.getSqlPreparedStatement(script)){
+            for (User user:users) {
+                if(user.getId() == null){
+                    user.setId(generateId.incrementAndGet());
+                }
+                userSetToMySqlScript(statement,user);
+                statement.addBatch();
+                ids.add(user.getId());
+            }
+
+            if(!HandlerSqlDAO.arrayHasOnlyOne(statement.executeBatch())){
+                return  new ArrayList<>();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ids;
+    }
+
 
     public static final String CAN_UPDATE = "SELECT id FROM user WHERE ";
     public static final String WHERE_DATE_REGISTRATION_GREATE_THAN = " OR (type_state_id = 1 AND user.date_registration > ? )";

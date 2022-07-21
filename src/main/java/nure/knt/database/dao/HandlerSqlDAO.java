@@ -29,7 +29,6 @@ public class HandlerSqlDAO {
     public static WorkWithCountries getCountries() {
         return countries;
     }
-
     @Autowired
     public void setCountries(WorkWithCountries countries) {
         HandlerSqlDAO.countries = countries;

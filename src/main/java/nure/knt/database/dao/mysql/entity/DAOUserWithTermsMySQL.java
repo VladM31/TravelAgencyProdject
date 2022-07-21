@@ -2,7 +2,6 @@ package nure.knt.database.dao.mysql.entity;
 
 import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.dao.mysql.terms.users.TermUserMySQL;
-import nure.knt.database.dao.mysql.tools.MySQLCore;
 import nure.knt.database.dao.mysql.tools.MySQLUserCore;
 import nure.knt.database.idao.entity.IDAOUserWithTerms;
 import nure.knt.database.idao.factory.users.IFactoryUser;
@@ -18,7 +17,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
 @Repository("Repository_User_MySQL")
@@ -49,14 +47,16 @@ public class DAOUserWithTermsMySQL extends MySQLUserCore<User> implements IDAOUs
 
     }
 
+    public static final String INSERT_USER = "INSERT INTO user (id,number,email,username,password,name,active,date_registration,role_id,country_id,type_state_id) " +
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?);";
     @Override
     public boolean saveAll(Iterable<User> entities) {
-        return false;
+        return !HandlerUser.saveUsersAndReturnsNewIds(super.conn,INSERT_USER,entities,super.getterId).isEmpty();
     }
 
     @Override
     public boolean save(User entity) {
-        return false;
+        return this.saveAll(List.of(entity));
     }
 
 
