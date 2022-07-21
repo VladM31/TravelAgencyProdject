@@ -289,6 +289,10 @@ public class HandlerSqlDAO {
         return HandlerSqlDAO.deleteByIdIn(connectorGetter,script,collection,LONG_TO_LONG);
     }
 
+    public static <E extends Enum<?>> Map<E,String> setNameScriptForEnumsTourAdOrderByValueUnmodifiable(String fileName,String propertyStart,E[] enums){
+        return Collections.unmodifiableMap(HandlerSqlDAO.setNameScriptForEnumsTourAdOrderByValue(fileName,propertyStart,enums));
+    }
+
     public static <E extends Enum<?>> Map<E,String> setNameScriptForEnumsTourAdOrderByValue(String fileName,String propertyStart,E[] enums){
         HashMap<E,String> map = new HashMap<>();
         Properties appProps = new Properties();
@@ -306,8 +310,9 @@ public class HandlerSqlDAO {
             e.printStackTrace();
         }
 
-        return Collections.unmodifiableMap(map);
+        return map;
     }
+
 
     public static String toScriptDefault(String SELECT_AND_FIELD,String FROM_AND_JOIN,ITermInformation iterm, IConcatScripts concator){
         return concator.concatScripts("",

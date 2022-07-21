@@ -26,4 +26,17 @@ public class TermCustomerMySQL extends TermUserMySQL<ITermCustomer> implements I
         privateWhere = HandlerTerm.setScript(this.privateWhere,MALE_IS,this.privateParametersForWhere,(mela));
         return this;
     }
+
+    private static final String FIRSTNAME_CONTAINING = " user.name LIKE ? ";
+    @Override
+    public ITermCustomer firstNameContaining(String firstname) {
+        privateWhere = HandlerTerm.setScript(this.privateWhere,FIRSTNAME_CONTAINING,this.privateParametersForWhere,("%"+firstname+"%/%"));
+        return this;
+    }
+    private static final String LASTNAME_CONTAINING = FIRSTNAME_CONTAINING;
+    @Override
+    public ITermCustomer lastNameContaining(String lastname) {
+        privateWhere = HandlerTerm.setScript(this.privateWhere,LASTNAME_CONTAINING,this.privateParametersForWhere,("%/%"+lastname+"%"));
+        return this;
+    }
 }
