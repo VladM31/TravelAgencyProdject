@@ -34,18 +34,8 @@ public class DAOUserMySQL extends MySQLCore implements IDAOUserOnly {
                                 HandlerUserPartScript.WHERE_USER_ID_IN,
                                 SORT_TO_DATE_REGISTRATION),
                         ids),
-                (statement -> {
-                    int position = 0;
-                    try {
-                        for(long id: ids){
-                            statement.setLong(++position,1l);
-                        }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-
-                }),
-                HandlerDAOUserMySQL::resultSetToUser);    }
+                HandlerDAOUserMySQL::resultSetToUser,ids);
+    }
 
     @Override
     public User findOneById(Long id) {

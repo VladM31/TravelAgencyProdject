@@ -28,16 +28,8 @@ public class DAOCourierMySQL extends MySQLCore implements IDAOCourierSQL<Courier
     @Override
     public List<Courier> findAllById(Iterable<Long> ids) {
         String scriptId = HandlerSqlDAO.setInInsideScript(HandlerSqlDAO.concatScriptToEnd(SELECT_ALL_COURIER, WHERE_ALL_ID, HandlerSqlDAO.SORT_TO_DATE_REGISTRATION), ids);
-        return HandlerSqlDAO.useSelectScript(super.conn, scriptId, p -> {
-            int index = 0;
-            try {
-                for (long id : ids) {
-                    p.setLong(++index, id);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }, HandlerDAOCourier::resultSetToCourier);
+        return HandlerSqlDAO.useSelectScript(super.conn, scriptId,
+                HandlerDAOCourier::resultSetToCourier,ids);
     }
 
     private static final String WHERE_ID_IS = " AND user.id = ? ";

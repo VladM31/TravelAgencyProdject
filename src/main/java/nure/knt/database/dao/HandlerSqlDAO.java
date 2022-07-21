@@ -108,25 +108,6 @@ public class HandlerSqlDAO {
         return String.join(" ",ExtraScripts);
     }
 
-    public static <T> List<T> useSelectScript(IConnectorGetter connectorGetter, final String script,
-                                              Consumer<java.sql.PreparedStatement> extraSet, Function<ResultSet,T> getObject){
-        try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
-            extraSet.accept(stat);
-            try(ResultSet resultSet = stat.executeQuery()){
-                List<T> list = new ArrayList<>();
-                while (resultSet.next()){
-                    list.add(getObject.apply(resultSet));
-                }
-                return list;
-            }finally {
-            }
-
-        }catch (SQLException e){
-            e.printStackTrace();
-            return new ArrayList<>(HandlerSqlDAO.EMPTY_CAPACITY);
-        }
-    }
-
     private static final int START_POSITION = 0;
 
     public static <T> List<T> useSelectScript(IConnectorGetter connectorGetter, final String script,
