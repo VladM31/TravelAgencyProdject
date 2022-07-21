@@ -48,7 +48,7 @@ public class DAORepositoryInsideMessageMySQL extends MySQLCore implements IDAOIn
     public DAORepositoryInsideMessageMySQL(@Value("${dao.inside.message.order.by.enums.properties}") String fileName,
                                            @Value("${dao.terms.inside.message.what.add}") String propertyStart,
                                            IConnectorGetter connector) {
-        this.orderByValueStringMap = HandlerSqlDAO.setNameScriptForEnumsTourAdOrderByValue(fileName,propertyStart,ITermInsideMessage.MessageField.values());
+        this.orderByValueStringMap = HandlerSqlDAO.setNameScriptForEnumsByValueUnmodifiable(fileName,propertyStart,ITermInsideMessage.MessageField.values());
 
         this.generatorId = HandlerDAOMessage.setGeneratorId(connector);
     }

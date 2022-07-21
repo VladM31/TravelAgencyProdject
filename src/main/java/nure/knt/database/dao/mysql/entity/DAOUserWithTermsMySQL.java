@@ -3,34 +3,39 @@ package nure.knt.database.dao.mysql.entity;
 import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.dao.mysql.terms.users.TermUserMySQL;
 import nure.knt.database.dao.mysql.tools.MySQLCore;
+import nure.knt.database.dao.mysql.tools.MySQLUserCore;
 import nure.knt.database.idao.entity.IDAOUserWithTerms;
+import nure.knt.database.idao.factory.users.IFactoryUser;
 import nure.knt.database.idao.terms.ITermInformation;
-import nure.knt.database.idao.terms.ITermTourAd;
 import nure.knt.database.idao.terms.fieldenum.IUserField;
 import nure.knt.database.idao.terms.fieldenum.UserField;
 import nure.knt.database.idao.terms.users.ITermUser;
 import nure.knt.entity.important.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
 
 @Repository("Repository_User_MySQL")
 @PropertySource("classpath:property/users/UserProperty.properties")
-public class DAOUserWithTermsMySQL<U extends User> extends MySQLCore implements IDAOUserWithTerms<U> {
-
-    final protected Map<IUserField,String> ENUM_TO_SCRIPT_MYSQL;
-
-    public DAOUserWithTermsMySQL(Map<IUserField, String> ENUM_TO_SCRIPT_MYSQL) {
-        this.ENUM_TO_SCRIPT_MYSQL = ENUM_TO_SCRIPT_MYSQL;
-    }
+public class DAOUserWithTermsMySQL extends MySQLUserCore<User> implements IDAOUserWithTerms<User,ITermUser> {
+    @Autowired
+    @Qualifier("Factory_User_MySQL")
+    private IFactoryUser factory;
+    final private Map<IUserField,String> ENUM_TO_SCRIPT_MYSQL;
+    final private Map<IUserField, Function<User,Object>> mapUserGettersValueByField;
 
     @Autowired
     public DAOUserWithTermsMySQL(@Value("${dao.users.order.by.enums.properties}") String fileName,
-                                 @Value("${dao.terms.users.what.add}") String propertyStart) {
-        Map<UserField,String> tempMapWithFiled = HandlerSqlDAO.setNameScriptForEnumsTourAdOrderByValue(fileName,propertyStart, UserField.values());
+                                 @Value("${dao.terms.users.what.add}") String propertyStart,
+                                 @Qualifier("Get_Object_By_Field_For_User") Map<IUserField, Function<User,Object>> mapUserGettersValueByField
+    ) {
+        Map<UserField,String> tempMapWithFiled = HandlerSqlDAO.setNameScriptForEnumsByValue(fileName,propertyStart, UserField.values());
 
         Map<IUserField,String> tempMap = new HashMap<>();
 
@@ -39,51 +44,58 @@ public class DAOUserWithTermsMySQL<U extends User> extends MySQLCore implements 
         tempMapWithFiled.clear();
 
         this.ENUM_TO_SCRIPT_MYSQL = Collections.unmodifiableMap(tempMap);
+        this.mapUserGettersValueByField = mapUserGettersValueByField;
+
+
     }
 
     @Override
-    public boolean canUpdate(U origin, U update) {
+    public boolean saveAll(Iterable<User> entities) {
         return false;
     }
 
     @Override
-    public boolean saveAll(Iterable<U> entities) {
+    public boolean save(User entity) {
         return false;
     }
 
+
+    private static final String UPDATE_USER = "UPDATE user SET %s WHERE id = ? ;";
     @Override
-    public boolean save(U entity) {
-        return false;
+    public int[] updateAllById(Iterable<User> entities, IUserField... fields) {
+        if (fields.length == 0 || Arrays.stream(fields).anyMatch(f-> f.equals(UserField.ID))){
+            return HandlerSqlDAO.ERROR_UPDATE;
+        }
+
+        return HandlerSqlDAO.updateByFieldAndId(super.conn,String.format(UPDATE_USER,
+                        HandlerSqlDAO.getScript(ENUM_TO_SCRIPT_MYSQL,fields," = ? ",", ")),
+                entities,mapUserGettersValueByField,fields,UserField.ID);
     }
 
     @Override
-    public int deleteAllById(Iterable<Long> ids) {
-        return 0;
+    public int updateOneById(User entity, IUserField... fields) {
+        return updateAllById(List.of(entity),fields)[0];
+    }
+
+
+    @Override
+    public Optional<User> findOneBy(ITermInformation information) {
+        return Optional.ofNullable(
+                HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,
+                        HandlerSqlDAO.toScriptDefault(SELECT_AND_PARAMETERS,FROM_AND_JOIN,information,super.concatScripts),
+                        factory::getUser,
+                        information.getParameters()
+                )
+        );
     }
 
     @Override
-    public int deleteById(Long id) {
-        return 0;
-    }
-
-    @Override
-    public int[] updateAllById(Iterable<U> entities, IUserField... fields) {
-        return new int[0];
-    }
-
-    @Override
-    public int updateOneById(U entity, IUserField... fields) {
-        return 0;
-    }
-
-    @Override
-    public Optional<U> findOneBy(ITermInformation information) {
-        return Optional.empty();
-    }
-
-    @Override
-    public List<U> findBy(ITermInformation information) {
-        return null;
+    public List<User> findBy(ITermInformation information) {
+        return HandlerSqlDAO.useSelectScript(super.conn,
+                        HandlerSqlDAO.toScriptDefault(SELECT_AND_PARAMETERS,FROM_AND_JOIN,information,super.concatScripts),
+                        factory::getUser,
+                        information.getParameters()
+                );
     }
 
     @Override
@@ -91,8 +103,23 @@ public class DAOUserWithTermsMySQL<U extends User> extends MySQLCore implements 
         return new TermUserMySQL<>(this.ENUM_TO_SCRIPT_MYSQL);
     }
 
-    @Override
-    public boolean userIsBooked(U user) {
-        return false;
-    }
+    private static final String SELECT_AND_PARAMETERS =
+            "SELECT  " +
+                    "\nuser.id AS user_pk,  " +
+                    "\nuser.number," +
+                    "\nuser.email," +
+                    "\nuser.username," +
+                    "\nuser.password, " +
+                    "\nuser.name, " +
+                    "\nuser.active, " +
+                    "\nuser.date_registration, " +
+                    "\ncountry.name AS country, " +
+                    "\nrole.name AS role, " +
+                    "\ntype_state.name AS type_state \n";
+
+    private static final String FROM_AND_JOIN =
+            "FROM user " +
+                    "\nRIGHT JOIN country ON user.country_id = country.id  " +
+                    "\nLEFT JOIN role ON user.role_id = role.id  " +
+                    "\nLEFT JOIN type_state ON user.type_state_id = type_state.id \n";
 }

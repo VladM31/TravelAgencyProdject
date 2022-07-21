@@ -49,7 +49,7 @@ public class RepositoryTourAdMySQL extends MySQLCore implements IDAOTourAdWithTe
 
     public RepositoryTourAdMySQL(@Value("${dao.tour.ad.order.by.enums.properties}") String fileName,
                                  @Value("${dao.terms.tour.ads.what.add}") String propertyStart) {
-        this.ORDER_BY_VALUE_STRING_MAP = HandlerSqlDAO.setNameScriptForEnumsTourAdOrderByValueUnmodifiable(fileName,propertyStart,ITermTourAd.OrderByValue.values());
+        this.ORDER_BY_VALUE_STRING_MAP = HandlerSqlDAO.setNameScriptForEnumsByValueUnmodifiable(fileName,propertyStart,ITermTourAd.OrderByValue.values());
     }
 
     @PostConstruct

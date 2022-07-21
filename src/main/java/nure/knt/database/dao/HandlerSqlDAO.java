@@ -1,7 +1,6 @@
 package nure.knt.database.dao;
 
 import nure.knt.database.idao.terms.ITermInformation;
-import nure.knt.database.idao.terms.ITermTourAd;
 import nure.knt.database.idao.tools.IConcatScripts;
 import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.tools.WorkWithCountries;
@@ -178,27 +177,11 @@ public class HandlerSqlDAO {
         }
     }
 
-
-    public static void setFieldsInsideScript(PreparedStatement statement,Iterable<Object> objects) throws SQLException {
+    public static void setFieldsInsideScript(PreparedStatement statement,Iterable<?> objects) throws SQLException {
         int position = START_POSITION;
         for (Object object:objects) {
-            substituteVariable(statement,++position,object);
+            position = checkType(position,object,statement);
         }
-    }
-
-    @Nullable
-    public static <T> T useSelectScriptAndGetOneObject(IConnectorGetter connectorGetter, final String script, Consumer<java.sql.PreparedStatement> extraSet, Function<ResultSet, T> getObject){
-        try(java.sql.PreparedStatement stat = connectorGetter.getSqlPreparedStatement(script)) {
-            extraSet.accept(stat);
-            try(ResultSet resultSet = stat.executeQuery()){
-                if(resultSet.next()){
-                    return getObject.apply(resultSet);
-                }
-            }
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Nullable
@@ -270,12 +253,13 @@ public class HandlerSqlDAO {
         return HandlerSqlDAO.deleteByIdIn(connectorGetter,script,collection,LONG_TO_LONG);
     }
 
-    public static <E extends Enum<?>> Map<E,String> setNameScriptForEnumsTourAdOrderByValueUnmodifiable(String fileName,String propertyStart,E[] enums){
-        return Collections.unmodifiableMap(HandlerSqlDAO.setNameScriptForEnumsTourAdOrderByValue(fileName,propertyStart,enums));
+    public static <E extends Enum<?>> Map<E,String> setNameScriptForEnumsByValueUnmodifiable(String fileName, String propertyStart, E[] enums){
+        return Collections.unmodifiableMap(HandlerSqlDAO.setNameScriptForEnumsByValue(fileName,propertyStart,enums));
     }
 
-    public static <E extends Enum<?>> Map<E,String> setNameScriptForEnumsTourAdOrderByValue(String fileName,String propertyStart,E[] enums){
+    public static <E extends Enum<?>> Map<E,String> setNameScriptForEnumsByValue(String fileName,String propertyStart,E[] enums){
         HashMap<E,String> map = new HashMap<>();
+
         Properties appProps = new Properties();
 
         try(FileInputStream fileInputStream = new FileInputStream(fileName)) {
@@ -308,4 +292,50 @@ public class HandlerSqlDAO {
                 iterm.getLimit());
     }
 
+    public static <Entity,Field> int[] updateByFieldAndId(IConnectorGetter connector,
+                                                          String script,Iterable<? extends Entity> entities,
+                                                          Map<? extends Field,Function<Entity,Object>> map,
+                                                          Field[] fields,Field id){
+        try(PreparedStatement statement = connector.getSqlPreparedStatement(script)) {
+            List<Object> listFields = new ArrayList<>(getCapacity(fields));
+
+            for (Entity entity:entities) {
+                for (int i = 0; i < fields.length; i++) {
+                    listFields.add(map.get(fields[i]).apply(entity));
+                }
+                listFields.add(map.get(id).apply(entity));
+
+                setFieldsInsideScript(statement,listFields);
+                statement.addBatch();
+                listFields.clear();
+            }
+            return statement.executeBatch();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ERROR_UPDATE;
+    }
+
+    private static int getCapacity(Object[] array){
+        return array.length +1;
+    }
+
+    public static <Field> String getScript(Map<Field,String> mapFields,Field[] fields,String addedPiece,String joinPiece){
+
+        String script = "";
+
+        for(Field field: fields){
+            script = toJoin(script,mapFields.get(field).concat(addedPiece),joinPiece);
+        }
+
+        return script;
+    }
+
+    public static String toJoin(String whereJoin,String whatJoin,String joinPiece){
+        if(whereJoin.isEmpty()){
+            return whatJoin;
+        }
+        return String.join(joinPiece,whereJoin,whatJoin);
+    }
 }
