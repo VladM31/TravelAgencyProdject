@@ -10,6 +10,7 @@
            http://www.springframework.org/schema/aop/spring-aop.xsd">
     <aop:aspectj-autoproxy/>
     <context:component-scan base-package="nure.knt.database.dao"/>
+    <context:component-scan base-package="nure.knt.database.config"/>
     <context:component-scan base-package="nure.knt.database.service"/>
     <context:component-scan base-package="nure.knt.aop"/>
     <context:property-placeholder location="classpath:travelAgency.properties"/>

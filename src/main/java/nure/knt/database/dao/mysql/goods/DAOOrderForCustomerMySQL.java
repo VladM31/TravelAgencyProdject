@@ -158,17 +158,7 @@ public class DAOOrderForCustomerMySQL extends MySQLCore implements IDAOOrderFrom
         final String SCRIPT_WITH_SYMBOL = HandlerSqlDAO.setInInsideScript(RESTING_CONDITION_COMMODITY_ID_IN,conditionCommodities);
         return HandlerSqlDAO.useSelectScript(super.conn,
                 HandlerSqlDAO.concatScriptToEnd(SELECT_ALL,WHERE_CUSTOMER_ID_IS,AND,SCRIPT_WITH_SYMBOL,SORT_TO_ORDER_TOUR_DATE_REGISTRATION),
-        (statement) -> {
-            try {
-                int position = 0;
-                statement.setLong(++position,customerId);
-                for (ConditionCommodity commodity:conditionCommodities) {
-                    statement.setInt(++position,commodity.getId());
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        },HandlerOrderCustomer::scriptToOrderFromTourAdForCustomer);
+                HandlerOrderCustomer::scriptToOrderFromTourAdForCustomer,customerId,conditionCommodities);
     }
 
     private static final String RESTING_NAME_TRAVEL_AGENCY_CONTAINING = " user.name LIKE ? ";
