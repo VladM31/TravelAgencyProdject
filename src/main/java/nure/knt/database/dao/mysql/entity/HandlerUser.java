@@ -1,6 +1,7 @@
 package nure.knt.database.dao.mysql.entity;
 
 import nure.knt.database.dao.HandlerSqlDAO;
+import nure.knt.database.idao.terms.fieldenum.IUserField;
 import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.entity.important.User;
 
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
@@ -133,10 +135,12 @@ public class HandlerUser {
 
     }
 
-    static List<Long> saveUsersAndReturnsNewIds(IConnectorGetter connector, String script, Iterable<? extends User> users, AtomicLong generateId){
+    public static final String INSERT_USER_WITH_ID = "INSERT INTO user (id,number,email,username,password,name,active,date_registration,role_id,country_id,type_state_id) " +
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?);";
+    static List<Long> saveUsersAndReturnsNewIds(IConnectorGetter connector,Iterable<? extends User> users, AtomicLong generateId){
         List<Long> ids = new ArrayList<>();
 
-        try(PreparedStatement statement = connector.getSqlPreparedStatement(script)){
+        try(PreparedStatement statement = connector.getSqlPreparedStatement(INSERT_USER_WITH_ID)){
             for (User user:users) {
                 if(user.getId() == null){
                     user.setId(generateId.incrementAndGet());
@@ -188,11 +192,39 @@ public class HandlerUser {
 
     }
 
+    public static Long getLongByScriptAndParametersName(IConnectorGetter connector, String script,String nameId){
+        try(java.sql.PreparedStatement statement = connector.getSqlPreparedStatement(script);
+            java.sql.ResultSet resultSet = statement.executeQuery()){
+
+            if(resultSet.next()){
+               return resultSet.getLong(nameId);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        throw new NullPointerException("not found max id for User");
+    }
+
+
     public static String addOr(String script){
         if(script.isEmpty()){
             return script;
         }
         return script + HandlerUserPartScript.OR;
+    }
+
+
+    public static boolean areNotNormalFields(IUserField[] fields, IUserField ...exceptions){
+        return fields == null || fields.length == 0 || Arrays.stream(fields).anyMatch(f-> {
+            for (IUserField field:exceptions) {
+                if(f.equals(field)){
+                    return true;
+                }
+            }
+            return false;
+        });
     }
 }
 

@@ -1,6 +1,7 @@
-package nure.knt.database.dao.mysql.tools;
+package nure.knt.database.dao.mysql.entity;
 
 import nure.knt.database.dao.HandlerSqlDAO;
+import nure.knt.database.dao.mysql.tools.MySQLCore;
 import nure.knt.database.idao.core.IDAODeleteById;
 import nure.knt.database.idao.core.IEntityIsBooked;
 import nure.knt.database.idao.tools.IConcatScripts;
@@ -13,7 +14,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class MySQLUserCore<U extends User> extends MySQLCore implements IDAODeleteById, IEntityIsBooked<U> {
@@ -35,7 +35,7 @@ public abstract class MySQLUserCore<U extends User> extends MySQLCore implements
         return this.deleteAllById(List.of(id));
     }
 
-    private static final String SELECT_WHERE_EMAIL_OR_NUMBER_OR_USERNAME_IS =
+    protected static final String SELECT_WHERE_EMAIL_OR_NUMBER_OR_USERNAME_IS =
             "SELECT user.id FROM user left join type_state ON user.type_state_id = type_state.id WHERE (email = ? OR number = ? OR username = ?) " +
                     "AND (type_state.name = ? OR type_state.name = ? AND user.date_registration > ?) ;";
 
@@ -60,10 +60,18 @@ public abstract class MySQLUserCore<U extends User> extends MySQLCore implements
         }
     }
 
-    protected Optional<Long> saveUserAndReturnId(){
-
-
-        return Optional.empty();
-    }
+    protected static final String SELECT_AND_PARAMETERS_FOR_USER =
+            "SELECT  " +
+                    "\nuser.id AS user_pk,  " +
+                    "\nuser.number," +
+                    "\nuser.email," +
+                    "\nuser.username," +
+                    "\nuser.password, " +
+                    "\nuser.name, " +
+                    "\nuser.active, " +
+                    "\nuser.date_registration, " +
+                    "\ncountry.name AS country, " +
+                    "\nrole.name AS role, " +
+                    "\ntype_state.name AS type_state \n";
 
 }

@@ -252,11 +252,11 @@ public class HandlerSqlDAO {
         return HandlerSqlDAO.deleteByIdIn(connectorGetter,script,collection,LONG_TO_LONG);
     }
 
-    public static <E extends Enum<?>> Map<E,String> setNameScriptForEnumsByValueUnmodifiable(String fileName, String propertyStart, E[] enums){
-        return Collections.unmodifiableMap(HandlerSqlDAO.setNameScriptForEnumsByValue(fileName,propertyStart,enums));
+    public static <E> Map<E,String> setNameScriptForEntityByValueUnmodifiable(String fileName, String propertyStart, E[] enums){
+        return Collections.unmodifiableMap(HandlerSqlDAO.setNameScriptForEntityByValue(fileName,propertyStart,enums));
     }
 
-    public static <E extends Enum<?>> Map<E,String> setNameScriptForEnumsByValue(String fileName,String propertyStart,E[] enums){
+    public static <E> Map<E,String> setNameScriptForEntityByValue(String fileName, String propertyStart, E[] enums){
         HashMap<E,String> map = new HashMap<>();
 
         Properties appProps = new Properties();

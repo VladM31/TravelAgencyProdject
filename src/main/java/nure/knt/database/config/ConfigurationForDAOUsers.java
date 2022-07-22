@@ -1,5 +1,7 @@
 package nure.knt.database.config;
 
+import nure.knt.database.dao.HandlerSqlDAO;
+import nure.knt.database.dao.mysql.entity.HandlerUser;
 import nure.knt.database.idao.terms.fieldenum.CustomerField;
 import nure.knt.database.idao.terms.fieldenum.IUserField;
 import nure.knt.database.idao.terms.fieldenum.UserField;
@@ -12,9 +14,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -22,7 +24,7 @@ import java.util.function.Function;
 
 @Configuration
 @PropertySource("classpath:property/users/UserProperty.properties")
-public class DAOForUsersConfig {
+public class ConfigurationForDAOUsers {
 
     @Bean("Getter_User_Id")
     @Autowired
@@ -31,18 +33,7 @@ public class DAOForUsersConfig {
                                          @Value("${dao.for.users.id.script.name.id}") String nameId){
         AtomicLong atomicLong = new AtomicLong();
 
-        try(java.sql.PreparedStatement statement = connector.getSqlPreparedStatement(script);
-            java.sql.ResultSet resultSet = statement.executeQuery()){
-
-            if(resultSet.next()){
-                atomicLong.set(resultSet.getLong(nameId));
-            }else{
-                throw new NullPointerException("not found max id for User");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        atomicLong.set(HandlerUser.getLongByScriptAndParametersName(connector,script,nameId));
 
         return atomicLong;
     }
@@ -67,6 +58,22 @@ public class DAOForUsersConfig {
 
         return map;
     }
+
+    @Bean("Get_Name_By_Field_For_User")
+    public  Map<IUserField,String> getNameUserFieldInDataBase(@Value("${dao.users.order.by.enums.properties}") String fileName,
+                                                       @Value("${dao.terms.users.what.add}") String propertyStart){
+        return HandlerSqlDAO.<IUserField>setNameScriptForEntityByValueUnmodifiable(fileName,propertyStart, UserField.values());
+    }
+
+    @Bean("Get_Name_By_Field_For_Customer")
+    public  Map<IUserField,String> getNameCustomerFieldInDataBase(@Value("${dao.for.customer.field.name}") String fileName,
+                                                          @Value("${dao.terms.customer.what.add}") String propertyStart,
+                                                          @Qualifier("Get_Name_By_Field_For_User") Map<IUserField,String> userFieldName) {
+        Map<IUserField,String> map = HandlerSqlDAO.<IUserField>setNameScriptForEntityByValue(fileName,propertyStart, CustomerField.values());
+        map.putAll(userFieldName);
+        return Collections.unmodifiableMap(map);
+    }
+
 }
 
 class HandlerDAOForUsersConfig{

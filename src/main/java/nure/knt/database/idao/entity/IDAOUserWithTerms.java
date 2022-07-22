@@ -15,7 +15,4 @@ public interface IDAOUserWithTerms<U extends User,IT extends ITermUser> extends 
 
     public IT term();
 
-    public static final Long userIdNotFound = null;
-
-
 }
