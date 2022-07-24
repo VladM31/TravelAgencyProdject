@@ -8,16 +8,17 @@ import nure.knt.database.idao.terms.ITermInformation;
 import nure.knt.database.idao.terms.fieldenum.IUserField;
 import nure.knt.database.idao.terms.fieldenum.UserField;
 import nure.knt.database.idao.terms.users.ITermCustomer;
+import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
 @Repository("Repository_Customer_MySQL")
@@ -31,15 +32,21 @@ public class RepositoryCustomerMySQL extends MySQLUserCore<Customer> implements 
     @Autowired
     @Qualifier("Factory_Customer_MySQL")
     private IFactoryEntity<Customer> factory;
+    @Autowired
+    @Qualifier("Getter_Customer_Id")
+    private AtomicLong generatorCustomerId;
 
     @Override
     public boolean saveAll(Iterable<Customer> entities) {
-        return false;
+        HandlerUser.saveUsersAndReturnsNewIds(super.conn,entities,super.getterId);
+
+        return  HandlerRepositoryCustomerMySQL
+                .saveCustomers(super.conn,entities,this.generatorCustomerId);
     }
 
     @Override
     public boolean save(Customer entity) {
-        return false;
+        return this.saveAll(List.of(entity));
     }
 
     private static final String UPDATE_CUSTOMER = "UPDATE customer JOIN user on user.id = customer.user_id SET %s WHERE user.id = ? ;";
@@ -49,9 +56,15 @@ public class RepositoryCustomerMySQL extends MySQLUserCore<Customer> implements 
             return HandlerSqlDAO.ERROR_UPDATE;
         }
 
-        return HandlerSqlDAO.updateByFieldAndId(super.conn,String.format(UPDATE_CUSTOMER,
-                        HandlerSqlDAO.getScript(ENUM_TO_SCRIPT_MYSQL,fields," = ? ",", ")),
-                entities,mapUserGettersValueByField,fields,UserField.ID);
+        return HandlerSqlDAO.updateByFieldAndId(super.conn,
+                String.format(UPDATE_CUSTOMER,
+                        HandlerSqlDAO.getScript(ENUM_TO_SCRIPT_MYSQL,
+                                fields,
+                                " = ? ",
+                                ", ")),
+                entities,
+                mapUserGettersValueByField,
+                fields, UserField.ID);
     }
 
     @Override
@@ -90,4 +103,45 @@ public class RepositoryCustomerMySQL extends MySQLUserCore<Customer> implements 
     public ITermCustomer term() {
         return new TermCustomerMySQL(ENUM_TO_SCRIPT_MYSQL);
     }
+}
+
+class HandlerRepositoryCustomerMySQL{
+
+    private static final String INSERT_CUSTOMER = " INSERT INTO customer (id,male,user_id) VALUES (?,?,?);";
+
+    public static boolean saveCustomers(IConnectorGetter connector,Iterable<Customer> customers,AtomicLong generatorCustomerIds){
+
+        try(PreparedStatement statement = connector.getSqlPreparedStatement(INSERT_CUSTOMER)){
+
+            for (var customer:customers) {
+                customer.setCustomerId(generatorCustomerIds.incrementAndGet());
+                statement.setLong(SetParam.ID.getPosition(),customer.getCustomerId());
+                statement.setBoolean(SetParam.MALE.getPosition(),customer.isMale());
+                statement.setLong(SetParam.USER_ID.getPosition(), customer.getId());
+
+                statement.addBatch();
+            }
+
+            return HandlerSqlDAO.arrayHasOnlyOne(statement.executeBatch());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    enum SetParam{
+        ID(1),MALE(2),USER_ID(2);
+
+        int position;
+
+        SetParam(int position) {
+            this.position = position;
+        }
+
+        public int getPosition() {
+            return position;
+        }
+    }
+
 }

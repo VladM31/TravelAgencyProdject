@@ -26,36 +26,19 @@ import java.util.function.Function;
 @PropertySource("classpath:property/users/UserProperty.properties")
 public class ConfigurationForDAOUsers {
 
-    @Bean("Getter_User_Id")
-    @Autowired
-    public AtomicLong getterAtomicUserId(IConnectorGetter connector,
-                                         @Value("${dao.for.users.id.script}") String script,
-                                         @Value("${dao.for.users.id.script.name.id}") String nameId){
-        AtomicLong atomicLong = new AtomicLong();
-
-        atomicLong.set(HandlerUser.getLongByScriptAndParametersName(connector,script,nameId));
-
-        return atomicLong;
-    }
-
     @Bean("Get_Object_By_Field_For_User")
     public Map<IUserField, Function<User,Object>> userFieldToObject(){
         Map<IUserField, Function<User,Object>> map = new HashMap<>();
-
         HandlerDAOForUsersConfig.setUserFieldToObject(map);
-
         return map;
     }
 
     @Bean("Get_Object_By_Field_For_Customer")
     public Map<IUserField, Function<Customer,Object>> customerFieldToObject(){
         Map<IUserField, Function<Customer,Object>> map = new HashMap<>();
-
         map.put(CustomerField.CUSTOMER_ID,User::getId);
         map.put(CustomerField.MALE,User::getId);
-
         HandlerDAOForUsersConfig.setUserFieldToObject(map);
-
         return map;
     }
 

@@ -37,7 +37,7 @@ public class DAOUserWithTermsMySQL extends MySQLUserCore<User> implements IDAOUs
             "VALUES (?,?,?,?,?,?,?,?,?,?,?);";
     @Override
     public boolean saveAll(Iterable<User> entities) {
-        return !HandlerUser.saveUsersAndReturnsNewIds(super.conn,entities,super.getterId).isEmpty();
+        return HandlerUser.saveUsersAndReturnsNewIds(super.conn,entities,super.getterId);
     }
 
     @Override

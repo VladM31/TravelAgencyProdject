@@ -137,8 +137,7 @@ public class HandlerUser {
 
     public static final String INSERT_USER_WITH_ID = "INSERT INTO user (id,number,email,username,password,name,active,date_registration,role_id,country_id,type_state_id) " +
             "VALUES (?,?,?,?,?,?,?,?,?,?,?);";
-    static List<Long> saveUsersAndReturnsNewIds(IConnectorGetter connector,Iterable<? extends User> users, AtomicLong generateId){
-        List<Long> ids = new ArrayList<>();
+    static boolean saveUsersAndReturnsNewIds(IConnectorGetter connector,Iterable<? extends User> users, AtomicLong generateId){
 
         try(PreparedStatement statement = connector.getSqlPreparedStatement(INSERT_USER_WITH_ID)){
             for (User user:users) {
@@ -147,17 +146,14 @@ public class HandlerUser {
                 }
                 userSetToMySqlScript(statement,user);
                 statement.addBatch();
-                ids.add(user.getId());
+
             }
 
-            if(!HandlerSqlDAO.arrayHasOnlyOne(statement.executeBatch())){
-                return  new ArrayList<>();
-            }
+            return HandlerSqlDAO.arrayHasOnlyOne(statement.executeBatch());
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-
-        return ids;
     }
 
 
