@@ -4,6 +4,7 @@ import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.dao.mysql.entity.HandlerUser;
 import nure.knt.database.idao.terms.fieldenum.CustomerField;
 import nure.knt.database.idao.terms.fieldenum.IUserField;
+import nure.knt.database.idao.terms.fieldenum.TravelAgencyField;
 import nure.knt.database.idao.terms.fieldenum.UserField;
 import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.entity.important.Customer;
@@ -53,6 +54,15 @@ public class ConfigurationForDAOUsers {
                                                           @Value("${dao.terms.customer.what.add}") String propertyStart,
                                                           @Qualifier("Get_Name_By_Field_For_User") Map<IUserField,String> userFieldName) {
         Map<IUserField,String> map = HandlerSqlDAO.<IUserField>setNameScriptForEntityByValue(fileName,propertyStart, CustomerField.values());
+        map.putAll(userFieldName);
+        return Collections.unmodifiableMap(map);
+    }
+
+    @Bean("Get_Name_By_Field_For_Travel_Agency")
+    public  Map<IUserField,String> getNameTravelAgencyFieldInDataBase(@Value("${dao.for.travel.agency.field.properties}") String fileName,
+                                                                  @Value("${dao.terms.travel.agency.what.add}") String propertyStart,
+                                                                  @Qualifier("Get_Name_By_Field_For_User") Map<IUserField,String> userFieldName) {
+        Map<IUserField,String> map = HandlerSqlDAO.<IUserField>setNameScriptForEntityByValue(fileName,propertyStart, TravelAgencyField.values());
         map.putAll(userFieldName);
         return Collections.unmodifiableMap(map);
     }
