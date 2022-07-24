@@ -4,6 +4,7 @@ import nure.knt.database.idao.factory.IFactoryEntity;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.important.Customer;
+import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,6 +44,32 @@ public class ConfigurationFactoryUsers {
            }
            return null;
         });
+    }
+
+    @Bean("Factory_Travel_Agency_MySQL")
+    public IFactoryEntity<TravelAgency> getTravelAgencyFactory(){
+        return resultSet -> {
+            try{
+                TravelAgency travelAgency = new TravelAgency();
+                setInfoFromResultSetToUser(travelAgency,resultSet);
+                travelAgency.setTravelId(resultSet.getLong("travel_agency_pk"));
+
+                travelAgency.setRating(resultSet.getFloat("rating"));
+                travelAgency.setKved(resultSet.getString("kved"));
+
+                travelAgency.setEgrpoyOrRnekpn(resultSet.getLong("egrpoy_or_rnykpn"));
+                travelAgency.setEgrpoy(resultSet.getBoolean("is_egrpoy"));
+                travelAgency.setAddress(resultSet.getString("address"));
+
+                travelAgency.setFullNameDirector(resultSet.getString("full_name_director"));
+                travelAgency.setDescribeAgency(resultSet.getString("describe_agency"));
+                travelAgency.setUrlPhoto(resultSet.getString("url_photo"));
+                return travelAgency;
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+            return null;
+        };
     }
 
     public static void setInfoFromResultSetToUser(User user, ResultSet resultSet) throws SQLException {
