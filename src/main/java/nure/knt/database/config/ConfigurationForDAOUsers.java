@@ -1,26 +1,22 @@
 package nure.knt.database.config;
 
 import nure.knt.database.dao.HandlerSqlDAO;
-import nure.knt.database.dao.mysql.entity.HandlerUser;
 import nure.knt.database.idao.terms.fieldenum.CustomerField;
 import nure.knt.database.idao.terms.fieldenum.IUserField;
 import nure.knt.database.idao.terms.fieldenum.TravelAgencyField;
 import nure.knt.database.idao.terms.fieldenum.UserField;
-import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.entity.important.Customer;
+import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
 @Configuration
@@ -39,6 +35,26 @@ public class ConfigurationForDAOUsers {
         Map<IUserField, Function<Customer,Object>> map = new HashMap<>();
         map.put(CustomerField.CUSTOMER_ID,User::getId);
         map.put(CustomerField.MALE,User::getId);
+        HandlerDAOForUsersConfig.setUserFieldToObject(map);
+        return map;
+    }
+
+    @Bean("Get_Object_By_Field_For_Travel_Agency")
+    public Map<IUserField, Function<TravelAgency,Object>> travelAgencyFieldToObject(){
+        Map<IUserField, Function<TravelAgency,Object>> map = new HashMap<>();
+
+        map.put(TravelAgencyField.TRAVEL_AGENCY_ID,TravelAgency::getTravelId);
+        map.put(TravelAgencyField.RATING,TravelAgency::getRating);
+        map.put(TravelAgencyField.KVED,TravelAgency::getKved);
+
+        map.put(TravelAgencyField.EGRPOY_OR_RNYKPN,TravelAgency::getEgrpoyOrRnekpn);
+        map.put(TravelAgencyField.IS_EGRPOY,TravelAgency::isEgrpoy);
+        map.put(TravelAgencyField.ADDRESS,TravelAgency::getAddress);
+
+        map.put(TravelAgencyField.FULL_NAME_DIRECTOR,TravelAgency::getFullNameDirector);
+        map.put(TravelAgencyField.DESCRIBE_AGENCY,TravelAgency::getDescribeAgency);
+        map.put(TravelAgencyField.URL_PHOTO,TravelAgency::getUrlPhoto);
+
         HandlerDAOForUsersConfig.setUserFieldToObject(map);
         return map;
     }
