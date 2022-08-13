@@ -5,6 +5,7 @@ import nure.knt.database.dao.mysql.terms.users.TermCustomerMySQL;
 import nure.knt.database.idao.entity.IDAOUserWithTerms;
 import nure.knt.database.idao.factory.IFactoryEntity;
 import nure.knt.database.idao.terms.ITermInformation;
+import nure.knt.database.idao.terms.fieldenum.CustomerField;
 import nure.knt.database.idao.terms.fieldenum.IUserField;
 import nure.knt.database.idao.terms.fieldenum.UserField;
 import nure.knt.database.idao.terms.users.ITermCustomer;
@@ -52,7 +53,7 @@ public class RepositoryCustomerMySQL extends MySQLUserCore<Customer> implements 
     private static final String UPDATE_CUSTOMER = "UPDATE customer JOIN user on user.id = customer.user_id SET %s WHERE user.id = ? ;";
     @Override
     public int[] updateAllById(Iterable<Customer> entities, IUserField... fields) {
-        if (HandlerUser.areNotNormalFields(fields, UserField.ID)){
+        if (HandlerUser.areNotNormalFields(fields, UserField.ID, CustomerField.CUSTOMER_ID)){
             return HandlerSqlDAO.ERROR_UPDATE;
         }
 

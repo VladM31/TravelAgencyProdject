@@ -27,8 +27,8 @@ public class ConfigurationGeneratorId {
     @Autowired
     @Bean("Getter_Customer_Id")
     public AtomicLong getAtomicCustomerId(IConnectorGetter connector,
-                                          @Value("${dao.for.travel.agency.id.script}") String script,
-                                          @Value("${dao.for.travel.agency.id.script.name.id}") String nameId){
+                                          @Value("${dao.for.customer.id.script}") String script,
+                                          @Value("${dao.for.customer.id.script.name.id}") String nameId){
         AtomicLong atomicLong = new AtomicLong();
         atomicLong.set(HandlerUser.getLongByScriptAndParametersName(connector,script,nameId));
         return atomicLong;
@@ -37,8 +37,8 @@ public class ConfigurationGeneratorId {
     @Autowired
     @Bean("Getter_Travel_Agency_Id")
     public AtomicLong getAtomicTravelAgencyId(IConnectorGetter connector,
-                                          @Value("${dao.for.customer.id.script}") String script,
-                                          @Value("${dao.for.customer.id.script.name.id}") String nameId){
+                                          @Value("${dao.for.travel.agency.id.script}") String script,
+                                          @Value("${dao.for.travel.agency.id.script.name.id}") String nameId){
         AtomicLong atomicLong = new AtomicLong();
         atomicLong.set(HandlerUser.getLongByScriptAndParametersName(connector,script,nameId));
         return atomicLong;
