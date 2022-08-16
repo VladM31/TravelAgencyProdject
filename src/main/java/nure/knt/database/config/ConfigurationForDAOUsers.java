@@ -101,5 +101,6 @@ class HandlerDAOForUsersConfig{
         map.put(UserField.ROLE,User::getRole);
         map.put(UserField.TYPE_STATE,User::getTypeState);
 
+        map.put(UserField.PASSWORD,User::getPassword);
     }
 }

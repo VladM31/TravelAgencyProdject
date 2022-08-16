@@ -33,8 +33,6 @@ public class DAOUserWithTermsMySQL extends MySQLUserCore<User> implements IDAOUs
         this.mapUserGettersValueByField = mapUserGettersValueByField;
     }
 
-    public static final String INSERT_USER = "INSERT INTO user (id,number,email,username,password,name,active,date_registration,role_id,country_id,type_state_id) " +
-            "VALUES (?,?,?,?,?,?,?,?,?,?,?);";
     @Override
     public boolean saveAll(Iterable<User> entities) {
         return HandlerUser.saveUsersAndReturnsNewIds(super.conn,entities,super.getterId);
@@ -44,7 +42,6 @@ public class DAOUserWithTermsMySQL extends MySQLUserCore<User> implements IDAOUs
     public boolean save(User entity) {
         return this.saveAll(List.of(entity));
     }
-
 
     private static final String UPDATE_USER = "UPDATE user SET %s WHERE id = ? ;";
     @Override
@@ -62,7 +59,6 @@ public class DAOUserWithTermsMySQL extends MySQLUserCore<User> implements IDAOUs
     public int updateOneById(User entity, IUserField... fields) {
         return updateAllById(List.of(entity),fields)[0];
     }
-
 
     @Override
     public Optional<User> findOneBy(ITermInformation information) {
