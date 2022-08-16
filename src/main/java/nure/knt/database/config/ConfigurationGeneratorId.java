@@ -43,4 +43,14 @@ public class ConfigurationGeneratorId {
         atomicLong.set(HandlerUser.getLongByScriptAndParametersName(connector,script,nameId));
         return atomicLong;
     }
+
+    @Autowired
+    @Bean("Getter_Courier_Id")
+    public AtomicLong getAtomicCourierId(IConnectorGetter connector,
+                                              @Value("${dao.for.courier.id.script}") String script,
+                                              @Value("${dao.for.courier.id.script.name.id}") String nameId){
+        AtomicLong atomicLong = new AtomicLong();
+        atomicLong.set(HandlerUser.getLongByScriptAndParametersName(connector,script,nameId));
+        return atomicLong;
+    }
 }

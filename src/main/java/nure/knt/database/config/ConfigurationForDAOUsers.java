@@ -1,10 +1,8 @@
 package nure.knt.database.config;
 
 import nure.knt.database.dao.HandlerSqlDAO;
-import nure.knt.database.idao.terms.fieldenum.CustomerField;
-import nure.knt.database.idao.terms.fieldenum.IUserField;
-import nure.knt.database.idao.terms.fieldenum.TravelAgencyField;
-import nure.knt.database.idao.terms.fieldenum.UserField;
+import nure.knt.database.idao.terms.fieldenum.*;
+import nure.knt.entity.important.Courier;
 import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
@@ -33,8 +31,8 @@ public class ConfigurationForDAOUsers {
     @Bean("Get_Object_By_Field_For_Customer")
     public Map<IUserField, Function<Customer,Object>> customerFieldToObject(){
         Map<IUserField, Function<Customer,Object>> map = new HashMap<>();
-        map.put(CustomerField.CUSTOMER_ID,User::getId);
-        map.put(CustomerField.MALE,User::getId);
+        map.put(CustomerField.CUSTOMER_ID,Customer::getCustomerId);
+        map.put(CustomerField.MALE,Customer::isMale);
         HandlerDAOForUsersConfig.setUserFieldToObject(map);
         return map;
     }
@@ -58,6 +56,22 @@ public class ConfigurationForDAOUsers {
         HandlerDAOForUsersConfig.setUserFieldToObject(map);
         return map;
     }
+
+    @Bean("Get_Object_By_Field_For_Courier")
+    public Map<IUserField, Function<Courier,Object>> courierFieldToObject(){
+        Map<IUserField, Function<Courier,Object>> map = new HashMap<>();
+        map.put(CourierField.COURIER_ID,Courier::getIdCourier);
+        map.put(CourierField.CITY,Courier::getCity);
+        map.put(CourierField.ADDRESS,Courier::getAddress);
+        map.put(CourierField.DATE_BIRTH,Courier::getDateBirth);
+        map.put(CourierField.DOES_HE_WANT,Courier::isDoesHeWant);
+        HandlerDAOForUsersConfig.setUserFieldToObject(map);
+        return map;
+    }
+
+    //-----------------------------------------------------------------------------
+    //--------- ********************************************** --------------------
+    //-----------------------------------------------------------------------------
 
     @Bean("Get_Name_By_Field_For_User")
     public  Map<IUserField,String> getNameUserFieldInDataBase(@Value("${dao.users.order.by.enums.properties}") String fileName,
@@ -83,6 +97,15 @@ public class ConfigurationForDAOUsers {
         return Collections.unmodifiableMap(map);
     }
 
+
+    @Bean("Get_Name_By_Field_For_Courier")
+    public  Map<IUserField,String> getNameCourierFieldInDataBase(@Value("${dao.for.courier.field.properties}") String fileName,
+                                                                      @Value("${dao.terms.courier.what.add}") String propertyStart,
+                                                                      @Qualifier("Get_Name_By_Field_For_User") Map<IUserField,String> userFieldName) {
+        Map<IUserField,String> map = HandlerSqlDAO.<IUserField>setNameScriptForEntityByValue(fileName,propertyStart, CourierField.values());
+        map.putAll(userFieldName);
+        return Collections.unmodifiableMap(map);
+    }
 }
 
 class HandlerDAOForUsersConfig{
