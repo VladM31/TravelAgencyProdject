@@ -81,7 +81,7 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
     private static final String UPDATE_EDITE_TOUR_AD_AFTER_SAVE = "UPDATE edit_tour_ad SET confirmed = true,need_delete = true WHERE what_to_change = %d;";
     private static final String UPDATE_EDITE_TOUR_AD_FOR_REMOVE = "UPDATE edit_tour_ad SET need_delete = true WHERE what_to_change = ?;";
     @Override
-    public boolean saveEdit(Long id){
+    public boolean useEdit(Long id){
         try(PreparedStatement statement = super.conn.getSqlPreparedStatement(UPDATE_EDIT)){
             statement.setLong(1,id);
             if(statement.executeUpdate() == 0){
@@ -96,7 +96,7 @@ public class DAOTourAdMySQL extends MySQLCore implements IDAOTourAd<TourAd> {
     }
 
     @Override
-    public boolean removeEdit(Long id) {
+    public boolean cancelEdit(Long id) {
         try(PreparedStatement statement = super.conn.getSqlPreparedStatement(UPDATE_EDITE_TOUR_AD_FOR_REMOVE)){
             statement.setLong(1,id);
             return statement.executeUpdate() != 0;
