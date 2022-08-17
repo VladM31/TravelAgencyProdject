@@ -2,6 +2,7 @@ package nure.knt.database.dao.mysql.entity;
 
 import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.dao.mysql.terms.users.TermTravelAgencyMySQL;
+import nure.knt.database.idao.entity.IDAOUserEdit;
 import nure.knt.database.idao.entity.IDAOUserWithTerms;
 import nure.knt.database.idao.factory.IFactoryEntity;
 import nure.knt.database.idao.terms.ITermInformation;
@@ -11,6 +12,7 @@ import nure.knt.database.idao.terms.fieldenum.TravelAgencyField;
 import nure.knt.database.idao.terms.fieldenum.UserField;
 import nure.knt.database.idao.terms.users.ITermTravelAgency;
 import nure.knt.database.idao.tools.IConnectorGetter;
+import nure.knt.entity.enums.TypeState;
 import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.TravelAgency;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +31,7 @@ import java.util.function.Function;
 
 @Repository("Repository_Travel_Agency_MySQL")
 @Order(10)
-public class RepositoryTravelAgencyMySQL extends MySQLUserCore<TravelAgency> implements IDAOUserWithTerms<TravelAgency, ITermTravelAgency> {
+public class RepositoryTravelAgencyMySQL extends MySQLUserCore<TravelAgency> implements IDAOUserEdit<TravelAgency, ITermTravelAgency> {
     @Autowired
     @Qualifier("Get_Object_By_Field_For_Travel_Agency")
     private Map<IUserField, Function<TravelAgency,Object>> travelAgencyFieldFunctionMap;
@@ -45,7 +47,7 @@ public class RepositoryTravelAgencyMySQL extends MySQLUserCore<TravelAgency> imp
 
     @Override
     public boolean saveAll(Iterable<TravelAgency> entities) {
-        HandlerUser.saveUsersAndReturnsNewIds(super.conn,entities,super.getterId);
+        if(!HandlerUser.saveUsersAndReturnsNewIds(super.conn,entities,super.getterId)) return false;
         return HandlerRepositoryTravelAgencyMySQL.travelAgencyToMySqlScript(super.conn,entities,this.generatorTravelAgencyId);
     }
 
@@ -119,6 +121,56 @@ public class RepositoryTravelAgencyMySQL extends MySQLUserCore<TravelAgency> imp
     public ITermTravelAgency term() {
         return new TermTravelAgencyMySQL(this.travelAgencyFieldStringMap);
     }
+
+    private static final String SAVE_EDIT = "INSERT INTO edit_agency(confirmed,need_delete,whom_need_change_id,what_to_change) VALUE(false,false,?,?)";
+    @Override
+    public boolean editing(Long id, TravelAgency entity) {
+        entity.setTypeState(TypeState.EDITING);
+
+        if(!this.save(entity)) return false;
+
+        try(PreparedStatement statement = super.conn.getSqlPreparedStatement(super.concatScripts.concatScripts(SAVE_EDIT))){
+            statement.setLong(1,id);
+            statement.setLong(2,entity.getTravelId());
+            return statement.executeUpdate() != 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    private static final String UPDATE_EDIT =
+            "update  user AS main_u\n" +
+            "join travel_agency AS main_ta on main_ta.user_id = main_u.id\n" +
+            "left join edit_agency ed on ed.whom_need_change_id = main_ta.id\n" +
+            "join travel_agency as changes_ta on changes_ta.id = ed.what_to_change\n" +
+            "join user as changes_u on changes_u.id = changes_ta.user_id\n" +
+            "SET main_u.number = changes_u.number,\n" +
+            "main_u.email = changes_u.email,\n" +
+            "main_u.username = changes_u.username,\n" +
+            "main_u.password = changes_u.password,\n" +
+            "main_u.name = changes_u.name,\n" +
+            "main_u.country_id = changes_u.country_id,\n" +
+            "main_ta.kved = changes_ta.kved,\n" +
+            "main_ta.egrpoy_or_rnykpn = changes_ta.egrpoy_or_rnykpn,\n" +
+            "main_ta.is_egrpoy = changes_ta.is_egrpoy,\n" +
+            "main_ta.address = changes_ta.address,\n" +
+            "main_ta.describe_agency = changes_ta.describe_agency,\n" +
+            "main_ta.url_photo = changes_ta.url_photo\n" +
+            "WHERE ed.what_to_change = 668;";
+
+    @Override
+    public boolean useEdit(Long id) {
+        if(HandlerUser.updateById(super.conn,super.concatScripts.concatScripts(UPDATE_EDIT),id) == 0)
+            return false;
+
+        return IDAOUserEdit.super.useEdit(id);
+    }
+
+    @Override
+    public boolean cancelEdit(Long id) {
+        return IDAOUserEdit.super.cancelEdit(id);
+    }
 }
 
 class HandlerRepositoryTravelAgencyMySQL{
@@ -127,17 +179,15 @@ class HandlerRepositoryTravelAgencyMySQL{
             " INSERT INTO travel_agency (id,rating,kved,egrpoy_or_rnykpn,is_egrpoy,code_confirmed,address,full_name_director,describe_agency,url_photo,user_id)" +
                     " VALUES (?,?,?,?,?,?,?,?,?,?,?);";
 
-    private static final int TRAVEL_AGENCY_ID = 1;
-    private static final int RATING = 2;
-    private static final int KVED = 3;
-    private static final int EGRPOY_OR_RNYKPN = 4;
-    private static final int IS_EGRPOY = 5;
-    private static final int CODE_CONFIRMED = 6;
-    private static final int ADDRESS = 7;
-    private static final int FULL_NAME_DIRECTOR = 8;
-    private static final int DESCRIBE_AGENCY = 9;
-    private static final int URL_PHOTO = 10;
-    private static final int USER_ID = 11;
+    enum Parameter{
+        TRAVEL_AGENCY_ID(1),RATING(2),KVED(3),EGRPOY_OR_RNYKPN(4),
+        IS_EGRPOY(5),CODE_CONFIRMED(6),ADDRESS(7),FULL_NAME_DIRECTOR(8),
+        DESCRIBE_AGENCY(9),URL_PHOTO(10),USER_ID(11);
+        public final int position;
+        Parameter(int position){
+            this.position = position;
+        }
+    }
 
     private static final boolean CODE_CONFIRMED_DEFAULT_VALUE = true;//I_HOPE_THIS_IS_TRUE_IF_IS_NOT_WE_HAVE_A_PROBLEM
 
@@ -146,22 +196,24 @@ class HandlerRepositoryTravelAgencyMySQL{
 
             for (TravelAgency travelAgency:travelAgencies) {
                 travelAgency.setTravelId(generatorCustomerIds.incrementAndGet());
-                statement.setLong(TRAVEL_AGENCY_ID,travelAgency.getTravelId());
-                statement.setFloat(RATING,travelAgency.getRating());
-                statement.setString(KVED,travelAgency.getKved());
+                statement.setLong(Parameter.TRAVEL_AGENCY_ID.position,travelAgency.getTravelId());
+                statement.setFloat(Parameter.RATING.position,travelAgency.getRating());
+                statement.setString(Parameter.KVED.position,travelAgency.getKved());
 
-                statement.setLong(EGRPOY_OR_RNYKPN,travelAgency.getEgrpoyOrRnekpn());
-                statement.setBoolean(IS_EGRPOY,travelAgency.isEgrpoy());
-                statement.setBoolean(CODE_CONFIRMED,CODE_CONFIRMED_DEFAULT_VALUE);
-                statement.setString(ADDRESS,travelAgency.getAddress());
+                statement.setLong(Parameter.EGRPOY_OR_RNYKPN.position,travelAgency.getEgrpoyOrRnekpn());
+                statement.setBoolean(Parameter.IS_EGRPOY.position,travelAgency.isEgrpoy());
+                statement.setBoolean(Parameter.CODE_CONFIRMED.position,CODE_CONFIRMED_DEFAULT_VALUE);
+                statement.setString(Parameter.ADDRESS.position,travelAgency.getAddress());
 
-                statement.setString(FULL_NAME_DIRECTOR,travelAgency.getFullNameDirector());
-                statement.setString(DESCRIBE_AGENCY,travelAgency.getDescribeAgency());
-                statement.setString(URL_PHOTO,travelAgency.getUrlPhoto());
-                statement.setLong(USER_ID,travelAgency.getId());
+                statement.setString(Parameter.FULL_NAME_DIRECTOR.position,travelAgency.getFullNameDirector());
+                statement.setString(Parameter.DESCRIBE_AGENCY.position,travelAgency.getDescribeAgency());
+                statement.setString(Parameter.URL_PHOTO.position,travelAgency.getUrlPhoto());
+                statement.setLong(Parameter.USER_ID.position,travelAgency.getId());
 
-                return HandlerSqlDAO.arrayHasOnlyOne(statement.executeBatch());
+                statement.addBatch();
             }
+
+            return HandlerSqlDAO.arrayHasOnlyOne(statement.executeBatch());
         } catch (SQLException e) {
             e.printStackTrace();
         }

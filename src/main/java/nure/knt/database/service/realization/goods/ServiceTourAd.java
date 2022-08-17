@@ -31,13 +31,13 @@ public class ServiceTourAd implements IServiceTourAd<TourAd> {
     }
 
     @Override
-    public boolean saveEdit(Long id) {
-        return dao.saveEdit(id);
+    public boolean useEdit(Long id) {
+        return dao.useEdit(id);
     }
 
     @Override
-    public boolean removeEdit(Long id) {
-        return dao.removeEdit(id);
+    public boolean cancelEdit(Long id) {
+        return dao.cancelEdit(id);
     }
 
     @Override
