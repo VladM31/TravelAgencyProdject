@@ -3,6 +3,7 @@ package nure.knt.database.dao.mysql.factory;
 import nure.knt.database.idao.factory.IFactoryEntity;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.enums.TypeState;
+import nure.knt.entity.important.Courier;
 import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.TravelAgency;
 import nure.knt.entity.important.User;
@@ -43,6 +44,26 @@ public class ConfigurationFactoryUsers {
                e.printStackTrace();
            }
            return null;
+        });
+    }
+
+    @Bean("Factory_Courier_MySQL")
+    public IFactoryEntity<Courier> getCourierFactory(){
+        return (resultSet -> {
+            try{
+                Courier courier = new Courier();
+                setInfoFromResultSetToUser(courier,resultSet);
+                courier.setIdCourier(resultSet.getLong("courier_pk"));
+
+                courier.setCity(resultSet.getString("city"));
+                courier.setAddress(resultSet.getString("address"));
+                courier.setDateBirth(resultSet.getDate("date_birth").toLocalDate());
+                courier.setDoesHeWant(resultSet.getBoolean("does_he_want"));
+                return courier;
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+            return null;
         });
     }
 

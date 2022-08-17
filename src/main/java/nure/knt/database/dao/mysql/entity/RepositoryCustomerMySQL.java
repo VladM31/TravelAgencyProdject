@@ -132,7 +132,7 @@ class HandlerRepositoryCustomerMySQL{
     }
 
     enum SetParam{
-        ID(1),MALE(2),USER_ID(2);
+        ID(1),MALE(2),USER_ID(3);
 
         int position;
 

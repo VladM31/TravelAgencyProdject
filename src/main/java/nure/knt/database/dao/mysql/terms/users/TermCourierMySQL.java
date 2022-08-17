@@ -51,7 +51,7 @@ public class TermCourierMySQL  extends TermUserMySQL<ITermCourier> implements IT
         return this;
     }
 
-    private static final String ID_COURIER_IN = " courier.in ( " + HandlerSqlDAO.REPLACE_SYMBOL + " ) ";
+    private static final String ID_COURIER_IN = " courier.id in ( " + HandlerSqlDAO.REPLACE_SYMBOL + " ) ";
     @Override
     public ITermCourier IdCourierIn(Long... idCouriers) {
         privateWhere = HandlerTerm.setFieldsIn(privateWhere,ID_COURIER_IN,privateParametersForWhere,idCouriers);
