@@ -16,6 +16,7 @@ import nure.knt.entity.important.Courier;
 import nure.knt.entity.important.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Date;
@@ -27,6 +28,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
+@Order(30)
 @Repository("Repository_Courier_MySQL")
 public class RepositoryCourierMySQL extends MySQLUserCore<Courier> implements IDAOUserWithTerms<Courier, ITermCourier> {
     @Autowired

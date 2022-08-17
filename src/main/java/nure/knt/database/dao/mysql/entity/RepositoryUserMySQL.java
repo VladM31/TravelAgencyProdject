@@ -12,14 +12,16 @@ import nure.knt.entity.important.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
 import java.util.function.Function;
 
+@Order(50)
 @Repository("Repository_User_MySQL")
 @PropertySource("classpath:property/users/UserProperty.properties")
-public class DAOUserWithTermsMySQL extends MySQLUserCore<User> implements IDAOUserWithTerms<User,ITermUser> {
+public class RepositoryUserMySQL extends MySQLUserCore<User> implements IDAOUserWithTerms<User,ITermUser> {
     @Autowired
     @Qualifier("Factory_User_MySQL")
     private IFactoryEntity<User> factory;
@@ -27,8 +29,8 @@ public class DAOUserWithTermsMySQL extends MySQLUserCore<User> implements IDAOUs
     final private Map<IUserField, Function<User,Object>> mapUserGettersValueByField;
 
     @Autowired
-    public DAOUserWithTermsMySQL(@Qualifier("Get_Object_By_Field_For_User") Map<IUserField, Function<User,Object>> mapUserGettersValueByField,
-                                 @Qualifier("Get_Name_By_Field_For_User") Map<IUserField,String> nameUserFieldInDataBase) {
+    public RepositoryUserMySQL(@Qualifier("Get_Object_By_Field_For_User") Map<IUserField, Function<User,Object>> mapUserGettersValueByField,
+                               @Qualifier("Get_Name_By_Field_For_User") Map<IUserField,String> nameUserFieldInDataBase) {
         this.ENUM_TO_SCRIPT_MYSQL = nameUserFieldInDataBase;
         this.mapUserGettersValueByField = mapUserGettersValueByField;
     }

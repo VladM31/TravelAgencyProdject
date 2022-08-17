@@ -14,6 +14,7 @@ import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -22,6 +23,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
+@Order(0)
 @Repository("Repository_Customer_MySQL")
 public class RepositoryCustomerMySQL extends MySQLUserCore<Customer> implements IDAOUserWithTerms<Customer, ITermCustomer> {
     @Autowired

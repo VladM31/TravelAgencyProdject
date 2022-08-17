@@ -15,6 +15,7 @@ import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.TravelAgency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
@@ -27,6 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
 @Repository("Repository_Travel_Agency_MySQL")
+@Order(10)
 public class RepositoryTravelAgencyMySQL extends MySQLUserCore<TravelAgency> implements IDAOUserWithTerms<TravelAgency, ITermTravelAgency> {
     @Autowired
     @Qualifier("Get_Object_By_Field_For_Travel_Agency")
@@ -88,18 +90,29 @@ public class RepositoryTravelAgencyMySQL extends MySQLUserCore<TravelAgency> imp
 
     private static final String FROM_AND_JOIN =
             "from travel_agency \n" +
-                    "LEFT join user ON travel_agency.user_id = uwser.id\n" +
+                    "LEFT join user ON travel_agency.user_id = user.id\n" +
                     "LEFT JOIN country ON user.country_id = country.id\n" +
                     "LEFT JOIN role ON user.role_id = role.id  \n" +
                     "LEFT JOIN type_state ON user.type_state_id = type_state.id";
     @Override
     public Optional<TravelAgency> findOneBy(ITermInformation information) {
-        return Optional.empty();
+        return Optional.ofNullable(
+                HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,
+                        HandlerSqlDAO.toScriptDefault(SELECT_AND_PARAMETERS_FOR_TRAVEL_AGENCY,FROM_AND_JOIN,information,super.concatScripts),
+                        factory::getEntity,
+                        information.getParameters()
+                )
+        );
     }
 
     @Override
     public List<TravelAgency> findBy(ITermInformation information) {
-        return null;
+        return HandlerSqlDAO.useSelectScript(super.conn,
+                        HandlerSqlDAO.toScriptDefault(SELECT_AND_PARAMETERS_FOR_TRAVEL_AGENCY,FROM_AND_JOIN,information,super.concatScripts),
+                        factory::getEntity,
+                        information.getParameters()
+                );
+
     }
 
     @Override
