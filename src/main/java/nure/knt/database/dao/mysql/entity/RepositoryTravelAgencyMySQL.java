@@ -3,17 +3,14 @@ package nure.knt.database.dao.mysql.entity;
 import nure.knt.database.dao.HandlerSqlDAO;
 import nure.knt.database.dao.mysql.terms.users.TermTravelAgencyMySQL;
 import nure.knt.database.idao.entity.IDAOUserEdit;
-import nure.knt.database.idao.entity.IDAOUserWithTerms;
 import nure.knt.database.idao.factory.IFactoryEntity;
 import nure.knt.database.idao.terms.ITermInformation;
-import nure.knt.database.idao.terms.fieldenum.CustomerField;
 import nure.knt.database.idao.terms.fieldenum.IUserField;
 import nure.knt.database.idao.terms.fieldenum.TravelAgencyField;
 import nure.knt.database.idao.terms.fieldenum.UserField;
 import nure.knt.database.idao.terms.users.ITermTravelAgency;
 import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.entity.enums.TypeState;
-import nure.knt.entity.important.Customer;
 import nure.knt.entity.important.TravelAgency;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,7 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -159,17 +156,35 @@ public class RepositoryTravelAgencyMySQL extends MySQLUserCore<TravelAgency> imp
             "main_ta.url_photo = changes_ta.url_photo\n" +
             "WHERE ed.what_to_change = 668;";
 
+    private static final String UPDATE_EDITE_TRAVEL_AGENCY_AS_USED= "UPDATE edit_agency SET confirmed = true,need_delete = true WHERE what_to_change = ?;";
+    private static final String UPDATE_EDITE_TRAVEL_AGENCY_AS_CANCELED= "UPDATE edit_agency SET need_delete = true WHERE what_to_change = ?;";
+
     @Override
     public boolean useEdit(Long id) {
-        if(HandlerUser.updateById(super.conn,super.concatScripts.concatScripts(UPDATE_EDIT),id) == 0)
+        if(HandlerSqlDAO.updateByParameters(super.conn,super.concatScripts.concatScripts(UPDATE_EDIT),id) == 0)
             return false;
-
-        return IDAOUserEdit.super.useEdit(id);
+        return HandlerSqlDAO.updateByParameters(super.conn,super.concatScripts.concatScripts(UPDATE_EDITE_TRAVEL_AGENCY_AS_USED),id) != 0;
     }
 
     @Override
     public boolean cancelEdit(Long id) {
-        return IDAOUserEdit.super.cancelEdit(id);
+        return HandlerSqlDAO.updateByParameters(super.conn,super.concatScripts.concatScripts(UPDATE_EDITE_TRAVEL_AGENCY_AS_CANCELED),id) != 0;
+    }
+
+    private static final String SELECT_WHERE_EMAIL_OR_NUMBER_OR_USERNAME_OR_NAME_EGRPOY_OR_RNYKPN_IS =
+            "SELECT u.id FROM user u " +
+                    "left join type_state ON u.type_state_id = type_state.id\n" +
+                    "left join travel_agency ta ON u.id = ta.user_id \n" +
+                    "WHERE " +
+                    "(u.email = ? OR u.number = ? OR u.username = ? OR u.name = ? " +
+                    "OR (ta.is_egrpoy = ? AND ta.egrpoy_or_rnykpn = ?))\n" +
+                    "AND (type_state.name = ? OR type_state.name = ? AND u.date_registration > ?) ;";
+
+    @Override
+    public boolean isBooked(TravelAgency user) {
+        return HandlerSqlDAO.useSelectScriptAndGetOneObject(super.conn,super.concatScripts.concatScripts(SELECT_WHERE_EMAIL_OR_NUMBER_OR_USERNAME_OR_NAME_EGRPOY_OR_RNYKPN_IS), r -> true,
+                user.getEmail(),user.getNumber(),user.getUsername(),user.getName(),user.isEgrpoy(),user.getEgrpoyOrRnekpn(),
+               TypeState.REGISTERED.name(),TypeState.REGISTRATION.name(), LocalDateTime.now().minusMinutes(15l)) != null;
     }
 }
 
