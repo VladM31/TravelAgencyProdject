@@ -18,7 +18,6 @@ import org.springframework.stereotype.Repository;
 import java.util.*;
 import java.util.function.Function;
 
-@Order(50)
 @Repository("Repository_User_MySQL")
 @PropertySource("classpath:property/users/UserProperty.properties")
 public class RepositoryUserMySQL extends MySQLUserCore<User> implements IDAOUserWithTerms<User,ITermUser> {

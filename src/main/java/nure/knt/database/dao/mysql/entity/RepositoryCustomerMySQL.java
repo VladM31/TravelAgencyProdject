@@ -23,7 +23,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
-@Order(0)
 @Repository("Repository_Customer_MySQL")
 public class RepositoryCustomerMySQL extends MySQLUserCore<Customer> implements IDAOUserWithTerms<Customer, ITermCustomer> {
     @Autowired

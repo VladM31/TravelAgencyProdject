@@ -27,7 +27,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
 @Repository("Repository_Travel_Agency_MySQL")
-@Order(10)
 public class RepositoryTravelAgencyMySQL extends MySQLUserCore<TravelAgency> implements IDAOUserEdit<TravelAgency, ITermTravelAgency> {
     @Autowired
     @Qualifier("Get_Object_By_Field_For_Travel_Agency")

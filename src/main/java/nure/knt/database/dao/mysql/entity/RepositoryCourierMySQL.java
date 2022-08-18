@@ -28,7 +28,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 
-@Order(30)
+
 @Repository("Repository_Courier_MySQL")
 public class RepositoryCourierMySQL extends MySQLUserCore<Courier> implements IDAOUserWithTerms<Courier, ITermCourier> {
     @Autowired
