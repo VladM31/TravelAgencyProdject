@@ -10,7 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -29,6 +28,8 @@ public class HandlerUser {
             return false;
         }
     }
+
+
 
     public static <U extends User> void resultSetToUserCore(ResultSet resultSet, U user) throws SQLException {
         user.setId(resultSet.getLong("user_pk"));

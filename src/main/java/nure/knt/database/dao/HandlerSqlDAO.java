@@ -182,6 +182,18 @@ public class HandlerSqlDAO {
             position = checkType(position,object,statement);
         }
     }
+    public static int updateByParameters(IConnectorGetter connector, String script, Object ... array){
+        try(PreparedStatement statement = connector.getSqlPreparedStatement(script)){
+            int position = START_POSITION;
+            for(Object obj : array){
+                position= checkType(position,obj,statement);
+            }
+            return statement.executeUpdate();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return -1;
+    }
 
     @Nullable
     public static <T> T useSelectScriptAndGetOneObject(IConnectorGetter connectorGetter, final String script, Function<ResultSet, T> getObject, @NonNull Object ...array){
