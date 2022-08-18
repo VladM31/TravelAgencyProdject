@@ -2,11 +2,15 @@ package nure.knt.controller.profile;
 
 
 import nure.knt.controller.HandlerController;
+import nure.knt.database.idao.terms.fieldenum.UserField;
+import nure.knt.database.idao.terms.users.ITermUser;
 import nure.knt.database.idao.tools.IConnectorGetter;
 import nure.knt.database.idao.entity.IDAOUserOnly;
+import nure.knt.database.service.implement.users.IServiceUser;
 import nure.knt.entity.enums.Role;
 import nure.knt.entity.important.User;
 import nure.knt.forms.filter.FilterAllUsers;
+import nure.knt.forms.filter.terms.FilterUserTerm;
 import nure.knt.tools.WorkWithCountries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,10 +36,8 @@ public class ControllerAdministrator {
     @Autowired
     private WorkWithCountries countries;
     @Autowired
-    @Qualifier("DAO_MySQL_User")
-    private IDAOUserOnly daoUsers;
-    @Autowired
-    private IConnectorGetter connector;
+    @Qualifier("User_Service")
+    private IServiceUser<User, ITermUser> serviceUser;
 
     private final String PAGE_FOR_SHOW_ALL_USERS;
     private final String URL_FOR_SHOW_ALL_USERS;
@@ -47,7 +49,7 @@ public class ControllerAdministrator {
     }
 
     @RequestMapping(value="${admin.show.all.users.url}",method = RequestMethod.GET)
-    public String showAllUsers(@AuthenticationPrincipal User user, Model model, FilterAllUsers filter){
+    public String showAllUsers(@AuthenticationPrincipal User user, Model model, FilterUserTerm filter){
 
        this.setInfoForShowAllUsers(user,model,filter);
 
@@ -59,7 +61,10 @@ public class ControllerAdministrator {
     @RequestMapping(value="${admin.show.all.users.url}",method = RequestMethod.PATCH)
     public String changeActiveUser(Long id,Boolean active){
 
-        this.daoUsers.updateStateUser(id,!active);
+        User temp = new User();
+        temp.setId(id);
+        temp.setActive(!active);
+        serviceUser.updateOneById(temp, UserField.ACTIVE);
 
         return "redirect:"+URL_FOR_SHOW_ALL_USERS;
     }
@@ -67,12 +72,12 @@ public class ControllerAdministrator {
     @RequestMapping(value="${administrator.want.delete.other.user}", method = RequestMethod.DELETE)
     public String deleteUser(Long id){
 
-        this.daoUsers.deleteById(id);
+        serviceUser.deleteById(id);
         return "redirect:"+URL_FOR_SHOW_ALL_USERS;
     }
 
-    @RequestMapping(value="${administrator.profile.select.url}", method = RequestMethod.GET)
-    public String showTableDateFromSelect(Model model,@Value("${administrator.profile.select.page}") String page,String script){
+    //@RequestMapping(value="${administrator.profile.select.url}", method = RequestMethod.GET)
+    public String showTableDateFromSelect(Model model,IConnectorGetter connector,@Value("${administrator.profile.select.page}") String page,String script){
         if(script == null || script.isEmpty()){
             return page;
         }
@@ -84,19 +89,13 @@ public class ControllerAdministrator {
 
         } catch (Exception e) {
             model.addAttribute("MyExceptions",e.getStackTrace());
-
-
         }
-
-
-
-
         return page;
     }
 
 
-    private void setInfoForShowAllUsers(User user, Model model, FilterAllUsers filter){
-        HandlerControllerAdministrator.setInfoForShowAllUsersLogic(user,model,filter,countries,daoUsers);
+    private void setInfoForShowAllUsers(User user, Model model, FilterUserTerm filter){
+        HandlerControllerAdministrator.setInfoForShowAllUsersLogic(user,model,filter,countries,serviceUser);
         HandlerController.setMenuModel(user,model);
     }
 }
@@ -104,10 +103,10 @@ public class ControllerAdministrator {
 
 class HandlerControllerAdministrator{
 
-    static void setInfoForShowAllUsersLogic(User user, Model model, FilterAllUsers filter,WorkWithCountries countries,IDAOUserOnly daoUsers){
+    static void setInfoForShowAllUsersLogic(User user, Model model, FilterUserTerm filter,WorkWithCountries countries, IServiceUser<User, ITermUser> service){
         model.addAttribute("user",user);
         model.addAttribute("filter", filter);
-        model.addAttribute("users",filter.filtering(daoUsers).stream().limit(100).toList());
+        model.addAttribute("users",service.findBy(filter.filtering(service.term()).end()));
         model.addAttribute("countries",countries.getCountry());
         model.addAttribute("isAdmin", user.getRole().equals(Role.ADMINISTRATOR));
     }
