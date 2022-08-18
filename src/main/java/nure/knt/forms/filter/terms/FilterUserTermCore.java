@@ -9,12 +9,14 @@ import nure.knt.entity.enums.TypeState;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class FilterUserTermCore {
     private Long[] ids;//
     private String number;//
-    private boolean numberForNotContaining;//
     private String email;//
     private boolean emailForNotContaining;//
     private String username;//
@@ -33,6 +35,10 @@ public class FilterUserTermCore {
     private String sortByFieldName;
     private Long[] limit;
 
+    public Set<Role> getSetRoles(){
+        return Arrays.stream(this.roles == null ? new Role[0] : roles).collect(Collectors.toSet());
+    }
+
     public static IUserField fieldNameToFieldEnum(String name){
         return UserField.valueOf(name);
     }
@@ -40,11 +46,7 @@ public class FilterUserTermCore {
     protected void defaultFiltering(ITermUser<? extends ITermUser> termUser){
         HandlerFilterTerms.checkArray(this.ids,(i) -> termUser.idUserIn(i));
 
-        HandlerFilterTerms.checkString(this.number, num -> {
-            if (numberForNotContaining)
-                termUser.numberIs(num);
-            else
-                termUser.numberContaining(num);});
+        HandlerFilterTerms.checkString(this.number, num -> termUser.numberContaining(num));
 
         HandlerFilterTerms.checkString(this.email, em -> {
             if (emailForNotContaining)
@@ -97,14 +99,6 @@ public class FilterUserTermCore {
 
     public void setNumber(String number) {
         this.number = number;
-    }
-
-    public boolean isNumberForNotContaining() {
-        return numberForNotContaining;
-    }
-
-    public void setNumberForNotContaining(boolean numberForNotContaining) {
-        this.numberForNotContaining = numberForNotContaining;
     }
 
     public String getEmail() {
@@ -225,5 +219,32 @@ public class FilterUserTermCore {
 
     public void setLimit(Long[] limit) {
         this.limit = limit;
+    }
+
+    public FilterUserTermCore(Long[] ids, String number,String email,
+                              boolean emailForNotContaining, String username, boolean usernameForNotContaining,
+                              String country, String name, Boolean active, Boolean notActive, Role[] roles,
+                              TypeState[] typeStates, LocalDateTime startDateRegistration, LocalDateTime endDateRegistration,
+                              HowSortSQL howSortSQL, String sortByFieldName, Long[] limit) {
+        this.ids = ids;
+        this.number = number;
+        this.email = email;
+        this.emailForNotContaining = emailForNotContaining;
+        this.username = username;
+        this.usernameForNotContaining = usernameForNotContaining;
+        this.country = country;
+        this.name = name;
+        this.active = active;
+        this.notActive = notActive;
+        this.roles = roles;
+        this.typeStates = typeStates;
+        this.startDateRegistration = startDateRegistration;
+        this.endDateRegistration = endDateRegistration;
+        this.howSortSQL = howSortSQL;
+        this.sortByFieldName = sortByFieldName;
+        this.limit = limit;
+    }
+
+    public FilterUserTermCore() {
     }
 }
